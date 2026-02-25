@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Calendar, CheckCircle2, MessageSquare, ShieldCheck, ArrowRight, Smartphone, Sparkles } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 export default function LandingPage() {
   return (
@@ -10,7 +11,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-10 w-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-              <Sparkles className="h-6 w-6 text-primary-foreground" />
+              <Logo className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="text-2xl font-display font-black tracking-tighter">VLINK</span>
           </div>
@@ -117,7 +118,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/10">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
+              <Logo className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-display font-black tracking-tighter">VLINK</span>
           </div>

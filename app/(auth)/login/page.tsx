@@ -1,5 +1,6 @@
 "use client"
 
+import { Logo } from "@/components/logo"
 import { signIn } from "@/lib/auth-client"
 import { Sparkles, ArrowLeft } from "lucide-react"
 import Link from "next/link"
@@ -39,7 +40,7 @@ export default function LoginPage() {
 
                 <div className="text-center space-y-4">
                     <div className="h-16 w-16 bg-primary rounded-2xl mx-auto flex items-center justify-center shadow-2xl shadow-primary/20">
-                        <Sparkles className="h-10 w-10 text-primary-foreground" />
+                        <Logo className="h-10 w-10 text-primary-foreground" />
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-3xl font-display font-black tracking-tighter">Bienvenido a VLink</h1>
