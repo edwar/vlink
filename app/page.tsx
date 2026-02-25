@@ -17,7 +17,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-6">
             <ThemeToggle />
             <Link
-              href="/dashboard"
+              href="/login"
               className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-sm transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20"
             >
               Empezar
@@ -45,7 +45,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <Link
-              href="/dashboard"
+              href="/login"
               className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg shadow-2xl shadow-primary/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
             >
               Crear mi cuenta gratis
