@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import {
     format,
     startOfWeek,
-    eachHourOfInterval,
     addDays,
     isSameDay,
     startOfMonth,
@@ -18,8 +17,6 @@ import {
     addWeeks,
     subMonths,
     getDay,
-    setHours,
-    setMinutes
 } from "date-fns"
 import { es } from "date-fns/locale"
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock } from "lucide-react"
@@ -143,40 +140,63 @@ export function CalendarView() {
             <div className="border rounded-xl bg-card overflow-hidden">
                 <div className="grid grid-cols-7 border-b bg-muted/30">
                     {weekDays.map(day => (
-                        <div key={day} className="p-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                            {day}
+                        <div key={day} className="p-2 sm:p-3 text-center text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                            <span className="hidden sm:inline">{day}</span>
+                            <span className="sm:hidden">{day.charAt(0)}</span>
                         </div>
                     ))}
                 </div>
                 <div className="grid grid-cols-7">
-                    {days.map((day, idx) => (
-                        <div
-                            key={day.toString()}
-                            onClick={() => {
-                                setSelectedDate(day)
-                                setCurrentDate(day)
-                                setView('day')
-                            }}
-                            className={cn(
-                                "min-h-[100px] p-2 border-b border-r last:border-r-0 cursor-pointer hover:bg-accent/30 transition-colors",
-                                !isSameDay(day, monthStart) && day < monthStart && "text-muted-foreground/30 bg-muted/10",
-                                !isSameDay(day, monthEnd) && day > monthEnd && "text-muted-foreground/30 bg-muted/10",
-                                isToday(day) && "bg-primary/5"
-                            )}
-                        >
-                            <div className="flex justify-between items-start">
-                                <span className={cn(
-                                    "flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium",
-                                    isToday(day) ? "bg-primary text-primary-foreground" : "text-foreground"
-                                )}>
-                                    {format(day, 'd')}
-                                </span>
+                    {days.map((day, idx) => {
+                        const dayOfWeek = getDay(day)
+                        const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
+                        const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
+
+                        const mainAvailability = daySlots.find(s => !s.isBlocked)
+                        const isBlocked = specificDateSlots.some(s => s.isBlocked)
+                        const isFullyUnavailable = !mainAvailability
+
+                        return (
+                            <div
+                                key={day.toString()}
+                                onClick={() => {
+                                    setSelectedDate(day)
+                                    setCurrentDate(day)
+                                    setView('day')
+                                }}
+                                className={cn(
+                                    "min-h-[50px] sm:min-h-[80px] md:min-h-[100px] lg:min-h-[150px] p-1 sm:p-2 border-b border-r last:border-r-0 cursor-pointer hover:bg-accent/30 transition-colors",
+                                    !isSameDay(day, monthStart) && day < monthStart && "text-muted-foreground/30 bg-muted/10",
+                                    !isSameDay(day, monthEnd) && day > monthEnd && "text-muted-foreground/30 bg-muted/10",
+                                    isToday(day) && "bg-primary/5",
+                                    isBlocked && "bg-red-50/30"
+                                )}
+                            >
+                                <div className="flex justify-between items-start">
+                                    <span className={cn(
+                                        "flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-[10px] sm:text-sm font-medium",
+                                        isToday(day) ? "bg-primary text-primary-foreground" : "text-foreground"
+                                    )}>
+                                        {format(day, 'd')}
+                                    </span>
+                                </div>
+                                <div className="mt-1 space-y-1">
+                                    {isBlocked && (
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-red-100 text-red-700 text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit">
+                                            <Lock className="h-2.5 w-2.5" />
+                                            <span className="hidden sm:inline">Bloqueado</span>
+                                        </div>
+                                    )}
+                                    {isFullyUnavailable && !isBlocked && (
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-muted text-muted-foreground text-[8px] sm:text-[10px] font-medium rounded w-fit">
+                                            <span className="hidden sm:inline">No laborable</span>
+                                            <span className="sm:hidden">N/L</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <div className="mt-1 space-y-1">
-                                {/* Placeholder for events */}
-                            </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
             </div>
         )
