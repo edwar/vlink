@@ -31,7 +31,7 @@ export async function getProfile() {
     }
 
     // Check if the user has a Google account connected
-    const googleAccount = profile.user.accounts.find(acc => acc.providerId === 'google')
+    const googleAccount = profile.user.accounts.find((acc: any) => acc.providerId === 'google')
     const isGoogleConnected = !!googleAccount
     const email = profile.user.email
 
