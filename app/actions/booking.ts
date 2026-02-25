@@ -2,8 +2,9 @@
 
 import prisma from "@/lib/prisma"
 import { startOfDay, endOfDay, addMinutes, format, isBefore } from "date-fns"
-import { sendAppointmentEmail } from "@/lib/resend"
+import { sendAppointmentEmail, sendOTPEmail } from "@/lib/resend"
 import { es } from "date-fns/locale"
+import crypto from "crypto"
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -167,4 +168,65 @@ export async function createAppointment(data: {
     })
 
     return appointment
+}
+
+export async function generateAndSendOTP(email: string, name: string) {
+    if (!email || !name) throw new Error("Email y nombre requeridos");
+
+    // Generate 6 digit code
+    const code = Array.from({ length: 6 }, () => crypto.randomInt(0, 10)).join("");
+
+    // Create unique identifier for booking OTPs
+    const identifier = `booking_otp_${email.toLowerCase()}`;
+
+    // Store in existing verification table (delete old ones first if exist)
+    await prisma.verification.deleteMany({
+        where: { identifier }
+    });
+
+    await prisma.verification.create({
+        data: {
+            id: crypto.randomUUID(),
+            identifier,
+            value: code,
+            expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 mins
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        }
+    });
+
+    // Send the email
+    await sendOTPEmail({
+        to: email,
+        clientName: name,
+        code
+    });
+
+    return { success: true };
+}
+
+export async function verifyOTP(email: string, code: string) {
+    if (!email || !code) throw new Error("Email y código requeridos");
+
+    const identifier = `booking_otp_${email.toLowerCase()}`;
+
+    const record = await prisma.verification.findFirst({
+        where: { identifier, value: code }
+    });
+
+    if (!record) {
+        throw new Error("Código incorrecto");
+    }
+
+    if (new Date() > record.expiresAt) {
+        // Option to delete explicitly or just throw
+        throw new Error("El código ha expirado. Solicita uno nuevo.");
+    }
+
+    // Code is valid, consume it
+    await prisma.verification.delete({
+        where: { id: record.id }
+    });
+
+    return { success: true };
 }

@@ -45,3 +45,35 @@ export async function sendAppointmentEmail({
         console.error('Error sending email:', error);
     }
 }
+
+export async function sendOTPEmail({
+    to,
+    clientName,
+    code,
+}: {
+    to: string;
+    clientName: string;
+    code: string;
+}) {
+    try {
+        await resend.emails.send({
+            from: 'VLink <noreply@vlink.app>',
+            to,
+            subject: 'Tu código de verificación - VLink',
+            html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+          <h1 style="color: #0f172a; font-size: 24px; font-weight: bold; margin-bottom: 20px;">VLink - Verificación</h1>
+          <p style="color: #475569; font-size: 16px;">Hola ${clientName},</p>
+          <p style="color: #475569; font-size: 16px;">Usa el siguiente código para continuar con tu reserva:</p>
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0; color: #0f172a; font-size: 32px; font-weight: 900; letter-spacing: 4px;">${code}</p>
+          </div>
+          <p style="color: #475569; font-size: 14px; margin-top: 30px;">Este código expirará en 15 minutos.</p>
+        </div>
+      `,
+        });
+    } catch (error) {
+        console.error('Error sending OTP email:', error);
+        throw error;
+    }
+}

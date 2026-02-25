@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
-import { format, addDays, startOfToday, isSameDay } from "date-fns"
+import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, CheckCircle2, MessageSquare, Loader2, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getProfileForBooking, getAvailableSlots, createAppointment } from "@/app/actions/booking"
+import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
 
 interface ServiceOption {
     id: string
@@ -28,7 +28,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [profileError, setProfileError] = useState(false)
 
     const [selectedService, setSelectedService] = useState<ServiceOption | null>(null)
-    const [selectedDate, setSelectedDate] = useState<Date>(startOfToday())
+    const [selectedDate, setSelectedDate] = useState<Date>(startOfTomorrow())
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
     const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: WhatsApp OTP, 3: Success
     const [slots, setSlots] = useState<string[]>([])
@@ -77,7 +77,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     }, [selectedDate, username, selectedService, step])
 
     // Next 14 days for date selection
-    const days = [...Array(14)].map((_, i) => addDays(startOfToday(), i))
+    const days = [...Array(14)].map((_, i) => addDays(startOfTomorrow(), i))
 
     const handleSelectService = (service: ServiceOption) => {
         setSelectedService(service)
@@ -295,7 +295,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                         </button>
                     </div>
                 ) : step === 2 ? (
-                    <WhatsAppVerification
+                    <ClientVerification
                         username={username}
                         serviceId={selectedService?.id || undefined}
                         onBack={() => setStep(1)}
@@ -319,7 +319,7 @@ function ChevronRight({ className }: { className?: string }) {
     return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6" /></svg>
 }
 
-function WhatsAppVerification({ onBack, onSuccess, bookingInfo, username, serviceId }: {
+function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceId }: {
     onBack: () => void,
     onSuccess: () => void,
     bookingInfo: { date: Date, time: string },
@@ -327,13 +327,49 @@ function WhatsAppVerification({ onBack, onSuccess, bookingInfo, username, servic
     serviceId?: string
 }) {
     const [name, setName] = useState("")
-    const [phone, setPhone] = useState("")
     const [email, setEmail] = useState("")
-    const [otpSent, setOtpSent] = useState(false)
     const [otp, setOtp] = useState("")
+    const [phone, setPhone] = useState("")
+
+    // 0: Email/Name input, 1: OTP verification, 2: Phone input & Confirm
+    const [verificationStep, setVerificationStep] = useState(0)
+
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const handleSendOTP = async () => {
+        setError(null)
+        setIsSubmitting(true)
+        try {
+            await generateAndSendOTP(email, name)
+            setVerificationStep(1)
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Error enviando el código")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    const handleVerifyOTP = async () => {
+        if (otp.length < 6) return
+        setError(null)
+        setIsSubmitting(true)
+        try {
+            await verifyOTP(email, otp)
+            setVerificationStep(2)
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Código incorrecto")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
 
     const handleBooking = async () => {
+        if (phone.length < 10) {
+            setError("Por favor ingresa un número de teléfono válido")
+            return
+        }
+        setError(null)
         setIsSubmitting(true)
         try {
             await createAppointment({
@@ -346,27 +382,56 @@ function WhatsAppVerification({ onBack, onSuccess, bookingInfo, username, servic
                 serviceId
             });
             onSuccess();
-        } catch (error) {
-            alert(error instanceof Error ? error.message : "Error al agendar")
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Error al agendar")
         } finally {
             setIsSubmitting(false)
         }
     }
 
+    const handleOtpChange = (index: number, value: string) => {
+        if (!/^[0-9]*$/.test(value)) return
+
+        const newOtp = otp.split('')
+        newOtp[index] = value
+        setOtp(newOtp.join(''))
+
+        // Auto focus next input
+        if (value && index < 5) {
+            const nextInput = document.getElementById(`otp-${index + 1}`)
+            nextInput?.focus()
+        }
+    }
+
+    const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Backspace' && !otp[index] && index > 0) {
+            const prevInput = document.getElementById(`otp-${index - 1}`)
+            prevInput?.focus()
+        }
+    }
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <button onClick={onBack} className="text-sm font-bold text-muted-foreground flex items-center gap-1 hover:text-primary transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                Regresar a fecha y hora
-            </button>
+            {verificationStep === 0 && (
+                <button onClick={onBack} className="text-sm font-bold text-muted-foreground flex items-center gap-1 hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                    Regresar a fecha y hora
+                </button>
+            )}
 
             <section className="space-y-6">
                 <div className="flex items-center gap-2 text-primary">
                     <MessageSquare className="h-4 w-4" />
-                    <h2 className="text-sm font-bold uppercase tracking-wider">Validación WhatsApp</h2>
+                    <h2 className="text-sm font-bold uppercase tracking-wider">Tus Datos</h2>
                 </div>
 
-                {!otpSent ? (
+                {error && (
+                    <div className="p-3 bg-destructive/10 text-destructive text-sm font-medium rounded-xl border border-destructive/20">
+                        {error}
+                    </div>
+                )}
+
+                {verificationStep === 0 && (
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label className="text-sm font-bold">Tu Nombre</label>
@@ -375,13 +440,95 @@ function WhatsAppVerification({ onBack, onSuccess, bookingInfo, username, servic
                                 placeholder="Escribe tu nombre completo"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 px-4 outline-none font-medium transition-all"
+                                disabled={isSubmitting}
+                                className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
                             />
                         </div>
 
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold">Tu Correo Institucional o Personal</label>
+                            <p className="text-xs text-muted-foreground">Te enviaremos un código de validación a este correo.</p>
+                            <input
+                                type="email"
+                                placeholder="tu-correo@ejemplo.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                disabled={isSubmitting}
+                                className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleSendOTP}
+                            disabled={isSubmitting || name.length < 3 || email.length < 5 || !email.includes('@')}
+                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                        >
+                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Enviar código al correo"}
+                        </button>
+                    </div>
+                )}
+
+                {verificationStep === 1 && (
+                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+                        <div className="p-4 bg-accent/50 rounded-2xl text-sm border-2 border-dashed">
+                            Enviamos un código de 6 dígitos a <span className="font-bold">{email}</span>
+                        </div>
+
                         <div className="space-y-4">
-                            <label className="text-sm font-bold">Tu WhatsApp</label>
-                            <p className="text-sm text-muted-foreground">Te enviaremos un código de acceso.</p>
+                            <label className="text-sm font-bold">Código de verificación</label>
+                            <div className="grid grid-cols-6 gap-2">
+                                {[...Array(6)].map((_, i) => (
+                                    <input
+                                        key={i}
+                                        id={`otp-${i}`}
+                                        type="text"
+                                        maxLength={1}
+                                        value={otp[i] || ''}
+                                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                                        disabled={isSubmitting}
+                                        className="w-full aspect-square text-center bg-card border-2 border-transparent focus:border-primary rounded-xl outline-none font-black text-xl disabled:opacity-50 transition-colors"
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={handleVerifyOTP}
+                            disabled={isSubmitting || otp.length < 6}
+                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                        >
+                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Verificar código"}
+                        </button>
+
+                        <button
+                            onClick={handleSendOTP}
+                            disabled={isSubmitting}
+                            className="w-full text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
+                        >
+                            ¿No has recibido el código? Reenviar
+                        </button>
+
+                        <button
+                            onClick={() => { setVerificationStep(0); setOtp(""); setError(null); }}
+                            disabled={isSubmitting}
+                            className="w-full text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
+                        >
+                            Cambiar correo electrónico
+                        </button>
+                    </div>
+                )}
+
+                {verificationStep === 2 && (
+                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+                        <div className="p-4 bg-green-500/10 border-green-500/20 rounded-2xl text-sm border-2 text-green-600 flex items-center gap-2 font-medium">
+                            <CheckCircle2 className="h-5 w-5" />
+                            Correo verificado exitosamente
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="text-sm font-bold">Número de WhatsApp</label>
+                            <p className="text-xs text-muted-foreground">El profesional te contactará a este número.</p>
                             <div className="relative">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold">+57</span>
                                 <input
@@ -389,64 +536,19 @@ function WhatsAppVerification({ onBack, onSuccess, bookingInfo, username, servic
                                     placeholder="300 000 0000"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
-                                    className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
                                 />
                             </div>
                         </div>
 
                         <button
-                            onClick={() => setOtpSent(true)}
-                            disabled={phone.length < 10 || name.length < 3}
-                            className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold shadow-lg shadow-[#25D366]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-                        >
-                            Enviar código por WhatsApp
-                        </button>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="p-4 bg-accent/50 rounded-2xl text-sm border-2 border-dashed">
-                            Enviamos un código a <span className="font-bold">+57 {phone}</span>
-                        </div>
-
-                        <div className="space-y-4">
-                            <label className="text-sm font-bold">Código de 6 dígitos</label>
-                            <div className="grid grid-cols-6 gap-2">
-                                {[...Array(6)].map((_, i) => (
-                                    <input
-                                        key={i}
-                                        type="text"
-                                        maxLength={1}
-                                        className="w-full aspect-square text-center bg-card border-2 border-transparent focus:border-primary rounded-xl outline-none font-black text-2xl"
-                                    />
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="space-y-4 border-t pt-6">
-                            <label className="text-sm font-bold">Correo de Gmail para recordatorios</label>
-                            <p className="text-xs text-muted-foreground italic">Te avisaremos un día antes y 2 horas antes de tu cita.</p>
-                            <input
-                                type="email"
-                                placeholder="tu-correo@gmail.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 px-4 outline-none font-medium transition-all"
-                            />
-                        </div>
-
-                        <button
                             onClick={handleBooking}
-                            disabled={isSubmitting || email.length < 5}
-                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                            disabled={isSubmitting || phone.length < 10}
+                            className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold shadow-lg shadow-[#25D366]/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Confirmar Cita"}
                         </button>
-
-                        {!isSubmitting && (
-                            <button onClick={() => setOtpSent(false)} className="w-full text-xs font-bold text-muted-foreground hover:underline">
-                                ¿No recibiste el código? Volver a intentar
-                            </button>
-                        )}
                     </div>
                 )}
             </section>
