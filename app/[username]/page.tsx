@@ -6,6 +6,7 @@ import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, CheckCircle2, MessageSquare, Loader2, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface ServiceOption {
     id: string
@@ -33,6 +34,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: WhatsApp OTP, 3: Success
     const [slots, setSlots] = useState<string[]>([])
     const [loadingSlots, setLoadingSlots] = useState(false)
+    const [imageError, setImageError] = useState(false)
 
     // Fetch profile data on mount
     useEffect(() => {
@@ -113,20 +115,27 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const displayName = profileData.displayName
 
     return (
-        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground relative">
+            {/* Theme Toggle - Floating Top Right */}
+            <div className="absolute top-4 right-4 z-50">
+                <ThemeToggle />
+            </div>
+
             <main className="max-w-md mx-auto px-6 py-12 md:py-20 space-y-10">
 
                 {/* Header Perfil */}
                 <header className="text-center space-y-4">
-                    {profileData.image ? (
+                    {profileData.image && !imageError ? (
                         <img
                             src={profileData.image}
                             alt={displayName}
-                            className="h-20 w-20 rounded-full mx-auto object-cover border-2 border-primary/10"
+                            onError={() => setImageError(true)}
+                            referrerPolicy="no-referrer"
+                            className="h-20 w-20 rounded-full mx-auto object-cover border-2 border-primary/10 shadow-sm transition-opacity duration-300"
                         />
                     ) : (
-                        <div className="h-20 w-20 bg-accent rounded-full mx-auto flex items-center justify-center text-2xl font-bold border-2 border-primary/10">
-                            {displayName.charAt(0).toUpperCase()}
+                        <div className="h-20 w-20 bg-primary/5 rounded-full mx-auto flex items-center justify-center text-2xl font-black border-2 border-primary/10 text-primary uppercase tracking-tighter">
+                            {displayName.charAt(0)}
                         </div>
                     )}
                     <div>
