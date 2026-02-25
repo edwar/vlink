@@ -43,8 +43,8 @@ export function AvailabilityManagement() {
                 if (data && data.length > 0) {
                     // Map database data to our state
                     const newDays = DAYS.map(day => {
-                        const workingRecord = data.find(d => d.dayOfWeek === day.id && d.specificDate === null && !d.isBlocked)
-                        const lunchRecord = data.find(d => d.dayOfWeek === day.id && d.specificDate === null && d.isBlocked)
+                        const workingRecord = data.find((d: any) => d.dayOfWeek === day.id && d.specificDate === null && !d.isBlocked)
+                        const lunchRecord = data.find((d: any) => d.dayOfWeek === day.id && d.specificDate === null && d.isBlocked)
 
                         return {
                             dayId: day.id,
@@ -59,7 +59,7 @@ export function AvailabilityManagement() {
                     setRecurringDays(newDays)
 
                     // Set special blocks
-                    setSpecialBlocks(data.filter(d => d.specificDate !== null))
+                    setSpecialBlocks(data.filter((d: any) => d.specificDate !== null))
                 }
             } catch (error) {
                 console.error("Error fetching availability:", error)
@@ -136,7 +136,7 @@ export function AvailabilityManagement() {
                 isBlocked: true
             })
             const data = await getAvailability()
-            setSpecialBlocks(data.filter(d => d.specificDate !== null))
+            setSpecialBlocks(data.filter((d: any) => d.specificDate !== null))
             setShowBlockModal(false)
             setNewBlock({ date: "", start: "09:00", end: "17:00" })
         } catch (error) {
@@ -155,7 +155,7 @@ export function AvailabilityManagement() {
             const { deleteAvailability } = await import("@/app/actions/availability")
             await deleteAvailability(id)
             const data = await getAvailability()
-            setSpecialBlocks(data.filter(d => d.specificDate !== null))
+            setSpecialBlocks(data.filter((d: any) => d.specificDate !== null))
         } catch (error) {
             console.error("Error deleting special block:", error)
         } finally {
