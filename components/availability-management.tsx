@@ -7,6 +7,7 @@ import { es } from "date-fns/locale"
 import { Checkbox } from "./ui/checkbox"
 import { getAvailability, updateAvailability } from "@/app/actions/availability"
 import { cn } from "@/lib/utils"
+import { Input } from "./ui/input"
 
 const DAYS = [
     { name: "Lunes", id: 1 },
@@ -221,20 +222,20 @@ export function AvailabilityManagement() {
                                     <div className="flex flex-col gap-4 animate-in zoom-in-95 duration-200">
                                         <div className="flex items-center gap-3 sm:gap-4">
                                             <div className="relative group flex-1 sm:flex-initial">
-                                                <input
+                                                <Input
                                                     type="time"
                                                     value={start}
                                                     onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                    className="w-full bg-background border-2 border-muted/50 rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
+                                                    className="w-full bg-background border-2 border-muted/50 rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                                 />
                                             </div>
                                             <span className="text-muted-foreground font-bold">a</span>
                                             <div className="relative group flex-1 sm:flex-initial">
-                                                <input
+                                                <Input
                                                     type="time"
                                                     value={end}
                                                     onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                    className="w-full bg-background border-2 border-muted/50 rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
+                                                    className="w-full bg-background border-2 border-muted/50 rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                                 />
                                             </div>
                                         </div>
@@ -253,19 +254,19 @@ export function AvailabilityManagement() {
                                             </div>
 
                                             {dayState?.lunchActive && (
-                                                <div className="flex items-center justify-between sm:justify-start gap-3 p-2.5 rounded-xl bg-primary/5 border border-primary/20 animate-in slide-in-from-left-2 duration-200">
-                                                    <input
+                                                <div className="flex items-center justify-between sm:justify-start gap-3 px-2 py-0 rounded-xl animate-in slide-in-from-left-2 duration-200">
+                                                    <Input
                                                         type="time"
                                                         value={dayState.lunchStart}
                                                         onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                        className="bg-transparent border-none p-0 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full"
+                                                        className="bg-transparent border-none px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                                     />
                                                     <span className="text-primary/40 text-[10px] font-bold">a</span>
-                                                    <input
+                                                    <Input
                                                         type="time"
                                                         value={dayState.lunchEnd}
                                                         onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                        className="bg-transparent border-none p-0 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full"
+                                                        className="bg-transparent border-none px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                                     />
                                                 </div>
                                             )}
@@ -338,7 +339,7 @@ export function AvailabilityManagement() {
                         <div className="space-y-6">
                             <div>
                                 <label className="block text-sm font-bold mb-2">Fecha</label>
-                                <input
+                                <Input
                                     type="date"
                                     value={newBlock.date}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
@@ -348,20 +349,20 @@ export function AvailabilityManagement() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-bold mb-2">Desde</label>
-                                    <input
+                                    <Input
                                         type="time"
                                         value={newBlock.start}
                                         onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
-                                        className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all"
+                                        className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-bold mb-2">Hasta</label>
-                                    <input
+                                    <Input
                                         type="time"
                                         value={newBlock.end}
                                         onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}
-                                        className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all"
+                                        className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                     />
                                 </div>
                             </div>
