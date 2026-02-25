@@ -25,7 +25,7 @@ export async function sendAppointmentEmail({
 
     try {
         await resend.emails.send({
-            from: 'VLink <onboarding@resend.dev>', // Assuming verified domain or testing with resend email
+            from: 'VLink <hola@cognilab.dev>', // Assuming verified domain or testing with resend email
             to,
             subject: subjects[type],
             html: `
@@ -57,7 +57,7 @@ export async function sendOTPEmail({
 }) {
     try {
         const response = await resend.emails.send({
-            from: 'VLink <onboarding@resend.dev>',
+            from: 'VLink <hola@cognilab.dev>',
             to,
             subject: 'Tu código de verificación - VLink',
             html: `
