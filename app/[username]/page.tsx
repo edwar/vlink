@@ -334,16 +334,8 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                 </div>
                             )}
                         </section>
-
-                        {/* Botón Continuar */}
-                        <button
-                            disabled={!selectedTime}
-                            onClick={() => setStep(2)}
-                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                        >
-                            Continuar
-                            <ChevronRight className="h-5 w-5" />
-                        </button>
+                        {/* Espaciador para no ocultar contenido debajo del botón flotante */}
+                        <div className="h-24 sm:hidden" />
                     </div>
                 ) : step === 2 ? (
                     <ClientVerification
@@ -360,8 +352,24 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                         bookingInfo={{ date: selectedDate, time: selectedTime! }}
                     />
                 ) : null}
-
             </main>
+
+            {/* Botón Continuar Global - Siempre fijo al viewport en el fondo */}
+            <div className={cn(
+                "fixed bottom-0 left-0 right-0 p-6 bg-linear-to-t from-background via-background/95 to-transparent pt-12 z-50 pointer-events-none transition-all duration-300",
+                step === 1 ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
+            )}>
+                <div className="max-w-md mx-auto pointer-events-auto">
+                    <button
+                        disabled={!selectedTime}
+                        onClick={() => setStep(2)}
+                        className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 disabled:opacity-50 disabled:shadow-none transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                    >
+                        Continuar
+                        <ChevronRight className="h-5 w-5" />
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }
