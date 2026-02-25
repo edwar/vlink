@@ -25,7 +25,7 @@ export async function sendAppointmentEmail({
 
     try {
         await resend.emails.send({
-            from: 'VLink <noreply@vlink.app>', // Assuming verified domain or testing with resend email
+            from: 'VLink <onboarding@resend.dev>', // Assuming verified domain or testing with resend email
             to,
             subject: subjects[type],
             html: `
@@ -56,8 +56,8 @@ export async function sendOTPEmail({
     code: string;
 }) {
     try {
-        await resend.emails.send({
-            from: 'VLink <noreply@vlink.app>',
+        const response = await resend.emails.send({
+            from: 'VLink <onboarding@resend.dev>',
             to,
             subject: 'Tu código de verificación - VLink',
             html: `
@@ -72,6 +72,7 @@ export async function sendOTPEmail({
         </div>
       `,
         });
+        console.log("Resend sending OTP response:", response);
     } catch (error) {
         console.error('Error sending OTP email:', error);
         throw error;

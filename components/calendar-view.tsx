@@ -23,7 +23,7 @@ import {
 import { es } from "date-fns/locale"
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getAvailability } from "@/app/actions/availability"
+import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
 
 type ViewType = 'day' | 'week' | 'month'
 
@@ -32,21 +32,26 @@ export function CalendarView() {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [availability, setAvailability] = useState<any[]>([])
+    const [appointments, setAppointments] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {
-        const fetchAvailability = async () => {
+        const fetchData = async () => {
             try {
-                const data = await getAvailability()
-                setAvailability(data)
+                const [availData, apptsData] = await Promise.all([
+                    getAvailability(),
+                    getAppointmentsForDashboard()
+                ])
+                setAvailability(availData)
+                setAppointments(apptsData)
             } catch (err) {
-                console.error("Error fetching availability for calendar:", err)
+                console.error("Error fetching data for calendar:", err)
             } finally {
                 setLoading(false)
             }
         }
-        fetchAvailability()
+        fetchData()
     }, [])
 
     // Navigation logic based on view
@@ -238,6 +243,8 @@ export function CalendarView() {
                         const isPast = isBefore(day, startOfDay(new Date()))
                         const isFullyUnavailable = !mainAvailability || isPast
 
+                        const dayAppointments = appointments.filter(a => isSameDay(new Date(a.startTime), day))
+
                         return (
                             <div
                                 key={day.toString()}
@@ -250,7 +257,7 @@ export function CalendarView() {
                                 }}
                                 className={cn(
                                     "min-h-[50px] sm:min-h-[80px] md:min-h-[100px] lg:min-h-[150px] p-1 sm:p-2 border-b border-r last:border-r-0 cursor-pointer hover:bg-accent/30 transition-colors",
-                                    isPast && "opacity-40 grayscale-[0.5] pointer-events-none bg-muted/20",
+                                    isPast && "opacity-40 pointer-events-none bg-muted/20",
                                     !isSameDay(day, monthStart) && day < monthStart && "text-muted-foreground/30 bg-muted/10",
                                     !isSameDay(day, monthEnd) && day > monthEnd && "text-muted-foreground/30 bg-muted/10",
                                     isToday(day) && "bg-primary/5",
@@ -277,6 +284,11 @@ export function CalendarView() {
                                         <div className="px-1 sm:px-1.5 py-0.5 bg-muted text-muted-foreground text-[8px] sm:text-[10px] font-medium rounded w-fit">
                                             <span className="hidden sm:inline">No disponible</span>
                                             <span className="sm:hidden">N/D</span>
+                                        </div>
+                                    )}
+                                    {dayAppointments.length > 0 && !isBlocked && (
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit overflow-hidden">
+                                            <span className="truncate">{dayAppointments.length} cita{dayAppointments.length > 1 ? 's' : ''}</span>
                                         </div>
                                     )}
                                 </div>
@@ -381,6 +393,11 @@ export function CalendarView() {
                                             })
                                         }
 
+                                        const slotAppointments = appointments.filter(a => {
+                                            const aStart = new Date(a.startTime);
+                                            return isSameDay(aStart, day) && aStart.getHours() === hour;
+                                        });
+
                                         return (
                                             <div
                                                 key={hour}
@@ -389,12 +406,24 @@ export function CalendarView() {
                                                     !isAvailable ? "bg-muted/40" : "hover:bg-accent/30"
                                                 )}
                                             >
-                                                {isAvailable ? (
-                                                    <button className="opacity-0 group-hover:opacity-100 transition-opacity absolute inset-1 border-2 border-dashed border-primary/30 rounded-lg flex items-center justify-center gap-2 text-primary hover:bg-primary/5 hover:border-primary/50">
-                                                        <Plus className="h-3 w-3" />
-                                                        <span className="text-[10px] font-bold">Cita</span>
-                                                    </button>
-                                                ) : (
+                                                {slotAppointments.map((appt, idx) => (
+                                                    <div
+                                                        key={appt.id}
+                                                        className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-xs overflow-hidden z-10"
+                                                        style={{
+                                                            top: `${(new Date(appt.startTime).getMinutes() / 60) * 100}%`,
+                                                            height: `${Math.max(20, (((new Date(appt.endTime).getTime() - new Date(appt.startTime).getTime()) / 1000 / 60) / 60) * 100)}%`,
+                                                            // Offset multiple appointments in the same slot slightly if they overlap exactly
+                                                            left: `${(idx * 4) + 4}px`,
+                                                            right: '4px'
+                                                        }}
+                                                    >
+                                                        <p className="font-semibold text-primary truncate leading-tight">{appt.clientName}</p>
+                                                        {appt.service?.name && <p className="text-[10px] text-primary/80 truncate leading-tight">{appt.service.name}</p>}
+                                                    </div>
+                                                ))}
+
+                                                {!isAvailable && slotAppointments.length === 0 && (
                                                     <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
                                                         <Lock className="h-4 w-4" />
                                                     </div>

@@ -144,3 +144,33 @@ export async function deleteAvailability(id: string) {
     revalidatePath("/dashboard/agenda")
     return { success: true }
 }
+
+export async function getAppointmentsForDashboard() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) {
+        throw new Error("Unauthorized")
+    }
+
+    const profile = await prisma.profile.findUnique({
+        where: { userId: session.user.id }
+    })
+
+    if (!profile) {
+        throw new Error("Profile not found")
+    }
+
+    const appointments = await prisma.appointment.findMany({
+        where: {
+            profileId: profile.id,
+            status: { not: "CANCELLED" }
+        },
+        include: {
+            service: true
+        }
+    })
+
+    return appointments
+}
