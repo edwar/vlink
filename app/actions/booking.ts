@@ -167,6 +167,10 @@ export async function createAppointment(data: {
         time: data.time
     })
 
+    // Sync with Google Calendar (Async, don't block response)
+    const { createGoogleCalendarEvent } = await import("@/lib/google-calendar")
+    createGoogleCalendarEvent(appointment.id).catch(console.error)
+
     return appointment
 }
 

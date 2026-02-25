@@ -30,16 +30,18 @@ export async function getProfile() {
         throw new Error("Profile not found")
     }
 
-    // Check if the user has a Google account connected
+    // Check if the user has a Google account connected and the required scope
     const googleAccount = profile.user.accounts.find((acc: any) => acc.providerId === 'google')
     const isGoogleConnected = !!googleAccount
+    const hasCalendarScope = googleAccount?.scope?.includes('https://www.googleapis.com/auth/calendar.events')
     const email = profile.user.email
 
     return {
         username: profile.username,
         bio: profile.bio || "",
         email: email,
-        isGoogleConnected: isGoogleConnected
+        isGoogleConnected: isGoogleConnected,
+        hasCalendarScope: !!hasCalendarScope
     }
 }
 

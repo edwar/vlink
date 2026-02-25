@@ -8,6 +8,8 @@ import { Checkbox } from "./ui/checkbox"
 import { getAvailability, updateAvailability } from "@/app/actions/availability"
 import { cn } from "@/lib/utils"
 import { Input } from "./ui/input"
+import { Button } from "./ui/button"
+import { sileo } from "sileo"
 
 const DAYS = [
     { name: "Lunes", id: 1 },
@@ -97,10 +99,22 @@ export function AvailabilityManagement() {
             })
 
             await updateAvailability(payload)
+            sileo.success({
+                title: "Configuración guardada",
+                description: "Tus horarios han sido actualizados exitosamente.",
+                styles: {
+                    title: "text-green-600! font-bold!",
+                    badge: "text-green-600!"
+                }
+            })
             setSuccess(true)
             setTimeout(() => setSuccess(false), 3000)
         } catch (error) {
             console.error("Error saving availability:", error)
+            sileo.error({
+                title: "Error al guardar",
+                description: "No se pudieron actualizar tus horarios. Intenta de nuevo."
+            })
         } finally {
             setSaving(false)
         }
@@ -139,8 +153,16 @@ export function AvailabilityManagement() {
             setSpecialBlocks(data.filter((d: any) => d.specificDate !== null))
             setShowBlockModal(false)
             setNewBlock({ date: "", start: "09:00", end: "17:00" })
+            sileo.success({
+                title: "Bloqueo añadido",
+                description: "El día de indisponibilidad ha sido registrado."
+            })
         } catch (error) {
             console.error("Error adding special block:", error)
+            sileo.error({
+                title: "Error al añadir",
+                description: "No se pudo registrar el bloqueo especial."
+            })
         } finally {
             setSaving(false)
         }
@@ -156,8 +178,16 @@ export function AvailabilityManagement() {
             await deleteAvailability(id)
             const data = await getAvailability()
             setSpecialBlocks(data.filter((d: any) => d.specificDate !== null))
+            sileo.success({
+                title: "Bloqueo eliminado",
+                description: "El horario vuelve a estar disponible."
+            })
         } catch (error) {
             console.error("Error deleting special block:", error)
+            sileo.error({
+                title: "Error al eliminar",
+                description: "No se pudo eliminar el bloqueo especial."
+            })
         } finally {
             setSaving(false)
         }
@@ -291,13 +321,14 @@ export function AvailabilityManagement() {
                         <h3 className="text-xl font-bold font-display">Bloqueos Especiales</h3>
                         <p className="text-sm text-muted-foreground mt-1">Días específicos que no estarás disponible (vacaciones, citas, etc.)</p>
                     </div>
-                    <button
+                    <Button
+                        variant="secondary"
                         onClick={() => setShowBlockModal(true)}
-                        className="flex w-full md:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-secondary text-secondary-foreground rounded-xl text-sm font-bold hover:bg-secondary/80 transition-all shadow-sm active:scale-95"
+                        className="w-full md:w-auto rounded-xl font-bold active:scale-95"
                     >
                         <Plus className="h-4 w-4" />
                         Añadir Bloqueo
-                    </button>
+                    </Button>
                 </div>
 
                 {specialBlocks.length > 0 ? (
@@ -313,12 +344,14 @@ export function AvailabilityManagement() {
                                         <p className="text-sm text-muted-foreground">{block.startTime} a {block.endTime}</p>
                                     </div>
                                 </div>
-                                <button
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
                                     onClick={() => handleDeleteBlock(block.id)}
-                                    className="p-2 text-muted-foreground hover:text-destructive transition-colors"
+                                    className="text-muted-foreground hover:text-destructive transition-colors"
                                 >
                                     <Trash2 className="h-5 w-5" />
-                                </button>
+                                </Button>
                             </div>
                         ))}
                     </div>
@@ -367,19 +400,20 @@ export function AvailabilityManagement() {
                                 </div>
                             </div>
                             <div className="flex gap-3 pt-4">
-                                <button
+                                <Button
+                                    variant="ghost"
                                     onClick={() => setShowBlockModal(false)}
-                                    className="flex-1 py-4 font-bold text-muted-foreground hover:bg-muted rounded-2xl transition-colors"
+                                    className="flex-1 rounded-2xl text-muted-foreground font-bold"
                                 >
                                     Cancelar
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     onClick={handleAddBlock}
                                     disabled={!newBlock.date || saving}
-                                    className="flex-1 bg-primary text-primary-foreground py-4 font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+                                    className="flex-1 rounded-2xl shadow-lg shadow-primary/20 font-bold"
                                 >
-                                    Añadir
-                                </button>
+                                    {saving ? <Loader2 className="animate-spin" /> : "Añadir"}
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -387,25 +421,29 @@ export function AvailabilityManagement() {
             )}
 
             <div className="fixed sm:sticky bottom-0 sm:bottom-6 left-0 right-0 p-4 sm:p-0 bg-background/80 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border-t sm:border-t-0 z-20 flex justify-end">
-                <button
+                <Button
                     onClick={handleSave}
                     disabled={saving}
                     className={cn(
-                        "flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-xl active:scale-95 disabled:opacity-50 disabled:active:scale-100",
+                        "w-full sm:w-auto px-10 h-14 rounded-2xl font-bold text-lg transition-all duration-500 active:scale-95 overflow-hidden",
                         success
-                            ? "bg-green-500 text-white shadow-green-500/20"
-                            : "bg-primary text-primary-foreground shadow-primary/20 hover:scale-[1.02] hover:shadow-primary/30"
+                            ? "bg-secondary text-secondary-foreground shadow-primary/30 shadow-2xs ring-4 ring-secondary/20 hover:bg-secondary/90"
+                            : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:shadow-md hover:-translate-y-0.5"
                     )}
                 >
-                    {saving ? (
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : success ? (
-                        <CheckCircle2 className="h-5 w-5 animate-bounce" />
-                    ) : (
-                        <Save className="h-5 w-5" />
-                    )}
-                    {saving ? "Guardando..." : success ? "¡Guardado!" : "Guardar Cambios"}
-                </button>
+                    <div className="flex items-center gap-3 relative">
+                        {saving ? (
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : success ? (
+                            <CheckCircle2 className="h-5 w-5 animate-in zoom-in duration-300 fill-secondary-foreground/10" />
+                        ) : (
+                            <Save className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                        )}
+                        <span className="animate-in fade-in slide-in-from-right-2 duration-300 flex items-center">
+                            {saving ? "Guardando..." : "Guardar Cambios"}
+                        </span>
+                    </div>
+                </Button>
             </div>
         </div>
     )

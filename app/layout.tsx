@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import "sileo/styles.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SileoToasterProvider } from "@/components/sileo-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,6 +37,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <SileoToasterProvider />
         </ThemeProvider>
       </body>
     </html>
