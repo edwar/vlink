@@ -21,9 +21,16 @@ import {
     startOfDay,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X } from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
 
 type ViewType = 'day' | 'week' | 'month'
 
@@ -33,6 +40,7 @@ export function CalendarView() {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [availability, setAvailability] = useState<any[]>([])
     const [appointments, setAppointments] = useState<any[]>([])
+    const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null)
     const [loading, setLoading] = useState(true)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -409,7 +417,11 @@ export function CalendarView() {
                                                 {slotAppointments.map((appt, idx) => (
                                                     <div
                                                         key={appt.id}
-                                                        className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-xs overflow-hidden z-10"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedAppointment(appt);
+                                                        }}
+                                                        className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-xs overflow-hidden z-10 cursor-pointer hover:bg-primary/20 hover:border-primary/40 transition-colors"
                                                         style={{
                                                             top: `${(new Date(appt.startTime).getMinutes() / 60) * 100}%`,
                                                             height: `${Math.max(20, (((new Date(appt.endTime).getTime() - new Date(appt.startTime).getTime()) / 1000 / 60) / 60) * 100)}%`,
@@ -444,6 +456,91 @@ export function CalendarView() {
         <div className="flex flex-col h-full space-y-6 animate-in fade-in duration-500">
             {renderHeader()}
             {view === 'month' ? renderMonthView() : renderDayOrWeekView()}
+
+            <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
+                <DialogContent className="sm:max-w-md border-0 bg-background/95 backdrop-blur-xl shadow-2xl p-0 overflow-hidden">
+                    <div className="bg-primary/5 border-b p-6">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-display font-bold">
+                                Detalles de la Cita
+                            </DialogTitle>
+                            <DialogDescription>
+                                Información completa sobre la reserva.
+                            </DialogDescription>
+                        </DialogHeader>
+                    </div>
+
+                    {selectedAppointment && (
+                        <div className="p-6 space-y-6">
+                            {/* Service Info */}
+                            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/30 border">
+                                <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                    <CalendarIcon className="h-5 w-5" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="font-semibold leading-none">{selectedAppointment.service?.name || "Servicio General"}</p>
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Clock3 className="h-3.5 w-3.5" />
+                                        <span>
+                                            {format(new Date(selectedAppointment.startTime), "EEEE d 'de' MMMM", { locale: es })}
+                                        </span>
+                                        <span>•</span>
+                                        <span>
+                                            {format(new Date(selectedAppointment.startTime), "HH:mm")} - {format(new Date(selectedAppointment.endTime), "HH:mm")}
+                                        </span>
+                                    </div>
+                                    <div className="pt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                                        <span>Hecha el: {format(new Date(selectedAppointment.createdAt), "dd/MM/yyyy HH:mm")}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Client Info */}
+                            <div className="space-y-4">
+                                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Información del Cliente</h4>
+
+                                <div className="grid gap-3">
+                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                            <User className="h-4 w-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs text-muted-foreground leading-none mb-1">Nombre</p>
+                                            <p className="text-sm font-medium">{selectedAppointment.clientName}</p>
+                                        </div>
+                                    </div>
+
+                                    {selectedAppointment.clientEmail && (
+                                        <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                                            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                                <Mail className="h-4 w-4" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-muted-foreground leading-none mb-1">Correo Electrónico</p>
+                                                <a href={`mailto:${selectedAppointment.clientEmail}`} className="text-sm font-medium text-primary hover:underline">
+                                                    {selectedAppointment.clientEmail}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                                        <div className="h-8 w-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 shrink-0">
+                                            <Phone className="h-4 w-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs text-muted-foreground leading-none mb-1">Teléfono (WhatsApp)</p>
+                                            <a href={`https://wa.me/${selectedAppointment.clientPhone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-green-600 hover:underline">
+                                                {selectedAppointment.clientPhone}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
