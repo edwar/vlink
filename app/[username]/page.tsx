@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
+import Link from "next/link"
 import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, CheckCircle2, MessageSquare, Loader2, Briefcase } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, CheckCircle2, MessageSquare, Loader2, Briefcase, UserX } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 interface ServiceOption {
     id: string
@@ -41,6 +43,10 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
         const fetchProfile = async () => {
             try {
                 const data = await getProfileForBooking(username)
+                if (!data) {
+                    setProfileError(true)
+                    return
+                }
                 setProfileData(data)
                 // If only one service, auto-select it
                 if (data.services.length === 1) {
@@ -100,13 +106,49 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
 
     if (profileError || !profileData) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center space-y-4 max-w-sm px-6">
-                    <div className="h-16 w-16 bg-destructive/10 rounded-full mx-auto flex items-center justify-center">
-                        <span className="text-2xl">😕</span>
+            <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground overflow-hidden flex flex-col relative px-6">
+                {/* Abstract Background Blur */}
+                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full -z-10" />
+                <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-accent blur-[100px] rounded-full -z-10 opacity-50" />
+
+                <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
+                    <div className="space-y-4">
+                        <div className="h-20 w-20 bg-primary/10 rounded-[28px] mx-auto flex items-center justify-center border-2 border-primary/20 rotate-3 shadow-xl shadow-primary/10 group">
+                            <UserX className="h-10 w-10 text-primary animate-pulse" />
+                        </div>
+
+                        <div className="space-y-2">
+                            <h1 className="text-3xl font-display font-black tracking-tighter">
+                                Perfil no encontrado
+                            </h1>
+                            <p className="text-muted-foreground font-medium max-w-xs mx-auto text-sm md:text-base leading-relaxed">
+                                El usuario <span className="text-foreground font-bold italic underline decoration-primary/30">@{username}</span> no parece estar registrado en nuestra plataforma.
+                            </p>
+                        </div>
                     </div>
-                    <h1 className="text-xl font-bold">Perfil no encontrado</h1>
-                    <p className="text-muted-foreground text-sm">No pudimos encontrar un profesional con el usuario <span className="font-bold">@{username}</span>.</p>
+
+                    <div className="flex flex-col gap-3 w-full max-w-[280px]">
+                        <Link
+                            href="/"
+                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                        >
+                            <CalendarIcon className="h-4 w-4" />
+                            Ver otras agendas
+                        </Link>
+                        <Link
+                            href="/login"
+                            className="w-full py-4 bg-card border border-primary/10 rounded-2xl font-bold text-sm transition-all hover:bg-accent flex items-center justify-center gap-2"
+                        >
+                            Crear mi propio VLink
+                        </Link>
+                    </div>
+
+                    <div className="pt-8">
+                        <div className="flex items-center gap-2 opacity-30 grayscale hover:grayscale-0 transition-all cursor-default">
+                            <Logo className="h-5 w-5" />
+                            <span className="text-sm font-display font-black tracking-tighter">VLINK</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -582,6 +624,8 @@ function SuccessView({ bookingInfo, displayName, serviceName }: {
             </div>
 
             <div className="bg-card border-2 rounded-3xl p-6 space-y-4 shadow-xl shadow-accent/20">
+                {/* Decorative Footer Element */}
+                <div className="h-2 w-full bg-linear-to-r from-transparent via-primary/20 to-transparent" />
                 {serviceName && (
                     <div className="flex items-center gap-4 text-left">
                         <div className="h-10 w-10 bg-accent rounded-lg flex items-center justify-center">

@@ -18,7 +18,7 @@ export async function getProfileForBooking(username: string) {
         }
     })
 
-    if (!profile) throw new Error("Perfil no encontrado")
+    if (!profile) return null
 
     return {
         displayName: profile.displayName || profile.user.name || username,
