@@ -17,6 +17,8 @@ import {
     addWeeks,
     subMonths,
     getDay,
+    isBefore,
+    startOfDay,
 } from "date-fns"
 import { es } from "date-fns/locale"
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock } from "lucide-react"
@@ -154,43 +156,48 @@ export function CalendarView() {
 
                         const mainAvailability = daySlots.find(s => !s.isBlocked)
                         const isBlocked = specificDateSlots.some(s => s.isBlocked)
-                        const isFullyUnavailable = !mainAvailability
+                        const isPast = isBefore(day, startOfDay(new Date()))
+                        const isFullyUnavailable = !mainAvailability || isPast
 
                         return (
                             <div
                                 key={day.toString()}
                                 onClick={() => {
+                                    if (isPast) return
+                                    if (isBlocked) return
                                     setSelectedDate(day)
                                     setCurrentDate(day)
                                     setView('day')
                                 }}
                                 className={cn(
                                     "min-h-[50px] sm:min-h-[80px] md:min-h-[100px] lg:min-h-[150px] p-1 sm:p-2 border-b border-r last:border-r-0 cursor-pointer hover:bg-accent/30 transition-colors",
+                                    isPast && "opacity-40 grayscale-[0.5] pointer-events-none bg-muted/20",
                                     !isSameDay(day, monthStart) && day < monthStart && "text-muted-foreground/30 bg-muted/10",
                                     !isSameDay(day, monthEnd) && day > monthEnd && "text-muted-foreground/30 bg-muted/10",
                                     isToday(day) && "bg-primary/5",
-                                    isBlocked && "bg-red-50/30"
+                                    isBlocked && "bg-red-100"
                                 )}
                             >
                                 <div className="flex justify-between items-start">
                                     <span className={cn(
                                         "flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-[10px] sm:text-sm font-medium",
-                                        isToday(day) ? "bg-primary text-primary-foreground" : "text-foreground"
+                                        isToday(day) ? "bg-primary text-primary-foreground" : "text-foreground",
+                                        isBlocked && "text-destructive"
                                     )}>
                                         {format(day, 'd')}
                                     </span>
                                 </div>
                                 <div className="mt-1 space-y-1">
                                     {isBlocked && (
-                                        <div className="px-1 sm:px-1.5 py-0.5 bg-red-100 text-red-700 text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit">
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-red-100 text-destructive text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit">
                                             <Lock className="h-2.5 w-2.5" />
                                             <span className="hidden sm:inline">Bloqueado</span>
                                         </div>
                                     )}
                                     {isFullyUnavailable && !isBlocked && (
                                         <div className="px-1 sm:px-1.5 py-0.5 bg-muted text-muted-foreground text-[8px] sm:text-[10px] font-medium rounded w-fit">
-                                            <span className="hidden sm:inline">No laborable</span>
-                                            <span className="sm:hidden">N/L</span>
+                                            <span className="hidden sm:inline">No disponible</span>
+                                            <span className="sm:hidden">N/D</span>
                                         </div>
                                     )}
                                 </div>
@@ -269,8 +276,13 @@ export function CalendarView() {
                                         const mainAvailability = daySlots.find(s => !s.isBlocked)
                                         const blockedSlots = [...daySlots.filter(s => s.isBlocked), ...specificDateSlots]
 
+                                        const now = new Date()
+                                        const slotDate = new Date(day)
+                                        slotDate.setHours(hour, 0, 0, 0)
+                                        const isPastSlot = isBefore(slotDate, now)
+
                                         let isAvailable = false
-                                        if (mainAvailability) {
+                                        if (mainAvailability && !isPastSlot) {
                                             const [startH, startM] = mainAvailability.startTime.split(':').map(Number)
                                             const [endH, endM] = mainAvailability.endTime.split(':').map(Number)
 
