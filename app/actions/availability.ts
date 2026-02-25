@@ -50,7 +50,7 @@ export async function updateAvailability(data: {
     // Simple strategy: delete existing and recreate for recurring
     // For specific dates, we might want to be more surgical, but for now let's handle recurring
 
-    await prisma.$transaction(async (tx: typeof prisma) => {
+    await prisma.$transaction(async (tx: any) => {
         // Delete existing recurring availabilities
         await tx.availability.deleteMany({
             where: {

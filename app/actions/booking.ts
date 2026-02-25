@@ -24,7 +24,7 @@ export async function getProfileForBooking(username: string) {
         bio: profile.bio || "",
         username: profile.username,
         image: profile.user.image,
-        services: profile.services.map(s => ({
+        services: profile.services.map((s: any) => ({
             id: s.id,
             name: s.name,
             durationMinutes: s.durationMinutes
