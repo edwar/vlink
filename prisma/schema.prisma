@@ -77,13 +77,29 @@ model Profile {
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   username         String         @unique
   bio              String?
+  displayName      String?
   googleCalendarId String? // For syncing
   availabilities   Availability[]
   appointments     Appointment[]
+  services         Service[]
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
   @@map("profile")
+}
+
+model Service {
+  id              String        @id @default(cuid())
+  profileId       String
+  profile         Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name            String
+  durationMinutes Int           @default(30)
+  isActive        Boolean       @default(true)
+  appointments    Appointment[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("service")
 }
 
 model Availability {
@@ -105,6 +121,8 @@ model Appointment {
   id            String   @id @default(cuid())
   profileId     String
   profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serviceId     String?
+  service       Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   clientName    String
   clientEmail   String?
   clientPhone   String // WhatsApp

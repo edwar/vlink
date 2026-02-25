@@ -5,7 +5,34 @@ import { startOfDay, endOfDay, addMinutes, format, isBefore } from "date-fns"
 import { sendAppointmentEmail } from "@/lib/resend"
 import { es } from "date-fns/locale"
 
-export async function getAvailableSlots(username: string, date: Date) {
+export async function getProfileForBooking(username: string) {
+    const profile = await prisma.profile.findUnique({
+        where: { username },
+        include: {
+            user: true,
+            services: {
+                where: { isActive: true },
+                orderBy: { createdAt: 'asc' }
+            }
+        }
+    })
+
+    if (!profile) throw new Error("Perfil no encontrado")
+
+    return {
+        displayName: profile.displayName || profile.user.name || username,
+        bio: profile.bio || "",
+        username: profile.username,
+        image: profile.user.image,
+        services: profile.services.map(s => ({
+            id: s.id,
+            name: s.name,
+            durationMinutes: s.durationMinutes
+        }))
+    }
+}
+
+export async function getAvailableSlots(username: string, date: Date, durationMinutes: number = 30) {
     const profile = await prisma.profile.findUnique({
         where: { username },
         include: { availabilities: true }
@@ -13,10 +40,10 @@ export async function getAvailableSlots(username: string, date: Date) {
 
     if (!profile) throw new Error("Perfil no encontrado")
 
-    const dayOfWeek = date.getDay() === 0 ? 6 : date.getDay() - 1 // Convert 0-6 (Sun-Sat) to 0-6 (Mon-Sun) if needed, but schema uses 0-6 (Sun-Sat). Wait, date.getDay() is 0 (Sun) to 6 (Sat).
+    const dayOfWeek = date.getDay()
 
     // 1. Get recurring availability for this day of week
-    const recurring = profile.availabilities.find((a: any) => a.dayOfWeek === date.getDay() && !a.isBlocked)
+    const recurring = profile.availabilities.find((a: any) => a.dayOfWeek === dayOfWeek && !a.isBlocked)
 
     if (!recurring) return []
 
@@ -48,23 +75,28 @@ export async function getAvailableSlots(username: string, date: Date) {
     endTime.setHours(endHour, endMin, 0, 0)
 
     while (isBefore(currentSlot, endTime)) {
-        const timeStr = format(currentSlot, "HH:mm")
+        const slotEnd = addMinutes(currentSlot, durationMinutes)
+        // Only add if the entire slot fits before end time
+        if (isBefore(slotEnd, endTime) || slotEnd.getTime() === endTime.getTime()) {
+            const timeStr = format(currentSlot, "HH:mm")
+            const slotEndStr = format(slotEnd, "HH:mm")
 
-        // Check if slot is blocked by specific block
-        const isBlocked = blocks.some((b: any) => timeStr >= b.startTime && timeStr < b.endTime)
+            // Check if slot is blocked by specific block
+            const isBlocked = blocks.some((b: any) => timeStr < b.endTime && slotEndStr > b.startTime)
 
-        // Check if slot overlaps with existing appointment
-        const isOccupied = appointments.some((appt: any) => {
-            const apptStart = format(appt.startTime, "HH:mm")
-            const apptEnd = format(appt.endTime, "HH:mm")
-            return timeStr >= apptStart && timeStr < apptEnd
-        })
+            // Check if slot overlaps with existing appointment
+            const isOccupied = appointments.some((appt: any) => {
+                const apptStart = format(appt.startTime, "HH:mm")
+                const apptEnd = format(appt.endTime, "HH:mm")
+                return timeStr < apptEnd && slotEndStr > apptStart
+            })
 
-        if (!isBlocked && !isOccupied) {
-            slots.push(timeStr)
+            if (!isBlocked && !isOccupied) {
+                slots.push(timeStr)
+            }
         }
 
-        currentSlot = addMinutes(currentSlot, 30) // Default 30 min slots
+        currentSlot = addMinutes(currentSlot, durationMinutes)
     }
 
     return slots
@@ -76,15 +108,23 @@ export async function createAppointment(data: {
     time: string,
     clientName: string,
     clientPhone: string,
-    clientEmail: string
+    clientEmail: string,
+    serviceId?: string
 }) {
     const profile = await prisma.profile.findUnique({ where: { username: data.username } })
     if (!profile) throw new Error("Perfil no encontrado")
 
+    // Get duration from service if provided, otherwise default 30
+    let durationMinutes = 30
+    if (data.serviceId) {
+        const service = await prisma.service.findUnique({ where: { id: data.serviceId } })
+        if (service) durationMinutes = service.durationMinutes
+    }
+
     const [hour, min] = data.time.split(":").map(Number)
     const startTime = new Date(data.date)
     startTime.setHours(hour, min, 0, 0)
-    const endTime = addMinutes(startTime, 30)
+    const endTime = addMinutes(startTime, durationMinutes)
 
     // Re-verify availability (Atomic check)
     const collision = await prisma.appointment.findFirst({
@@ -103,6 +143,7 @@ export async function createAppointment(data: {
     const appointment = await prisma.appointment.create({
         data: {
             profileId: profile.id,
+            serviceId: data.serviceId || null,
             clientName: data.clientName,
             clientPhone: data.clientPhone,
             clientEmail: data.clientEmail,
