@@ -320,23 +320,28 @@ export function CalendarView() {
             <div className="flex flex-col border rounded-xl bg-card overflow-hidden">
                 <div className={cn(
                     "grid border-b",
-                    view === 'day' ? "grid-cols-1" : "grid-cols-7"
+                    view === 'day' ? "grid-cols-[80px_1fr]" : "grid-cols-[80px_repeat(7,1fr)]"
                 )}>
+                    {/* Placeholder for the time column offset */}
+                    <div className="bg-muted/30 border-r" />
+
                     {displayDays.map((day) => (
                         <div
                             key={day.toString()}
                             onClick={() => setSelectedDate(day)}
                             className={cn(
                                 "p-4 text-center cursor-pointer transition-colors hover:bg-accent/50",
-                                isSameDay(day, selectedDate) && "bg-accent"
+                                isSameDay(day, selectedDate) && "bg-accent",
+                                // Day specific formatting if needed
+                                "border-r last:border-r-0"
                             )}
                         >
-                            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                            <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                                 {format(day, "eee", { locale: es })}
                             </p>
                             <p className={cn(
-                                "text-lg font-semibold",
-                                isToday(day) && "text-primary border-b-2 border-primary inline-block shrink-0 px-1"
+                                "text-base sm:text-lg font-bold",
+                                isToday(day) && "text-primary border-b-2 border-primary inline-block px-1"
                             )}>
                                 {format(day, "d")}
                             </p>
