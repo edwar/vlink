@@ -258,6 +258,8 @@ export function ConfigurationSettings() {
                                             </InputGroupAddon>
                                             <InputGroupInput
                                                 type="text"
+                                                inputMode="numeric"
+                                                pattern="[0-9.]*"
                                                 value={newPrice}
                                                 onChange={(e) => setNewPrice(formatPrice(e.target.value))}
                                                 placeholder="0"
@@ -357,6 +359,8 @@ export function ConfigurationSettings() {
                                                             </InputGroupAddon>
                                                             <InputGroupInput
                                                                 type="text"
+                                                                inputMode="numeric"
+                                                                pattern="[0-9.]*"
                                                                 value={editPrice}
                                                                 onChange={(e) => setEditPrice(formatPrice(e.target.value))}
                                                                 className="h-full text-lg font-bold px-4 border-none focus-visible:ring-0"
