@@ -471,20 +471,23 @@ export function CalendarView() {
                                 <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                                     <CalendarIcon className="h-5 w-5" />
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="font-semibold leading-none">{selectedAppointment.service?.name || "Servicio General"}</p>
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Clock3 className="h-3.5 w-3.5" />
-                                        <span>
-                                            {format(new Date(selectedAppointment.startTime), "EEEE d 'de' MMMM", { locale: es })}
-                                        </span>
-                                        <span>•</span>
-                                        <span>
+                                <div className="space-y-1.5 w-full overflow-hidden">
+                                    <p className="font-bold text-lg leading-tight truncate">{selectedAppointment.service?.name || "Servicio General"}</p>
+                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                                        <div className="flex items-center gap-1.5">
+                                            <Clock3 className="h-3.5 w-3.5 text-primary" />
+                                            <span className="capitalize">
+                                                {format(new Date(selectedAppointment.startTime), "EEEE d 'de' MMMM", { locale: es })}
+                                            </span>
+                                        </div>
+                                        <span className="opacity-40 hidden xs:inline">•</span>
+                                        <span className="font-medium text-foreground/80 bg-muted px-1.5 py-0.5 rounded text-xs">
                                             {format(new Date(selectedAppointment.startTime), "HH:mm")} - {format(new Date(selectedAppointment.endTime), "HH:mm")}
                                         </span>
                                     </div>
-                                    <div className="pt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                                        <span>Hecha el: {format(new Date(selectedAppointment.createdAt), "dd/MM/yyyy HH:mm")}</span>
+                                    <div className="pt-2 flex items-center gap-2 text-[10px] text-muted-foreground border-t mt-2">
+                                        <CalendarIcon className="h-3 w-3" />
+                                        <span>Registrada el: {format(new Date(selectedAppointment.createdAt), "dd/MM/yyyy HH:mm")}</span>
                                     </div>
                                 </div>
                             </div>
@@ -496,9 +499,9 @@ export function CalendarView() {
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                             <User className="h-4 w-4" />
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-muted-foreground leading-none mb-1">Nombre</p>
-                                            <p className="text-sm font-medium">{selectedAppointment.clientName}</p>
+                                        <div className="min-w-0">
+                                            <p className="text-[10px] text-muted-foreground leading-none mb-1">Nombre</p>
+                                            <p className="text-sm font-semibold truncate">{selectedAppointment.clientName}</p>
                                         </div>
                                     </div>
 
@@ -507,9 +510,9 @@ export function CalendarView() {
                                             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                                 <Mail className="h-4 w-4" />
                                             </div>
-                                            <div>
-                                                <p className="text-xs text-muted-foreground leading-none mb-1">Correo Electrónico</p>
-                                                <a href={`mailto:${selectedAppointment.clientEmail}`} className="text-sm font-medium text-primary hover:underline">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-[10px] text-muted-foreground leading-none mb-1">Correo Electrónico</p>
+                                                <a href={`mailto:${selectedAppointment.clientEmail}`} className="text-sm font-medium text-primary hover:underline break-all block leading-tight">
                                                     {selectedAppointment.clientEmail}
                                                 </a>
                                             </div>
