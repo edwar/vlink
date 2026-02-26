@@ -69,9 +69,16 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                             <span>{format(new Date(appt.startTime), "HH:mm")} - {format(new Date(appt.endTime), "HH:mm")}</span>
                         </div>
                         {appt.service && (
-                            <div className="flex items-center gap-1 font-medium">
-                                <Briefcase className="h-3 w-3" />
-                                <span>{appt.service.name}</span>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <div className="flex items-center gap-1 font-medium">
+                                    <Briefcase className="h-3 w-3" />
+                                    <span>{appt.service.name}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <span className="text-[10px] font-black bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                                        $ {(appt.service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+                                    </span>
+                                </div>
                             </div>
                         )}
                     </div>

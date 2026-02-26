@@ -116,11 +116,18 @@ export async function createAppointment(data: {
     const profile = await prisma.profile.findUnique({ where: { username: data.username } })
     if (!profile) throw new Error("Perfil no encontrado")
 
-    // Get duration from service if provided, otherwise default 30
+    // Get duration and service info if provided
     let durationMinutes = 30
+    let serviceName = undefined
+    let servicePrice = undefined
+
     if (data.serviceId) {
         const service = await prisma.service.findUnique({ where: { id: data.serviceId } })
-        if (service) durationMinutes = service.durationMinutes
+        if (service) {
+            durationMinutes = service.durationMinutes
+            serviceName = service.name
+            servicePrice = service.price
+        }
     }
 
     const [hour, min] = data.time.split(":").map(Number)
@@ -164,6 +171,8 @@ export async function createAppointment(data: {
         type: "CONFIRMATION",
         clientName: data.clientName,
         professionalName: user?.name || data.username,
+        serviceName,
+        price: servicePrice,
         date: format(startTime, "EEEE, d 'de' MMMM", { locale: es }),
         time: data.time
     })

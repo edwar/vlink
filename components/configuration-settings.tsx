@@ -425,8 +425,10 @@ export function ConfigurationSettings() {
                                                                         : `${service.durationMinutes} min`}
                                                                 </span>
                                                             </div>
-                                                            <div className="flex items-center gap-1.5 font-bold text-foreground/80">
-                                                                <span>$ {(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="font-bold text-foreground/80 bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                                                                    $ {(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>

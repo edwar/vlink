@@ -472,7 +472,13 @@ export function CalendarView() {
                                     <CalendarIcon className="h-5 w-5" />
                                 </div>
                                 <div className="space-y-1.5 w-full overflow-hidden">
-                                    <p className="font-bold text-lg leading-tight truncate">{selectedAppointment.service?.name || "Servicio General"}</p>
+                                    <div className="flex items-center justify-between gap-4">
+                                        <p className="font-bold text-lg leading-tight truncate">{selectedAppointment.service?.name || "Servicio General"}</p>
+                                        <div className="text-right shrink-0">
+                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Inversión</p>
+                                            <p className="font-black text-primary">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
+                                        </div>
+                                    </div>
                                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
                                         <div className="flex items-center gap-1.5">
                                             <Clock3 className="h-3.5 w-3.5 text-primary" />

@@ -208,34 +208,34 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                         key={service.id}
                                         onClick={() => handleSelectService(service)}
                                         className={cn(
-                                            "w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center gap-4",
+                                            "w-full p-5 rounded-[2rem] border-2 text-left transition-all flex items-center gap-4 group/btn",
                                             selectedService?.id === service.id
-                                                ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
-                                                : "bg-card border-transparent hover:border-accent"
+                                                ? "bg-primary text-primary-foreground border-primary shadow-2xl shadow-primary/20 scale-[1.02]"
+                                                : "bg-card border-muted/30 hover:border-primary/30 hover:bg-primary/5"
                                         )}
                                     >
                                         <div className={cn(
-                                            "h-10 w-10 rounded-xl flex items-center justify-center shrink-0",
+                                            "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/btn:scale-110 duration-500",
                                             selectedService?.id === service.id ? "bg-primary-foreground/20" : "bg-primary/10"
                                         )}>
                                             <Briefcase className={cn(
-                                                "h-5 w-5",
+                                                "h-6 w-6",
                                                 selectedService?.id === service.id ? "text-primary-foreground" : "text-primary"
                                             )} />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="font-bold text-sm">{service.name}</p>
-                                            <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs opacity-70 mt-0.5">
-                                                <div className="flex items-center gap-1">
-                                                    <Clock className="h-3 w-3" />
+                                            <p className="font-black text-base sm:text-lg tracking-tight mb-0.5">{service.name}</p>
+                                            <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs font-bold uppercase tracking-widest opacity-70">
+                                                <div className="flex items-center gap-1.5">
+                                                    <Clock className="h-3.5 w-3.5" />
                                                     <span>
                                                         {service.durationMinutes >= 60
-                                                            ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}min` : ""}`
+                                                            ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
                                                             : `${service.durationMinutes} min`}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-1 font-bold">
-                                                    <span>$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                <div className="flex items-center gap-1.5 text-primary">
+                                                    <span className="bg-primary/10 px-2 py-0.5 rounded-full">$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -362,6 +362,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                     <SuccessView
                         displayName={displayName}
                         serviceName={selectedService?.name}
+                        price={selectedService?.price}
                         bookingInfo={{ date: selectedDate, time: selectedTime! }}
                     />
                 ) : null}
@@ -627,10 +628,11 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
     )
 }
 
-function SuccessView({ bookingInfo, displayName, serviceName }: {
+function SuccessView({ bookingInfo, displayName, serviceName, price }: {
     bookingInfo: { date: Date, time: string },
     displayName: string,
-    serviceName?: string
+    serviceName?: string,
+    price?: number | null
 }) {
     return (
         <div className="text-center space-y-8 animate-in zoom-in-95 duration-500">
@@ -647,14 +649,22 @@ function SuccessView({ bookingInfo, displayName, serviceName }: {
                 {/* Decorative Footer Element */}
                 <div className="h-2 w-full bg-linear-to-r from-transparent via-primary/20 to-transparent" />
                 {serviceName && (
-                    <div className="flex items-center gap-4 text-left">
-                        <div className="h-10 w-10 bg-accent rounded-lg flex items-center justify-center">
-                            <Briefcase className="h-5 w-5" />
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
+                        <div className="flex items-center gap-4">
+                            <div className="h-10 w-10 bg-accent rounded-lg flex items-center justify-center">
+                                <Briefcase className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Servicio</p>
+                                <p className="font-bold text-lg leading-tight">{serviceName}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="text-xs font-bold uppercase text-muted-foreground tracking-widest">Servicio</p>
-                            <p className="font-bold">{serviceName}</p>
-                        </div>
+                        {price !== undefined && price !== null && (
+                            <div className="sm:text-right pl-14 sm:pl-0">
+                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Inversión</p>
+                                <p className="font-black text-xl text-primary">$ {price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
+                            </div>
+                        )}
                     </div>
                 )}
                 <div className={cn("flex items-center gap-4 text-left", serviceName && "border-t pt-4")}>

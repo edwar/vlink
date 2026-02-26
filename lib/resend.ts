@@ -7,6 +7,8 @@ export async function sendAppointmentEmail({
     type,
     clientName,
     professionalName,
+    serviceName,
+    price,
     date,
     time,
 }: {
@@ -14,6 +16,8 @@ export async function sendAppointmentEmail({
     type: 'CONFIRMATION' | 'REMINDER_24H' | 'REMINDER_2H';
     clientName: string;
     professionalName: string;
+    serviceName?: string;
+    price?: number | null;
     date: string;
     time: string;
 }) {
@@ -22,6 +26,10 @@ export async function sendAppointmentEmail({
         REMINDER_24H: `Recordatorio: Tienes una cita mañana con ${professionalName}`,
         REMINDER_2H: `Recordatorio: Tu cita con ${professionalName} es en 2 horas`,
     };
+
+    const formattedPrice = price !== undefined && price !== null
+        ? `$ ${price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
+        : null;
 
     try {
         await resend.emails.send({
@@ -34,7 +42,9 @@ export async function sendAppointmentEmail({
           <p style="color: #475569; font-size: 16px;">Hola ${clientName},</p>
           <p style="color: #475569; font-size: 16px;">Tu cita con <strong>${professionalName}</strong> está programada para:</p>
           <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <p style="margin: 0; color: #0f172a;"><strong>Fecha:</strong> ${date}</p>
+            ${serviceName ? `<p style="margin: 0; color: #0f172a;"><strong>Servicio:</strong> ${serviceName}</p>` : ''}
+            ${formattedPrice ? `<p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Precio:</strong> ${formattedPrice}</p>` : ''}
+            <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Fecha:</strong> ${date}</p>
             <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Hora:</strong> ${time}</p>
           </div>
           <p style="color: #475569; font-size: 14px; margin-top: 30px;">Si necesitas cancelar o reprogramar, por favor contacta al profesional directamente.</p>
