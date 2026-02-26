@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { sileo } from "sileo"
+import { LoadingState } from "./loading-state"
 
 const DAYS = [
     { name: "Lunes", id: 1 },
@@ -195,10 +196,7 @@ export function AvailabilityManagement() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-muted-foreground animate-pulse">Cargando tu configuración...</p>
-            </div>
+            <LoadingState message="Cargando tu configuración..." fullPage={false} />
         )
     }
 

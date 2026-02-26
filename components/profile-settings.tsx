@@ -8,6 +8,7 @@ import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "@/
 import { Textarea } from "./ui/textarea"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
+import { LoadingState } from "@/components/loading-state"
 import { sileo } from "sileo"
 
 export function ProfileSettings() {
@@ -83,12 +84,7 @@ export function ProfileSettings() {
     }
 
     if (loading) {
-        return (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-muted-foreground animate-pulse">Cargando perfil...</p>
-            </div>
-        )
+        return <LoadingState fullPage={false} message="Cargando perfil..." />
     }
 
     return (

@@ -8,6 +8,7 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 import { sileo } from "sileo"
+import { LoadingState } from "./loading-state"
 
 const DURATION_OPTIONS = [
     { label: "15 min", value: 15 },
@@ -185,10 +186,7 @@ export function ConfigurationSettings() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-muted-foreground animate-pulse">Cargando configuración...</p>
-            </div>
+            <LoadingState message="Cargando configuración..." fullPage={false} />
         )
     }
 

@@ -8,6 +8,7 @@ import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefca
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LoadingState } from "@/components/loading-state"
 import { Logo } from "@/components/logo"
 import {
     InputOTP,
@@ -103,14 +104,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     }
 
     if (loadingProfile) {
-        return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center space-y-4">
-                    <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto" />
-                    <p className="text-muted-foreground animate-pulse">Cargando...</p>
-                </div>
-            </div>
-        )
+        return <LoadingState />
     }
 
     if (profileError || !profileData) {
