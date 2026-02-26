@@ -28,7 +28,8 @@ export async function getProfileForBooking(username: string) {
         services: profile.services.map((s: any) => ({
             id: s.id,
             name: s.name,
-            durationMinutes: s.durationMinutes
+            durationMinutes: s.durationMinutes,
+            price: s.price
         }))
     }
 }

@@ -7,6 +7,13 @@ import { cn } from "@/lib/utils"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "./ui/select"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
 
@@ -24,6 +31,7 @@ interface ServiceItem {
     name: string
     durationMinutes: number
     isActive: boolean
+    price: number
 }
 
 export function ConfigurationSettings() {
@@ -35,12 +43,14 @@ export function ConfigurationSettings() {
     // New service form
     const [showNewForm, setShowNewForm] = useState(false)
     const [newName, setNewName] = useState("")
+    const [newPrice, setNewPrice] = useState("0")
     const [newDuration, setNewDuration] = useState(30)
     const [creatingService, setCreatingService] = useState(false)
 
     // Editing
     const [editingId, setEditingId] = useState<string | null>(null)
     const [editName, setEditName] = useState("")
+    const [editPrice, setEditPrice] = useState("0")
     const [editDuration, setEditDuration] = useState(30)
     const [updatingService, setUpdatingService] = useState(false)
 
@@ -92,10 +102,15 @@ export function ConfigurationSettings() {
         if (!newName.trim()) return
         setCreatingService(true)
         try {
-            await createService({ name: newName, durationMinutes: newDuration })
+            await createService({
+                name: newName,
+                durationMinutes: newDuration,
+                price: parseFloat(newPrice) || 0
+            })
             const data = await getConfiguration()
             setServices(data.services)
             setNewName("")
+            setNewPrice("0")
             setNewDuration(30)
             setShowNewForm(false)
             sileo.success({
@@ -120,7 +135,11 @@ export function ConfigurationSettings() {
         if (!editName.trim()) return
         setUpdatingService(true)
         try {
-            await updateService(id, { name: editName, durationMinutes: editDuration })
+            await updateService(id, {
+                name: editName,
+                durationMinutes: editDuration,
+                price: parseFloat(editPrice) || 0
+            })
             const data = await getConfiguration()
             setServices(data.services)
             setEditingId(null)
@@ -181,6 +200,7 @@ export function ConfigurationSettings() {
     const startEditing = (service: ServiceItem) => {
         setEditingId(service.id)
         setEditName(service.name)
+        setEditPrice(service.price.toString())
         setEditDuration(service.durationMinutes)
     }
 
@@ -226,29 +246,50 @@ export function ConfigurationSettings() {
                                         autoFocus
                                     />
                                 </div>
-                                <div className="space-y-4">
-                                    <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Duración Sugerida</Label>
-                                    <div className="flex flex-wrap gap-2">
-                                        {DURATION_OPTIONS.map((opt) => (
-                                            <button
-                                                key={opt.value}
-                                                onClick={() => setNewDuration(opt.value)}
-                                                className={cn(
-                                                    "px-5 py-3 rounded-xl text-sm font-black border-2 transition-all active:scale-95",
-                                                    newDuration === opt.value
-                                                        ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
-                                                        : "bg-background border-muted/50 hover:border-primary/30"
-                                                )}
-                                            >
-                                                {opt.label}
-                                            </button>
-                                        ))}
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-4">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Precio (Opcional)</Label>
+                                        <div className="relative">
+                                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-bold text-muted-foreground">$</span>
+                                            <Input
+                                                type="number"
+                                                value={newPrice}
+                                                onChange={(e) => setNewPrice(e.target.value)}
+                                                placeholder="0"
+                                                className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background pl-10 px-6"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Duración Sugerida</Label>
+                                        <Select
+                                            value={newDuration.toString()}
+                                            onValueChange={(val) => setNewDuration(parseInt(val))}
+                                        >
+                                            <SelectTrigger size="lg" className="h-16 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
+                                                <SelectValue placeholder="Seleccionar duración" />
+                                            </SelectTrigger>
+                                            <SelectContent className="rounded-xl border-2 shadow-xl">
+                                                {DURATION_OPTIONS.map((opt) => (
+                                                    <SelectItem
+                                                        key={opt.value}
+                                                        value={opt.value.toString()}
+                                                        className="font-bold py-3 focus:bg-primary/10 focus:text-primary cursor-pointer"
+                                                    >
+                                                        {opt.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </div>
+
                                 <div className="flex gap-3 justify-end pt-4 border-t border-primary/10">
                                     <Button
                                         variant="ghost"
-                                        onClick={() => { setShowNewForm(false); setNewName(""); setNewDuration(30) }}
+                                        onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
                                         className="rounded-xl font-bold h-11"
                                     >
                                         Cancelar
@@ -292,46 +333,62 @@ export function ConfigurationSettings() {
                                         {editingId === service.id ? (
                                             <div className="space-y-6">
                                                 <div className="space-y-4">
-                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-primary">Editar Nombre</Label>
+                                                    <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Nombre del Servicio</Label>
                                                     <Input
                                                         type="text"
                                                         value={editName}
                                                         onChange={(e) => setEditName(e.target.value)}
-                                                        className="h-12 rounded-xl border-2 font-bold px-5"
+                                                        className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6"
                                                         autoFocus
                                                     />
                                                 </div>
-                                                <div className="space-y-4">
-                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-primary">Editar Duración</Label>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {DURATION_OPTIONS.map((opt) => (
-                                                            <button
-                                                                key={opt.value}
-                                                                onClick={() => setEditDuration(opt.value)}
-                                                                className={cn(
-                                                                    "px-4 py-2 rounded-lg text-xs font-black border-2 transition-all",
-                                                                    editDuration === opt.value
-                                                                        ? "bg-primary text-primary-foreground border-primary"
-                                                                        : "bg-background border-muted/50 hover:border-primary/20"
-                                                                )}
-                                                            >
-                                                                {opt.label}
-                                                            </button>
-                                                        ))}
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className="space-y-4">
+                                                        <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Precio (Opcional)</Label>
+                                                        <div className="relative">
+                                                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-bold text-muted-foreground">$</span>
+                                                            <Input
+                                                                type="number"
+                                                                value={editPrice}
+                                                                onChange={(e) => setEditPrice(e.target.value)}
+                                                                className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background pl-10 px-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="space-y-4">
+                                                        <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Duración</Label>
+                                                        <Select
+                                                            value={editDuration.toString()}
+                                                            onValueChange={(val) => setEditDuration(parseInt(val))}
+                                                        >
+                                                            <SelectTrigger className="h-16 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
+                                                                <SelectValue placeholder="Duración" />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="rounded-xl border-2 shadow-xl">
+                                                                {DURATION_OPTIONS.map(opt => (
+                                                                    <SelectItem
+                                                                        key={opt.value}
+                                                                        value={opt.value.toString()}
+                                                                        className="font-bold py-3 focus:bg-primary/10 focus:text-primary cursor-pointer"
+                                                                    >
+                                                                        {opt.label}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-2 justify-end pt-4 border-t border-primary/10">
-                                                    <Button variant="ghost" size="sm" onClick={() => setEditingId(null)} className="rounded-lg font-bold">
+                                                <div className="flex gap-3 justify-end pt-4 border-t border-primary/10">
+                                                    <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-bold h-11">
                                                         Cancelar
                                                     </Button>
                                                     <Button
-                                                        size="sm"
                                                         onClick={() => handleUpdateService(service.id)}
                                                         disabled={updatingService || !editName.trim()}
-                                                        className="rounded-lg font-black px-5"
+                                                        className="rounded-xl font-black h-11 px-6 shadow-md"
                                                     >
-                                                        {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Save className="h-4 w-4 mr-1" />}
-                                                        Guardar
+                                                        {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                                                        Guardar Cambios
                                                     </Button>
                                                 </div>
                                             </div>
@@ -347,13 +404,18 @@ export function ConfigurationSettings() {
                                                     </div>
                                                     <div className="flex-1 min-w-0 pt-0.5">
                                                         <h4 className="font-black text-base sm:text-lg truncate tracking-tight text-foreground/90 leading-tight mb-1">{service.name}</h4>
-                                                        <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
-                                                            <Clock className="h-3 w-3" />
-                                                            <span>
-                                                                {service.durationMinutes >= 60
-                                                                    ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
-                                                                    : `${service.durationMinutes} min`}
-                                                            </span>
+                                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] sm:text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
+                                                            <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2 py-0.5 rounded-full">
+                                                                <Clock className="h-3 w-3" />
+                                                                <span>
+                                                                    {service.durationMinutes >= 60
+                                                                        ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
+                                                                        : `${service.durationMinutes} min`}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-1.5 font-bold text-foreground/80">
+                                                                <span>$ {(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -24,6 +24,7 @@ interface ServiceOption {
     id: string
     name: string
     durationMinutes: number
+    price: number | null
 }
 
 interface ProfileData {
@@ -48,7 +49,6 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [loadingSlots, setLoadingSlots] = useState(false)
     const [imageError, setImageError] = useState(false)
 
-    // Fetch profile data on mount
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -64,7 +64,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                     setStep(1)
                 } else if (data.services.length === 0) {
                     // No services configured, go directly to date/time with default 30 min
-                    setSelectedService({ id: "", name: "Cita General", durationMinutes: 30 })
+                    setSelectedService({ id: "", name: "Cita General", durationMinutes: 30, price: 0 })
                     setStep(1)
                 }
             } catch (error) {
@@ -225,13 +225,18 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="font-bold text-sm">{service.name}</p>
-                                            <div className="flex items-center gap-1.5 text-xs opacity-70 mt-0.5">
-                                                <Clock className="h-3 w-3" />
-                                                <span>
-                                                    {service.durationMinutes >= 60
-                                                        ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}min` : ""}`
-                                                        : `${service.durationMinutes} min`}
-                                                </span>
+                                            <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs opacity-70 mt-0.5">
+                                                <div className="flex items-center gap-1">
+                                                    <Clock className="h-3 w-3" />
+                                                    <span>
+                                                        {service.durationMinutes >= 60
+                                                            ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}min` : ""}`
+                                                            : `${service.durationMinutes} min`}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-1 font-bold">
+                                                    <span>$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </button>
@@ -261,11 +266,16 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-bold truncate">{selectedService.name}</p>
                                 </div>
-                                <span className="text-xs text-muted-foreground font-semibold shrink-0">
-                                    {selectedService.durationMinutes >= 60
-                                        ? `${Math.floor(selectedService.durationMinutes / 60)}h ${selectedService.durationMinutes % 60 > 0 ? `${selectedService.durationMinutes % 60}min` : ""}`
-                                        : `${selectedService.durationMinutes} min`}
-                                </span>
+                                <div className="flex flex-col items-end gap-0.5">
+                                    <span className="text-[10px] text-muted-foreground font-semibold leading-none">
+                                        {selectedService.durationMinutes >= 60
+                                            ? `${Math.floor(selectedService.durationMinutes / 60)}h ${selectedService.durationMinutes % 60 > 0 ? `${selectedService.durationMinutes % 60}min` : ""}`
+                                            : `${selectedService.durationMinutes} min`}
+                                    </span>
+                                    <span className="text-xs font-black text-primary leading-none">
+                                        $ {(selectedService.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+                                    </span>
+                                </div>
                             </div>
                         )}
 

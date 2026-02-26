@@ -33,7 +33,13 @@ export async function getServices() {
         orderBy: { createdAt: 'asc' }
     })
 
-    return services
+    return services.map(s => ({
+        id: s.id,
+        name: s.name,
+        durationMinutes: s.durationMinutes,
+        isActive: s.isActive,
+        price: (s as any).price ?? 0
+    }))
 }
 
 export async function getConfiguration() {
@@ -46,7 +52,13 @@ export async function getConfiguration() {
 
     return {
         displayName: profile.displayName || session.user.name || "",
-        services
+        services: services.map(s => ({
+            id: s.id,
+            name: s.name,
+            durationMinutes: s.durationMinutes,
+            isActive: s.isActive,
+            price: (s as any).price ?? 0
+        }))
     }
 }
 
@@ -66,7 +78,7 @@ export async function updateDisplayName(displayName: string) {
     return { success: true }
 }
 
-export async function createService(data: { name: string, durationMinutes: number }) {
+export async function createService(data: { name: string, durationMinutes: number, price?: number }) {
     const { profile } = await getProfileForUser()
 
     if (!data.name || data.name.trim() === "") {
@@ -77,7 +89,8 @@ export async function createService(data: { name: string, durationMinutes: numbe
         data: {
             profileId: profile.id,
             name: data.name.trim(),
-            durationMinutes: data.durationMinutes
+            durationMinutes: data.durationMinutes,
+            price: data.price || 0
         }
     })
 
@@ -85,7 +98,7 @@ export async function createService(data: { name: string, durationMinutes: numbe
     return { success: true }
 }
 
-export async function updateService(id: string, data: { name?: string, durationMinutes?: number, isActive?: boolean }) {
+export async function updateService(id: string, data: { name?: string, durationMinutes?: number, isActive?: boolean, price?: number }) {
     const { profile } = await getProfileForUser()
 
     // Verify ownership
@@ -102,7 +115,8 @@ export async function updateService(id: string, data: { name?: string, durationM
         data: {
             ...(data.name !== undefined && { name: data.name.trim() }),
             ...(data.durationMinutes !== undefined && { durationMinutes: data.durationMinutes }),
-            ...(data.isActive !== undefined && { isActive: data.isActive })
+            ...(data.isActive !== undefined && { isActive: data.isActive }),
+            ...(data.price !== undefined && { price: data.price })
         }
     })
 

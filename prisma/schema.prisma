@@ -96,6 +96,7 @@ model Service {
   durationMinutes Int           @default(30)
   isActive        Boolean       @default(true)
   appointments    Appointment[]
+  price           Float?        @default(0)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
