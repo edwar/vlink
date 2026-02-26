@@ -159,7 +159,7 @@ export function CalendarView() {
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Vista</p>
                         <div className="grid grid-cols-3 gap-2">
                             <button
-                                onClick={() => { setView('day'); }}
+                                onClick={() => { setView('day'); setIsMenuOpen(false); }}
                                 className={cn(
                                     "px-3 py-2 text-xs font-medium rounded-lg border transition-all flex flex-col items-center gap-2",
                                     view === 'day' ? "bg-primary text-primary-foreground border-primary" : "bg-muted/30 text-muted-foreground"
@@ -169,7 +169,7 @@ export function CalendarView() {
                                 Día
                             </button>
                             <button
-                                onClick={() => { setView('week'); }}
+                                onClick={() => { setView('week'); setIsMenuOpen(false); }}
                                 className={cn(
                                     "px-3 py-2 text-xs font-medium rounded-lg border transition-all flex flex-col items-center gap-2",
                                     view === 'week' ? "bg-primary text-primary-foreground border-primary" : "bg-muted/30 text-muted-foreground"
@@ -179,7 +179,7 @@ export function CalendarView() {
                                 Semana
                             </button>
                             <button
-                                onClick={() => { setView('month'); }}
+                                onClick={() => { setView('month'); setIsMenuOpen(false); }}
                                 className={cn(
                                     "px-3 py-2 text-xs font-medium rounded-lg border transition-all flex flex-col items-center gap-2",
                                     view === 'month' ? "bg-primary text-primary-foreground border-primary" : "bg-muted/30 text-muted-foreground"
@@ -195,20 +195,20 @@ export function CalendarView() {
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Navegación</p>
                         <div className="flex items-center gap-2">
                             <button
-                                onClick={() => { handlePrevious(); }}
+                                onClick={() => { handlePrevious(); setIsMenuOpen(false); }}
                                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg hover:bg-accent text-sm"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                                 Anterior
                             </button>
                             <button
-                                onClick={() => { handleToday(); }}
+                                onClick={() => { handleToday(); setIsMenuOpen(false); }}
                                 className="flex-1 px-4 py-2 border rounded-lg hover:bg-accent text-sm font-bold"
                             >
                                 Hoy
                             </button>
                             <button
-                                onClick={() => { handleNext(); }}
+                                onClick={() => { handleNext(); setIsMenuOpen(false); }}
                                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg hover:bg-accent text-sm"
                             >
                                 Siguiente
@@ -250,7 +250,6 @@ export function CalendarView() {
                         const isBlocked = specificDateSlots.some(s => s.isBlocked)
                         const isPast = isBefore(day, startOfDay(new Date()))
                         const isFullyUnavailable = !mainAvailability || isPast
-
                         const dayAppointments = appointments.filter(a => isSameDay(new Date(a.startTime), day))
 
                         return (
@@ -317,140 +316,131 @@ export function CalendarView() {
         const hours = [...Array(24)].map((_, i) => i)
 
         return (
-            <div className="flex flex-col border rounded-xl bg-card overflow-hidden">
-                <div className={cn(
-                    "grid border-b",
-                    view === 'day' ? "grid-cols-[80px_1fr]" : "grid-cols-[80px_repeat(7,1fr)]"
-                )}>
-                    {/* Placeholder for the time column offset */}
-                    <div className="bg-muted/30 border-r" />
-
-                    {displayDays.map((day) => (
-                        <div
-                            key={day.toString()}
-                            onClick={() => setSelectedDate(day)}
-                            className={cn(
-                                "p-4 text-center cursor-pointer transition-colors hover:bg-accent/50",
-                                isSameDay(day, selectedDate) && "bg-accent",
-                                // Day specific formatting if needed
-                                "border-r last:border-r-0"
-                            )}
-                        >
-                            <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                                {format(day, "eee", { locale: es })}
-                            </p>
-                            <p className={cn(
-                                "text-base sm:text-lg font-bold",
-                                isToday(day) && "text-primary border-b-2 border-primary inline-block px-1"
-                            )}>
-                                {format(day, "d")}
-                            </p>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="flex-1 overflow-y-auto max-h-[600px] scrollbar-hide relative">
+            <div className="flex flex-col border rounded-xl bg-card overflow-hidden h-[600px]">
+                <div className="overflow-auto scrollbar-hide flex-1">
                     <div className={cn(
-                        "grid",
-                        view === 'day' ? "grid-cols-[80px_1fr]" : "grid-cols-[80px_repeat(7,1fr)]"
+                        "flex flex-col min-w-full transition-all duration-300",
+                        view === 'week' ? "w-max sm:w-full" : "w-full"
                     )}>
-                        {/* Time labels column */}
-                        <div className="flex flex-col">
-                            {hours.map((hour) => (
-                                <div key={hour} className="h-16 p-4 text-xs font-medium text-muted-foreground text-right border-r border-b bg-muted/30">
-                                    {hour}:00
+                        {/* Header Grid */}
+                        <div className={cn(
+                            "grid border-b sticky top-0 z-30 bg-card",
+                            view === 'day'
+                                ? "grid-cols-[80px_1fr]"
+                                : "grid-cols-[80px_repeat(7,120px)] sm:grid-cols-[80px_repeat(7,1fr)]"
+                        )}>
+                            <div className="sticky left-0 z-40 bg-background/95 backdrop-blur-sm border-r" />
+                            {displayDays.map((day) => (
+                                <div
+                                    key={day.toString()}
+                                    onClick={() => setSelectedDate(day)}
+                                    className={cn(
+                                        "p-4 text-center cursor-pointer transition-colors hover:bg-accent/50",
+                                        isSameDay(day, selectedDate) && "bg-accent",
+                                        "border-r last:border-r-0"
+                                    )}
+                                >
+                                    <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                        {format(day, "eee", { locale: es })}
+                                    </p>
+                                    <p className={cn(
+                                        "text-base sm:text-lg font-bold",
+                                        isToday(day) && "text-primary border-b-2 border-primary inline-block px-1"
+                                    )}>
+                                        {format(day, "d")}
+                                    </p>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Days columns */}
-                        {displayDays.map((day) => {
-                            const dayOfWeek = getDay(day)
+                        {/* Body Grid */}
+                        <div className={cn(
+                            "grid relative",
+                            view === 'day'
+                                ? "grid-cols-[80px_1fr]"
+                                : "grid-cols-[80px_repeat(7,120px)] sm:grid-cols-[80px_repeat(7,1fr)]"
+                        )}>
+                            {/* Time labels column */}
+                            <div className="flex flex-col sticky left-0 z-20">
+                                {hours.map((hour) => (
+                                    <div key={hour} className="h-20 p-4 text-[10px] sm:text-xs font-black text-muted-foreground text-right border-r border-b bg-background/90 backdrop-blur-xs">
+                                        {hour}:00
+                                    </div>
+                                ))}
+                            </div>
 
-                            return (
-                                <div key={day.toString()} className="flex flex-col relative border-r last:border-r-0">
-                                    {hours.map((hour) => {
-                                        // Check availability for this slot
-                                        // A slot is available if there is an availability record that covers it
-                                        // AND there is NO blocked record that covers it
+                            {/* Days columns */}
+                            {displayDays.map((day) => {
+                                const dayOfWeek = getDay(day)
+                                return (
+                                    <div key={day.toString()} className="flex flex-col relative border-r last:border-r-0">
+                                        {hours.map((hour) => {
+                                            const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
+                                            const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
+                                            const mainAvailability = daySlots.find(s => !s.isBlocked)
+                                            const blockedSlots = [...daySlots.filter(s => s.isBlocked), ...specificDateSlots]
+                                            const now = new Date()
+                                            const slotDate = new Date(day)
+                                            slotDate.setHours(hour, 0, 0, 0)
+                                            const isPastSlot = isBefore(slotDate, now)
 
-                                        const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
-                                        const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
-
-                                        const mainAvailability = daySlots.find(s => !s.isBlocked)
-                                        const blockedSlots = [...daySlots.filter(s => s.isBlocked), ...specificDateSlots]
-
-                                        const now = new Date()
-                                        const slotDate = new Date(day)
-                                        slotDate.setHours(hour, 0, 0, 0)
-                                        const isPastSlot = isBefore(slotDate, now)
-
-                                        let isAvailable = false
-                                        if (mainAvailability && !isPastSlot) {
-                                            const [startH, startM] = mainAvailability.startTime.split(':').map(Number)
-                                            const [endH, endM] = mainAvailability.endTime.split(':').map(Number)
-
-                                            // Main availability range check
-                                            if (hour >= startH && hour < endH) {
-                                                isAvailable = true
+                                            let isAvailable = false
+                                            if (mainAvailability && !isPastSlot) {
+                                                const [startH] = mainAvailability.startTime.split(':').map(Number)
+                                                const [endH] = mainAvailability.endTime.split(':').map(Number)
+                                                if (hour >= startH && hour < endH) isAvailable = true
+                                                blockedSlots.forEach(block => {
+                                                    const [bStartH] = block.startTime.split(':').map(Number)
+                                                    const [bEndH] = block.endTime.split(':').map(Number)
+                                                    if (hour >= bStartH && hour < bEndH) isAvailable = false
+                                                })
                                             }
 
-                                            // Check if lunch/blocked slot overlaps
-                                            blockedSlots.forEach(block => {
-                                                const [bStartH, bStartM] = block.startTime.split(':').map(Number)
-                                                const [bEndH, bEndM] = block.endTime.split(':').map(Number)
+                                            const slotAppointments = appointments.filter(a => {
+                                                const aStart = new Date(a.startTime);
+                                                return isSameDay(aStart, day) && aStart.getHours() === hour;
+                                            });
 
-                                                if (hour >= bStartH && hour < bEndH) {
-                                                    isAvailable = false
-                                                }
-                                            })
-                                        }
+                                            return (
+                                                <div
+                                                    key={hour}
+                                                    className={cn(
+                                                        "group h-20 border-b last:border-b-0 relative transition-colors",
+                                                        !isAvailable ? "bg-muted/40" : "hover:bg-accent/30"
+                                                    )}
+                                                >
+                                                    {slotAppointments.map((appt, idx) => (
+                                                        <div
+                                                            key={appt.id}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedAppointment(appt);
+                                                            }}
+                                                            className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-[10px] overflow-hidden z-10 cursor-pointer hover:bg-primary/20 hover:border-primary/40 transition-colors"
+                                                            style={{
+                                                                top: `${(new Date(appt.startTime).getMinutes() / 60) * 100}%`,
+                                                                height: `${Math.max(20, (((new Date(appt.endTime).getTime() - new Date(appt.startTime).getTime()) / 1000 / 60) / 60) * 100)}%`,
+                                                                left: `${(idx * 4) + 4}px`,
+                                                                right: '4px'
+                                                            }}
+                                                        >
+                                                            <p className="font-semibold text-primary truncate leading-tight">{appt.clientName}</p>
+                                                            {appt.service?.name && <p className="text-[10px] text-primary/80 truncate leading-tight">{appt.service.name}</p>}
+                                                        </div>
+                                                    ))}
 
-                                        const slotAppointments = appointments.filter(a => {
-                                            const aStart = new Date(a.startTime);
-                                            return isSameDay(aStart, day) && aStart.getHours() === hour;
-                                        });
-
-                                        return (
-                                            <div
-                                                key={hour}
-                                                className={cn(
-                                                    "group h-16 border-b last:border-b-0 relative transition-colors",
-                                                    !isAvailable ? "bg-muted/40" : "hover:bg-accent/30"
-                                                )}
-                                            >
-                                                {slotAppointments.map((appt, idx) => (
-                                                    <div
-                                                        key={appt.id}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setSelectedAppointment(appt);
-                                                        }}
-                                                        className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-xs overflow-hidden z-10 cursor-pointer hover:bg-primary/20 hover:border-primary/40 transition-colors"
-                                                        style={{
-                                                            top: `${(new Date(appt.startTime).getMinutes() / 60) * 100}%`,
-                                                            height: `${Math.max(20, (((new Date(appt.endTime).getTime() - new Date(appt.startTime).getTime()) / 1000 / 60) / 60) * 100)}%`,
-                                                            // Offset multiple appointments in the same slot slightly if they overlap exactly
-                                                            left: `${(idx * 4) + 4}px`,
-                                                            right: '4px'
-                                                        }}
-                                                    >
-                                                        <p className="font-semibold text-primary truncate leading-tight">{appt.clientName}</p>
-                                                        {appt.service?.name && <p className="text-[10px] text-primary/80 truncate leading-tight">{appt.service.name}</p>}
-                                                    </div>
-                                                ))}
-
-                                                {!isAvailable && slotAppointments.length === 0 && (
-                                                    <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-                                                        <Lock className="h-4 w-4" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            )
-                        })}
+                                                    {!isAvailable && slotAppointments.length === 0 && (
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+                                                            <Lock className="h-4 w-4" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -477,7 +467,6 @@ export function CalendarView() {
 
                     {selectedAppointment && (
                         <div className="p-6 space-y-6">
-                            {/* Service Info */}
                             <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/30 border">
                                 <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                                     <CalendarIcon className="h-5 w-5" />
@@ -500,10 +489,8 @@ export function CalendarView() {
                                 </div>
                             </div>
 
-                            {/* Client Info */}
                             <div className="space-y-4">
                                 <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Información del Cliente</h4>
-
                                 <div className="grid gap-3">
                                     <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
