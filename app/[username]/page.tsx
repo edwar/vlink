@@ -4,11 +4,20 @@ import { useState, useEffect, use } from "react"
 import Link from "next/link"
 import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, CheckCircle2, MessageSquare, Loader2, Briefcase, UserX } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSeparator,
+    InputOTPSlot,
+} from "@/components/ui/input-otp"
+import { sileo } from "sileo"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 interface ServiceOption {
     id: string
@@ -401,6 +410,10 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
         setIsSubmitting(true)
         try {
             await generateAndSendOTP(email, name)
+            sileo.success({
+                title: "Código enviado",
+                description: `Hemos enviado un código de 6 dígitos a ${email}`
+            })
             setVerificationStep(1)
         } catch (err) {
             setError(err instanceof Error ? err.message : "Error enviando el código")
@@ -415,8 +428,16 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
         setIsSubmitting(true)
         try {
             await verifyOTP(email, otp)
+            sileo.success({
+                title: "¡Verificado!",
+                description: "Tu correo ha sido validado correctamente."
+            })
             setVerificationStep(2)
         } catch (err) {
+            sileo.error({
+                title: "Código inválido",
+                description: "El código ingresado no es correcto. Inténtalo de nuevo."
+            })
             setError(err instanceof Error ? err.message : "Código incorrecto")
         } finally {
             setIsSubmitting(false)
@@ -440,6 +461,10 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                 clientEmail: email,
                 serviceId
             });
+            sileo.success({
+                title: "¡Cita agendada!",
+                description: "Tu cita ha sido agendada correctamente."
+            })
             onSuccess();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Error al agendar")
@@ -448,26 +473,6 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
         }
     }
 
-    const handleOtpChange = (index: number, value: string) => {
-        if (!/^[0-9]*$/.test(value)) return
-
-        const newOtp = otp.split('')
-        newOtp[index] = value
-        setOtp(newOtp.join(''))
-
-        // Auto focus next input
-        if (value && index < 5) {
-            const nextInput = document.getElementById(`otp-${index + 1}`)
-            nextInput?.focus()
-        }
-    }
-
-    const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            const prevInput = document.getElementById(`otp-${index - 1}`)
-            prevInput?.focus()
-        }
-    }
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -533,22 +538,29 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             Enviamos un código de 6 dígitos a <span className="font-bold">{email}</span>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="flex flex-col items-center gap-4">
                             <label className="text-sm font-bold">Código de verificación</label>
-                            <div className="grid grid-cols-6 gap-2">
-                                {[...Array(6)].map((_, i) => (
-                                    <input
-                                        key={i}
-                                        id={`otp-${i}`}
-                                        type="text"
-                                        maxLength={1}
-                                        value={otp[i] || ''}
-                                        onChange={(e) => handleOtpChange(i, e.target.value)}
-                                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                                        disabled={isSubmitting}
-                                        className="w-full aspect-square text-center bg-card border-2 border-transparent focus:border-primary rounded-xl outline-none font-black text-xl disabled:opacity-50 transition-colors"
-                                    />
-                                ))}
+                            <div className="w-full flex items-center justify-center">
+                                <InputOTP
+                                    maxLength={6}
+                                    id="otp-verification"
+                                    required
+                                    value={otp}
+                                    onChange={(value) => setOtp(value)}
+                                    disabled={isSubmitting}
+                                >
+                                    <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
+                                        <InputOTPSlot index={0} />
+                                        <InputOTPSlot index={1} />
+                                        <InputOTPSlot index={2} />
+                                    </InputOTPGroup>
+                                    <InputOTPSeparator className="mx-2" />
+                                    <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
+                                        <InputOTPSlot index={3} />
+                                        <InputOTPSlot index={4} />
+                                        <InputOTPSlot index={5} />
+                                    </InputOTPGroup>
+                                </InputOTP>
                             </div>
                         </div>
 
@@ -580,34 +592,30 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
 
                 {verificationStep === 2 && (
                     <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-                        <div className="p-4 bg-green-500/10 border-green-500/20 rounded-2xl text-sm border-2 text-green-600 flex items-center gap-2 font-medium">
-                            <CheckCircle2 className="h-5 w-5" />
-                            Correo verificado exitosamente
-                        </div>
-
                         <div className="space-y-4">
                             <label className="text-sm font-bold">Número de WhatsApp</label>
                             <p className="text-xs text-muted-foreground">El profesional te contactará a este número.</p>
                             <div className="relative">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold">+57</span>
-                                <input
+                                <Input
                                     type="tel"
                                     placeholder="300 000 0000"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                     disabled={isSubmitting}
-                                    className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
+                                    className="w-full h-14 bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
                                 />
                             </div>
                         </div>
 
-                        <button
+                        <Button
+                            variant="default"
                             onClick={handleBooking}
                             disabled={isSubmitting || phone.length < 10}
-                            className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold shadow-lg shadow-[#25D366]/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                            className="w-full h-14 text-xl font-bold"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Confirmar Cita"}
-                        </button>
+                        </Button>
                     </div>
                 )}
             </section>
@@ -622,8 +630,8 @@ function SuccessView({ bookingInfo, displayName, serviceName }: {
 }) {
     return (
         <div className="text-center space-y-8 animate-in zoom-in-95 duration-500">
-            <div className="h-24 w-24 bg-green-500/10 rounded-full mx-auto flex items-center justify-center border-2 border-green-500/20">
-                <CheckCircle2 className="h-12 w-12 text-green-500" />
+            <div className="h-24 w-24 bg-primary/10 rounded-full mx-auto flex items-center justify-center border-2 border-primary/20">
+                <Check className="h-12 w-12 text-primary" />
             </div>
 
             <div className="space-y-2">
