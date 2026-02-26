@@ -284,7 +284,7 @@ export function ConfigurationSettings() {
                                     <div
                                         key={service.id}
                                         className={cn(
-                                            "group p-6 border-2 rounded-2xl transition-all duration-300",
+                                            "group p-5 sm:p-6 border-2 rounded-2xl transition-all duration-300",
                                             !service.isActive ? "bg-muted/5 border-transparent opacity-60" : "bg-background border-muted/30 hover:border-primary/20 hover:shadow-md",
                                             editingId === service.id && "border-primary ring-4 ring-primary/5 bg-primary/5 shadow-xl"
                                         )}
@@ -336,51 +336,61 @@ export function ConfigurationSettings() {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className="flex items-center gap-6">
-                                                <div className={cn(
-                                                    "h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-all duration-500",
-                                                    service.isActive ? "bg-primary/10 border-primary/10 scale-100" : "bg-muted border-transparent scale-90"
-                                                )}>
-                                                    <Briefcase className={cn("h-7 w-7", service.isActive ? "text-primary" : "text-muted-foreground/30")} />
-                                                </div>
-                                                <div className="flex-1 min-w-0 space-y-1">
-                                                    <p className="font-black text-lg truncate tracking-tight text-foreground/90">{service.name}</p>
-                                                    <div className="flex items-center gap-2 text-xs text-muted-foreground/60 font-bold uppercase tracking-wider">
-                                                        <Clock className="h-3.5 w-3.5" />
-                                                        <span>
-                                                            {service.durationMinutes >= 60
-                                                                ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
-                                                                : `${service.durationMinutes} min`}
-                                                        </span>
+                                            <div className="flex flex-col gap-5">
+                                                {/* Info Header */}
+                                                <div className="flex items-start gap-4">
+                                                    <div className={cn(
+                                                        "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-all duration-500",
+                                                        service.isActive ? "bg-primary/10 border-primary/20" : "bg-muted border-transparent opacity-40 shrink-0"
+                                                    )}>
+                                                        <Briefcase className={cn("h-6 w-6", service.isActive ? "text-primary" : "text-muted-foreground")} />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0 pt-0.5">
+                                                        <h4 className="font-black text-base sm:text-lg truncate tracking-tight text-foreground/90 leading-tight mb-1">{service.name}</h4>
+                                                        <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
+                                                            <Clock className="h-3 w-3" />
+                                                            <span>
+                                                                {service.durationMinutes >= 60
+                                                                    ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
+                                                                    : `${service.durationMinutes} min`}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                                                {/* Action Buttons */}
+                                                <div className="flex items-center gap-2 pt-4 border-t border-muted/30">
                                                     <button
                                                         onClick={() => handleToggleActive(service)}
                                                         className={cn(
-                                                            "p-2.5 rounded-xl transition-all active:scale-90",
+                                                            "flex-1 flex items-center justify-center h-11 rounded-xl transition-all active:scale-95 shadow-sm",
                                                             service.isActive
-                                                                ? "bg-green-500/10 text-green-600 hover:bg-green-500/20"
-                                                                : "bg-muted text-muted-foreground hover:bg-muted-foreground/10"
+                                                                ? "bg-green-500/10 text-green-600 hover:bg-green-500/20 border border-green-500/10"
+                                                                : "bg-muted text-muted-foreground hover:bg-muted-foreground/10 border border-transparent"
                                                         )}
                                                         title={service.isActive ? "Desactivar" : "Activar"}
                                                     >
-                                                        <Check className={cn("h-5 w-5", !service.isActive && "opacity-30")} />
+                                                        <Check className="h-4 w-4" />
+                                                        <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">
+                                                            {service.isActive ? "Activo" : "Inactivo"}
+                                                        </span>
                                                     </button>
                                                     <button
                                                         onClick={() => startEditing(service)}
-                                                        className="p-2.5 bg-muted/50 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-all active:scale-90"
+                                                        className="flex-1 flex items-center justify-center h-11 bg-secondary/50 text-secondary-foreground hover:bg-secondary rounded-xl transition-all active:scale-95 border border-muted/30 shadow-sm"
                                                     >
-                                                        <Pencil className="h-5 w-5" />
+                                                        <Pencil className="h-4 w-4" />
+                                                        <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Editar</span>
                                                     </button>
                                                     <button
                                                         onClick={() => handleDeleteService(service.id)}
                                                         disabled={deletingId === service.id}
-                                                        className="p-2.5 bg-muted/50 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all active:scale-90"
+                                                        className="flex-1 flex items-center justify-center h-11 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-xl transition-all active:scale-95 border border-destructive/10 shadow-sm"
                                                     >
                                                         {deletingId === service.id
-                                                            ? <Loader2 className="h-5 w-5 animate-spin" />
-                                                            : <Trash2 className="h-5 w-5" />}
+                                                            ? <Loader2 className="h-4 w-4 animate-spin" />
+                                                            : <Trash2 className="h-4 w-4" />}
+                                                        <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Borrar</span>
                                                     </button>
                                                 </div>
                                             </div>
