@@ -272,7 +272,7 @@ export function ConfigurationSettings() {
                                             value={newDuration.toString()}
                                             onValueChange={(val) => setNewDuration(parseInt(val))}
                                         >
-                                            <SelectTrigger size="lg" className="h-16 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
+                                            <SelectTrigger className="h-14 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
                                                 <SelectValue placeholder="Seleccionar duración" />
                                             </SelectTrigger>
                                             <SelectContent position="popper" className="rounded-xl border-2 shadow-xl">
@@ -292,20 +292,20 @@ export function ConfigurationSettings() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-3 justify-end pt-4 border-t border-primary/10">
+                                <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-6 border-t border-primary/10">
                                     <Button
                                         variant="ghost"
                                         onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
-                                        className="rounded-xl font-bold h-11"
+                                        className="rounded-xl font-bold h-12 w-full sm:w-auto"
                                     >
                                         Cancelar
                                     </Button>
                                     <Button
                                         onClick={handleCreateService}
                                         disabled={creatingService || !newName.trim()}
-                                        className="rounded-xl font-black h-11 px-6 shadow-md"
+                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/10"
                                     >
-                                        {creatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                                        {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                                         Crear Servicio
                                     </Button>
                                 </div>
@@ -369,7 +369,7 @@ export function ConfigurationSettings() {
                                                             value={editDuration.toString()}
                                                             onValueChange={(val) => setEditDuration(parseInt(val))}
                                                         >
-                                                            <SelectTrigger className="h-16 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
+                                                            <SelectTrigger className="h-14 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
                                                                 <SelectValue placeholder="Duración" />
                                                             </SelectTrigger>
                                                             <SelectContent position="popper" className="rounded-xl border-2 shadow-xl">
@@ -386,14 +386,14 @@ export function ConfigurationSettings() {
                                                         </Select>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-3 justify-end pt-4 border-t border-primary/10">
-                                                    <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-bold h-11">
+                                                <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-6 border-t border-primary/10">
+                                                    <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-bold h-12 w-full sm:w-auto">
                                                         Cancelar
                                                     </Button>
                                                     <Button
                                                         onClick={() => handleUpdateService(service.id)}
                                                         disabled={updatingService || !editName.trim()}
-                                                        className="rounded-xl font-black h-11 px-6 shadow-md"
+                                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/20 bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95"
                                                     >
                                                         {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
                                                         Guardar Cambios
