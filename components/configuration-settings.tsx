@@ -3,17 +3,19 @@
 import { useState, useEffect } from "react"
 import { Loader2, Plus, Pencil, Trash2, Check, X, Clock, Save, Briefcase } from "lucide-react"
 import { getConfiguration, updateDisplayName, createService, updateService, deleteService } from "@/app/actions/services"
-import { cn } from "@/lib/utils"
+import { cn, formatPrice, parsePrice } from "@/lib/utils"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from "./ui/select"
+import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "./ui/input-group"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
 
@@ -105,7 +107,7 @@ export function ConfigurationSettings() {
             await createService({
                 name: newName,
                 durationMinutes: newDuration,
-                price: parseFloat(newPrice) || 0
+                price: parseFloat(parsePrice(newPrice)) || 0
             })
             const data = await getConfiguration()
             setServices(data.services)
@@ -138,7 +140,7 @@ export function ConfigurationSettings() {
             await updateService(id, {
                 name: editName,
                 durationMinutes: editDuration,
-                price: parseFloat(editPrice) || 0
+                price: parseFloat(parsePrice(editPrice)) || 0
             })
             const data = await getConfiguration()
             setServices(data.services)
@@ -200,7 +202,7 @@ export function ConfigurationSettings() {
     const startEditing = (service: ServiceItem) => {
         setEditingId(service.id)
         setEditName(service.name)
-        setEditPrice(service.price.toString())
+        setEditPrice(formatPrice(service.price))
         setEditDuration(service.durationMinutes)
     }
 
@@ -250,16 +252,18 @@ export function ConfigurationSettings() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-4">
                                         <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Precio (Opcional)</Label>
-                                        <div className="relative">
-                                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-bold text-muted-foreground">$</span>
-                                            <Input
-                                                type="number"
+                                        <InputGroup className="h-14 rounded-xl border-2 border-muted/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all bg-background px-0 overflow-hidden shadow-none">
+                                            <InputGroupAddon align="inline-start" className="pl-5 border-none">
+                                                <InputGroupText className="text-lg font-bold text-muted-foreground">$</InputGroupText>
+                                            </InputGroupAddon>
+                                            <InputGroupInput
+                                                type="text"
                                                 value={newPrice}
-                                                onChange={(e) => setNewPrice(e.target.value)}
+                                                onChange={(e) => setNewPrice(formatPrice(e.target.value))}
                                                 placeholder="0"
-                                                className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background pl-10 px-6"
+                                                className="h-full text-lg font-bold px-4 border-none focus-visible:ring-0"
                                             />
-                                        </div>
+                                        </InputGroup>
                                     </div>
 
                                     <div className="space-y-4">
@@ -271,16 +275,18 @@ export function ConfigurationSettings() {
                                             <SelectTrigger size="lg" className="h-16 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
                                                 <SelectValue placeholder="Seleccionar duración" />
                                             </SelectTrigger>
-                                            <SelectContent className="rounded-xl border-2 shadow-xl">
-                                                {DURATION_OPTIONS.map((opt) => (
-                                                    <SelectItem
-                                                        key={opt.value}
-                                                        value={opt.value.toString()}
-                                                        className="font-bold py-3 focus:bg-primary/10 focus:text-primary cursor-pointer"
-                                                    >
-                                                        {opt.label}
-                                                    </SelectItem>
-                                                ))}
+                                            <SelectContent position="popper" className="rounded-xl border-2 shadow-xl">
+                                                <SelectGroup>
+                                                    {DURATION_OPTIONS.map((opt) => (
+                                                        <SelectItem
+                                                            key={opt.value}
+                                                            value={opt.value.toString()}
+                                                            className="font-bold py-3 focus:bg-primary/10 focus:text-primary cursor-pointer"
+                                                        >
+                                                            {opt.label}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectGroup>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -345,15 +351,17 @@ export function ConfigurationSettings() {
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <div className="space-y-4">
                                                         <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Precio (Opcional)</Label>
-                                                        <div className="relative">
-                                                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-bold text-muted-foreground">$</span>
-                                                            <Input
-                                                                type="number"
+                                                        <InputGroup className="h-14 rounded-xl border-2 border-muted/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all bg-background px-0 overflow-hidden shadow-none">
+                                                            <InputGroupAddon align="inline-start" className="pl-5 border-none">
+                                                                <InputGroupText className="text-lg font-bold text-muted-foreground">$</InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <InputGroupInput
+                                                                type="text"
                                                                 value={editPrice}
-                                                                onChange={(e) => setEditPrice(e.target.value)}
-                                                                className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background pl-10 px-6"
+                                                                onChange={(e) => setEditPrice(formatPrice(e.target.value))}
+                                                                className="h-full text-lg font-bold px-4 border-none focus-visible:ring-0"
                                                             />
-                                                        </div>
+                                                        </InputGroup>
                                                     </div>
                                                     <div className="space-y-4">
                                                         <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Duración</Label>
@@ -364,7 +372,7 @@ export function ConfigurationSettings() {
                                                             <SelectTrigger className="h-16 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
                                                                 <SelectValue placeholder="Duración" />
                                                             </SelectTrigger>
-                                                            <SelectContent className="rounded-xl border-2 shadow-xl">
+                                                            <SelectContent position="popper" className="rounded-xl border-2 shadow-xl">
                                                                 {DURATION_OPTIONS.map(opt => (
                                                                     <SelectItem
                                                                         key={opt.value}
