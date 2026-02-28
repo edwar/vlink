@@ -118,7 +118,7 @@ export default async function OrganizacionPage() {
                                                 />
                                             </div>
                                             <div className="flex-1 min-w-0 space-y-1.5">
-                                                <div className="flex items-center gap-3">
+                                                <div className="flex items-center gap-3 min-w-0">
                                                     <h3 className="text-xl sm:text-2xl font-black font-display tracking-tight truncate text-foreground/90">{member.user.name}</h3>
                                                     {member.role === "OWNER" && (
                                                         <div className="h-6 w-6 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 shadow-inner">
@@ -137,7 +137,7 @@ export default async function OrganizacionPage() {
                                                             <div className="flex items-center gap-2 min-w-0">
                                                                 <p className="text-[10px] font-black text-primary flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 rounded-lg border border-primary/10 min-w-0">
                                                                     <Briefcase className="h-3 w-3 shrink-0" />
-                                                                    <span className="truncate">
+                                                                    <span className="truncate max-w-[150px] sm:max-w-[200px]">
                                                                         {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
                                                                     </span>
                                                                 </p>

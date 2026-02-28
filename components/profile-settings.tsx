@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Copy, Check, Calendar as CalendarIcon, Loader2, Save } from "lucide-react"
-import { getProfile, updateProfile } from "@/app/actions/profile"
+import { Copy, Check, Calendar as CalendarIcon, Loader2, Save, AlertCircle } from "lucide-react"
+import { getProfile, updateProfile, disconnectGoogle } from "@/app/actions/profile"
 import { cn } from "@/lib/utils"
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "@/components/ui/input-group"
 import { Textarea } from "./ui/textarea"
@@ -10,6 +10,13 @@ import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 import { LoadingState } from "@/components/loading-state"
 import { sileo } from "sileo"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { authClient } from "@/lib/auth-client"
 
 export function ProfileSettings() {
     const [loading, setLoading] = useState(true)
@@ -23,6 +30,8 @@ export function ProfileSettings() {
     const [email, setEmail] = useState("")
     const [isGoogleConnected, setIsGoogleConnected] = useState(false)
     const [hasCalendarScope, setHasCalendarScope] = useState(false)
+    const [isDisconnecting, setIsDisconnecting] = useState(false)
+    const [confirmOpen, setConfirmOpen] = useState(false)
     const [copied, setCopied] = useState(false)
 
     useEffect(() => {
@@ -83,6 +92,39 @@ export function ProfileSettings() {
         } finally {
             setSaving(false)
         }
+    }
+
+    const handleDisconnectGoogle = () => {
+        setConfirmOpen(true)
+    }
+
+    const confirmDisconnect = async () => {
+        setConfirmOpen(false)
+        setIsDisconnecting(true)
+        try {
+            await disconnectGoogle()
+            setIsGoogleConnected(false)
+            setHasCalendarScope(false)
+            sileo.info({
+                title: "Cuenta desconectada",
+                description: "Se ha revocado el acceso a tu Google Calendar correctamente."
+            })
+        } catch (err: any) {
+            console.error("Error disconnecting:", err)
+            sileo.error({
+                title: "Error al desconectar",
+                description: "No se pudo revocar el acceso en este momento."
+            })
+        } finally {
+            setIsDisconnecting(false)
+        }
+    }
+
+    const handleConnectGoogle = async () => {
+        await authClient.signIn.social({
+            provider: "google",
+            callbackURL: window.location.href
+        })
     }
 
     if (loading) {
@@ -239,9 +281,23 @@ export function ProfileSettings() {
                                                 </p>
                                             </div>
                                         </div>
+                                        <div className="mt-4 pt-4 border-t border-green-500/10">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={handleDisconnectGoogle}
+                                                disabled={isDisconnecting}
+                                                className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 hover:text-destructive h-10"
+                                            >
+                                                {isDisconnecting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : "Revocar Acceso de Google"}
+                                            </Button>
+                                        </div>
                                     </div>
                                 ) : (
-                                    <Button className="w-full rounded-2xl font-black h-12 shadow-xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 text-lg">
+                                    <Button
+                                        onClick={handleConnectGoogle}
+                                        className="w-full rounded-2xl font-black h-12 shadow-xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 text-lg"
+                                    >
                                         Conectar Calendario
                                     </Button>
                                 )}
@@ -278,6 +334,46 @@ export function ProfileSettings() {
                     </Button>
                 </div>
             </div>
+
+            {/* Confirmation Modal */}
+            <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                <DialogContent className="max-w-md p-0 overflow-hidden border-none bg-transparent shadow-none">
+                    <div className="relative p-1 rounded-[2.5rem] bg-gradient-to-b from-destructive/20 to-transparent">
+                        <div className="bg-card/90 backdrop-blur-2xl border border-white/10 rounded-[2.3rem] p-8 shadow-2xl space-y-8">
+                            <div className="flex flex-col items-center text-center space-y-4">
+                                <div className="h-20 w-20 rounded-3xl bg-destructive/10 flex items-center justify-center text-destructive animate-pulse shadow-inner border border-destructive/20">
+                                    <AlertCircle className="h-10 w-10" />
+                                </div>
+                                <div className="space-y-2">
+                                    <DialogTitle className="text-3xl font-black font-display tracking-tight text-foreground uppercase">
+                                        ¿Revocar Acceso?
+                                    </DialogTitle>
+                                    <DialogDescription className="text-muted-foreground font-medium text-lg leading-relaxed">
+                                        Esta acción detendrá inmediatamente la sincronización con <span className="text-foreground font-bold">Google Calendar</span>. Tus citas no se verán reflejadas y podrías tener cruces de horario.
+                                    </DialogDescription>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setConfirmOpen(false)}
+                                    className="h-14 rounded-2xl font-black uppercase tracking-widest text-xs border-2 border-primary/5 hover:bg-primary/5 transition-all"
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={confirmDisconnect}
+                                    className="h-14 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-destructive/20 hover:shadow-destructive/40 transition-all hover:-translate-y-1 active:scale-95 bg-destructive text-destructive-foreground"
+                                >
+                                    Sí, desconectar
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

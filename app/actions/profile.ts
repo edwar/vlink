@@ -73,3 +73,19 @@ export async function updateProfile(data: { username: string, bio: string }) {
 
     return { success: true }
 }
+
+export async function disconnectGoogle() {
+    const profile = await getEffectiveProfile()
+
+    // Delete the Google account record for this user
+    await prisma.account.deleteMany({
+        where: {
+            userId: profile.userId,
+            providerId: 'google'
+        }
+    })
+
+    revalidatePath("/dashboard/perfil")
+
+    return { success: true }
+}
