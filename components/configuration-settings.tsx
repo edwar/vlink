@@ -227,7 +227,7 @@ export function ConfigurationSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Column 1: Services (Left) */}
                 <div className="lg:col-span-7 space-y-8">
-                    <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm space-y-8">
+                    <section className="bg-card border rounded-xl p-6 sm:p-8 shadow-sm space-y-8">
                         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                             <div className="space-y-1">
                                 <h3 className="text-2xl font-black font-display tracking-tight text-primary">Servicios: {displayName}</h3>
@@ -246,7 +246,7 @@ export function ConfigurationSettings() {
 
                         {/* New Service Form */}
                         {showNewForm && (
-                            <div className="p-6 border-2 border-dashed border-primary/20 rounded-2xl space-y-8 bg-primary/5 animate-in slide-in-from-top-4 duration-300">
+                            <div className="p-6 border-2 border-dashed border-primary/20 rounded-xl space-y-8 bg-primary/5 animate-in slide-in-from-top-4 duration-300">
                                 <div className="space-y-4">
                                     <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Nombre del Servicio</Label>
                                     <Input
@@ -326,8 +326,8 @@ export function ConfigurationSettings() {
 
                         {/* Service List */}
                         {services.length === 0 && !showNewForm ? (
-                            <div className="py-20 text-center border-2 border-dashed rounded-3xl bg-muted/10 border-muted-foreground/10 space-y-4">
-                                <div className="h-16 w-16 rounded-2xl bg-muted/20 flex items-center justify-center mx-auto grayscale opacity-50">
+                            <div className="py-20 text-center border-2 border-dashed rounded-xl bg-muted/10 border-muted-foreground/10 space-y-4">
+                                <div className="h-16 w-16 rounded-xl bg-muted/20 flex items-center justify-center mx-auto grayscale opacity-50">
                                     <Briefcase className="h-8 w-8 text-muted-foreground" />
                                 </div>
                                 <div className="space-y-1">
@@ -343,7 +343,7 @@ export function ConfigurationSettings() {
                                     <div
                                         key={service.id}
                                         className={cn(
-                                            "group p-5 sm:p-6 border-2 rounded-2xl transition-all duration-300",
+                                            "group p-5 sm:p-6 border-2 rounded-xl transition-all duration-300",
                                             !service.isActive ? "bg-muted/5 border-transparent opacity-60" : "bg-background border-muted/30 hover:border-primary/20 hover:shadow-md",
                                             editingId === service.id && "border-primary ring-4 ring-primary/5 bg-primary/5 shadow-xl"
                                         )}
@@ -419,7 +419,7 @@ export function ConfigurationSettings() {
                                                 {/* Info Header */}
                                                 <div className="flex items-start gap-4">
                                                     <div className={cn(
-                                                        "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-all duration-500",
+                                                        "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-all duration-500",
                                                         service.isActive ? "bg-primary/10 border-primary/20" : "bg-muted border-transparent opacity-40 shrink-0"
                                                     )}>
                                                         <Briefcase className={cn("h-6 w-6", service.isActive ? "text-primary" : "text-muted-foreground")} />
@@ -490,7 +490,7 @@ export function ConfigurationSettings() {
 
                 {/* Column 2: Public Name (Right) */}
                 <div className="lg:col-span-5 space-y-8">
-                    <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm space-y-8">
+                    <section className="bg-card border rounded-xl p-6 sm:p-8 shadow-sm space-y-8">
                         <div className="space-y-1">
                             <h3 className="text-xl font-bold font-display tracking-tight">Nombre Público</h3>
                             <p className="text-xs text-muted-foreground font-medium">Es el título que verán tus clientes.</p>
@@ -504,14 +504,14 @@ export function ConfigurationSettings() {
                                     value={displayName}
                                     onChange={(e) => setDisplayName(e.target.value)}
                                     placeholder="Ej: Dr. Alejandro García"
-                                    className="h-14 rounded-2xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6"
+                                    className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6"
                                 />
                             </div>
 
                             <Button
                                 onClick={handleSaveName}
                                 disabled={savingName}
-                                className="w-full h-12 rounded-2xl font-black text-sm shadow-lg shadow-primary/10 overflow-hidden hover:scale-105 transition-all active:scale-95"
+                                className="w-full h-12 rounded-xl font-black text-sm shadow-lg shadow-primary/10 overflow-hidden hover:scale-105 transition-all active:scale-95"
                             >
                                 {savingName ? (
                                     <Loader2 className="h-5 w-5 animate-spin mr-2" />
@@ -523,7 +523,7 @@ export function ConfigurationSettings() {
                         </div>
                     </section>
 
-                    <div className="p-8 rounded-3xl bg-primary/5 border-2 border-primary/10 space-y-4">
+                    <div className="p-8 rounded-xl bg-primary/5 border-2 border-primary/10 space-y-4">
                         <h4 className="text-sm font-black font-display uppercase tracking-widest text-primary/80">Tip Profesional</h4>
                         <p className="text-xs text-muted-foreground leading-relaxed font-medium">
                             Usa un nombre que sea fácil de reconocer para tus clientes. Esto genera confianza y profesionalismo desde el primer contacto.
