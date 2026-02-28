@@ -49,56 +49,63 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
 
     if (!recurring) return []
 
-    // 2. Get specific blocks for this date
-    const blocks = profile.availabilities.filter((a: any) =>
-        a.isBlocked &&
-        a.specificDate &&
-        startOfDay(a.specificDate).getTime() === startOfDay(date).getTime()
-    )
+    // Force Colombia timezone for correct boundary limits
+    const isoDate = date.toISOString().split("T")[0];
+    const dayStart = new Date(`${isoDate}T00:00:00-05:00`);
+    const dayEnd = new Date(`${isoDate}T23:59:59-05:00`);
 
-    // 3. Get existing appointments for this date
+    // 2. Get specific blocks for this date
+    const blocks = profile.availabilities.filter((a: any) => {
+        if (!a.isBlocked || !a.specificDate) return false;
+        return a.specificDate.toISOString().split("T")[0] === isoDate;
+    })
+
+    // 3. Get existing appointments for this date using precise UTC boundaries
     const appointments = await prisma.appointment.findMany({
         where: {
             profileId: profile.id,
-            startTime: { gte: startOfDay(date) },
-            endTime: { lte: endOfDay(date) },
+            startTime: { gte: dayStart },
+            endTime: { lte: dayEnd },
             status: { not: "CANCELLED" }
         }
     })
 
     // 4. Generate slots based on recurring hours
     const slots: string[] = []
-    let currentSlot = new Date(date)
+
     const [startHour, startMin] = recurring.startTime.split(":").map(Number)
     const [endHour, endMin] = recurring.endTime.split(":").map(Number)
 
-    currentSlot.setHours(startHour, startMin, 0, 0)
-    const endTime = new Date(date)
-    endTime.setHours(endHour, endMin, 0, 0)
+    let currentMinutes = startHour * 60 + startMin;
+    const endMinutes = endHour * 60 + endMin;
 
-    while (isBefore(currentSlot, endTime)) {
-        const slotEnd = addMinutes(currentSlot, durationMinutes)
-        // Only add if the entire slot fits before end time
-        if (isBefore(slotEnd, endTime) || slotEnd.getTime() === endTime.getTime()) {
-            const timeStr = format(currentSlot, "HH:mm")
-            const slotEndStr = format(slotEnd, "HH:mm")
+    while (currentMinutes + durationMinutes <= endMinutes) {
+        const slotEndMinutes = currentMinutes + durationMinutes;
 
-            // Check if slot is blocked by specific block
-            const isBlocked = blocks.some((b: any) => timeStr < b.endTime && slotEndStr > b.startTime)
+        const h = Math.floor(currentMinutes / 60);
+        const m = currentMinutes % 60;
+        const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 
-            // Check if slot overlaps with existing appointment
-            const isOccupied = appointments.some((appt: any) => {
-                const apptStart = format(appt.startTime, "HH:mm")
-                const apptEnd = format(appt.endTime, "HH:mm")
-                return timeStr < apptEnd && slotEndStr > apptStart
-            })
+        const eh = Math.floor(slotEndMinutes / 60);
+        const em = slotEndMinutes % 60;
+        const slotEndStr = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
 
-            if (!isBlocked && !isOccupied) {
-                slots.push(timeStr)
-            }
+        // Check if slot is blocked by specific block
+        const isBlocked = blocks.some((b: any) => timeStr < b.endTime && slotEndStr > b.startTime)
+
+        // Check if slot overlaps with existing appointment
+        const isOccupied = appointments.some((appt: any) => {
+            // Compare accurately using minutes difference from midnight Colombia time
+            const apptStartMins = (appt.startTime.getTime() - dayStart.getTime()) / 60000;
+            const apptEndMins = (appt.endTime.getTime() - dayStart.getTime()) / 60000;
+            return currentMinutes < apptEndMins && slotEndMinutes > apptStartMins;
+        })
+
+        if (!isBlocked && !isOccupied) {
+            slots.push(timeStr)
         }
 
-        currentSlot = addMinutes(currentSlot, durationMinutes)
+        currentMinutes += durationMinutes;
     }
 
     return slots
@@ -130,10 +137,11 @@ export async function createAppointment(data: {
         }
     }
 
-    const [hour, min] = data.time.split(":").map(Number)
-    const startTime = new Date(data.date)
-    startTime.setHours(hour, min, 0, 0)
-    const endTime = addMinutes(startTime, durationMinutes)
+    const isoDate = data.date.toISOString().split("T")[0]; // "2026-02-28"
+    const startTime = new Date(`${isoDate}T${data.time.padStart(5, '0')}:00-05:00`);
+
+    // Explicit end time using math
+    const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
 
     // Re-verify availability (Atomic check)
     const collision = await prisma.appointment.findFirst({
