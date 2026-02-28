@@ -185,9 +185,9 @@ export async function createAppointment(data: {
         time: data.time
     })
 
-    // Sync with Google Calendar (Async, don't block response)
+    // Sync with Google Calendar (Awaiting execution to prevent serverless suspension/timeouts on Prisma)
     const { createGoogleCalendarEvent } = await import("@/lib/google-calendar")
-    createGoogleCalendarEvent(appointment.id).catch(console.error)
+    await createGoogleCalendarEvent(appointment.id).catch(console.error)
 
     return appointment
 }
