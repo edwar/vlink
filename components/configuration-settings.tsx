@@ -425,8 +425,8 @@ export function ConfigurationSettings() {
                                                         <Briefcase className={cn("h-6 w-6", service.isActive ? "text-primary" : "text-muted-foreground")} />
                                                     </div>
                                                     <div className="flex-1 min-w-0 pt-0.5">
-                                                        <h4 className="font-black text-base sm:text-lg truncate tracking-tight text-foreground/90 leading-tight mb-1">{service.name}</h4>
-                                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] sm:text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
+                                                        <h4 className="font-black text-sm sm:text-lg truncate tracking-tight text-foreground/90 leading-tight mb-1">{service.name}</h4>
+                                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm sm:text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
                                                             <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2 py-0.5 rounded-full">
                                                                 <Clock className="h-3 w-3" />
                                                                 <span>
@@ -449,34 +449,34 @@ export function ConfigurationSettings() {
                                                     <Button
                                                         onClick={() => handleToggleActive(service)}
                                                         className={cn(
-                                                            "flex-1 flex items-center justify-center h-11 rounded-xl transition-all active:scale-95 shadow-sm",
+                                                            "flex-1 flex items-center justify-center h-12 rounded-xl transition-all active:scale-95 shadow-sm",
                                                             service.isActive
                                                                 ? "bg-green-500/10 text-green-600 hover:bg-green-500/20 border border-green-500/10"
-                                                                : "bg-muted text-muted-foreground hover:bg-muted-foreground/10 border border-transparent"
+                                                                : "bg-primary text-primary-foreground border border-transparent"
                                                         )}
                                                         title={service.isActive ? "Desactivar" : "Activar"}
                                                     >
                                                         <Check className="h-4 w-4" />
-                                                        <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">
+                                                        <span className="hidden sm:block ml-2 text-sm font-black uppercase tracking-tighter">
                                                             {service.isActive ? "Activo" : "Inactivo"}
                                                         </span>
                                                     </Button>
                                                     <Button
                                                         onClick={() => startEditing(service)}
-                                                        className="flex-1 flex items-center justify-center h-11 bg-secondary/50 text-secondary-foreground hover:bg-secondary rounded-xl transition-all active:scale-95 border border-muted/30 shadow-sm"
+                                                        className="flex-1 flex items-center justify-center h-12 bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground rounded-xl transition-all active:scale-95 border border-primary/30 shadow-sm"
                                                     >
                                                         <Pencil className="h-4 w-4" />
-                                                        <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Editar</span>
+                                                        <span className="hidden sm:block ml-2 text-sm font-black uppercase tracking-tighter">Editar</span>
                                                     </Button>
                                                     <Button
                                                         onClick={() => setServiceToDelete(service)}
                                                         disabled={deletingId === service.id}
-                                                        className="flex-1 flex items-center justify-center h-11 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-xl transition-all active:scale-95 border border-destructive/10 shadow-sm"
+                                                        className="flex-1 flex items-center justify-center h-12 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-xl transition-all active:scale-95 border border-destructive/10 shadow-sm"
                                                     >
                                                         {deletingId === service.id
                                                             ? <Loader2 className="h-4 w-4 animate-spin" />
                                                             : <Trash2 className="h-4 w-4" />}
-                                                        <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Borrar</span>
+                                                        <span className="hidden sm:block ml-2 text-sm font-black uppercase tracking-tighter">Borrar</span>
                                                     </Button>
                                                 </div>
                                             </div>
@@ -498,7 +498,7 @@ export function ConfigurationSettings() {
 
                         <div className="space-y-6">
                             <div className="space-y-3">
-                                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/70 ml-1">Tu Nombre Comercial</Label>
+                                <Label className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground/70 ml-1">Tu Nombre Comercial</Label>
                                 <Input
                                     type="text"
                                     value={displayName}
@@ -511,7 +511,7 @@ export function ConfigurationSettings() {
                             <Button
                                 onClick={handleSaveName}
                                 disabled={savingName}
-                                className="w-full h-12 rounded-2xl font-black text-base shadow-lg shadow-primary/10 overflow-hidden hover:scale-105 transition-all active:scale-95"
+                                className="w-full h-12 rounded-2xl font-black text-sm shadow-lg shadow-primary/10 overflow-hidden hover:scale-105 transition-all active:scale-95"
                             >
                                 {savingName ? (
                                     <Loader2 className="h-5 w-5 animate-spin mr-2" />

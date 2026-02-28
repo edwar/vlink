@@ -3,9 +3,9 @@ import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
 import { startOfDay, endOfDay, format, isAfter } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, CheckCircle2 } from "lucide-react"
-import Link from "next/link"
+import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff } from "lucide-react"
 import { AppointmentCard } from "@/components/appointment-card"
+import { EmptyState } from "@/components/empty-state"
 
 export default async function DashboardPage() {
     const session = await auth.api.getSession({
@@ -114,6 +114,9 @@ export default async function DashboardPage() {
                     <EmptyState
                         title="Día despejado"
                         description="No tienes citas para hoy. ¡Disfruta el tiempo libre o comparte tu perfil!"
+                        actionText="Ir a mi Perfil"
+                        actionHref="/dashboard/perfil"
+                        icon={CalendarOff}
                     />
                 )}
             </section>
@@ -143,24 +146,3 @@ export default async function DashboardPage() {
     );
 }
 
-function EmptyState({ title, description }: { title: string, description: string }) {
-    return (
-        <div className="p-12 bg-card border-2 border-dashed border-primary/10 rounded-[3rem] text-center space-y-4">
-            <div className="h-16 w-16 bg-primary/5 rounded-full mx-auto flex items-center justify-center text-primary/30">
-                <CalendarIcon className="h-8 w-8" />
-            </div>
-            <div className="space-y-2 max-w-xs mx-auto">
-                <p className="font-bold text-lg">{title}</p>
-                <p className="text-sm text-muted-foreground">{description}</p>
-            </div>
-            <div className="pt-2">
-                <Link
-                    href="/dashboard/perfil"
-                    className="inline-flex items-center justify-center h-12 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95 cursor-default"
-                >
-                    Ir a mi Perfil
-                </Link>
-            </div>
-        </div>
-    )
-}

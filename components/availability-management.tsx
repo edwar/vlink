@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Clock, Plus, Trash2, Loader2, Save, CheckCircle2, Calendar as CalendarIcon } from "lucide-react"
+import { Clock, Plus, Trash2, Loader2, Save, CheckCircle2, CalendarOff, Calendar as CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { Checkbox } from "./ui/checkbox"
@@ -12,6 +12,7 @@ import { Button } from "./ui/button"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { EmptyState } from "@/components/empty-state"
 
 const DAYS = [
     { name: "Lunes", id: 1 },
@@ -355,12 +356,11 @@ export function AvailabilityManagement() {
                         ))}
                     </div>
                 ) : (
-                    <div className="bg-muted/20 border-2 border-dashed border-muted rounded-3xl p-12 text-center group hover:border-primary/30 transition-colors">
-                        <div className="bg-background w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform">
-                            <CalendarIcon className="h-6 w-6 text-muted-foreground/40" />
-                        </div>
-                        <p className="text-sm text-muted-foreground font-medium">No tienes bloqueos configurados.</p>
-                    </div>
+                    <EmptyState
+                        title="No tienes bloqueos configurados."
+                        description="Los bloqueos son días específicos en los que no estarás disponible para citas."
+                        icon={CalendarOff}
+                    />
                 )}
             </section>
 

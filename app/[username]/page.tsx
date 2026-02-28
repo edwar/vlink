@@ -208,10 +208,10 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                         key={service.id}
                                         onClick={() => handleSelectService(service)}
                                         className={cn(
-                                            "w-full p-5 rounded-[2rem] border-2 text-left transition-all flex items-center gap-4 group/btn",
+                                            "w-full p-5 rounded-[2rem] border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
                                             selectedService?.id === service.id
-                                                ? "bg-primary text-primary-foreground border-primary shadow-2xl shadow-primary/20 scale-[1.02]"
-                                                : "bg-card border-muted/30 hover:border-primary/30 hover:bg-primary/5"
+                                                ? "bg-primary/90 text-primary-foreground border-primary shadow-2xl shadow-primary/20 scale-[1.02]"
+                                                : "bg-card hover:border-2 hover:border-primary/30 hover:bg-primary/5"
                                         )}
                                     >
                                         <div className={cn(
@@ -234,8 +234,8 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                                             : `${service.durationMinutes} min`}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-primary">
-                                                    <span className="bg-primary/10 px-2 py-0.5 rounded-full">$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={cn("px-2 py-0.5 rounded-full", selectedService?.id === service.id ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground")}>$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -374,14 +374,14 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                 step === 1 ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
             )}>
                 <div className="max-w-md mx-auto pointer-events-auto">
-                    <button
+                    <Button
                         disabled={!selectedTime}
                         onClick={() => setStep(2)}
-                        className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 disabled:opacity-50 disabled:shadow-none transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                        className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 disabled:opacity-50 disabled:shadow-none transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                     >
                         Continuar
                         <ChevronRight className="h-5 w-5" />
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

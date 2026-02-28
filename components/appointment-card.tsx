@@ -49,7 +49,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
     }
 
     return (
-        <div className="p-6 bg-card border-2 border-primary/5 rounded-[2rem] flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-primary/5 transition-all group overflow-hidden relative">
+        <div className="p-6 bg-card border-2 border-primary/5 rounded-[2rem] flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-lg hover:shadow-muted transition-all group overflow-hidden relative">
             <div className="flex items-center gap-6">
                 <div className="h-16 w-16 bg-accent rounded-full flex items-center justify-center text-xl font-black text-primary border-2 border-background shadow-sm shrink-0">
                     {appt.clientName.charAt(0)}
@@ -89,7 +89,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                 <Link
                     href={`https://wa.me/${appt.clientPhone.replace(/\D/g, '')}`}
                     target="_blank"
-                    className="h-12 flex-1 md:flex-none px-6 bg-transparent text-primary rounded-2xl flex items-center justify-center font-bold text-sm border border-border shadow-lg hover:shadow-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-default"
+                    className="h-12 flex-1 md:flex-none px-6 bg-transparent text-primary rounded-2xl flex items-center justify-center font-bold text-sm border border-border shadow-lg shadow-muted hover:scale-[1.02] active:scale-[0.98] transition-all cursor-default"
                 >
                     WhatsApp
                 </Link>
