@@ -7,18 +7,10 @@ import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff } from "luci
 import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
 
+import { getEffectiveProfile } from "@/lib/permissions"
+
 export default async function DashboardPage() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session) return null
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id }
-    })
-
-    if (!profile) return null
+    const profile = await getEffectiveProfile()
 
     const today = new Date()
 

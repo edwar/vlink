@@ -21,6 +21,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   profile       Profile?
+  memberships   Member[]
 
   @@map("user")
 }
@@ -71,10 +72,59 @@ model Verification {
 
 // VLink Project Specific Models
 
+model Organization {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  members     Member[]
+  profiles    Profile[] // Perfiles profesionales en esta organizacion
+  invitations Invitation[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           MemberRole   @default(PROFESSIONAL)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([userId, organizationId])
+  @@map("member")
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MANAGER
+  PROFESSIONAL
+}
+
+model Invitation {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String? // Opcional: invitar por email específico
+  token          String       @unique
+  role           MemberRole   @default(PROFESSIONAL)
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+
+  @@map("invitation")
+}
+
 model Profile {
   id               String         @id @default(cuid())
   userId           String         @unique
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId   String?
+  organization     Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   username         String         @unique
   bio              String?
   displayName      String?

@@ -18,6 +18,7 @@ export function ProfileSettings() {
     const [error, setError] = useState<string | null>(null)
 
     const [username, setUsername] = useState("")
+    const [displayName, setDisplayName] = useState("")
     const [bio, setBio] = useState("")
     const [email, setEmail] = useState("")
     const [isGoogleConnected, setIsGoogleConnected] = useState(false)
@@ -29,6 +30,7 @@ export function ProfileSettings() {
             try {
                 const data = await getProfile()
                 setUsername(data.username)
+                setDisplayName(data.displayName)
                 setBio(data.bio)
                 setEmail(data.email)
                 setIsGoogleConnected(data.isGoogleConnected)
@@ -95,8 +97,8 @@ export function ProfileSettings() {
                     <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm h-full flex flex-col justify-between space-y-8">
                         <div>
                             <div className="space-y-1">
-                                <h3 className="text-2xl font-black font-display tracking-tight text-primary">Información del Perfil</h3>
-                                <p className="text-sm text-muted-foreground font-medium">Personaliza cómo te ven tus clientes en la plataforma.</p>
+                                <h3 className="text-2xl font-black font-display tracking-tight text-primary">Información de Perfil: {displayName}</h3>
+                                <p className="text-sm text-muted-foreground font-medium">Personaliza cómo se muestra este profesional en la plataforma.</p>
                             </div>
 
                             <div className="grid gap-8 mt-10">

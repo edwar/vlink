@@ -53,5 +53,28 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Comunicaciones:** Resend para envío de Emails (Formatos React-Email y HTML).
 - **Infraestructura Cloud:** Vercel (Optimizaciones orientadas al modelo de funciones Serverless y Edge). Integración API de GCP (Google Calendar).
 
+## 5. Próximo Alcance: Gestión Organizacional y Multicuenta (En Desarrollo)
+
+VLink evolucionará de una herramienta individual a una plataforma de gestión para equipos y organizaciones, permitiendo que gestores o administradores manejen múltiples agendas de forma centralizada.
+
+### A. Modelo de Organizaciones y Roles
+- **Estructura Escalable:** Implementación de tablas `Organization` y `Member` para agrupar profesionales bajo una misma entidad (empresa, clínica, asociación).
+- **Sistema de Roles (RBAC):**
+  - **OWNER/ADMIN:** Control total de la organización y facturación.
+  - **MANAGER (Gestor):** Capacidad para visualizar, editar y coordinar las agendas de los profesionales asignados.
+  - **PROFESSIONAL:** Dueño de la agenda sincronizada con Google.
+- **Permisos Delegados:** Los gestores podrán actuar en nombre del profesional (crear servicios, bloquear horarios, cancelar citas) utilizando la conexión "offline" ya establecida con Google.
+
+### B. Flujo de Conexión "Minimal Click"
+Para garantizar la facilidad de uso y rapidez en la implementación:
+- **Invitación por Enlace:** El gestor genera un enlace único de invitación para la organización.
+- **Onboarding Flash:** El profesional abre el enlace, inicia sesión con Google y, en un solo paso, autoriza la gestión de su agenda y la sincronización del calendario.
+- **Dashboard Multicuenta:** Los gestores contarán con un "Switcher" de perfiles para alternar entre agendas sin cerrar sesión, permitiendo una coordinación fluida de múltiples profesionales.
+
+### C. Beneficios para el Negocio
+- **Centralización:** Ideal para secretarios/as o asistentes que gestionan la agenda de varios doctores, abogados o consultores.
+- **Privacidad Segura:** El profesional mantiene el control de su cuenta personal de Google, delegando solo la gestión operativa dentro de VLink.
+- **Escalabilidad Horizontal:** Permite que VLink sea adoptado por empresas con decenas de empleados con una fricción de configuración casi nula.
+
 ---
-*Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y final del proyecto VLink.*
+*Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*

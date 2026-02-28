@@ -4,24 +4,16 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { getEffectiveProfile } from "@/lib/permissions"
 
 export async function getAvailability() {
-    const session = await auth.api.getSession({
-        headers: await headers()
+    const profile = await getEffectiveProfile()
+
+    const availability = await prisma.availability.findMany({
+        where: { profileId: profile.id }
     })
 
-    if (!session) {
-        throw new Error("Unauthorized")
-    }
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id },
-        include: {
-            availabilities: true
-        }
-    })
-
-    return profile?.availabilities || []
+    return availability || []
 }
 
 export async function updateAvailability(data: {
@@ -31,25 +23,9 @@ export async function updateAvailability(data: {
     isBlocked?: boolean,
     id?: string
 }[]) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session) {
-        throw new Error("Unauthorized")
-    }
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id }
-    })
-
-    if (!profile) {
-        throw new Error("Profile not found")
-    }
+    const profile = await getEffectiveProfile()
 
     // Simple strategy: delete existing and recreate for recurring
-    // For specific dates, we might want to be more surgical, but for now let's handle recurring
-
     await prisma.$transaction(async (tx: any) => {
         // Delete existing recurring availabilities
         await tx.availability.deleteMany({
@@ -84,21 +60,7 @@ export async function addSpecialBlock(data: {
     endTime: string,
     isBlocked: boolean
 }) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session) {
-        throw new Error("Unauthorized")
-    }
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id }
-    })
-
-    if (!profile) {
-        throw new Error("Profile not found")
-    }
+    const profile = await getEffectiveProfile()
 
     await prisma.availability.create({
         data: {
@@ -117,21 +79,7 @@ export async function addSpecialBlock(data: {
 }
 
 export async function deleteAvailability(id: string) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session?.user?.id) {
-        throw new Error("Unauthorized")
-    }
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id }
-    })
-
-    if (!profile) {
-        throw new Error("Profile not found")
-    }
+    const profile = await getEffectiveProfile()
 
     await prisma.availability.delete({
         where: {
@@ -146,21 +94,7 @@ export async function deleteAvailability(id: string) {
 }
 
 export async function getAppointmentsForDashboard() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session?.user?.id) {
-        throw new Error("Unauthorized")
-    }
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id }
-    })
-
-    if (!profile) {
-        throw new Error("Profile not found")
-    }
+    const profile = await getEffectiveProfile()
 
     const appointments = await prisma.appointment.findMany({
         where: {

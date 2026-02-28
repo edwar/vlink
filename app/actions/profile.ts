@@ -1,22 +1,15 @@
 "use server"
 
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { getEffectiveProfile } from "@/lib/permissions"
 
 export async function getProfile() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
+    const profile = await getEffectiveProfile()
 
-    if (!session?.user?.id) {
-        throw new Error("Unauthorized")
-    }
-
-    // Fetch profile and user data (for email/accounts)
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id },
+    // Fetch full data for the effective profile
+    const fullProfile = await prisma.profile.findUnique({
+        where: { id: profile.id },
         include: {
             user: {
                 include: {
@@ -26,19 +19,21 @@ export async function getProfile() {
         }
     })
 
-    if (!profile) {
+    if (!fullProfile) {
         throw new Error("Profile not found")
     }
 
     // Check if the user has a Google account connected and the required scope
-    const googleAccount = profile.user.accounts.find((acc: any) => acc.providerId === 'google')
+    const googleAccount = fullProfile.user.accounts.find((acc: any) => acc.providerId === 'google')
     const isGoogleConnected = !!googleAccount
     const hasCalendarScope = googleAccount?.scope?.includes('https://www.googleapis.com/auth/calendar.events')
-    const email = profile.user.email
+    const email = fullProfile.user.email
 
     return {
-        username: profile.username,
-        bio: profile.bio || "",
+        id: fullProfile.id,
+        username: fullProfile.username,
+        displayName: fullProfile.displayName || fullProfile.user.name,
+        bio: fullProfile.bio || "",
         email: email,
         isGoogleConnected: isGoogleConnected,
         hasCalendarScope: !!hasCalendarScope
@@ -46,13 +41,7 @@ export async function getProfile() {
 }
 
 export async function updateProfile(data: { username: string, bio: string }) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session?.user?.id) {
-        throw new Error("Unauthorized")
-    }
+    const profile = await getEffectiveProfile()
 
     const { username, bio } = data
 
@@ -66,13 +55,13 @@ export async function updateProfile(data: { username: string, bio: string }) {
         where: { username }
     })
 
-    if (existingProfile && existingProfile.userId !== session.user.id) {
+    if (existingProfile && existingProfile.id !== profile.id) {
         throw new Error("Username is already taken")
     }
 
     // Update the profile
     await prisma.profile.update({
-        where: { userId: session.user.id },
+        where: { id: profile.id },
         data: {
             username: username.trim(),
             bio: bio.trim()

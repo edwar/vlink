@@ -2,15 +2,17 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard } from "lucide-react"
+import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
 import { signOut } from "@/lib/auth-client"
+import { ProfileSwitcher } from "./profile-switcher"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Agenda', href: '/dashboard/agenda', icon: Calendar },
     { name: 'Disponibilidad', href: '/dashboard/disponibilidad', icon: Clock },
+    { name: 'Equipo', href: '/dashboard/organizacion', icon: Users },
     { name: 'Perfil', href: '/dashboard/perfil', icon: User },
     { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
 ]
@@ -30,6 +32,9 @@ export function DashboardSidebar() {
                 <span className="text-2xl font-display font-bold tracking-tight text-primary">VLink</span>
                 <ThemeToggle />
             </div>
+
+            <ProfileSwitcher />
+
             <nav className="flex flex-1 flex-col">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>

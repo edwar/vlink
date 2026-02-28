@@ -1,0 +1,65 @@
+import { auth } from "@/lib/auth"
+import { headers, cookies } from "next/headers"
+import prisma from "@/lib/prisma"
+
+/**
+ * Resolves the professional profile that the current user is authorized to manage or view.
+ * If 'vlink-view-as-profile-id' cookie is present, it verifies the user's permission
+ * within the organization of that profile.
+ */
+export async function getEffectiveProfile() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) {
+        throw new Error("Unauthorized")
+    }
+
+    const cookieStore = await cookies()
+    const viewAsProfileId = cookieStore.get("vlink-view-as-profile-id")?.value
+
+    // 1. If no "view as" is specified, return the user's personal profile
+    if (!viewAsProfileId) {
+        const personalProfile = await prisma.profile.findUnique({
+            where: { userId: session.user.id },
+            include: { organization: true }
+        })
+        if (!personalProfile) throw new Error("Personal profile not found")
+        return personalProfile
+    }
+
+    // 2. If "view as" is specified, verify permissions
+    const targetProfile = await prisma.profile.findUnique({
+        where: { id: viewAsProfileId },
+        include: { organization: true }
+    })
+
+    if (!targetProfile) {
+        throw new Error("Target profile not found")
+    }
+
+    // If it's their own profile, just return it
+    if (targetProfile.userId === session.user.id) {
+        return targetProfile
+    }
+
+    // Check if the user is a manager/admin/owner in the target profile's organization
+    if (!targetProfile.organizationId) {
+        throw new Error("Target profile is not part of any organization")
+    }
+
+    const membership = await prisma.member.findFirst({
+        where: {
+            organizationId: targetProfile.organizationId,
+            userId: session.user.id,
+            role: { in: ["OWNER", "ADMIN", "MANAGER"] }
+        }
+    })
+
+    if (!membership) {
+        throw new Error("Access denied: You don't have permission to manage this agenda")
+    }
+
+    return targetProfile
+}

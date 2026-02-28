@@ -230,8 +230,8 @@ export function ConfigurationSettings() {
                     <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm space-y-8">
                         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                             <div className="space-y-1">
-                                <h3 className="text-2xl font-black font-display tracking-tight text-primary">Mis Servicios</h3>
-                                <p className="text-sm text-muted-foreground font-medium">Define qué ofreces y cuánto dura cada sesión.</p>
+                                <h3 className="text-2xl font-black font-display tracking-tight text-primary">Servicios: {displayName}</h3>
+                                <p className="text-sm text-muted-foreground font-medium">Define qué ofreces y cuánto dura cada sesión para este profesional.</p>
                             </div>
                             {!showNewForm && (
                                 <Button

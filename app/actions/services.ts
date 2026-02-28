@@ -1,28 +1,12 @@
 "use server"
 
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { getEffectiveProfile } from "@/lib/permissions"
 
 async function getProfileForUser() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session?.user?.id) {
-        throw new Error("Unauthorized")
-    }
-
-    const profile = await prisma.profile.findUnique({
-        where: { userId: session.user.id }
-    })
-
-    if (!profile) {
-        throw new Error("Profile not found")
-    }
-
-    return { profile, session }
+    const profile = await getEffectiveProfile()
+    return { profile }
 }
 
 export async function getServices() {
@@ -43,7 +27,7 @@ export async function getServices() {
 }
 
 export async function getConfiguration() {
-    const { profile, session } = await getProfileForUser()
+    const { profile } = await getProfileForUser()
 
     const services = await prisma.service.findMany({
         where: { profileId: profile.id },
@@ -51,7 +35,7 @@ export async function getConfiguration() {
     })
 
     return {
-        displayName: profile.displayName || session.user.name || "",
+        displayName: profile.displayName || profile.username || "",
         services: services.map(s => ({
             id: s.id,
             name: s.name,
