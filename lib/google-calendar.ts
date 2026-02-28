@@ -107,3 +107,32 @@ export async function createGoogleCalendarEvent(appointmentId: string) {
         return null
     }
 }
+
+export async function deleteGoogleCalendarEvent(appointmentId: string) {
+    try {
+        const appointment = await prisma.appointment.findUnique({
+            where: { id: appointmentId },
+            include: {
+                profile: true
+            }
+        })
+
+        if (!appointment || !appointment.googleEventId || !appointment.profile.userId) {
+            return null // Not found or never synced
+        }
+
+        const auth = await getGoogleAuthClient(appointment.profile.userId)
+        const calendar = google.calendar({ version: "v3", auth })
+
+        await calendar.events.delete({
+            calendarId: "primary",
+            eventId: appointment.googleEventId,
+            sendUpdates: "all", // Notify attendees of cancellation
+        })
+
+        return true
+    } catch (error) {
+        console.error("Error deleting Google Calendar event:", error)
+        return false
+    }
+}
