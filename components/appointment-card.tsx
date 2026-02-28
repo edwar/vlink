@@ -103,7 +103,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                             <XCircle className="h-5 w-5" />
                         </button>
                     </DialogTrigger>
-                    <DialogContent className="rounded-[2rem] border-0 shadow-2xl">
+                    <DialogContent>
                         <DialogHeader className="pt-4">
                             <div className="h-16 w-16 bg-red-100 rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto sm:mx-0">
                                 <AlertTriangle className="h-8 w-8" />
@@ -115,7 +115,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                                 Estás a punto de cancelar la cita de <span className="font-bold text-foreground">{appt.clientName}</span> para el día <span className="font-bold text-foreground">{format(new Date(appt.startTime), "d 'de' MMMM", { locale: es })}</span>. Esta acción no se puede deshacer.
                             </DialogDescription>
                         </DialogHeader>
-                        <DialogFooter className="gap-2 sm:gap-0 font-display">
+                        <DialogFooter className="flex w-full gap-3 sm:flex-row">
                             <Button
                                 variant="outline"
                                 onClick={() => setIsOpen(false)}

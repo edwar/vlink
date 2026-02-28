@@ -226,7 +226,7 @@ export function ConfigurationSettings() {
                             {!showNewForm && (
                                 <Button
                                     onClick={() => setShowNewForm(true)}
-                                    className="shrink-0 h-11 rounded-xl font-black px-6 shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-95"
+                                    className="shrink-0 h-12 rounded-xl font-black shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-95"
                                 >
                                     <Plus className="h-5 w-5 mr-2" />
                                     Nuevo Servicio
@@ -501,7 +501,7 @@ export function ConfigurationSettings() {
                             <Button
                                 onClick={handleSaveName}
                                 disabled={savingName}
-                                className="w-full h-14 rounded-2xl font-black text-base shadow-lg shadow-primary/10 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.98]"
+                                className="w-full h-12 rounded-2xl font-black text-base shadow-lg shadow-primary/10 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.98]"
                             >
                                 {savingName ? (
                                     <Loader2 className="h-5 w-5 animate-spin mr-2" />

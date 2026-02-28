@@ -29,6 +29,18 @@ export function LandingNav() {
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [menuOpen])
 
+    // Prevent scrolling when menu is open (mobile only)
+    useEffect(() => {
+        if (menuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'unset'
+        }
+        return () => {
+            document.body.style.overflow = 'unset'
+        }
+    }, [menuOpen])
+
     const handleSignOut = async () => {
         setMenuOpen(false)
         await signOut()
@@ -77,41 +89,47 @@ export function LandingNav() {
                         {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                     </button>
 
-                    {/* Dropdown */}
+                    {/* Dropdown / Menu Overlay */}
                     {menuOpen && (
-                        <div className="absolute top-full right-4 mt-2 w-56 bg-card border border-border/60 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                            {/* Dashboard / Empezar */}
-                            <Link
-                                href={isLoggedIn ? "/dashboard" : "/login"}
+                        <>
+                            <div
+                                className="fixed inset-0 z-40 bg-background/60 backdrop-blur-md animate-in fade-in duration-300"
                                 onClick={() => setMenuOpen(false)}
-                                className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-accent transition-colors"
-                            >
-                                {isLoggedIn ? "Ir al dashboard" : "Empezar"}
-                            </Link>
+                            />
+                            <div className="absolute top-full right-4 mt-2 w-56 bg-card border border-border/60 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                {/* Dashboard / Empezar */}
+                                <Link
+                                    href={isLoggedIn ? "/dashboard" : "/login"}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-accent transition-colors"
+                                >
+                                    {isLoggedIn ? "Ir al dashboard" : "Empezar"}
+                                </Link>
 
-                            {/* Divider */}
-                            <div className="my-1 border-t border-border/40" />
+                                {/* Divider */}
+                                <div className="my-1 border-t border-border/40" />
 
-                            {/* Theme Toggle */}
-                            <div className="flex items-center justify-between px-4 py-3 rounded-xl">
-                                <span className="text-sm font-semibold text-muted-foreground">Tema</span>
-                                <ThemeToggle />
+                                {/* Theme Toggle */}
+                                <div className="flex items-center justify-between px-4 py-3 rounded-xl">
+                                    <span className="text-sm font-semibold text-muted-foreground">Tema</span>
+                                    <ThemeToggle />
+                                </div>
+
+                                {/* Sign Out (only when logged in) */}
+                                {isLoggedIn && (
+                                    <>
+                                        <div className="my-1 border-t border-border/40" />
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
+                                        >
+                                            <LogOut className="h-4 w-4" />
+                                            Cerrar sesión
+                                        </button>
+                                    </>
+                                )}
                             </div>
-
-                            {/* Sign Out (only when logged in) */}
-                            {isLoggedIn && (
-                                <>
-                                    <div className="my-1 border-t border-border/40" />
-                                    <button
-                                        onClick={handleSignOut}
-                                        className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
-                                    >
-                                        <LogOut className="h-4 w-4" />
-                                        Cerrar sesión
-                                    </button>
-                                </>
-                            )}
-                        </div>
+                        </>
                     )}
                 </div>
             </div>

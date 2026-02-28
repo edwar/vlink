@@ -46,7 +46,7 @@ export function MobileNav() {
     return (
         <div className="md:hidden">
             {/* Header with Hamburger */}
-            <header className="flex h-16 items-center justify-between border-b bg-card px-4 sticky top-0 z-40">
+            <header className="flex h-16 items-center justify-between border-b bg-card px-4 sticky top-0 z-50">
                 <span className="text-xl font-display font-bold tracking-tight text-primary">VLink</span>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -60,7 +60,7 @@ export function MobileNav() {
             {/* Menu Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+                    className="fixed inset-0 z-50 bg-background/30 backdrop-blur-xs animate-in fade-in duration-200"
                     onClick={() => setIsOpen(false)}
                 />
             )}

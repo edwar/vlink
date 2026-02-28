@@ -11,6 +11,7 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 
 const DAYS = [
     { name: "Lunes", id: 1 },
@@ -322,7 +323,7 @@ export function AvailabilityManagement() {
                     <Button
                         variant="secondary"
                         onClick={() => setShowBlockModal(true)}
-                        className="w-full md:w-auto rounded-xl font-bold active:scale-95"
+                        className="w-full md:w-auto h-12 rounded-xl font-bold active:scale-95"
                     >
                         <Plus className="h-4 w-4" />
                         Añadir Bloqueo
@@ -363,67 +364,67 @@ export function AvailabilityManagement() {
                 )}
             </section>
 
-            {showBlockModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-card border w-full max-w-md p-8 rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300">
-                        <h4 className="text-2xl font-bold font-display mb-6">Nuevo Bloqueo</h4>
-                        <div className="space-y-6">
+            <Dialog open={showBlockModal} onOpenChange={setShowBlockModal}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold font-display">Nuevo Bloqueo</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-6 py-4">
+                        <div>
+                            <label className="block text-sm font-bold mb-2">Fecha</label>
+                            <Input
+                                type="date"
+                                value={newBlock.date}
+                                onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
+                                className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all"
+                            />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-bold mb-2">Fecha</label>
+                                <label className="block text-sm font-bold mb-2">Desde</label>
                                 <Input
-                                    type="date"
-                                    value={newBlock.date}
-                                    onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
-                                    className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all"
+                                    type="time"
+                                    value={newBlock.start}
+                                    onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
+                                    className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                 />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-bold mb-2">Desde</label>
-                                    <Input
-                                        type="time"
-                                        value={newBlock.start}
-                                        onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
-                                        className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold mb-2">Hasta</label>
-                                    <Input
-                                        type="time"
-                                        value={newBlock.end}
-                                        onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}
-                                        className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex gap-3 pt-4">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setShowBlockModal(false)}
-                                    className="flex-1 rounded-2xl text-muted-foreground font-bold"
-                                >
-                                    Cancelar
-                                </Button>
-                                <Button
-                                    onClick={handleAddBlock}
-                                    disabled={!newBlock.date || saving}
-                                    className="flex-1 rounded-2xl shadow-lg shadow-primary/20 font-bold"
-                                >
-                                    {saving ? <Loader2 className="animate-spin" /> : "Añadir"}
-                                </Button>
+                            <div>
+                                <label className="block text-sm font-bold mb-2">Hasta</label>
+                                <Input
+                                    type="time"
+                                    value={newBlock.end}
+                                    onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}
+                                    className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                    <DialogFooter className="flex w-full gap-3 sm:flex-row">
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowBlockModal(false)}
+                            className="flex-1 rounded-xl border-2 font-bold h-12"
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={handleAddBlock}
+                            disabled={!newBlock.date || saving}
+                            className="flex-1 rounded-xl font-bold h-12 shadow-lg"
+                        >
+                            {saving ? <Loader2 className="animate-spin" /> : "Añadir"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             <div className="fixed sm:sticky bottom-0 sm:bottom-6 left-0 right-0 p-4 sm:p-0 bg-background/80 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border-t sm:border-t-0 z-20 flex justify-end">
                 <Button
                     onClick={handleSave}
                     disabled={saving}
                     className={cn(
-                        "w-full sm:w-auto px-10 h-14 rounded-2xl font-bold text-lg transition-all duration-500 active:scale-95 overflow-hidden",
+                        "w-full sm:w-auto h-12 rounded-2xl font-bold text-lg transition-all duration-500 active:scale-95 overflow-hidden",
                         success
                             ? "bg-secondary text-secondary-foreground shadow-primary/30 shadow-2xs ring-4 ring-secondary/20 hover:bg-secondary/90"
                             : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:shadow-md hover:-translate-y-0.5"

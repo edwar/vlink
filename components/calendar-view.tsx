@@ -453,7 +453,7 @@ export function CalendarView() {
             {view === 'month' ? renderMonthView() : renderDayOrWeekView()}
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="sm:max-w-md border-0 bg-background/95 backdrop-blur-xl shadow-2xl p-0 overflow-hidden">
+                <DialogContent className="sm:max-w-md p-0 overflow-hidden">
                     <div className="bg-primary/5 border-b p-6">
                         <DialogHeader>
                             <DialogTitle className="text-xl font-display font-bold">
@@ -501,7 +501,7 @@ export function CalendarView() {
                             <div className="space-y-4">
                                 <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Información del Cliente</h4>
                                 <div className="grid gap-3">
-                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent/50 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                             <User className="h-4 w-4" />
                                         </div>
@@ -512,7 +512,7 @@ export function CalendarView() {
                                     </div>
 
                                     {selectedAppointment.clientEmail && (
-                                        <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                                        <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent/50 transition-colors">
                                             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                                 <Mail className="h-4 w-4" />
                                             </div>
@@ -525,7 +525,7 @@ export function CalendarView() {
                                         </div>
                                     )}
 
-                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent/50 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 shrink-0">
                                             <Phone className="h-4 w-4" />
                                         </div>
