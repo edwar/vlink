@@ -224,7 +224,7 @@ export function AvailabilityManagement() {
                                     "flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all duration-300",
                                     active
                                         ? "bg-card border-primary/20 shadow-sm"
-                                        : "bg-muted/30 border-transparent grayscale-[0.5] opacity-80"
+                                        : "bg-muted/30 grayscale-[0.5] opacity-80"
                                 )}
                             >
                                 <div className="flex items-center justify-between sm:justify-start gap-4 mb-4 sm:mb-0">
@@ -256,7 +256,7 @@ export function AvailabilityManagement() {
                                                     type="time"
                                                     value={start}
                                                     onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                    className="w-full bg-background border-2 border-muted/50 rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                                    className="w-full bg-background rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                                 />
                                             </div>
                                             <span className="text-muted-foreground font-bold">a</span>
@@ -265,7 +265,7 @@ export function AvailabilityManagement() {
                                                     type="time"
                                                     value={end}
                                                     onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                    className="w-full bg-background border-2 border-muted/50 rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                                    className="w-full bg-background rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                                 />
                                             </div>
                                         </div>
@@ -275,7 +275,6 @@ export function AvailabilityManagement() {
                                                 <Checkbox
                                                     checked={dayState?.lunchActive}
                                                     onCheckedChange={() => toggleLunch(day.id)}
-                                                    className="size-4 rounded"
                                                     id={`lunch-${day.id}`}
                                                 />
                                                 <label htmlFor={`lunch-${day.id}`} className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-wider cursor-pointer">
@@ -283,31 +282,56 @@ export function AvailabilityManagement() {
                                                 </label>
                                             </div>
 
-                                            {dayState?.lunchActive && (
-                                                <div className="flex items-center justify-between sm:justify-start gap-3 px-2 py-0 rounded-xl animate-in slide-in-from-left-2 duration-200">
-                                                    <Input
-                                                        type="time"
-                                                        value={dayState.lunchStart}
-                                                        onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                        className="bg-transparent border-none px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                    />
-                                                    <span className="text-primary/40 text-[10px] font-bold">a</span>
-                                                    <Input
-                                                        type="time"
-                                                        value={dayState.lunchEnd}
-                                                        onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                        className="bg-transparent border-none px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                    />
-                                                </div>
-                                            )}
+
+                                            <div className="flex items-center justify-between sm:justify-start gap-3 px-2 py-0 rounded-xl animate-in slide-in-from-left-2 duration-200">
+                                                <Input
+                                                    type="time"
+                                                    disabled={!dayState?.lunchActive}
+                                                    value={dayState?.lunchStart}
+                                                    onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
+                                                    className="bg-transparent px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                                />
+                                                <span className="text-primary/40 text-[10px] font-bold">a</span>
+                                                <Input
+                                                    type="time"
+                                                    disabled={!dayState?.lunchActive}
+                                                    value={dayState?.lunchEnd}
+                                                    onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
+                                                    className="bg-transparent px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 )}
                                 {!active && (
-                                    <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-xl">
-                                        <Clock className="h-4 w-4 text-muted-foreground/50" />
-                                        <span className="text-sm text-muted-foreground font-medium italic">No disponible para citas</span>
-                                    </div>
+                                    <>
+                                        <div className="flex flex-col gap-4 pointer-events-none select-none">
+                                            <div className="flex items-center gap-3 sm:gap-4">
+                                                <div className="relative group flex-1 sm:flex-initial">
+                                                    <div className="h-[38px] w-full lg:w-[82px] bg-transparent border-[0.5px] border-primary/10 rounded-xl" />
+                                                </div>
+                                                <span className="text-primary/40 font-bold">a</span>
+                                                <div className="relative group flex-1 sm:flex-initial">
+                                                    <div className="h-[38px] w-full lg:w-[83px] bg-transparent border-[0.5px] border-primary/10 rounded-xl" />
+                                                </div>
+                                            </div>
+                                            <div className="h-[0.25px] w-full bg-primary/10 rounded-xl" />
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                                                <div className="flex flex-col sm:flex-row sm:items-center">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="h-[24px] w-[24px] rounded-md bg-transparent border-[0.5px] border-primary/10" />
+                                                        <div className="h-4 w-[152px] bg-transparent border-[0.5px] border-primary/10 rounded-full" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-between sm:justify-start gap-3 px-2 py-0 rounded-xl animate-in slide-in-from-left-2 duration-200">
+                                                    <div className="h-7 w-full lg:w-[78px] bg-transparent border-[0.5px] border-primary/10 rounded-md mt-1" />
+                                                    <span className="text-primary/40 text-[10px] font-bold">a</span>
+                                                    <div className="h-7 w-full lg:w-[78px] bg-transparent border-[0.5px] border-primary/10 rounded-md mt-1" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </>
                                 )}
                             </div>
                         )
