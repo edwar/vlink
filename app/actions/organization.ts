@@ -20,17 +20,27 @@ export async function createOrganization(name: string) {
 
     const slug = name.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "") + "-" + Math.random().toString(36).slice(-4)
 
-    const organization = await prisma.organization.create({
-        data: {
-            name,
-            slug,
-            members: {
-                create: {
-                    userId: session.user.id,
-                    role: "OWNER"
+    const organization = await prisma.$transaction(async (tx) => {
+        const org = await tx.organization.create({
+            data: {
+                name,
+                slug,
+                members: {
+                    create: {
+                        userId: session.user.id,
+                        role: "OWNER"
+                    }
                 }
             }
-        }
+        })
+
+        // Link creator's profile to the organization
+        await tx.profile.update({
+            where: { userId: session.user.id },
+            data: { organizationId: org.id }
+        })
+
+        return org
     })
 
     revalidatePath("/dashboard")
@@ -142,13 +152,11 @@ export async function acceptInvitation(token: string) {
             }
         })
 
-        // 2. Link profile to organization (if it's a professional)
-        if (invitation.role === "PROFESSIONAL") {
-            await tx.profile.update({
-                where: { userId: session.user.id },
-                data: { organizationId: invitation.organizationId }
-            })
-        }
+        // 2. Link profile to organization (primary organization for the user's agenda)
+        await tx.profile.update({
+            where: { userId: session.user.id },
+            data: { organizationId: invitation.organizationId }
+        })
 
         // 3. Delete invitation (one-time use or keep it? Let's keep it clean)
         // Optionally delete invitation if you want it to be single-use

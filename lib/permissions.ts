@@ -44,21 +44,21 @@ export async function getEffectiveProfile() {
         return targetProfile
     }
 
-    // Check if the user is a manager/admin/owner in the target profile's organization
-    if (!targetProfile.organizationId) {
-        throw new Error("Target profile is not part of any organization")
-    }
-
-    const membership = await prisma.member.findFirst({
+    // Optimized: Verify if current user is owner/admin/manager in ANY common organization 
+    // with the target profile's user.
+    const commonMembership = await prisma.member.findFirst({
         where: {
-            organizationId: targetProfile.organizationId,
             userId: session.user.id,
-            role: { in: ["OWNER", "ADMIN", "MANAGER"] }
-        }
+            role: { in: ["OWNER", "ADMIN", "MANAGER"] },
+            organization: {
+                members: { some: { userId: targetProfile.userId } }
+            }
+        },
+        select: { organizationId: true }
     })
 
-    if (!membership) {
-        throw new Error("Access denied: You don't have permission to manage this agenda")
+    if (!commonMembership) {
+        throw new Error("Access denied: You don't have permission to manage this profile's agenda")
     }
 
     return targetProfile
