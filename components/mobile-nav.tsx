@@ -7,11 +7,14 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
 import { signOut } from "@/lib/auth-client"
+import { ProfileSwitcher } from "./profile-switcher"
+import { Users } from "lucide-react"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Agenda', href: '/dashboard/agenda', icon: Calendar },
     { name: 'Disponibilidad', href: '/dashboard/disponibilidad', icon: Clock },
+    { name: 'Equipo', href: '/dashboard/organizacion', icon: Users },
     { name: 'Perfil', href: '/dashboard/perfil', icon: User },
     { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
 ]
@@ -73,6 +76,9 @@ export function MobileNav() {
                 <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b">
                     <span className="text-xl font-display font-bold tracking-tight text-primary">VLink</span>
                     <ThemeToggle />
+                </div>
+                <div className="px-1 border-b">
+                    <ProfileSwitcher />
                 </div>
 
                 <nav className="flex flex-1 flex-col p-6 overflow-y-auto">

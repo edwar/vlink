@@ -7,6 +7,7 @@ import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Shield, Building2, UserCircle, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { UserAvatar } from "@/components/user-avatar"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -49,6 +50,12 @@ export default async function OrganizacionPage() {
 
     const currentUserRole = members.find(m => m.userId === session.user.id)?.role
 
+    const ROLE_LABELS: Record<string, string> = {
+        OWNER: "Propietario",
+        ADMIN: "Administrador",
+        MEMBER: "Miembro"
+    }
+
     return (
         <div className="space-y-12 animate-in fade-in duration-700 pb-20">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -65,7 +72,7 @@ export default async function OrganizacionPage() {
                 </div>
                 <div className="px-4 py-2 bg-muted/50 rounded-xl border border-border inline-flex items-center gap-2">
                     <Shield className="h-4 w-4 text-primary" />
-                    <span className="text-xs font-black uppercase tracking-widest text-foreground">Tu Rol: {currentUserRole}</span>
+                    <span className="text-xs font-black uppercase tracking-widest text-foreground">Tu Rol: {currentUserRole ? ROLE_LABELS[currentUserRole] : "Miembro"}</span>
                 </div>
             </header>
 
@@ -87,12 +94,12 @@ export default async function OrganizacionPage() {
                             <Card key={member.id} className="border-2 hover:border-primary/20 transition-all overflow-hidden group">
                                 <CardContent className="p-0">
                                     <div className="flex items-center p-5 gap-4">
-                                        <div className="h-14 w-14 rounded-2xl bg-muted/50 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/5 transition-colors">
-                                            {member.user.image ? (
-                                                <img src={member.user.image} alt={member.user.name} className="h-full w-full rounded-2xl object-cover" />
-                                            ) : (
-                                                <UserCircle className="h-8 w-8" />
-                                            )}
+                                        <div className="h-14 w-14 shrink-0 transition-all group-hover:scale-105 duration-300">
+                                            <UserAvatar
+                                                image={member.user.image}
+                                                name={member.user.name}
+                                                className="h-full w-full rounded-2xl shadow-sm border border-border group-hover:border-primary/20"
+                                            />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2 mb-0.5">

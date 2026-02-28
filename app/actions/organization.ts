@@ -200,7 +200,7 @@ export async function getManagedProfiles(organizationId: string) {
         }
     })
 
-    if (!membership) throw new Error("Unauthorized access to organization profiles")
+    if (!membership) return []
 
     return await prisma.profile.findMany({
         where: {

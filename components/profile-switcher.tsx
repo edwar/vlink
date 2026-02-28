@@ -7,6 +7,7 @@ import { getProfile } from "@/app/actions/profile"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { UserCircle, Briefcase, Building2, ChevronDown, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { UserAvatar } from "./user-avatar"
 
 export function ProfileSwitcher() {
     const [organizations, setOrganizations] = useState<any[]>([])
@@ -71,16 +72,22 @@ export function ProfileSwitcher() {
     if (organizations.length === 0) return null
 
     return (
-        <div className="px-2 py-4 border-b bg-muted/20">
+        <div className="px-1 py-4 bg-muted/20">
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">
                 <Building2 className="h-3 w-3" />
                 Viendo Agenda De:
             </p>
             <Select value={selectedProfileId || "personal"} onValueChange={handleSwitch}>
-                <SelectTrigger className="w-full h-12 bg-background border-2 focus:ring-primary/20 transition-all rounded-xl">
+                <SelectTrigger className="w-full h-12 bg-background border-2 focus:ring-primary/20 transition-all rounded-xl pl-2">
                     <SelectValue>
                         <div className="flex items-center gap-2 truncate">
-                            <UserCircle className="h-5 w-5 text-primary shrink-0" />
+                            <UserAvatar
+                                image={selectedProfileId && selectedProfileId !== "personal"
+                                    ? Object.values(managedProfiles).flat().find(p => p.id === selectedProfileId)?.user?.image
+                                    : activeProfile?.image}
+                                name="Avatar"
+                                className="h-8 w-8 rounded-lg shrink-0"
+                            />
                             <span className="truncate font-bold text-sm">
                                 {selectedProfileId && selectedProfileId !== "personal"
                                     ? Object.values(managedProfiles).flat().find(p => p.id === selectedProfileId)?.displayName || "Profesional"
@@ -92,9 +99,13 @@ export function ProfileSwitcher() {
                 <SelectContent className="rounded-xl border-2 shadow-xl">
                     <SelectGroup>
                         <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50">Personal</SelectLabel>
-                        <SelectItem value="personal" className="py-3 focus:bg-primary/5 rounded-lg cursor-pointer">
+                        <SelectItem value="personal" className="py-2.5 focus:bg-primary/5 rounded-lg cursor-pointer">
                             <div className="flex items-center gap-2">
-                                <UserCircle className="h-4 w-4 text-primary" />
+                                <UserAvatar
+                                    image={activeProfile?.image}
+                                    name={activeProfile?.displayName}
+                                    className="h-8 w-8 rounded-lg"
+                                />
                                 <div className="flex flex-col">
                                     <span className="font-bold text-sm">Mi Agenda Personal</span>
                                     <span className="text-[10px] text-muted-foreground">Propietario</span>
@@ -103,34 +114,42 @@ export function ProfileSwitcher() {
                         </SelectItem>
                     </SelectGroup>
 
-                    {organizations.map(org => (
-                        <SelectGroup key={org.id}>
-                            <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50 pt-3 flex items-center gap-2">
-                                <Building2 className="h-3 w-3" />
-                                {org.name}
-                            </SelectLabel>
-                            {managedProfiles[org.id]?.map(profile => (
-                                <SelectItem
-                                    key={profile.id}
-                                    value={profile.id}
-                                    className="py-3 focus:bg-primary/5 rounded-lg cursor-pointer"
-                                    disabled={false}
-                                >
-                                    <div className="flex items-center gap-2">
-                                        <Briefcase className="h-4 w-4 text-blue-500" />
-                                        <div className="flex flex-col">
-                                            <span className="font-bold text-sm truncate max-w-[150px]">
-                                                {profile.displayName || profile.user.name}
-                                            </span>
-                                            <span className="text-[10px] text-muted-foreground truncate">
-                                                @{profile.username}
-                                            </span>
+                    {organizations.map(org => {
+                        const profiles = (managedProfiles[org.id] || []).filter(p => p.id !== activeProfile?.id)
+                        if (profiles.length === 0) return null
+
+                        return (
+                            <SelectGroup key={org.id}>
+                                <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50 pt-3 flex items-center gap-2">
+                                    <Building2 className="h-3 w-3" />
+                                    {org.name}
+                                </SelectLabel>
+                                {profiles.map(profile => (
+                                    <SelectItem
+                                        key={profile.id}
+                                        value={profile.id}
+                                        className="py-2.5 focus:bg-primary/5 rounded-lg cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <UserAvatar
+                                                image={profile.user?.image}
+                                                name={profile.displayName || profile.user?.name}
+                                                className="h-8 w-8 rounded-lg"
+                                            />
+                                            <div className="flex flex-col text-left">
+                                                <span className="font-bold text-sm truncate max-w-[150px]">
+                                                    {profile.displayName || profile.user?.name}
+                                                </span>
+                                                <span className="text-[10px] text-muted-foreground truncate">
+                                                    @{profile.username}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    ))}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        )
+                    })}
                 </SelectContent>
             </Select>
         </div>

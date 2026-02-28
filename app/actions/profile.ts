@@ -33,6 +33,7 @@ export async function getProfile() {
         id: fullProfile.id,
         username: fullProfile.username,
         displayName: fullProfile.displayName || fullProfile.user.name,
+        image: fullProfile.user.image,
         bio: fullProfile.bio || "",
         email: email,
         isGoogleConnected: isGoogleConnected,
