@@ -59,93 +59,125 @@ export default async function OrganizacionPage() {
     }
 
     return (
-        <div className="space-y-12 animate-in fade-in duration-700 pb-20">
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-primary/10 rounded-2xl">
-                            <Building2 className="h-7 w-7 text-primary" />
-                        </div>
-                        <h1 className="text-4xl font-display font-black tracking-tight text-primary uppercase">{organization.name}</h1>
-                    </div>
-                    <p className="text-muted-foreground font-medium pl-1">
-                        Gestionando equipo y agendas compartidas.
-                    </p>
+        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 px-1">
+            <header className="relative p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-10">
+                    <Building2 className="h-24 w-24 text-primary rotate-12" />
                 </div>
-                <div className="px-4 py-2 bg-muted/50 rounded-xl border border-border inline-flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-primary" />
-                    <span className="text-xs font-black uppercase tracking-widest text-foreground">Tu Rol: {currentUserRole ? ROLE_LABELS[currentUserRole] : "Miembro"}</span>
+
+                <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div className="space-y-2">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
+                            <Building2 className="h-3 w-3" />
+                            Gestión Corporativa
+                        </div>
+                        <h1 className="text-5xl font-display font-black tracking-tighter text-primary uppercase">
+                            {organization.name}
+                        </h1>
+                        <p className="text-muted-foreground font-medium text-lg max-w-2xl">
+                            Administra tu equipo de profesionales, coordina agendas compartidas y escala tu negocio centralizadamente.
+                        </p>
+                    </div>
+                    <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-sm inline-flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                            <Shield className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tu Rol</p>
+                            <p className="text-sm font-black text-foreground">{currentUserRole ? ROLE_LABELS[currentUserRole] : "Miembro"}</p>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 {/* Miembros / Mi Equipo */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="flex items-center justify-between border-b pb-4">
-                        <h2 className="text-2xl font-display font-black tracking-tight flex items-center gap-3">
-                            <Users className="h-6 w-6 text-primary" />
-                            Mi Equipo
-                        </h2>
-                        <span className="px-4 py-1 bg-primary/5 text-primary text-[10px] font-black uppercase tracking-widest rounded-full">
-                            {members.length} Miembros
+                <div className="lg:col-span-2 space-y-8">
+                    <div className="flex items-center justify-between px-2">
+                        <div className="flex items-center gap-3">
+                            <div className="h-8 w-1 bg-primary rounded-full" />
+                            <h2 className="text-3xl font-display font-black tracking-tight">Mi Equipo</h2>
+                        </div>
+                        <span className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 shadow-sm shadow-primary/5">
+                            {members.length} Profesionales
                         </span>
                     </div>
 
-                    <div className="grid gap-4">
+                    <div className="grid gap-6">
                         {members.map((member) => (
-                            <Card key={member.id} className="border-2 hover:border-primary/20 transition-all overflow-hidden group relative">
-                                <CardContent className="p-0">
-
-                                    <div className="flex items-center px-4 py-6 gap-3 sm:gap-4 relative">
-                                        <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 transition-all group-hover:scale-105 duration-300">
-                                            <UserAvatar
-                                                image={member.user.image}
-                                                name={member.user.name}
-                                                className="h-full w-full rounded-2xl shadow-sm border border-border group-hover:border-primary/20"
-                                            />
-                                        </div>
-                                        <div className="flex-1 min-w-0 space-y-0.5">
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="text-base sm:text-lg font-black font-display tracking-tight truncate">{member.user.name}</h3>
-                                                {member.role === "OWNER" && <Shield className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
+                            <div key={member.id} className="p-1 rounded-3xl bg-gradient-to-r from-primary/5 to-transparent hover:from-primary/10 transition-colors duration-500">
+                                <Card className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[1.5rem] hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                    <CardContent className="p-0">
+                                        <div className="flex items-center px-6 py-6 gap-5 sm:gap-6 relative">
+                                            <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 transition-all group-hover:scale-105 duration-500">
+                                                <UserAvatar
+                                                    image={member.user.image}
+                                                    name={member.user.name}
+                                                    className="h-full w-full rounded-2xl shadow-lg border-2 border-background ring-4 ring-primary/5 group-hover:ring-primary/10"
+                                                />
                                             </div>
-                                            <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">{member.user.email}</p>
-
-                                            {member.user.profile?.username && (
-                                                <div className="flex items-center gap-2 mt-1 sm:mt-0">
-                                                    <p className="text-[10px] font-bold text-primary flex items-center gap-1 opacity-70 sm:opacity-60 group-hover:opacity-100 transition-opacity truncate">
-                                                        <Briefcase className="h-2.5 w-2.5" />
-                                                        {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
-                                                    </p>
-                                                    <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
+                                            <div className="flex-1 min-w-0 space-y-1.5">
+                                                <div className="flex items-center gap-3">
+                                                    <h3 className="text-xl sm:text-2xl font-black font-display tracking-tight truncate text-foreground/90">{member.user.name}</h3>
+                                                    {member.role === "OWNER" && (
+                                                        <div className="h-6 w-6 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 shadow-inner">
+                                                            <Shield className="h-3.5 w-3.5" />
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
-                                        </div>
+                                                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                                                    <p className="text-sm text-muted-foreground font-bold truncate flex items-center gap-2">
+                                                        <UserCircle className="h-3.5 w-3.5 opacity-50" />
+                                                        {member.user.email}
+                                                    </p>
+                                                    {member.user.profile?.username && (
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="hidden sm:block h-3 w-px bg-border/50" />
+                                                            <div className="flex items-center gap-2">
+                                                                <p className="text-[10px] font-black text-primary flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 rounded-lg border border-primary/10 truncate">
+                                                                    <Briefcase className="h-3 w-3" />
+                                                                    {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
+                                                                </p>
+                                                                <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
 
-                                        {/* Role Tag - Absolute on Mobile, Static on Desktop */}
-                                        <div className="absolute top-2 right-3 sm:static sm:top-auto sm:right-auto shrink-0 flex items-center">
-                                            <span className={cn(
-                                                "px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[9px] sm:text-[12px] font-black uppercase tracking-widest border",
-                                                member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20" :
-                                                    member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
-                                                        "bg-green-500/10 text-green-600 border-green-500/20"
-                                            )}>
-                                                {ROLE_LABELS[member.role]}
-                                            </span>
+                                            <div className="shrink-0">
+                                                <span className={cn(
+                                                    "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-sm",
+                                                    member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
+                                                        member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
+                                                            "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
+                                                )}>
+                                                    {ROLE_LABELS[member.role]}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            </div>
                         ))}
                     </div>
                 </div>
 
                 {/* Lateral: Invitaciones */}
-                <div className="space-y-6">
-                    <InviteMember
-                        organizationId={organization.id}
-                        disabled={currentUserRole !== "OWNER"}
-                    />
+                <div className="space-y-10">
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="h-8 w-1 bg-muted-foreground/30 rounded-full" />
+                        <h2 className="text-3xl font-display font-black tracking-tight text-muted-foreground">Crecer</h2>
+                    </div>
+                    <div className="p-1 rounded-[2.5rem] bg-gradient-to-b from-primary/5 to-transparent">
+                        <Card className="bg-card/40 backdrop-blur-xl border-2 border-dashed border-primary/20 rounded-3xl p-2">
+                            <InviteMember
+                                organizationId={organization.id}
+                                disabled={currentUserRole !== "OWNER"}
+                            />
+                        </Card>
+                    </div>
                 </div>
             </div>
         </div>

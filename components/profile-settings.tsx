@@ -90,43 +90,61 @@ export function ProfileSettings() {
     }
 
     return (
-        <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="space-y-6 animate-in fade-in duration-700">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Profile Info (Left) */}
-                <div className="lg:col-span-7 space-y-8">
-                    <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm h-full flex flex-col justify-between space-y-8">
-                        <div>
-                            <div className="space-y-1">
-                                <h3 className="text-2xl font-black font-display tracking-tight text-primary">Información de Perfil: {displayName}</h3>
-                                <p className="text-sm text-muted-foreground font-medium">Personaliza cómo se muestra este profesional en la plataforma.</p>
+                <div className="lg:col-span-12 xl:col-span-7 space-y-10">
+                    <section className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
+                        <div className="relative z-10 bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-10">
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-8 w-1 bg-primary rounded-full" />
+                                    <h3 className="text-3xl font-black font-display tracking-tight text-primary uppercase">Datos Maestros</h3>
+                                </div>
+                                <p className="text-muted-foreground font-medium text-lg max-w-xl">
+                                    Configura tu nombre público, biografía y personaliza tu identificador único en la plataforma.
+                                </p>
                             </div>
 
-                            <div className="grid gap-8 mt-10">
-                                <div className="space-y-3">
-                                    <Label className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/70 ml-1">Nombre de usuario (URL)</Label>
-                                    <InputGroup className="h-12 rounded-2xl overflow-hidden transition-all bg-background/50">
-                                        <InputGroupAddon className="bg-muted/20 border-r px-4 h-12">
-                                            <InputGroupText className="text-muted-foreground font-bold text-xs">
-                                                {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <InputGroupInput
-                                            type="text"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            className="font-bold text-lg px-5 h-14"
-                                        />
-                                    </InputGroup>
+                            <div className="grid gap-10 mt-6">
+                                <div className="space-y-4">
+                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">
+                                        Identidad VLink (Username)
+                                    </Label>
+                                    <div className="group transition-all">
+                                        <InputGroup className="h-14 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/40 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                            <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-14 flex items-center justify-center">
+                                                <InputGroupText className="text-primary font-black text-[13px] tracking-tighter">
+                                                    {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <InputGroupInput
+                                                type="text"
+                                                value={username}
+                                                onChange={(e) => setUsername(e.target.value)}
+                                                className="font-black text-xl px-6 h-14 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30"
+                                                placeholder="tu-nombre"
+                                            />
+                                        </InputGroup>
+                                    </div>
                                 </div>
 
-                                <div className="space-y-3">
-                                    <Label className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/70 ml-1">Biografía Corta</Label>
-                                    <Textarea
-                                        value={bio}
-                                        onChange={(e) => setBio(e.target.value)}
-                                        className="w-full bg-background/50 rounded-2xl p-6 outline-none transition-all text-lg min-h-[305px] font-medium leading-relaxed resize-none"
-                                        placeholder="Cuenta un poco sobre lo que haces, tus especialidades o tu experiencia profesional..."
-                                    />
+                                <div className="space-y-4">
+                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">
+                                        Biografía Profesional
+                                    </Label>
+                                    <div className="relative group transition-all">
+                                        <Textarea
+                                            value={bio}
+                                            onChange={(e) => setBio(e.target.value)}
+                                            className="w-full bg-background/40 backdrop-blur-sm border-2 border-primary/5 rounded-[2rem] p-8 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-lg min-h-[300px] font-medium leading-relaxed resize-none shadow-inner"
+                                            placeholder="Describe tu experiencia, especialidades y el valor que ofreces a tus clientes..."
+                                        />
+                                        <div className="absolute bottom-6 right-8 text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest">
+                                            {bio.length} Caracteres
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -134,122 +152,131 @@ export function ProfileSettings() {
                 </div>
 
                 {/* Column 2: Link and Google (Right) */}
-                <div className="lg:col-span-5 space-y-4">
+                <div className="lg:col-span-12 xl:col-span-5 space-y-10">
                     {/* Section: Public Link */}
-                    <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                        <div className="space-y-1">
-                            <h3 className="text-xl font-bold font-display tracking-tight">Tu Enlace Público</h3>
-                            <p className="text-xs text-muted-foreground font-medium">Link directo para agendamientos.</p>
-                        </div>
-
-                        <div className="flex justify-between gap-3 p-2 bg-muted/20 rounded-2xl border border-muted-foreground/10">
-                            <div className="px-4 py-3.5 text-sm font-bold overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-transparent shadow-inner-sm text-primary/80">
-                                {profileUrl.replace(/^https?:\/\//, '')}
+                    <section className="group p-1 rounded-[2.5rem] bg-linear-to-b from-primary/5 to-transparent">
+                        <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 shadow-xl shadow-primary/5 space-y-8 h-full">
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Enlace de Agenda</h3>
+                                <p className="text-sm text-muted-foreground font-medium">Comparte este link para recibir reservas.</p>
                             </div>
-                            <Button
-                                variant="secondary"
-                                onClick={copyToClipboard}
-                                className="rounded-xl font-black h-12 shadow-sm active:scale-75 transition-all hover:bg-secondary/80 hover:shadow-xl"
-                            >
-                                {copied ? <Check className="h-4 w-4 text-green-500!" /> : <Copy className="h-4 w-4" />}
-                            </Button>
+
+                            <div className="flex items-center gap-3 p-3 bg-muted/20 rounded-[1.5rem] border border-muted-foreground/10 shadow-inner group-hover:border-primary/20 transition-all">
+                                <div className="flex-1 px-5 py-3.5 text-sm font-black overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-primary/5 shadow-inner-sm text-primary group-hover:bg-background transition-colors">
+                                    {profileUrl.replace(/^https?:\/\//, '')}
+                                </div>
+                                <Button
+                                    variant="secondary"
+                                    onClick={copyToClipboard}
+                                    className="rounded-xl font-black h-12 w-12 p-0 shadow-lg active:scale-75 transition-all hover:bg-primary hover:text-white hover:shadow-primary/20"
+                                >
+                                    {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                                </Button>
+                            </div>
                         </div>
                     </section>
 
                     {/* Section: Google Calendar */}
-                    <section className="bg-card border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                        <div className="flex items-start justify-between gap-4">
-                            <div className="space-y-1">
-                                <h3 className="text-xl font-bold font-display tracking-tight">Google Calendar</h3>
-                                <p className="text-xs text-muted-foreground font-medium">Disponibilidad en tiempo real.</p>
-                            </div>
-                            {isGoogleConnected && (
-                                <div className="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-[9px] font-black uppercase tracking-tighter ring-1 ring-green-500/20">
-                                    <div className="h-1 w-1 rounded-full bg-green-500 animate-pulse" />
-                                    Sync
+                    <section className="p-1 rounded-[2.5rem] bg-linear-to-br from-primary/10 via-transparent to-transparent">
+                        <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 shadow-xl shadow-primary/5 space-y-8">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="space-y-2">
+                                    <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Sincronización</h3>
+                                    <p className="text-sm text-muted-foreground font-medium">Conexión con Google Calendar.</p>
                                 </div>
-                            )}
-                        </div>
-
-                        {isGoogleConnected && !hasCalendarScope && (
-                            <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
-                                <CalendarIcon className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                                <p className="text-[11px] text-amber-700/90 dark:text-amber-400/90 leading-tight font-medium">
-                                    Reinicia sesión para habilitar la escritura de eventos.
-                                </p>
+                                {isGoogleConnected && (
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 ring-green-500/20 shadow-sm shadow-green-500/10">
+                                        <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                                        Online
+                                    </div>
+                                )}
                             </div>
-                        )}
 
-                        <div className={cn(
-                            "p-5 border-2 rounded-2xl space-y-5 transition-all duration-300",
-                            isGoogleConnected
-                                ? "bg-muted/30 border-primary/5"
-                                : "bg-background border-dashed border-muted-foreground/20"
-                        )}>
-                            <div className="flex items-center gap-4">
-                                <div className={cn(
-                                    "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-all",
-                                    isGoogleConnected ? "bg-background border-primary/20 scale-100" : "bg-muted/50 border-transparent scale-95"
-                                )}>
-                                    <CalendarIcon className={cn("h-6 w-6", isGoogleConnected ? "text-primary" : "text-muted-foreground/30")} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold truncate tracking-tight text-foreground/90">{email || "Sin sincronizar"}</p>
-                                    <p className="text-[9px] text-muted-foreground/60 font-black uppercase tracking-widest">
-                                        {isGoogleConnected ? "Google Activo" : "Google Inactivo"}
+                            {isGoogleConnected && !hasCalendarScope && (
+                                <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-start gap-4 animate-in zoom-in duration-500">
+                                    <div className="p-2 bg-amber-500/10 rounded-lg shrink-0">
+                                        <CalendarIcon className="h-4 w-4 text-amber-600" />
+                                    </div>
+                                    <p className="text-[11px] text-amber-700/90 dark:text-amber-400/90 leading-relaxed font-bold">
+                                        Faltan permisos de escritura. Por seguridad, te sugerimos cerrar sesión y volver a entrar.
                                     </p>
                                 </div>
-                            </div>
+                            )}
 
-                            {isGoogleConnected ? (
-                                <div className="relative overflow-hidden w-full bg-green-500/10 border border-green-500/20 rounded-2xl p-5 transition-all hover:bg-green-500/15 group">
-                                    <div className="flex items-start gap-4 relative z-10">
-                                        <div className="p-2.5 bg-green-500/20 rounded-xl shrink-0 group-hover:scale-110 transition-transform duration-300 ring-1 ring-green-500/20">
-                                            <Check className="h-5 w-5 text-green-600 dark:text-green-500" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-sm font-black tracking-tight text-green-700 dark:text-green-400">¡Conexión establecida!</p>
-                                            <p className="text-[11px] font-medium text-green-700/80 dark:text-green-500/80 leading-relaxed pr-6">
-                                                Tu calendario está sincronizado. Tus próximos eventos se tomarán en cuenta para tu disponibilidad pública.
-                                            </p>
-                                        </div>
+                            <div className={cn(
+                                "p-6 border-2 rounded-[2rem] space-y-6 transition-all duration-500 relative overflow-hidden",
+                                isGoogleConnected
+                                    ? "bg-primary/5 border-primary/10 shadow-inner"
+                                    : "bg-background/20 border-dashed border-muted-foreground/20"
+                            )}>
+                                <div className="flex items-center gap-5 relative z-10">
+                                    <div className={cn(
+                                        "h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-xl transition-all duration-500",
+                                        isGoogleConnected
+                                            ? "bg-background border-primary shadow-primary/10 scale-100"
+                                            : "bg-muted/50 border-transparent scale-90 opacity-50"
+                                    )}>
+                                        <CalendarIcon className={cn("h-7 w-7", isGoogleConnected ? "text-primary" : "text-muted-foreground/30")} />
                                     </div>
-                                    <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:scale-110 group-hover:-rotate-12 transition-all duration-700 pointer-events-none">
-                                        <CalendarIcon className="h-32 w-32" />
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-lg font-black truncate tracking-tight text-foreground">{email || "Sin Cuenta"}</p>
+                                        <p className="text-[10px] text-muted-foreground/60 font-black uppercase tracking-widest">
+                                            {isGoogleConnected ? "Google Activo" : "Google Inactivo"}
+                                        </p>
                                     </div>
                                 </div>
-                            ) : (
-                                <Button className="w-full rounded-xl font-black h-11 shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-95">
-                                    Permitir acceso
-                                </Button>
-                            )}
+
+                                {isGoogleConnected ? (
+                                    <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-5 relative group overflow-hidden">
+                                        <div className="flex items-start gap-4 relative z-10">
+                                            <div className="p-2.5 bg-green-500/20 rounded-xl shrink-0 ring-1 ring-green-500/20">
+                                                <Check className="h-5 w-5 text-green-600" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <p className="text-sm font-black tracking-tight text-green-600">Sincronización Total</p>
+                                                <p className="text-[11px] font-medium text-green-700/70 leading-relaxed pr-2">
+                                                    Tu disponibilidad pública se ajustará automáticamente según los eventos en tu calendario Google.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <Button className="w-full rounded-2xl font-black h-12 shadow-xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 text-lg">
+                                        Conectar Calendario
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </section>
                 </div>
             </div>
 
-            <div className="flex justify-end pt-6 border-t border-muted-foreground/10">
-                <Button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className={cn(
-                        "w-full sm:w-auto h-12 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 transition-all active:scale-95 overflow-hidden",
-                        success
-                            ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-4 ring-secondary/20 hover:bg-secondary/90"
-                            : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:shadow-md hover:-translate-y-1"
-                    )}
-                >
-                    <div className="flex items-center gap-4">
-                        {saving ? (
-                            <Loader2 className="h-6 w-6 animate-spin" />
-                        ) : success ? (
-                            <Check className="h-6 w-6 animate-in zoom-in duration-300" />
-                        ) : (
-                            <Save className="h-6 w-6" />
+            <div className="sticky bottom-8 z-50 px-2 lg:px-0 flex justify-end">
+                <div className="p-2 rounded-[2rem] bg-background/40 backdrop-blur-xl border-2 border-primary/10 shadow-2xl w-fit">
+                    <Button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className={cn(
+                            "w-full sm:w-auto h-16 px-12 rounded-[1.5rem] font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
+                            success
+                                ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
+                                : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
                         )}
-                        <span>{saving ? "Guardando..." : "Guardar Cambios"}</span>
-                    </div>
-                </Button>
+                    >
+                        <div className="flex items-center gap-4">
+                            {saving ? (
+                                <Loader2 className="h-7 w-7 animate-spin" />
+                            ) : success ? (
+                                <Check className="h-7 w-7 animate-in zoom-in duration-500" />
+                            ) : (
+                                <Save className="h-7 w-7 group-hover/btn:rotate-12 transition-transform" />
+                            )}
+                            <span className="uppercase tracking-widest text-sm">
+                                {saving ? "Procesando..." : success ? "Éxito total" : "Guardar cambios de mi perfil"}
+                            </span>
+                        </div>
+                    </Button>
+                </div>
             </div>
         </div>
     )

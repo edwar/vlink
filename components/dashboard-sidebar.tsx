@@ -27,42 +27,54 @@ export function DashboardSidebar() {
     }
 
     return (
-        <div className="flex h-full flex-col gap-y-5 overflow-y-auto bg-card border-r px-6 pb-4">
-            <div className="flex h-16 shrink-0 items-center justify-between">
-                <span className="text-2xl font-display font-bold tracking-tight text-primary">VLink</span>
+        <div className="flex h-full flex-col gap-y-6 overflow-y-auto bg-card border-r border-primary/5 px-6 pb-6">
+            <div className="flex h-20 shrink-0 items-center justify-between">
+                <div className="flex items-center gap-2 group cursor-pointer">
+                    <div className="h-8 w-8 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-black text-xl shadow-lg shadow-primary/20 group-hover:rotate-12 transition-transform">V</div>
+                    <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
+                </div>
                 <ThemeToggle />
             </div>
 
             <ProfileSwitcher />
 
-            <nav className="flex flex-1 flex-col">
+            <nav className="flex flex-1 flex-col mt-4">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
-                        <ul role="list" className="-mx-2 space-y-1">
-                            {navigation.map((item) => (
-                                <li key={item.name}>
-                                    <Link
-                                        href={item.href}
-                                        className={cn(
-                                            pathname === item.href
-                                                ? 'bg-accent text-accent-foreground'
-                                                : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-                                            'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition-colors'
-                                        )}
-                                    >
-                                        <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                        {item.name}
-                                    </Link>
-                                </li>
-                            ))}
+                        <ul role="list" className="-mx-2 space-y-1.5">
+                            {navigation.map((item) => {
+                                const isActive = pathname === item.href;
+                                return (
+                                    <li key={item.name}>
+                                        <Link
+                                            href={item.href}
+                                            className={cn(
+                                                isActive
+                                                    ? 'bg-primary/10 text-primary border-primary/20 shadow-sm'
+                                                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
+                                                'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-all duration-300'
+                                            )}
+                                        >
+                                            {isActive && (
+                                                <div className="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-full" />
+                                            )}
+                                            <item.icon className={cn(
+                                                "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                                isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+                                            )} aria-hidden="true" />
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                )
+                            })}
                         </ul>
                     </li>
                     <li className="mt-auto">
                         <button
                             onClick={handleSignOut}
-                            className="group -mx-2 flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                            className="group -mx-2 flex w-full gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
                         >
-                            <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
+                            <LogOut className="h-6 w-6 shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                             Cerrar sesión
                         </button>
                     </li>

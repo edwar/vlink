@@ -23,7 +23,7 @@ export async function getEffectiveProfile() {
     if (!viewAsProfileId) {
         const personalProfile = await prisma.profile.findUnique({
             where: { userId: session.user.id },
-            include: { organization: true }
+            include: { organization: true, user: true }
         })
         if (!personalProfile) throw new Error("Personal profile not found")
         return personalProfile
@@ -32,7 +32,7 @@ export async function getEffectiveProfile() {
     // 2. If "view as" is specified, verify permissions
     const targetProfile = await prisma.profile.findUnique({
         where: { id: viewAsProfileId },
-        include: { organization: true }
+        include: { organization: true, user: true }
     })
 
     if (!targetProfile) {

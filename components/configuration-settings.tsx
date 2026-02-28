@@ -223,330 +223,391 @@ export function ConfigurationSettings() {
     }
 
     return (
-        <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="space-y-12 animate-in fade-in duration-700">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Services (Left) */}
-                <div className="lg:col-span-7 space-y-8">
-                    <section className="bg-card border rounded-xl p-6 sm:p-8 shadow-sm space-y-8">
-                        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                            <div className="space-y-1">
-                                <h3 className="text-2xl font-black font-display tracking-tight text-primary">Servicios: {displayName}</h3>
-                                <p className="text-sm text-muted-foreground font-medium">Define qué ofreces y cuánto dura cada sesión para este profesional.</p>
-                            </div>
-                            {!showNewForm && (
-                                <Button
-                                    onClick={() => setShowNewForm(true)}
-                                    className="shrink-0 h-12 rounded-xl font-black shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-95"
-                                >
-                                    <Plus className="h-5 w-5 mr-2" />
-                                    Nuevo Servicio
-                                </Button>
-                            )}
-                        </div>
-
-                        {/* New Service Form */}
-                        {showNewForm && (
-                            <div className="p-6 border-2 border-dashed border-primary/20 rounded-xl space-y-8 bg-primary/5 animate-in slide-in-from-top-4 duration-300">
-                                <div className="space-y-4">
-                                    <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Nombre del Servicio</Label>
-                                    <Input
-                                        type="text"
-                                        value={newName}
-                                        onChange={(e) => setNewName(e.target.value)}
-                                        placeholder="Ej: Consulta Médica, Asesoría Legal..."
-                                        className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6"
-                                        autoFocus
-                                    />
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-4">
-                                        <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Precio (Opcional)</Label>
-                                        <InputGroup className="h-14 rounded-xl border-2 border-muted/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all bg-background px-0 overflow-hidden shadow-none">
-                                            <InputGroupAddon align="inline-start" className="pl-5 border-none">
-                                                <InputGroupText className="text-lg font-bold text-muted-foreground">$</InputGroupText>
-                                            </InputGroupAddon>
-                                            <InputGroupInput
-                                                type="text"
-                                                inputMode="numeric"
-                                                pattern="[0-9.]*"
-                                                value={newPrice}
-                                                onChange={(e) => setNewPrice(formatPrice(e.target.value))}
-                                                placeholder="0"
-                                                className="h-full text-lg font-bold px-4 border-none focus-visible:ring-0"
-                                            />
-                                        </InputGroup>
+                <div className="lg:col-span-12 xl:col-span-7 space-y-10">
+                    <section className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
+                        <div className="relative z-10 bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-10">
+                            <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-8 w-1 bg-primary rounded-full" />
+                                        <h3 className="text-3xl font-black font-display tracking-tight text-primary uppercase">Mis Servicios</h3>
                                     </div>
-
-                                    <div className="space-y-4">
-                                        <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/70 ml-1">Duración Sugerida</Label>
-                                        <Select
-                                            value={newDuration.toString()}
-                                            onValueChange={(val) => setNewDuration(parseInt(val))}
-                                        >
-                                            <SelectTrigger className="h-14 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
-                                                <SelectValue placeholder="Seleccionar duración" />
-                                            </SelectTrigger>
-                                            <SelectContent position="popper" className="rounded-xl border-2 shadow-xl">
-                                                <SelectGroup>
-                                                    {DURATION_OPTIONS.map((opt) => (
-                                                        <SelectItem
-                                                            key={opt.value}
-                                                            value={opt.value.toString()}
-                                                            className="font-bold py-3 focus:bg-primary/10 focus:text-primary cursor-pointer"
-                                                        >
-                                                            {opt.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-6 border-t border-primary/10">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
-                                        className="rounded-xl font-bold h-12 w-full sm:w-auto"
-                                    >
-                                        Cancelar
-                                    </Button>
-                                    <Button
-                                        onClick={handleCreateService}
-                                        disabled={creatingService || !newName.trim()}
-                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/10 hover:scale-105 transition-all active:scale-95"
-                                    >
-                                        {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
-                                        Crear Servicio
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Service List */}
-                        {services.length === 0 && !showNewForm ? (
-                            <div className="py-20 text-center border-2 border-dashed rounded-xl bg-muted/10 border-muted-foreground/10 space-y-4">
-                                <div className="h-16 w-16 rounded-xl bg-muted/20 flex items-center justify-center mx-auto grayscale opacity-50">
-                                    <Briefcase className="h-8 w-8 text-muted-foreground" />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-lg font-black font-display tracking-tight">No tienes servicios activos</p>
-                                    <p className="text-sm text-muted-foreground font-medium max-w-[280px] mx-auto leading-relaxed">
-                                        Agrega al menos uno para que tus clientes puedan reservar una cita contigo.
+                                    <p className="text-muted-foreground font-medium text-lg max-w-xl">
+                                        Define tu portafolio profesional. Configura precios y duraciones personalizadas para cada sesión.
                                     </p>
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="grid gap-4">
-                                {services.map((service) => (
-                                    <div
-                                        key={service.id}
-                                        className={cn(
-                                            "group p-5 sm:p-6 border-2 rounded-xl transition-all duration-300",
-                                            !service.isActive ? "bg-muted/5 border-transparent opacity-60" : "bg-background border-muted/30 hover:border-primary/20 hover:shadow-md",
-                                            editingId === service.id && "border-primary ring-4 ring-primary/5 bg-primary/5 shadow-xl"
-                                        )}
+                                {!showNewForm && (
+                                    <Button
+                                        onClick={() => setShowNewForm(true)}
+                                        className="shrink-0 h-14 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
                                     >
-                                        {editingId === service.id ? (
-                                            <div className="space-y-6">
-                                                <div className="space-y-4">
-                                                    <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Nombre del Servicio</Label>
-                                                    <Input
+                                        <Plus className="h-5 w-5 mr-2" />
+                                        Nuevo Servicio
+                                    </Button>
+                                )}
+                            </div>
+
+                            {/* New Service Form */}
+                            {showNewForm && (
+                                <div className="p-8 border-2 border-dashed border-primary/20 rounded-[2rem] space-y-10 bg-primary/5 animate-in slide-in-from-top-6 duration-500 overflow-hidden relative">
+                                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
+
+                                    <div className="space-y-4">
+                                        <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Nombre del Servicio</Label>
+                                        <Input
+                                            type="text"
+                                            value={newName}
+                                            onChange={(e) => setNewName(e.target.value)}
+                                            placeholder="Ej: Consultoría Estratégica, Sesión de Coaching..."
+                                            className="h-16 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
+                                            autoFocus
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="space-y-4">
+                                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Inversión (COP)</Label>
+                                            <div className="group transition-all">
+                                                <InputGroup className="h-16 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                                    <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-16 flex items-center justify-center">
+                                                        <InputGroupText className="text-primary font-black text-xl">$</InputGroupText>
+                                                    </InputGroupAddon>
+                                                    <InputGroupInput
                                                         type="text"
-                                                        value={editName}
-                                                        onChange={(e) => setEditName(e.target.value)}
-                                                        className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6"
-                                                        autoFocus
+                                                        inputMode="numeric"
+                                                        pattern="[0-9.]*"
+                                                        value={newPrice}
+                                                        onChange={(e) => setNewPrice(formatPrice(e.target.value))}
+                                                        className="font-black text-xl px-6 h-16 bg-transparent border-none focus:ring-0"
+                                                        placeholder="0"
                                                     />
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <div className="space-y-4">
-                                                        <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Precio (Opcional)</Label>
-                                                        <InputGroup className="h-14 rounded-xl border-2 border-muted/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all bg-background px-0 overflow-hidden shadow-none">
-                                                            <InputGroupAddon align="inline-start" className="pl-5 border-none">
-                                                                <InputGroupText className="text-lg font-bold text-muted-foreground">$</InputGroupText>
-                                                            </InputGroupAddon>
-                                                            <InputGroupInput
-                                                                type="text"
-                                                                inputMode="numeric"
-                                                                pattern="[0-9.]*"
-                                                                value={editPrice}
-                                                                onChange={(e) => setEditPrice(formatPrice(e.target.value))}
-                                                                className="h-full text-lg font-bold px-4 border-none focus-visible:ring-0"
-                                                            />
-                                                        </InputGroup>
-                                                    </div>
-                                                    <div className="space-y-4">
-                                                        <Label className="text-xs font-black uppercase tracking-widest text-primary ml-1">Duración</Label>
-                                                        <Select
-                                                            value={editDuration.toString()}
-                                                            onValueChange={(val) => setEditDuration(parseInt(val))}
-                                                        >
-                                                            <SelectTrigger className="h-14 w-full rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6 shadow-sm">
-                                                                <SelectValue placeholder="Duración" />
-                                                            </SelectTrigger>
-                                                            <SelectContent position="popper" className="rounded-xl border-2 shadow-xl">
-                                                                {DURATION_OPTIONS.map(opt => (
-                                                                    <SelectItem
-                                                                        key={opt.value}
-                                                                        value={opt.value.toString()}
-                                                                        className="font-bold py-3 focus:bg-primary/10 focus:text-primary cursor-pointer"
-                                                                    >
-                                                                        {opt.label}
-                                                                    </SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-6 border-t border-primary/10">
-                                                    <Button variant="outline" onClick={() => setEditingId(null)} className="rounded-xl font-bold h-12 w-full sm:w-auto">
-                                                        Cancelar
-                                                    </Button>
-                                                    <Button
-                                                        onClick={() => handleUpdateService(service.id)}
-                                                        disabled={updatingService || !editName.trim()}
-                                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/20 bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 transition-all active:scale-95"
-                                                    >
-                                                        {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-                                                        Guardar Cambios
-                                                    </Button>
-                                                </div>
+                                                </InputGroup>
                                             </div>
-                                        ) : (
-                                            <div className="flex flex-col gap-5">
-                                                {/* Info Header */}
-                                                <div className="flex items-start gap-4">
-                                                    <div className={cn(
-                                                        "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-all duration-500",
-                                                        service.isActive ? "bg-primary/10 border-primary/20" : "bg-muted border-transparent opacity-40 shrink-0"
-                                                    )}>
-                                                        <Briefcase className={cn("h-6 w-6", service.isActive ? "text-primary" : "text-muted-foreground")} />
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Tiempo de Sesión</Label>
+                                            <Select
+                                                value={newDuration.toString()}
+                                                onValueChange={(val) => setNewDuration(parseInt(val))}
+                                            >
+                                                <SelectTrigger className="h-16 w-full rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner">
+                                                    <div className="flex items-center gap-3">
+                                                        <Clock className="h-5 w-5 text-primary" />
+                                                        <SelectValue placeholder="Duración" />
                                                     </div>
-                                                    <div className="flex-1 min-w-0 pt-0.5">
-                                                        <h4 className="font-black text-sm sm:text-lg truncate tracking-tight text-foreground/90 leading-tight mb-1">{service.name}</h4>
-                                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm sm:text-xs text-muted-foreground/60 font-black uppercase tracking-wider">
-                                                            <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2 py-0.5 rounded-full">
-                                                                <Clock className="h-3 w-3" />
-                                                                <span>
-                                                                    {service.durationMinutes >= 60
-                                                                        ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
-                                                                        : `${service.durationMinutes} min`}
-                                                                </span>
+                                                </SelectTrigger>
+                                                <SelectContent position="popper" className="rounded-2xl border-2 border-primary/5 shadow-2xl p-2 bg-popover/90 backdrop-blur-xl">
+                                                    <SelectGroup>
+                                                        {DURATION_OPTIONS.map((opt) => (
+                                                            <SelectItem
+                                                                key={opt.value}
+                                                                value={opt.value.toString()}
+                                                                className="font-black text-sm py-4 px-6 rounded-xl focus:bg-primary focus:text-white cursor-pointer transition-colors"
+                                                            >
+                                                                {opt.label}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col-reverse sm:flex-row gap-4 justify-end pt-8 border-t border-primary/10">
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
+                                            className="rounded-2xl font-black h-14 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                        >
+                                            Descartar
+                                        </Button>
+                                        <Button
+                                            onClick={handleCreateService}
+                                            disabled={creatingService || !newName.trim()}
+                                            className="rounded-2xl font-black h-14 px-10 uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+                                        >
+                                            {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Check className="h-5 w-5 mr-2" />}
+                                            Publicar Servicio
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Service List */}
+                            {services.length === 0 && !showNewForm ? (
+                                <div className="py-24 text-center border-2 border-dashed rounded-[2rem] bg-muted/5 border-primary/10 space-y-6">
+                                    <div className="h-20 w-20 rounded-[1.5rem] bg-primary/5 flex items-center justify-center mx-auto ring-1 ring-primary/10">
+                                        <Briefcase className="h-10 w-10 text-primary/30" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <p className="text-2xl font-black font-display tracking-tight text-foreground/80 lowercase italic">Tu mesa está vacía</p>
+                                        <p className="text-muted-foreground font-medium max-w-[320px] mx-auto leading-relaxed">
+                                            Crea tu primer servicio para empezar a recibir agendamientos profesionalmente.
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setShowNewForm(true)}
+                                        className="rounded-xl font-black border-2 hover:bg-primary/5"
+                                    >
+                                        Inaugurar Catálogo
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="grid gap-6">
+                                    {services.map((service) => (
+                                        <div
+                                            key={service.id}
+                                            className={cn(
+                                                "group relative p-1 rounded-[2rem] transition-all duration-500",
+                                                editingId === service.id ? "bg-linear-to-br from-primary/20 to-transparent" : "bg-transparent"
+                                            )}
+                                        >
+                                            <div className={cn(
+                                                "relative z-10 p-6 sm:p-8 rounded-[1.8rem] border transition-all duration-500",
+                                                !service.isActive
+                                                    ? "bg-muted/10 border-transparent opacity-60 grayscale"
+                                                    : "bg-background/40 backdrop-blur-md border-primary/5 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
+                                                editingId === service.id && "bg-card shadow-2xl border-primary shadow-primary/10"
+                                            )}>
+                                                {editingId === service.id ? (
+                                                    <div className="space-y-8">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="p-2 bg-primary/10 rounded-lg">
+                                                                <Pencil className="h-4 w-4 text-primary" />
                                                             </div>
-                                                            <div className="flex items-center gap-1.5">
-                                                                <span className="font-bold text-foreground/80 bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                                                                    $ {(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
-                                                                </span>
+                                                            <h4 className="font-black text-lg uppercase tracking-widest text-primary">Redactando Servicio</h4>
+                                                        </div>
+                                                        <div className="space-y-4">
+                                                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Nombre</Label>
+                                                            <Input
+                                                                type="text"
+                                                                value={editName}
+                                                                onChange={(e) => setEditName(e.target.value)}
+                                                                className="h-14 rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6"
+                                                                autoFocus
+                                                            />
+                                                        </div>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                            <div className="space-y-4">
+                                                                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Precio</Label>
+                                                                <InputGroup className="h-14 rounded-xl border-2 border-primary/10 focus-within:border-primary/30 focus-within:ring-4 focus-within:ring-primary/5 transition-all bg-background px-0 overflow-hidden shadow-none">
+                                                                    <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-5 flex items-center justify-center">
+                                                                        <InputGroupText className="font-black text-primary">$</InputGroupText>
+                                                                    </InputGroupAddon>
+                                                                    <InputGroupInput
+                                                                        type="text"
+                                                                        inputMode="numeric"
+                                                                        pattern="[0-9.]*"
+                                                                        value={editPrice}
+                                                                        onChange={(e) => setEditPrice(formatPrice(e.target.value))}
+                                                                        className="font-black text-lg px-5 h-14 bg-transparent border-none focus:ring-0"
+                                                                    />
+                                                                </InputGroup>
+                                                            </div>
+                                                            <div className="space-y-4">
+                                                                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Duración</Label>
+                                                                <Select
+                                                                    value={editDuration.toString()}
+                                                                    onValueChange={(val) => setEditDuration(parseInt(val))}
+                                                                >
+                                                                    <SelectTrigger className="h-14 w-full rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6">
+                                                                        <SelectValue placeholder="Duración" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent position="popper" className="rounded-xl border-2 border-primary/5 shadow-2xl p-2 bg-popover/90 backdrop-blur-xl">
+                                                                        {DURATION_OPTIONS.map(opt => (
+                                                                            <SelectItem
+                                                                                key={opt.value}
+                                                                                value={opt.value.toString()}
+                                                                                className="font-black text-sm py-3 px-6 rounded-lg focus:bg-primary focus:text-white cursor-pointer"
+                                                                            >
+                                                                                {opt.label}
+                                                                            </SelectItem>
+                                                                        ))}
+                                                                    </SelectContent>
+                                                                </Select>
                                                             </div>
                                                         </div>
+                                                        <div className="flex items-center justify-end gap-3 pt-6 border-t border-primary/10">
+                                                            <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-black h-12 uppercase tracking-widest text-[10px]">
+                                                                Cancelar
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => handleUpdateService(service.id)}
+                                                                disabled={updatingService || !editName.trim()}
+                                                                className="rounded-xl font-black h-12 px-8 uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20"
+                                                            >
+                                                                {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                                                                Confirmar Cambios
+                                                            </Button>
+                                                        </div>
                                                     </div>
-                                                </div>
-
-                                                {/* Action Buttons */}
-                                                <div className="flex items-center gap-2 pt-4 border-t border-muted/30">
-                                                    <Button
-                                                        onClick={() => handleToggleActive(service)}
-                                                        className={cn(
-                                                            "flex-1 flex items-center justify-center h-12 rounded-xl transition-all active:scale-95 shadow-sm",
+                                                ) : (
+                                                    <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+                                                        {/* Status Indicator */}
+                                                        <div className={cn(
+                                                            "h-16 w-16 sm:h-20 sm:w-20 rounded-[1.5rem] flex items-center justify-center shrink-0 border-2 transition-all duration-700",
                                                             service.isActive
-                                                                ? "bg-green-500/10 text-green-600 hover:bg-green-500/20 border border-green-500/10"
-                                                                : "bg-primary text-primary-foreground border border-transparent"
-                                                        )}
-                                                        title={service.isActive ? "Desactivar" : "Activar"}
-                                                    >
-                                                        <Check className="h-4 w-4" />
-                                                        <span className="hidden sm:block ml-2 text-sm font-black uppercase tracking-tighter">
-                                                            {service.isActive ? "Activo" : "Inactivo"}
-                                                        </span>
-                                                    </Button>
-                                                    <Button
-                                                        onClick={() => startEditing(service)}
-                                                        className="flex-1 flex items-center justify-center h-12 bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground rounded-xl transition-all active:scale-95 border border-primary/30 shadow-sm"
-                                                    >
-                                                        <Pencil className="h-4 w-4" />
-                                                        <span className="hidden sm:block ml-2 text-sm font-black uppercase tracking-tighter">Editar</span>
-                                                    </Button>
-                                                    <Button
-                                                        onClick={() => setServiceToDelete(service)}
-                                                        disabled={deletingId === service.id}
-                                                        className="flex-1 flex items-center justify-center h-12 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-xl transition-all active:scale-95 border border-destructive/10 shadow-sm"
-                                                    >
-                                                        {deletingId === service.id
-                                                            ? <Loader2 className="h-4 w-4 animate-spin" />
-                                                            : <Trash2 className="h-4 w-4" />}
-                                                        <span className="hidden sm:block ml-2 text-sm font-black uppercase tracking-tighter">Borrar</span>
-                                                    </Button>
-                                                </div>
+                                                                ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-110 group-hover:rotate-6"
+                                                                : "bg-muted border-muted-foreground/10 opacity-50 shrink-0"
+                                                        )}>
+                                                            <Briefcase className={cn("h-7 w-7 sm:h-9 sm:w-9", service.isActive ? "text-primary" : "text-muted-foreground/40")} />
+                                                        </div>
+
+                                                        <div className="flex-1 min-w-0 text-center sm:text-left space-y-2">
+                                                            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-2">
+                                                                <h4 className="font-black text-xl sm:text-2xl truncate tracking-tight text-foreground/90 leading-tight">
+                                                                    {service.name}
+                                                                </h4>
+                                                                <span className={cn(
+                                                                    "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                                                    service.isActive
+                                                                        ? "bg-green-500/10 text-green-600 border-green-500/20"
+                                                                        : "bg-muted text-muted-foreground border-muted-foreground/10"
+                                                                )}>
+                                                                    {service.isActive ? "Vigente" : "Latente"}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-[11px] font-black uppercase tracking-widest">
+                                                                <div className="flex items-center gap-2 text-primary bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10">
+                                                                    <Clock className="h-3.5 w-3.5" />
+                                                                    <span>
+                                                                        {service.durationMinutes >= 60
+                                                                            ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
+                                                                            : `${service.durationMinutes} minutos`}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 text-foreground/70 bg-muted/30 px-3 py-1.5 rounded-xl border border-foreground/5 shadow-inner">
+                                                                    <span className="text-primary/60">$</span>
+                                                                    <span>{(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Actions */}
+                                                        <div className="flex sm:flex-col gap-2 shrink-0 pt-4 sm:pt-0">
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => handleToggleActive(service)}
+                                                                className={cn(
+                                                                    "h-12 w-12 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2",
+                                                                    service.isActive
+                                                                        ? "text-green-600 border-green-500/20 hover:border-green-500/40 hover:bg-green-500/5 shadow-lg shadow-green-500/5"
+                                                                        : "text-muted-foreground border-primary/5 hover:border-primary/20"
+                                                                )}
+                                                                title={service.isActive ? "Archivar" : "Activar"}
+                                                            >
+                                                                <Check className={cn("h-5 w-5", service.isActive ? "opacity-100" : "opacity-30")} />
+                                                            </Button>
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => startEditing(service)}
+                                                                className="h-12 w-12 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-primary/5 hover:border-primary/20 hover:bg-primary/5"
+                                                                title="Ajustar"
+                                                            >
+                                                                <Pencil className="h-5 w-5" />
+                                                            </Button>
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => setServiceToDelete(service)}
+                                                                disabled={deletingId === service.id}
+                                                                className="h-12 w-12 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-destructive/5 hover:border-destructive/20 hover:bg-destructive/5 text-destructive"
+                                                                title="Eliminar"
+                                                            >
+                                                                {deletingId === service.id
+                                                                    ? <Loader2 className="h-5 w-5 animate-spin" />
+                                                                    : <Trash2 className="h-5 w-5" />}
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                            {!editingId && (
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </section>
                 </div>
 
-                {/* Column 2: Public Name (Right) */}
-                <div className="lg:col-span-5 space-y-8">
-                    <section className="bg-card border rounded-xl p-6 sm:p-8 shadow-sm space-y-8">
-                        <div className="space-y-1">
-                            <h3 className="text-xl font-bold font-display tracking-tight">Nombre Público</h3>
-                            <p className="text-xs text-muted-foreground font-medium">Es el título que verán tus clientes.</p>
-                        </div>
-
-                        <div className="space-y-6">
-                            <div className="space-y-3">
-                                <Label className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground/70 ml-1">Tu Nombre Comercial</Label>
-                                <Input
-                                    type="text"
-                                    value={displayName}
-                                    onChange={(e) => setDisplayName(e.target.value)}
-                                    placeholder="Ej: Dr. Alejandro García"
-                                    className="h-14 rounded-xl border-2 border-muted/50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-background px-6"
-                                />
+                {/* Column 2: Commercial Name (Right) */}
+                <div className="lg:col-span-12 xl:col-span-5 space-y-10">
+                    <section className="p-1 rounded-[2.5rem] bg-linear-to-b from-primary/5 to-transparent">
+                        <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-10">
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Marca Comercial</h3>
+                                <p className="text-sm text-muted-foreground font-medium">Define el título público de tu espacio.</p>
                             </div>
 
-                            <Button
-                                onClick={handleSaveName}
-                                disabled={savingName}
-                                className="w-full h-12 rounded-xl font-black text-sm shadow-lg shadow-primary/10 overflow-hidden hover:scale-105 transition-all active:scale-95"
-                            >
-                                {savingName ? (
-                                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                                ) : (
-                                    <Save className="h-5 w-5 mr-2" />
-                                )}
-                                {savingName ? "Guardando..." : "Actualizar Nombre"}
-                            </Button>
+                            <div className="space-y-8">
+                                <div className="space-y-4">
+                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
+                                    <Input
+                                        type="text"
+                                        value={displayName}
+                                        onChange={(e) => setDisplayName(e.target.value)}
+                                        placeholder="Ej: Ing. Marco Antonio Solís"
+                                        className="h-16 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
+                                    />
+                                </div>
+
+                                <Button
+                                    onClick={handleSaveName}
+                                    disabled={savingName}
+                                    className="w-full h-16 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
+                                >
+                                    {savingName ? (
+                                        <Loader2 className="h-6 w-6 animate-spin mr-3" />
+                                    ) : (
+                                        <Save className="h-6 w-6 mr-3 group-hover/save:rotate-12 transition-transform" />
+                                    )}
+                                    {savingName ? "Asegurando..." : "Firmar Nombre Comercial"}
+                                </Button>
+                            </div>
                         </div>
                     </section>
 
-                    <div className="p-8 rounded-xl bg-primary/5 border-2 border-primary/10 space-y-4">
-                        <h4 className="text-sm font-black font-display uppercase tracking-widest text-primary/80">Tip Profesional</h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-medium">
-                            Usa un nombre que sea fácil de reconocer para tus clientes. Esto genera confianza y profesionalismo desde el primer contacto.
-                        </p>
+                    <div className="relative p-8 rounded-[2rem] bg-background/40 backdrop-blur-md border-2 border-primary/10 overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-transform duration-1000" />
+                        <div className="relative z-10 space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                                <h4 className="text-xs font-black font-display uppercase tracking-widest text-primary/80">Protocolo de Confianza</h4>
+                            </div>
+                            <p className="text-[11px] text-muted-foreground leading-relaxed font-bold italic">
+                                "La claridad en el nombre y la oferta comercial reduce la fricción en el embudo de ventas. Un perfil bien configurado convierte un 40% más de visitas en agendamientos reales."
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <Dialog open={!!serviceToDelete} onOpenChange={(open) => !open && setServiceToDelete(null)}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-xl font-bold font-display">¿Eliminar servicio?</DialogTitle>
-                        <DialogDescription className="text-sm pt-2">
-                            Estás a punto de eliminar el servicio <span className="font-bold text-foreground">{serviceToDelete?.name}</span>. Esta acción no se puede deshacer.
+                <DialogContent className="rounded-[2.5rem] border-2 border-primary/10 bg-card/95 backdrop-blur-2xl p-10 max-w-md">
+                    <DialogHeader className="space-y-4">
+                        <div className="h-16 w-16 bg-destructive/10 rounded-2xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
+                            <Trash2 className="h-8 w-8" />
+                        </div>
+                        <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Eliminar Servicio</DialogTitle>
+                        <DialogDescription className="text-lg font-medium leading-relaxed pr-6">
+                            Estás a punto de desmantelar <span className="font-black text-foreground underline decoration-destructive/30 decoration-4">{serviceToDelete?.name}</span>. Esta operación es irreversible y afectará tu disponibilidad futura.
                         </DialogDescription>
                     </DialogHeader>
-                    <DialogFooter className="flex w-full gap-3 sm:flex-row pt-4">
+                    <DialogFooter className="flex flex-col sm:flex-row w-full gap-4 pt-8">
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             onClick={() => setServiceToDelete(null)}
-                            className="flex-1 rounded-xl font-bold h-12 border-2"
+                            className="flex-1 rounded-2xl font-black h-14 uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
                         >
-                            Cancelar
+                            Conservar
                         </Button>
                         <Button
                             onClick={() => {
@@ -554,10 +615,10 @@ export function ConfigurationSettings() {
                             }}
                             disabled={deletingId === serviceToDelete?.id}
                             variant="destructive"
-                            className="flex-1 rounded-xl font-bold h-12 shadow-lg hover:scale-105 transition-all active:scale-95"
+                            className="flex-1 rounded-2xl font-black h-14 uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
                         >
-                            {deletingId === serviceToDelete?.id ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <Trash2 className="h-4 w-4 mr-2" />}
-                            Eliminar
+                            {deletingId === serviceToDelete?.id ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <Trash2 className="h-5 w-5 mr-2" />}
+                            Confirmar Baja
                         </Button>
                     </DialogFooter>
                 </DialogContent>

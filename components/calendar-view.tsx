@@ -363,7 +363,7 @@ export function CalendarView() {
                             {/* Time labels column */}
                             <div className="flex flex-col sticky left-0 z-20">
                                 {hours.map((hour) => (
-                                    <div key={hour} className="h-20 p-4 text-[10px] sm:text-xs font-black text-muted-foreground text-right border-r border-b bg-background/90 backdrop-blur-xs">
+                                    <div key={hour} className="h-20 p-4 text-[10px] sm:text-xs font-black text-muted-foreground text-right border-r border-b bg-background/95 backdrop-blur-md">
                                         {hour}:00
                                     </div>
                                 ))}
