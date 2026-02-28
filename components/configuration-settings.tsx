@@ -18,6 +18,14 @@ import {
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "./ui/input-group"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "./ui/dialog"
 
 const DURATION_OPTIONS = [
     { label: "15 min", value: 15 },
@@ -58,6 +66,7 @@ export function ConfigurationSettings() {
 
     // Deleting
     const [deletingId, setDeletingId] = useState<string | null>(null)
+    const [serviceToDelete, setServiceToDelete] = useState<ServiceItem | null>(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -172,6 +181,7 @@ export function ConfigurationSettings() {
                 title: "Servicio eliminado",
                 description: "El servicio ha sido removido de tu lista."
             })
+            setServiceToDelete(null)
         } catch (err: any) {
             sileo.error({
                 title: "Error al eliminar",
@@ -296,7 +306,7 @@ export function ConfigurationSettings() {
 
                                 <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-6 border-t border-primary/10">
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
                                         className="rounded-xl font-bold h-12 w-full sm:w-auto"
                                     >
@@ -391,7 +401,7 @@ export function ConfigurationSettings() {
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-6 border-t border-primary/10">
-                                                    <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-bold h-12 w-full sm:w-auto">
+                                                    <Button variant="outline" onClick={() => setEditingId(null)} className="rounded-xl font-bold h-12 w-full sm:w-auto">
                                                         Cancelar
                                                     </Button>
                                                     <Button
@@ -459,7 +469,7 @@ export function ConfigurationSettings() {
                                                         <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Editar</span>
                                                     </Button>
                                                     <Button
-                                                        onClick={() => handleDeleteService(service.id)}
+                                                        onClick={() => setServiceToDelete(service)}
                                                         disabled={deletingId === service.id}
                                                         className="flex-1 flex items-center justify-center h-11 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-xl transition-all active:scale-95 border border-destructive/10 shadow-sm"
                                                     >
@@ -521,6 +531,37 @@ export function ConfigurationSettings() {
                     </div>
                 </div>
             </div>
+
+            <Dialog open={!!serviceToDelete} onOpenChange={(open) => !open && setServiceToDelete(null)}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold font-display">¿Eliminar servicio?</DialogTitle>
+                        <DialogDescription className="text-sm pt-2">
+                            Estás a punto de eliminar el servicio <span className="font-bold text-foreground">{serviceToDelete?.name}</span>. Esta acción no se puede deshacer.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="flex w-full gap-3 sm:flex-row pt-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => setServiceToDelete(null)}
+                            className="flex-1 rounded-xl font-bold h-12 border-2"
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                if (serviceToDelete) handleDeleteService(serviceToDelete.id)
+                            }}
+                            disabled={deletingId === serviceToDelete?.id}
+                            variant="destructive"
+                            className="flex-1 rounded-xl font-bold h-12 shadow-lg hover:scale-105 transition-all active:scale-95"
+                        >
+                            {deletingId === serviceToDelete?.id ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <Trash2 className="h-4 w-4 mr-2" />}
+                            Eliminar
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
