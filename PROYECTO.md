@@ -1,55 +1,57 @@
 # Definición de Alcance y Objetivos - Proyecto VLink
 
-VLink es una plataforma de gestión de citas diseñada para facilitar la programación entre profesionales (clientes) y sus usuarios finales, con una profunda integración con Google Calendar y validación vía WhatsApp.
+VLink es una plataforma de gestión de citas diseñada para facilitar la programación de citas entre profesionales y sus usuarios finales. Ofrece una profunda integración con Google Calendar y un sistema de validación seguro.
 
-## 1. Objetivos Principales
-- Proporcionar una herramienta de agendamiento eficiente y minimalista.
-- Automatizar la sincronización con Google Calendar.
-- Simplificar el acceso de los usuarios finales mediante validación por WhatsApp (sin contraseñas).
-- Ofrecer una experiencia de usuario premium, priorizando dispositivos móviles.
+## 1. Objetivos Principales (Completados)
+- Proporcionar una herramienta de agendamiento eficiente, intuitiva y minimalista.
+- Automatizar al 100% la sincronización bidireccional de citas con Google Calendar (incluyendo creación y cancelación de eventos).
+- Simplificar el acceso de los clientes mediante validación por correo electrónico (OTP) evitando tener que usar contraseñas.
+- Proveer paneles de administración avanzados para el profesional (gestión de disponibilidad, catálogo de servicios y monitoreo de agenda).
+- Ofrecer una experiencia visual premium, priorizando dispositivos móviles (Mobile First).
 
-## 2. Alcance del Proyecto
+## 2. Alcance del Proyecto Actualmente Implementado
 
 ### A. Autenticación y Perfil (Profesionales)
-- **Login con Google:** Acceso obligatorio mediante Google OAuth para sincronización de calendarios.
-- **Link Único:** Cada profesional tendrá una URL personalizada (ej: `vlink.app/profesional-xyz`) para compartir con sus clientes.
+- **Login Seguro:** Acceso obligatorio seguro mediante Google OAuth, desarrollado sobre `better-auth`.
+- **Permisos "Offline":** Conexión persistente mediante *refresh-tokens* para manipular calendarios sin que el usuario esté activo.
+- **Link Único Público:** Cada profesional posee una URL personalizada y dinámica (ej: `vlink.app/nombre-usuario`) que lista sus servicios y horarios disponibles para compartir con sus clientes.
+- **Onboarding Automático:** Creación de perfil y enlace de reservas automático al momento de iniciar sesión por primera vez.
 
-### B. Gestión de Agenda (Panel de Control)
-- **Visualización de Calendario:** Vista de agenda por horas, clara y funcional.
-- **Bloqueos Recurrentes:** Configuración de días y horas no laborables (ej: "No trabajo lunes y martes").
-- **Bloqueos Puntuales:** Capacidad de bloquear fechas específicas para vacaciones, citas médicas o descansos.
+### B. Gestión de Agenda (Panel de Control - Dashboard)
+- **Gestión de Servicios:** Creación, edición, eliminación y ajuste de precios de servicios. Duraciones personalizadas que delimitan matemáticamente el calendario.
+- **Resumen Estadístico:** Visualización en tarjetas de citas de hoy, ingresos esperados y próximos clientes.
+- **Vista de Citas:** Lista de citas confirmadas y canceladas.
+- **Bloqueos Recurrentes:** Configuración predeterminada de los horarios semanales del profesional.
+- **Bloqueos Puntuales (Vacaciones/Permisos):** Capacidad para elegir un día en específico e inhabilitar los turnos de manera total o parcial.
+- **Cancelación:** Posibilidad de cancelar citas desde el administrador, replicando al mismo tiempo la cancelación en Google Calendar.
 
 ### C. Sistema de Agendamiento (Usuarios Finales)
-- **Flujo de Registro por WhatsApp:**
-  1. El usuario ingresa su número de WhatsApp.
-  2. Recibe un código temporal (OTP) vía WhatsApp.
-  3. Ingresa el código en un modal para validar su identidad.
-- **Reserva de Cita:** 
-  1. Selección de horario basado en la disponibilidad real del profesional.
-  2. **Validación en Tiempo Real:** Verificación de disponibilidad al momento de confirmar para evitar *double-booking*.
-  3. Captura de correo de Gmail para recordatorios.
+- **Catálogo de Servicios:** Pantalla inicial que permite escoger el tipo de cita, enseñando su precio y su duración si hubiese más de uno habilitado.
+- **Selección Inteligente:** Calendario adaptativo de 14 días que esconde u oculta *slots* en tiempo real según los bloqueos, duraciones del servicio, o superposición de otras citas empleando zonas horarias en UTC-5 (Colombia).
+- **Flujo de Seguridad OTP (One Time Password):**
+  1. El usuario entrega su Email y Nombre.
+  2. VLink verifica empleando Resend un código numérico temporal enviado al correo para validar la identidad.
+- **Entrada de Datos de Contacto:** Captura de correo y número de WhatsApp con un sistema avanzado de formateado estético automático (`300 000 0000`).
+- **Prevención Over-booking:** Re-verificación atómica al instante del guardado para asegurar que no existan empalmes en la base de datos.
 
-### D. Notificaciones y Recordatorios
-- **Google Calendar:** Creación automática del evento en el calendario del profesional y del usuario.
-- **Recordatorios por Email:** 
-  - Envío automático un día antes de la cita.
-  - Envío automático dos horas antes de la cita.
+### D. Notificaciones y Sincronización
+- **Eventos en Google Calendar:** Transacción asíncrona ("Serverless friendly") para escribir detalles completos (Nombre, Correo y WhatsApp del cliente, Nombre del servicio) en la agenda de Google. Si la cita cae, Google notificará también por ese medio al invitado.
+- **Confirmaciones por Email:** Envío automático e inmediato de correos personalizados al cliente dictando los detalles del turno, hora y el nombre del profesional a través de Resend tras hacer su reserva.
 
 ## 3. Requisitos de Diseño (UI/UX)
-- **Mobile First:** Optimización extrema para smartphones.
-- **Estética:** Minimalista, moderna y clara.
-- **Modo Dual:** Soporte nativo para Modo Claro (Light Mode) y Modo Oscuro (Dark Mode).
-- **Consistencia:** Uso de variables semánticas de color y tipografía moderna (Inter/Outfit).
+- **Mobile First Extremo:** Uso de modales y drawers nativos, fondos de navegación tipo cristal, *overlays* y animaciones (`animate-in` de Tailwind).
+- **Modos Visuales:** Sistema robusto y testeado de Light Mode / Dark Mode controlable por el usuario con el componente ThemeToggle.
+- **Open Graph Dinámicos:** Generación de tarjetas de vista previa renderizadas con Next.js Edge (OG Images) en `/opengraph-image`, mostrando la imagen insignia cuando el enlace se envía por chats de texto (WhatsApp, Twitter).
+- **Microinteracciones y Feedback:** Estados vacíos amoldables (`EmptyState`), *Loaders* integrados en los botones durante submits, formateos instantáneos y Alertas tipo Toast (con `sileo`).
 
-## 4. Stack Tecnológico (Propuesto)
-- **Framework:** Next.js (App Router).
-- **Estilos:** Tailwind CSS con configuración para modo claro/oscuro.
-- **Base de Datos:** Prisma (conectado a la DB de preferencia).
-- **Gestor de Paquetes:** pnpm.
-- **Integraciones:** 
-  - Google Calendar API.
-  - API de WhatsApp (Twilio u otra similar para OTP).
-  - Resend (para recordatorios por email).
+## 4. Stack Tecnológico (Implementado)
+- **Framework:** Next.js (App Router, Server Actions, Server Components).
+- **Estilos:** Tailwind CSS v4 con variables CSS nativas, clase `dark`, y pre-generadores (Lucide y SVG). `shadcn/ui` y Radix UI para componentes base.
+- **Base de Datos:** PostgresSQL alojado en NeonDB.
+- **ORM:** Prisma Studio y Client.
+- **Autenticación:** Better-Auth con el adaptador de Prisma (Soporte OAuth de Google).
+- **Comunicaciones:** Resend para envío de Emails (Formatos React-Email y HTML).
+- **Infraestructura Cloud:** Vercel (Optimizaciones orientadas al modelo de funciones Serverless y Edge). Integración API de GCP (Google Calendar).
 
 ---
-*Documento generado para guiar el desarrollo inicial del proyecto VLink.*
+*Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y final del proyecto VLink.*
