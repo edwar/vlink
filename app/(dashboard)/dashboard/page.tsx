@@ -85,7 +85,7 @@ export default async function DashboardPage() {
     const hoursOccupied = Math.round((totalMinutes / 60) * 10) / 10
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 px-1">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
             {/* Header section with profile overview */}
             <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
             </header>
 
             <Tabs defaultValue="agenda" className="space-y-8">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 px-2">
                     <TabsList className="bg-muted/40 p-1.5 rounded-2xl h-auto border-2 border-primary/5 backdrop-blur-sm shadow-inner">
                         <TabsTrigger value="agenda" className="rounded-xl px-10 py-3 font-black uppercase text-xs tracking-[0.2em] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg active:scale-95 transition-all">
                             Mi Agenda
@@ -119,7 +119,7 @@ export default async function DashboardPage() {
                         </TabsTrigger>
                     </TabsList>
 
-                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 bg-card/40 px-6 py-2 rounded-full border border-primary/5 backdrop-blur">
+                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 w-fit bg-card/40 px-6 py-2 rounded-full border border-primary/5 backdrop-blur">
                         <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-primary shadow-sm shadow-primary/50" /> {totalAppointmentsToday} Hoy</span>
                         <div className="h-3 w-px bg-border/50" />
                         <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50" /> {allAppointments.length} Activas</span>
@@ -128,36 +128,36 @@ export default async function DashboardPage() {
 
                 <TabsContent value="agenda" className="space-y-16 mt-0 focus-visible:ring-0">
                     {/* Bento Grid Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6">
-                        <div className="md:col-span-3 lg:col-span-4 p-8 bg-card/60 backdrop-blur-xl border border-primary/10 rounded-3xl shadow-xl shadow-primary/5 space-y-6 flex flex-col justify-between hover:border-primary/40 transition-all group overflow-hidden relative">
+                    <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-6">
+                        <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-card/60 backdrop-blur-xl border border-primary/10 rounded-3xl shadow-xl shadow-primary/5 space-y-6 flex flex-col justify-between hover:border-primary/40 transition-all group overflow-hidden relative">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                             <div className="h-14 w-14 bg-linear-to-br from-primary to-primary/60 rounded-2xl flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:rotate-12 transition-transform">
                                 <CalendarIcon className="h-7 w-7" />
                             </div>
                             <div className="space-y-1">
-                                <p className="text-4xl font-black font-display tracking-tight leading-none">{totalAppointmentsToday}</p>
+                                <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none">{totalAppointmentsToday}</p>
                                 <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
                             </div>
                         </div>
 
-                        <div className="md:col-span-3 lg:col-span-4 p-8 bg-card/60 backdrop-blur-xl border border-blue-500/10 rounded-3xl shadow-xl shadow-blue-500/5 space-y-6 flex flex-col justify-between hover:border-blue-500/40 transition-all group overflow-hidden relative">
+                        <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-card/60 backdrop-blur-xl border border-blue-500/10 rounded-3xl shadow-xl shadow-blue-500/5 space-y-6 flex flex-col justify-between hover:border-blue-500/40 transition-all group overflow-hidden relative">
                             <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full -ml-16 -mb-16 group-hover:scale-150 transition-transform duration-700" />
                             <div className="h-14 w-14 bg-linear-to-br from-blue-500 to-blue-400 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:-rotate-12 transition-transform">
                                 <CheckCircle2 className="h-7 w-7" />
                             </div>
                             <div className="space-y-1">
-                                <p className="text-4xl font-black font-display tracking-tight leading-none">{allAppointments.length}</p>
+                                <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none">{allAppointments.length}</p>
                                 <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
                             </div>
                         </div>
 
-                        <div className="md:col-span-6 lg:col-span-4 p-8 bg-card/60 backdrop-blur-xl border border-amber-500/10 rounded-3xl shadow-xl shadow-amber-500/5 space-y-6 flex flex-col justify-between hover:border-amber-500/40 transition-all group overflow-hidden relative">
+                        <div className="md:col-span-6 xl:col-span-4 p-6 sm:p-8 bg-card/60 backdrop-blur-xl border border-amber-500/10 rounded-3xl shadow-xl shadow-amber-500/5 space-y-6 flex flex-col justify-between hover:border-amber-500/40 transition-all group overflow-hidden relative">
                             <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-10 -mb-10 group-hover:scale-150 transition-transform duration-700" />
                             <div className="h-14 w-14 bg-linear-to-br from-amber-500 to-amber-300 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-500/20 group-hover:rotate-12 transition-transform">
                                 <Clock className="h-7 w-7" />
                             </div>
                             <div className="space-y-1">
-                                <p className="text-4xl font-black font-display tracking-tight leading-none">{hoursOccupied}h</p>
+                                <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none">{hoursOccupied}h</p>
                                 <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
                             </div>
                         </div>
@@ -192,15 +192,13 @@ export default async function DashboardPage() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="bg-card/40 backdrop-blur rounded-[2.5rem] p-12 border-2 border-dashed border-primary/10">
-                                        <EmptyState
-                                            title="Día libre"
-                                            description="No tienes citas agendadas para hoy. Un buen momento para organizar tus servicios o descansar."
-                                            actionText="Configurar Disponibilidad"
-                                            actionHref="/dashboard/disponibilidad"
-                                            icon={CalendarOff}
-                                        />
-                                    </div>
+                                    <EmptyState
+                                        title="Día libre"
+                                        description="No tienes citas agendadas para hoy. Un buen momento para organizar tus servicios o descansar."
+                                        actionText="Configurar Disponibilidad"
+                                        actionHref="/dashboard/disponibilidad"
+                                        icon={CalendarOff}
+                                    />
                                 )}
                             </section>
 

@@ -44,75 +44,89 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
     }
 
     return (
-        <Card className="border-2 border-primary/10 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <CardHeader className="bg-primary/5 pb-4">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                        <UserPlus className="h-5 w-5 text-primary" />
+        <section className="p-1 rounded-[2.5rem] bg-linear-to-br from-primary/10 via-transparent to-transparent group/invite">
+            <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 shadow-xl shadow-primary/5 space-y-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover/invite:scale-150 transition-transform duration-1000" />
+
+                <div className="flex items-start gap-4 relative z-10">
+                    <div className="h-14 w-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0 border border-primary/20 shadow-inner">
+                        <UserPlus className="h-7 w-7" />
                     </div>
-                    <div>
-                        <CardTitle className="text-xl">Invitar a un Miembro</CardTitle>
-                        <CardDescription>Genera un enlace para que alguien se una a tu equipo.</CardDescription>
-                    </div>
-                </div>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-6">
-                <div className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="role">Rol del invitado</Label>
-                        <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
-                            <SelectTrigger id="role" className="h-12 border-2 focus:border-primary">
-                                <SelectValue placeholder="Selecciona un rol" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="PROFESSIONAL">Profesional (Tiene su propia agenda)</SelectItem>
-                                <SelectItem value="MANAGER">Gestor (Administra agendas de otros)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1.5 px-1">
-                            <Info className="h-3 w-3" />
-                            {disabled
-                                ? "Solo el propietario puede generar nuevos enlaces de invitación."
-                                : role === "PROFESSIONAL"
-                                    ? "El profesional podrá sincronizar su Google Calendar tras unirse."
-                                    : "El gestor podrá ver y coordinar todas las agendas de la organización."}
-                        </p>
+                    <div className="space-y-1">
+                        <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Invitar a un Miembro</h3>
+                        <p className="text-sm text-muted-foreground font-medium leading-tight">Genera un enlace para que alguien se una a tu equipo.</p>
                     </div>
                 </div>
 
-                {invitationUrl && (
-                    <div className="space-y-3 p-4 bg-muted/50 rounded-xl border-2 border-dashed animate-in zoom-in duration-300">
-                        <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Enlace de invitación</Label>
-                        <div className="flex gap-2">
-                            <Input
-                                readOnly
-                                value={invitationUrl}
-                                className="h-12 bg-background font-mono text-xs border-2"
-                            />
-                            <Button size="icon" variant="outline" className="h-12 w-12 shrink-0 border-2" onClick={copyToClipboard}>
-                                {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                            </Button>
+                <div className="space-y-6 relative z-10">
+                    <div className="space-y-3">
+                        <Label htmlFor="role" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Rol del invitado</Label>
+                        <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
+                            <SelectTrigger id="role" className="h-14 rounded-2xl border-2 border-primary/5 bg-background/40 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
+                                <SelectValue placeholder="Selecciona un rol" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-2xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">
+                                <SelectItem value="PROFESSIONAL" className="rounded-xl focus:bg-primary/10 focus:text-primary">Profesional (Tiene su propia agenda)</SelectItem>
+                                <SelectItem value="MANAGER" className="rounded-xl focus:bg-primary/10 focus:text-primary">Gestor (Administra agendas de otros)</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        <div className="flex items-start gap-3 p-3 bg-primary/5 rounded-xl border border-primary/10">
+                            <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                            <p className="text-[11px] text-muted-foreground font-medium leading-relaxed">
+                                {disabled
+                                    ? "Solo el propietario puede generar nuevos enlaces de invitación."
+                                    : role === "PROFESSIONAL"
+                                        ? "El profesional podrá sincronizar su Google Calendar tras unirse."
+                                        : "El gestor podrá ver y coordinar todas las agendas de la organización."}
+                            </p>
                         </div>
-                        <p className="text-[10px] text-center text-muted-foreground">Este enlace expira en 7 días.</p>
                     </div>
-                )}
-            </CardContent>
-            <CardFooter className="bg-muted/30 border-t pt-4">
-                <Button
-                    className="w-full h-12 font-bold text-lg"
-                    onClick={handleCreateInvitation}
-                    disabled={isPending || disabled}
-                >
-                    {isPending ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Generando...
-                        </>
-                    ) : (
-                        invitationUrl ? "Generar otro enlace" : "Crear enlace de invitación"
+
+                    {invitationUrl && (
+                        <div className="p-5 bg-background/60 rounded-[1.8rem] border-2 border-dashed border-primary/20 space-y-4 animate-in zoom-in duration-500">
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary/70 ml-1">Enlace de invitación</Label>
+                            <div className="flex gap-2">
+                                <Input
+                                    readOnly
+                                    value={invitationUrl}
+                                    className="h-12 bg-background/40 font-mono text-[11px] border-2 border-primary/10 rounded-xl px-4"
+                                />
+                                <Button
+                                    size="icon"
+                                    variant="outline"
+                                    className="h-12 w-12 shrink-0 border-2 border-primary/10 rounded-xl bg-background/40 hover:bg-primary/10 hover:border-primary/20 transition-all"
+                                    onClick={copyToClipboard}
+                                >
+                                    {copied ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5 text-primary" />}
+                                </Button>
+                            </div>
+                            <p className="text-[10px] text-center text-muted-foreground/60 font-medium italic">Este enlace expira en 7 días.</p>
+                        </div>
                     )}
-                </Button>
-            </CardFooter>
-        </Card>
+
+                    <Button
+                        className="w-full h-16 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
+                        onClick={handleCreateInvitation}
+                        disabled={isPending || disabled}
+                    >
+                        <div className="absolute inset-0 bg-linear-to-r from-primary via-primary/80 to-primary opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                        <div className="relative z-10 flex items-center justify-center gap-3">
+                            {isPending ? (
+                                <>
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    <span>Generando Acceso...</span>
+                                </>
+                            ) : (
+                                <>
+                                    {invitationUrl ? <Sparkles className="h-5 w-5" /> : <UserPlus className="h-5 w-5" />}
+                                    <span>{invitationUrl ? "Generar Nuevo Código" : "Crear Enlace de Invitación"}</span>
+                                </>
+                            )}
+                        </div>
+                    </Button>
+                </div>
+            </div>
+        </section>
     )
 }

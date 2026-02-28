@@ -59,7 +59,7 @@ export default async function OrganizacionPage() {
     }
 
     return (
-        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 px-1">
+        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
             <header className="relative p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
@@ -90,9 +90,9 @@ export default async function OrganizacionPage() {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-16">
                 {/* Miembros / Mi Equipo */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="xl:col-span-8 space-y-8">
                     <div className="flex items-center justify-between px-2">
                         <div className="flex items-center gap-3">
                             <div className="h-8 w-1 bg-primary rounded-full" />
@@ -105,11 +105,11 @@ export default async function OrganizacionPage() {
 
                     <div className="grid gap-6">
                         {members.map((member) => (
-                            <div key={member.id} className="p-1 rounded-3xl bg-gradient-to-r from-primary/5 to-transparent hover:from-primary/10 transition-colors duration-500">
-                                <Card className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[1.5rem] hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden">
+                            <div key={member.id} className="p-1 rounded-xl bg-linear-to-r from-primary/5 to-transparent hover:from-primary/10 transition-colors duration-500">
+                                <Card className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-xl hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                                     <CardContent className="p-0">
-                                        <div className="flex items-center px-6 py-6 gap-5 sm:gap-6 relative">
+                                        <div className="flex flex-col sm:flex-row sm:items-center px-6 py-6 gap-2 sm:gap-3 relative">
                                             <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 transition-all group-hover:scale-105 duration-500">
                                                 <UserAvatar
                                                     image={member.user.image}
@@ -126,18 +126,20 @@ export default async function OrganizacionPage() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
                                                     <p className="text-sm text-muted-foreground font-bold truncate flex items-center gap-2">
-                                                        <UserCircle className="h-3.5 w-3.5 opacity-50" />
-                                                        {member.user.email}
+                                                        <UserCircle className="h-3.5 w-3.5 opacity-50 shrink-0" />
+                                                        <span className="truncate">{member.user.email}</span>
                                                     </p>
                                                     {member.user.profile?.username && (
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="hidden sm:block h-3 w-px bg-border/50" />
-                                                            <div className="flex items-center gap-2">
-                                                                <p className="text-[10px] font-black text-primary flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 rounded-lg border border-primary/10 truncate">
-                                                                    <Briefcase className="h-3 w-3" />
-                                                                    {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
+                                                        <div className="flex items-center gap-2 max-w-full overflow-hidden">
+                                                            <div className="hidden sm:block h-3 w-px bg-border/50 shrink-0" />
+                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                <p className="text-[10px] font-black text-primary flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 rounded-lg border border-primary/10 min-w-0">
+                                                                    <Briefcase className="h-3 w-3 shrink-0" />
+                                                                    <span className="truncate">
+                                                                        {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
+                                                                    </span>
                                                                 </p>
                                                                 <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
                                                             </div>
@@ -146,9 +148,9 @@ export default async function OrganizacionPage() {
                                                 </div>
                                             </div>
 
-                                            <div className="shrink-0">
+                                            <div className="shrink-0 absolute -top-1 -right-2 lg:relative lg:top-0 lg:right-0">
                                                 <span className={cn(
-                                                    "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-sm",
+                                                    "px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-sm",
                                                     member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
                                                         member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
                                                             "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
@@ -165,19 +167,16 @@ export default async function OrganizacionPage() {
                 </div>
 
                 {/* Lateral: Invitaciones */}
-                <div className="space-y-10">
+                <div className="xl:col-span-4 space-y-10">
                     <div className="flex items-center gap-3 px-2">
                         <div className="h-8 w-1 bg-muted-foreground/30 rounded-full" />
                         <h2 className="text-3xl font-display font-black tracking-tight text-muted-foreground">Crecer</h2>
                     </div>
-                    <div className="p-1 rounded-[2.5rem] bg-gradient-to-b from-primary/5 to-transparent">
-                        <Card className="bg-card/40 backdrop-blur-xl border-2 border-dashed border-primary/20 rounded-3xl p-2">
-                            <InviteMember
-                                organizationId={organization.id}
-                                disabled={currentUserRole !== "OWNER"}
-                            />
-                        </Card>
-                    </div>
+
+                    <InviteMember
+                        organizationId={organization.id}
+                        disabled={currentUserRole !== "OWNER"}
+                    />
                 </div>
             </div>
         </div>
