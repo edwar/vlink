@@ -453,7 +453,8 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
     }
 
     const handleBooking = async () => {
-        if (phone.length < 10) {
+        const rawPhone = phone.replace(/\D/g, '')
+        if (rawPhone.length < 10) {
             setError("Por favor ingresa un número de teléfono válido")
             return
         }
@@ -609,9 +610,19 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold">+57</span>
                                 <Input
                                     type="tel"
+                                    pattern="[0-9]*"
                                     placeholder="300 000 0000"
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    onChange={(e) => {
+                                        const rawValue = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                        let formattedValue = rawValue;
+                                        if (rawValue.length > 6) {
+                                            formattedValue = `${rawValue.slice(0, 3)} ${rawValue.slice(3, 6)} ${rawValue.slice(6)}`;
+                                        } else if (rawValue.length > 3) {
+                                            formattedValue = `${rawValue.slice(0, 3)} ${rawValue.slice(3)}`;
+                                        }
+                                        setPhone(formattedValue);
+                                    }}
                                     disabled={isSubmitting}
                                     className="w-full h-14 bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
                                 />
@@ -621,7 +632,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                         <Button
                             variant="default"
                             onClick={handleBooking}
-                            disabled={isSubmitting || phone.length < 10}
+                            disabled={isSubmitting || phone.replace(/\D/g, '').length < 10}
                             className="w-full h-12 text-xl font-bold"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Confirmar Cita"}
