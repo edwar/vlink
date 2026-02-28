@@ -191,23 +191,56 @@ export async function getManagedProfiles(organizationId: string) {
 
     if (!session?.user?.id) throw new Error("Unauthorized")
 
-    // Check if user is MANAGER, ADMIN or OWNER
-    const membership = await prisma.member.findFirst({
+    // Obtener el rol del usuario actual en la organización
+    const currentMember = await prisma.member.findFirst({
         where: {
             organizationId,
-            userId: session.user.id,
-            role: { in: ["OWNER", "ADMIN", "MANAGER"] }
+            userId: session.user.id
         }
     })
 
-    if (!membership) return []
+    // Si no es miembro o no tiene rol de gestión, no devuelve perfiles
+    if (!currentMember || !["OWNER", "ADMIN", "MANAGER"].includes(currentMember.role)) {
+        return []
+    }
 
-    return await prisma.profile.findMany({
+    // Obtener todos los miembros de la organización con sus perfiles
+    const allMembers = await prisma.member.findMany({
         where: {
-            organizationId
+            organizationId,
+            userId: { not: session.user.id } // No incluimos al usuario mismo (ya tiene su opción "Personal")
         },
         include: {
-            user: true
+            user: {
+                include: {
+                    profile: true
+                }
+            }
         }
     })
+
+    // Aplicar lógica de visibilidad solicitada:
+    // 1. OWNER le aparece al MANAGER (para administrar su agenda)
+    // 2. MANAGER NO le sale al OWNER
+    const filteredMembers = allMembers.filter(m => {
+        if (currentMember.role === "OWNER") {
+            // El propietario solo ve profesionales, no gestores/admins
+            return m.role === "PROFESSIONAL"
+        }
+
+        if (currentMember.role === "MANAGER" || currentMember.role === "ADMIN") {
+            // El gestor puede ver a todos (Owner y Profesionales) para administrar sus agendas
+            return m.role === "OWNER" || m.role === "PROFESSIONAL"
+        }
+
+        return false
+    })
+
+    return filteredMembers
+        .filter(m => m.user.profile)
+        .map(members => ({
+            ...members.user.profile!,
+            user: members.user,
+            role: members.role
+        }))
 }
