@@ -67,7 +67,7 @@
     --destructive: #ef4444;
     --destructive-foreground: #fafafa;
     --border: #e4e4e7;
-    --input: #e4e4e7;
+    --input: #a3a3a3;
     --ring: #18181b;
     --radius: 0.5rem;
   }
@@ -93,9 +93,11 @@
     --input: #27272a;
     --ring: #d4d4d8;
   }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -105,6 +107,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;

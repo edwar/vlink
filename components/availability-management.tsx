@@ -376,7 +376,7 @@ export function AvailabilityManagement() {
                                 type="date"
                                 value={newBlock.date}
                                 onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
-                                className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all"
+                                className="w-full bg-muted/30 focus:border-primary rounded-xl px-4 py-3 outline-none transition-all"
                             />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -386,7 +386,7 @@ export function AvailabilityManagement() {
                                     type="time"
                                     value={newBlock.start}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
-                                    className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                    className="w-full bg-muted/30 focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                 />
                             </div>
                             <div>
@@ -395,7 +395,7 @@ export function AvailabilityManagement() {
                                     type="time"
                                     value={newBlock.end}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}
-                                    className="w-full bg-muted/30 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                    className="w-full bg-muted/30 focus:border-primary rounded-xl px-4 py-3 outline-none transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                 />
                             </div>
                         </div>

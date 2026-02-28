@@ -102,8 +102,8 @@ export function ProfileSettings() {
                             <div className="grid gap-8 mt-10">
                                 <div className="space-y-3">
                                     <Label className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/70 ml-1">Nombre de usuario (URL)</Label>
-                                    <InputGroup className="rounded-2xl overflow-hidden border-2 border-muted/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all bg-background/50">
-                                        <InputGroupAddon className="bg-muted/20 border-r px-4">
+                                    <InputGroup className="h-12 rounded-2xl overflow-hidden transition-all bg-background/50">
+                                        <InputGroupAddon className="bg-muted/20 border-r px-4 h-12">
                                             <InputGroupText className="text-muted-foreground font-bold text-xs">
                                                 {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
                                             </InputGroupText>
@@ -122,7 +122,7 @@ export function ProfileSettings() {
                                     <Textarea
                                         value={bio}
                                         onChange={(e) => setBio(e.target.value)}
-                                        className="w-full bg-background/50 border-2 border-muted/50 rounded-2xl p-6 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg min-h-[220px] font-medium leading-relaxed resize-none"
+                                        className="w-full bg-background/50 rounded-2xl p-6 outline-none transition-all text-lg min-h-[305px] font-medium leading-relaxed resize-none"
                                         placeholder="Cuenta un poco sobre lo que haces, tus especialidades o tu experiencia profesional..."
                                     />
                                 </div>
@@ -147,7 +147,7 @@ export function ProfileSettings() {
                             <Button
                                 variant="secondary"
                                 onClick={copyToClipboard}
-                                className="rounded-xl font-black h-12 shadow-sm active:scale-95 transition-all hover:bg-secondary/80"
+                                className="rounded-xl font-black h-12 shadow-sm active:scale-75 transition-all hover:bg-secondary/80 hover:shadow-xl"
                             >
                                 {copied ? <Check className="h-4 w-4 text-green-500!" /> : <Copy className="h-4 w-4" />}
                             </Button>
@@ -200,12 +200,25 @@ export function ProfileSettings() {
                             </div>
 
                             {isGoogleConnected ? (
-                                <Button variant="ghost" className="w-full text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-xl h-10 transition-colors border border-transparent hover:border-destructive/10">
-                                    Desconectar
-                                </Button>
+                                <div className="relative overflow-hidden w-full bg-green-500/10 border border-green-500/20 rounded-2xl p-5 transition-all hover:bg-green-500/15 group">
+                                    <div className="flex items-start gap-4 relative z-10">
+                                        <div className="p-2.5 bg-green-500/20 rounded-xl shrink-0 group-hover:scale-110 transition-transform duration-300 ring-1 ring-green-500/20">
+                                            <Check className="h-5 w-5 text-green-600 dark:text-green-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-black tracking-tight text-green-700 dark:text-green-400">¡Conexión establecida!</p>
+                                            <p className="text-[11px] font-medium text-green-700/80 dark:text-green-500/80 leading-relaxed pr-6">
+                                                Tu calendario está sincronizado. Tus próximos eventos se tomarán en cuenta para tu disponibilidad pública.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:scale-110 group-hover:-rotate-12 transition-all duration-700 pointer-events-none">
+                                        <CalendarIcon className="h-32 w-32" />
+                                    </div>
+                                </div>
                             ) : (
                                 <Button className="w-full rounded-xl font-black h-11 shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-95">
-                                    Conectar Ahora
+                                    Permitir acceso
                                 </Button>
                             )}
                         </div>

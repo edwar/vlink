@@ -294,10 +294,10 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                         key={day.toString()}
                                         onClick={() => setSelectedDate(day)}
                                         className={cn(
-                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl border-2 transition-all",
+                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl transition-all",
                                             isSameDay(day, selectedDate)
                                                 ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105"
-                                                : "bg-card border-transparent hover:border-accent"
+                                                : "bg-card hover:border-accent"
                                         )}
                                     >
                                         <span className="text-[10px] uppercase font-bold opacity-70">
@@ -332,10 +332,10 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                             key={time}
                                             onClick={() => setSelectedTime(time)}
                                             className={cn(
-                                                "py-3 rounded-xl border-2 font-semibold text-sm transition-all",
+                                                "py-3 rounded-xl font-semibold text-sm transition-all",
                                                 selectedTime === time
                                                     ? "bg-primary text-primary-foreground border-primary shadow-md"
-                                                    : "bg-card border-transparent hover:border-accent"
+                                                    : "bg-card hover:border-accent"
                                             )}
                                         >
                                             {time}
@@ -508,26 +508,26 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label className="text-sm font-bold">Tu Nombre</label>
-                            <input
+                            <Input
                                 type="text"
                                 placeholder="Escribe tu nombre completo"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 disabled={isSubmitting}
-                                className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
+                                className="w-full bg-card rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
                             />
                         </div>
 
                         <div className="space-y-2">
                             <label className="text-sm font-bold">Tu Correo Institucional o Personal</label>
                             <p className="text-xs text-muted-foreground">Te enviaremos un código de validación a este correo.</p>
-                            <input
+                            <Input
                                 type="email"
                                 placeholder="tu-correo@ejemplo.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={isSubmitting}
-                                className="w-full bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
+                                className="w-full bg-card rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
                             />
                         </div>
 
@@ -624,7 +624,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                                         setPhone(formattedValue);
                                     }}
                                     disabled={isSubmitting}
-                                    className="w-full h-14 bg-card border-2 border-transparent focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
+                                    className="w-full h-14 bg-card focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
                                 />
                             </div>
                         </div>

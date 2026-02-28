@@ -136,10 +136,14 @@ export default async function DashboardPage() {
                             <AppointmentCard key={appt.id} appt={appt} showDate />
                         ))}
                     </div>
-                ) : upcomingAppointments.length === 0 && todayAppointments.length === 0 ? null : (
-                    <p className="text-center py-8 text-muted-foreground text-sm font-medium italic">
-                        No hay más citas próximas por ahora.
-                    </p>
+                ) : (
+                    <EmptyState
+                        title="No hay citas próximas"
+                        description="No tienes citas próximas por ahora. ¡Disfruta el tiempo libre o comparte tu perfil!"
+                        actionText="Ir a mi Perfil"
+                        actionHref="/dashboard/perfil"
+                        icon={CalendarOff}
+                    />
                 )}
             </section>
         </div>
