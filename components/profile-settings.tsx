@@ -218,7 +218,7 @@ export function ProfileSettings() {
                     onClick={handleSave}
                     disabled={saving}
                     className={cn(
-                        "w-full sm:w-auto h-12 rounded-2xl font-black text-lg shadow-2xl transition-all duration-500 active:scale-95 overflow-hidden",
+                        "w-full sm:w-auto h-12 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 transition-all active:scale-95 overflow-hidden",
                         success
                             ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-4 ring-secondary/20 hover:bg-secondary/90"
                             : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:shadow-md hover:-translate-y-1"

@@ -156,7 +156,7 @@ function EmptyState({ title, description }: { title: string, description: string
             <div className="pt-2">
                 <Link
                     href="/dashboard/perfil"
-                    className="inline-flex items-center justify-center h-12 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+                    className="inline-flex items-center justify-center h-12 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95 cursor-default"
                 >
                     Ir a mi Perfil
                 </Link>

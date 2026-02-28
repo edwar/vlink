@@ -89,7 +89,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                 <Link
                     href={`https://wa.me/${appt.clientPhone.replace(/\D/g, '')}`}
                     target="_blank"
-                    className="h-12 flex-1 md:flex-none px-6 bg-[#25D366] text-white rounded-2xl flex items-center justify-center font-bold text-sm shadow-lg shadow-[#25D366]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="h-12 flex-1 md:flex-none px-6 bg-transparent text-primary rounded-2xl flex items-center justify-center font-bold text-sm border border-border shadow-lg hover:shadow-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-default"
                 >
                     WhatsApp
                 </Link>

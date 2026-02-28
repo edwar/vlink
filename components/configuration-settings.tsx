@@ -305,7 +305,7 @@ export function ConfigurationSettings() {
                                     <Button
                                         onClick={handleCreateService}
                                         disabled={creatingService || !newName.trim()}
-                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/10"
+                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/10 hover:scale-105 transition-all active:scale-95"
                                     >
                                         {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                                         Crear Servicio
@@ -397,7 +397,7 @@ export function ConfigurationSettings() {
                                                     <Button
                                                         onClick={() => handleUpdateService(service.id)}
                                                         disabled={updatingService || !editName.trim()}
-                                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/20 bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95"
+                                                        className="rounded-xl font-black h-12 px-8 w-full sm:w-auto shadow-lg shadow-primary/20 bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 transition-all active:scale-95"
                                                     >
                                                         {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
                                                         Guardar Cambios
@@ -436,7 +436,7 @@ export function ConfigurationSettings() {
 
                                                 {/* Action Buttons */}
                                                 <div className="flex items-center gap-2 pt-4 border-t border-muted/30">
-                                                    <button
+                                                    <Button
                                                         onClick={() => handleToggleActive(service)}
                                                         className={cn(
                                                             "flex-1 flex items-center justify-center h-11 rounded-xl transition-all active:scale-95 shadow-sm",
@@ -450,15 +450,15 @@ export function ConfigurationSettings() {
                                                         <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">
                                                             {service.isActive ? "Activo" : "Inactivo"}
                                                         </span>
-                                                    </button>
-                                                    <button
+                                                    </Button>
+                                                    <Button
                                                         onClick={() => startEditing(service)}
                                                         className="flex-1 flex items-center justify-center h-11 bg-secondary/50 text-secondary-foreground hover:bg-secondary rounded-xl transition-all active:scale-95 border border-muted/30 shadow-sm"
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Editar</span>
-                                                    </button>
-                                                    <button
+                                                    </Button>
+                                                    <Button
                                                         onClick={() => handleDeleteService(service.id)}
                                                         disabled={deletingId === service.id}
                                                         className="flex-1 flex items-center justify-center h-11 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-xl transition-all active:scale-95 border border-destructive/10 shadow-sm"
@@ -467,7 +467,7 @@ export function ConfigurationSettings() {
                                                             ? <Loader2 className="h-4 w-4 animate-spin" />
                                                             : <Trash2 className="h-4 w-4" />}
                                                         <span className="hidden sm:block ml-2 text-[10px] font-black uppercase tracking-tighter">Borrar</span>
-                                                    </button>
+                                                    </Button>
                                                 </div>
                                             </div>
                                         )}
@@ -501,7 +501,7 @@ export function ConfigurationSettings() {
                             <Button
                                 onClick={handleSaveName}
                                 disabled={savingName}
-                                className="w-full h-12 rounded-2xl font-black text-base shadow-lg shadow-primary/10 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.98]"
+                                className="w-full h-12 rounded-2xl font-black text-base shadow-lg shadow-primary/10 overflow-hidden hover:scale-105 transition-all active:scale-95"
                             >
                                 {savingName ? (
                                     <Loader2 className="h-5 w-5 animate-spin mr-2" />
