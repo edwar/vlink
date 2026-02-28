@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Menu, X, LogOut, LayoutDashboard, Calendar, Clock, User, Settings } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
+import { signOut } from "@/lib/auth-client"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -18,6 +19,12 @@ const navigation = [
 export function MobileNav() {
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
+    const router = useRouter()
+
+    const handleSignOut = async () => {
+        await signOut()
+        router.push("/")
+    }
 
     // Close menu when clicking a link or changing path
     useEffect(() => {
@@ -60,7 +67,7 @@ export function MobileNav() {
 
             {/* Side Drawer */}
             <div className={cn(
-                "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r shadow-2xl transform transition-transform duration-300 ease-in-out",
+                "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col",
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b">
@@ -91,7 +98,10 @@ export function MobileNav() {
                             </ul>
                         </li>
                         <li className="mt-auto">
-                            <button className="group -mx-2 flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
+                            <button
+                                onClick={handleSignOut}
+                                className="group -mx-2 flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                            >
                                 <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
                                 Cerrar sesión
                             </button>

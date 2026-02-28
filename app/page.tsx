@@ -1,31 +1,14 @@
 import Link from "next/link"
 import { Calendar, CheckCircle2, MessageSquare, ShieldCheck, ArrowRight, Smartphone, Sparkles } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
+import { AuthCTA } from "@/components/auth-cta"
+import { LandingNav } from "@/components/landing-nav"
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground overflow-x-hidden">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-primary/5">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-              <Logo className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <span className="text-2xl font-display font-black tracking-tighter">VLINK</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <ThemeToggle />
-            <Link
-              href="/login"
-              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-sm transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20"
-            >
-              Empezar
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <LandingNav />
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
@@ -45,13 +28,13 @@ export default function LandingPage() {
             Conecta tu Google Calendar, comparte tu link único y deja que tus clientes agenden por WhatsApp en segundos.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-            <Link
-              href="/login"
+            <AuthCTA
               className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg shadow-2xl shadow-primary/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+              loggedInChildren={<>Ir al dashboard <ArrowRight className="h-5 w-5" /></>}
             >
               Crear mi cuenta gratis
               <ArrowRight className="h-5 w-5" />
-            </Link>
+            </AuthCTA>
           </div>
         </div>
       </section>

@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
+import { signOut } from "@/lib/auth-client"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -16,6 +17,12 @@ const navigation = [
 
 export function DashboardSidebar() {
     const pathname = usePathname()
+    const router = useRouter()
+
+    const handleSignOut = async () => {
+        await signOut()
+        router.push("/")
+    }
 
     return (
         <div className="flex h-full flex-col gap-y-5 overflow-y-auto bg-card border-r px-6 pb-4">
@@ -46,7 +53,10 @@ export function DashboardSidebar() {
                         </ul>
                     </li>
                     <li className="mt-auto">
-                        <button className="group -mx-2 flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
+                        <button
+                            onClick={handleSignOut}
+                            className="group -mx-2 flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                        >
                             <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
                             Cerrar sesión
                         </button>

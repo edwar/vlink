@@ -1,13 +1,23 @@
 "use client"
 
 import { Logo } from "@/components/logo"
-import { signIn } from "@/lib/auth-client"
-import { Sparkles, ArrowLeft } from "lucide-react"
+import { signIn, useSession } from "@/lib/auth-client"
+import { Sparkles, ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false)
+    const { data: session, isPending } = useSession()
+    const router = useRouter()
+
+    // Redirect to dashboard if user already has an active session
+    useEffect(() => {
+        if (!isPending && session?.user) {
+            router.replace("/dashboard")
+        }
+    }, [session, isPending, router])
 
     const handleGoogleLogin = async () => {
         setIsLoading(true)
@@ -21,6 +31,25 @@ export default function LoginPage() {
         } finally {
             setIsLoading(false)
         }
+    }
+
+    // Show loading state while checking session
+    if (isPending) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        )
+    }
+
+    // If session exists, show loading while redirecting
+    if (session?.user) {
+        return (
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="text-muted-foreground font-medium text-sm">Redirigiendo al dashboard...</p>
+            </div>
+        )
     }
 
     return (
