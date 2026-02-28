@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react"
 import Link from "next/link"
 import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -19,6 +19,7 @@ import {
 import { sileo } from "sileo"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/empty-state"
 
 interface ServiceOption {
     id: string
@@ -342,9 +343,11 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                     ))}
                                 </div>
                             ) : (
-                                <div className="p-8 bg-accent/30 rounded-2xl text-center border-2 border-dashed">
-                                    <p className="text-sm text-muted-foreground italic">No hay horarios disponibles para este día.</p>
-                                </div>
+                                <EmptyState
+                                    title="Horarios"
+                                    description="No hay horarios disponibles para este día."
+                                    icon={CalendarOff}
+                                />
                             )}
                         </section>
                         {/* Espaciador para no ocultar contenido debajo del botón flotante */}
@@ -527,13 +530,14 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             />
                         </div>
 
-                        <button
+                        <Button
+                            variant="default"
                             onClick={handleSendOTP}
                             disabled={isSubmitting || name.length < 3 || email.length < 5 || !email.includes('@')}
-                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                            className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Enviar código al correo"}
-                        </button>
+                        </Button>
                     </div>
                 )}
 
@@ -569,13 +573,14 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             </div>
                         </div>
 
-                        <button
+                        <Button
+                            variant="default"
                             onClick={handleVerifyOTP}
                             disabled={isSubmitting || otp.length < 6}
-                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                            className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Verificar código"}
-                        </button>
+                        </Button>
 
                         <button
                             onClick={handleSendOTP}
@@ -617,7 +622,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             variant="default"
                             onClick={handleBooking}
                             disabled={isSubmitting || phone.length < 10}
-                            className="w-full h-14 text-xl font-bold"
+                            className="w-full h-12 text-xl font-bold"
                         >
                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Confirmar Cita"}
                         </Button>
@@ -693,7 +698,7 @@ function SuccessView({ bookingInfo, displayName, serviceName, price }: {
 
             <button
                 onClick={() => window.location.reload()}
-                className="w-full py-4 border-2 border-primary text-primary rounded-2xl font-bold hover:bg-primary hover:text-primary-foreground transition-all active:scale-[0.98]"
+                className="w-full h-12 border-2 border-primary text-primary rounded-2xl font-bold hover:bg-primary hover:text-primary-foreground transition-all active:scale-[0.98]"
             >
                 Agendar otra cita
             </button>

@@ -76,7 +76,8 @@ export async function sendOTPEmail({
           <p style="color: #475569; font-size: 16px;">Hola ${clientName},</p>
           <p style="color: #475569; font-size: 16px;">Usa el siguiente código para continuar con tu reserva:</p>
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-            <p style="margin: 0; color: #0f172a; font-size: 32px; font-weight: 900; letter-spacing: 4px;">${code}</p>
+            <p style="margin: 0; color: #0f172a; font-size: 32px; font-weight: 900; letter-spacing: 4px; user-select: all; -webkit-user-select: all; -moz-user-select: all; -ms-user-select: all; cursor: pointer;">${code}</p>
+            <p style="margin: 10px 0 0 0; color: #64748b; font-size: 12px; font-weight: 500;">(Toca el código para seleccionarlo fácilmente)</p>
           </div>
           <p style="color: #475569; font-size: 14px; margin-top: 30px;">Este código expirará en 15 minutos.</p>
         </div>
