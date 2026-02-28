@@ -56,7 +56,7 @@ export default function LandingPage() {
             {
               icon: <ShieldCheck className="h-6 w-6" />,
               title: "Link de Marca Único",
-              desc: "Tu propio espacio profesional bajo vlink.app/tu-nombre. Minimalista, moderno y oscuro."
+              desc: "Tu propio espacio profesional bajo vlink.cognilab.dev/tu-nombre. Minimalista, moderno y oscuro."
             }
           ].map((feature, i) => (
             <div

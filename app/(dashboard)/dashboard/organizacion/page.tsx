@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Users, Shield, Building2, UserCircle, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
+import { CopyLink } from "@/components/copy-link"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -53,7 +54,8 @@ export default async function OrganizacionPage() {
     const ROLE_LABELS: Record<string, string> = {
         OWNER: "Propietario",
         ADMIN: "Administrador",
-        MEMBER: "Miembro"
+        PROFESSIONAL: "Profesional",
+        MANAGER: "Gestor"
     }
 
     return (
@@ -91,38 +93,45 @@ export default async function OrganizacionPage() {
 
                     <div className="grid gap-4">
                         {members.map((member) => (
-                            <Card key={member.id} className="border-2 hover:border-primary/20 transition-all overflow-hidden group">
+                            <Card key={member.id} className="border-2 hover:border-primary/20 transition-all overflow-hidden group relative">
                                 <CardContent className="p-0">
-                                    <div className="flex items-center p-5 gap-4">
-                                        <div className="h-14 w-14 shrink-0 transition-all group-hover:scale-105 duration-300">
+
+                                    <div className="flex items-center px-4 py-6 gap-3 sm:gap-4 relative">
+                                        <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 transition-all group-hover:scale-105 duration-300">
                                             <UserAvatar
                                                 image={member.user.image}
                                                 name={member.user.name}
                                                 className="h-full w-full rounded-2xl shadow-sm border border-border group-hover:border-primary/20"
                                             />
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 mb-0.5">
-                                                <h3 className="text-lg font-black font-display tracking-tight truncate">{member.user.name}</h3>
-                                                {member.role === "OWNER" && <Shield className="h-3.5 w-3.5 text-amber-500" />}
+                                        <div className="flex-1 min-w-0 space-y-0.5">
+                                            <div className="flex items-center gap-2">
+                                                <h3 className="text-base sm:text-lg font-black font-display tracking-tight truncate">{member.user.name}</h3>
+                                                {member.role === "OWNER" && <Shield className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
                                             </div>
-                                            <p className="text-sm text-muted-foreground font-medium truncate">{member.user.email}</p>
+                                            <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">{member.user.email}</p>
+
+                                            {member.user.profile?.username && (
+                                                <div className="flex items-center gap-2 mt-1 sm:mt-0">
+                                                    <p className="text-[10px] font-bold text-primary flex items-center gap-1 opacity-70 sm:opacity-60 group-hover:opacity-100 transition-opacity truncate">
+                                                        <Briefcase className="h-2.5 w-2.5" />
+                                                        {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
+                                                    </p>
+                                                    <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="flex flex-col items-end gap-1.5 shrink-0 pl-2">
+
+                                        {/* Role Tag - Absolute on Mobile, Static on Desktop */}
+                                        <div className="absolute top-2 right-3 sm:static sm:top-auto sm:right-auto shrink-0 flex items-center">
                                             <span className={cn(
-                                                "px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border",
+                                                "px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[9px] sm:text-[12px] font-black uppercase tracking-widest border",
                                                 member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20" :
                                                     member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
                                                         "bg-green-500/10 text-green-600 border-green-500/20"
                                             )}>
-                                                {member.role}
+                                                {ROLE_LABELS[member.role]}
                                             </span>
-                                            {member.user.profile?.username && (
-                                                <p className="text-[10px] font-bold text-muted-foreground flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
-                                                    <Briefcase className="h-3 w-3" />
-                                                    vlink.app/{member.user.profile.username}
-                                                </p>
-                                            )}
                                         </div>
                                     </div>
                                 </CardContent>
@@ -133,9 +142,10 @@ export default async function OrganizacionPage() {
 
                 {/* Lateral: Invitaciones */}
                 <div className="space-y-6">
-                    {(currentUserRole === "OWNER" || currentUserRole === "ADMIN") && (
-                        <InviteMember organizationId={organization.id} />
-                    )}
+                    <InviteMember
+                        organizationId={organization.id}
+                        disabled={currentUserRole !== "OWNER"}
+                    />
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 ### A. Autenticación y Perfil (Profesionales)
 - **Login Seguro:** Acceso obligatorio seguro mediante Google OAuth, desarrollado sobre `better-auth`.
 - **Permisos "Offline":** Conexión persistente mediante *refresh-tokens* para manipular calendarios sin que el usuario esté activo.
-- **Link Único Público:** Cada profesional posee una URL personalizada y dinámica (ej: `vlink.app/nombre-usuario`) que lista sus servicios y horarios disponibles para compartir con sus clientes.
+- **Link Único Público:** Cada profesional posee una URL personalizada y dinámica (ej: `vlink.cognilab.dev/nombre-usuario`) que lista sus servicios y horarios disponibles para compartir con sus clientes.
 - **Onboarding Automático:** Creación de perfil y enlace de reservas automático al momento de iniciar sesión por primera vez.
 
 ### B. Gestión de Agenda (Panel de Control - Dashboard)

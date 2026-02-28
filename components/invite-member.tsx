@@ -12,9 +12,10 @@ import { Loader2, UserPlus, Copy, Check, Info } from "lucide-react"
 
 interface InviteMemberProps {
     organizationId: string
+    disabled?: boolean
 }
 
-export function InviteMember({ organizationId }: InviteMemberProps) {
+export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
     const [role, setRole] = useState<"MANAGER" | "PROFESSIONAL">("PROFESSIONAL")
     const [isPending, setIsPending] = useState(false)
     const [invitationUrl, setInvitationUrl] = useState<string | null>(null)
@@ -59,7 +60,7 @@ export function InviteMember({ organizationId }: InviteMemberProps) {
                 <div className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="role">Rol del invitado</Label>
-                        <Select value={role} onValueChange={(v: any) => setRole(v)}>
+                        <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
                             <SelectTrigger id="role" className="h-12 border-2 focus:border-primary">
                                 <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
@@ -70,9 +71,11 @@ export function InviteMember({ organizationId }: InviteMemberProps) {
                         </Select>
                         <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1.5 px-1">
                             <Info className="h-3 w-3" />
-                            {role === "PROFESSIONAL"
-                                ? "El profesional podrá sincronizar su Google Calendar tras unirse."
-                                : "El gestor podrá ver y coordinar todas las agendas de la organización."}
+                            {disabled
+                                ? "Solo el propietario puede generar nuevos enlaces de invitación."
+                                : role === "PROFESSIONAL"
+                                    ? "El profesional podrá sincronizar su Google Calendar tras unirse."
+                                    : "El gestor podrá ver y coordinar todas las agendas de la organización."}
                         </p>
                     </div>
                 </div>
@@ -98,7 +101,7 @@ export function InviteMember({ organizationId }: InviteMemberProps) {
                 <Button
                     className="w-full h-12 font-bold text-lg"
                     onClick={handleCreateInvitation}
-                    disabled={isPending}
+                    disabled={isPending || disabled}
                 >
                     {isPending ? (
                         <>
