@@ -338,7 +338,7 @@ export function ProfileSettings() {
             {/* Confirmation Modal */}
             <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                 <DialogContent className="max-w-md p-0 overflow-hidden border-none bg-transparent shadow-none">
-                    <div className="relative p-1 rounded-[2.5rem] bg-gradient-to-b from-destructive/20 to-transparent">
+                    <div className="relative p-1 rounded-[2.5rem] bg-linear-to-b from-destructive/20 to-transparent">
                         <div className="bg-card/90 backdrop-blur-2xl border border-white/10 rounded-[2.3rem] p-8 shadow-2xl space-y-8">
                             <div className="flex flex-col items-center text-center space-y-4">
                                 <div className="h-20 w-20 rounded-3xl bg-destructive/10 flex items-center justify-center text-destructive animate-pulse shadow-inner border border-destructive/20">

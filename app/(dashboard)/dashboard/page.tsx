@@ -8,6 +8,7 @@ import { subDays, eachDayOfInterval, format as formatDateFns } from "date-fns"
 import { getEffectiveProfile } from "@/lib/permissions"
 import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
+import { Title } from "@/components/title"
 
 export default async function DashboardPage() {
     const profile = await getEffectiveProfile()
@@ -98,9 +99,7 @@ export default async function DashboardPage() {
                             <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                             Sistema Activo
                         </div>
-                        <h1 className="text-5xl font-display font-black tracking-tight text-primary">
-                            Panel de Control
-                        </h1>
+                        <Title title="Panel de Control" />
                         <p className="text-muted-foreground font-medium text-lg max-w-xl">
                             Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Hoy es <span className="text-primary font-bold italic decoration-primary/30">{format(today, "EEEE, d 'de' MMMM", { locale: es })}</span>.
                         </p>

@@ -1,4 +1,5 @@
 import { ProfileSettings } from "@/components/profile-settings";
+import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { UserCircle } from "lucide-react";
 
@@ -18,9 +19,7 @@ export default async function PerfilPage() {
                             <UserCircle className="h-3 w-3" />
                             Identidad Digital
                         </div>
-                        <h1 className="text-5xl font-display font-black tracking-tight text-primary">
-                            Mi Perfil
-                        </h1>
+                        <Title title="Mi Perfil" />
                         <p className="text-muted-foreground font-medium text-lg max-w-2xl">
                             Gestiona tu marca personal, <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>. Personaliza tu biografía y sincroniza tus servicios con tu calendario de Google.
                         </p>

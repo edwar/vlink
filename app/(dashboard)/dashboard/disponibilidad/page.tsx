@@ -1,4 +1,5 @@
 import { AvailabilityManagement } from "@/components/availability-management";
+import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { Clock } from "lucide-react";
 
@@ -18,9 +19,7 @@ export default async function DisponibilidadPage() {
                             <Clock className="h-3 w-3" />
                             Control Horario
                         </div>
-                        <h1 className="text-5xl font-display font-black tracking-tight text-primary">
-                            Disponibilidad
-                        </h1>
+                        <Title title="Disponibilidad" />
                         <p className="text-muted-foreground font-medium text-lg max-w-2xl">
                             Define tus reglas de tiempo, <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>. Configura horarios regulares, bloqueos específicos y excepciones para un control total.
                         </p>

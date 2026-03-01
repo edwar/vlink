@@ -6,16 +6,10 @@ import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getProfileForBooking, getAvailableSlots, createAppointment, generateAndSendOTP, verifyOTP } from "@/app/actions/booking"
+import { getProfileForBooking, getAvailableSlots, createAppointment } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LoadingState } from "@/components/loading-state"
 import { Logo } from "@/components/logo"
-import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
-} from "@/components/ui/input-otp"
 import { sileo } from "sileo"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -45,7 +39,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [selectedService, setSelectedService] = useState<ServiceOption | null>(null)
     const [selectedDate, setSelectedDate] = useState<Date>(startOfTomorrow())
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
-    const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: WhatsApp OTP, 3: Success
+    const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: Client details, 3: Success
     const [slots, setSlots] = useState<string[]>([])
     const [loadingSlots, setLoadingSlots] = useState(false)
     const [imageError, setImageError] = useState(false)
@@ -404,60 +398,29 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
 }) {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
-    const [otp, setOtp] = useState("")
     const [phone, setPhone] = useState("")
-
-    // 0: Email/Name input, 1: OTP verification, 2: Phone input & Confirm
-    const [verificationStep, setVerificationStep] = useState(0)
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const handleSendOTP = async () => {
-        setError(null)
-        setIsSubmitting(true)
-        try {
-            await generateAndSendOTP(email, name)
-            sileo.success({
-                title: "Código enviado",
-                description: `Hemos enviado un código de 6 dígitos a ${email}`
-            })
-            setVerificationStep(1)
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Error enviando el código")
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
-    const handleVerifyOTP = async () => {
-        if (otp.length < 6) return
-        setError(null)
-        setIsSubmitting(true)
-        try {
-            await verifyOTP(email, otp)
-            sileo.success({
-                title: "¡Verificado!",
-                description: "Tu correo ha sido validado correctamente."
-            })
-            setVerificationStep(2)
-        } catch (err) {
-            sileo.error({
-                title: "Código inválido",
-                description: "El código ingresado no es correcto. Inténtalo de nuevo."
-            })
-            setError(err instanceof Error ? err.message : "Código incorrecto")
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
     const handleBooking = async () => {
         const rawPhone = phone.replace(/\D/g, '')
+
+        if (name.length < 3) {
+            setError("Por favor ingresa tu nombre completo")
+            return
+        }
+
+        if (!email.includes('@') || email.length < 5) {
+            setError("Por favor ingresa un correo electrónico válido")
+            return
+        }
+
         if (rawPhone.length < 10) {
             setError("Por favor ingresa un número de teléfono válido")
             return
         }
+
         setError(null)
         setIsSubmitting(true)
         try {
@@ -482,15 +445,12 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
         }
     }
 
-
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {verificationStep === 0 && (
-                <button onClick={onBack} className="text-sm font-bold text-muted-foreground flex items-center gap-1 hover:text-primary transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                    Regresar a fecha y hora
-                </button>
-            )}
+            <button onClick={onBack} className="text-sm font-bold text-muted-foreground flex items-center gap-1 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                Regresar a fecha y hora
+            </button>
 
             <section className="space-y-6">
                 <div className="flex items-center gap-2 text-primary">
@@ -504,141 +464,71 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                     </div>
                 )}
 
-                {verificationStep === 0 && (
-                    <div className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold">Tu Nombre</label>
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold ml-1">Tu Nombre Completo</label>
+                        <Input
+                            type="text"
+                            placeholder="Ej: Juan Pérez"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            disabled={isSubmitting}
+                            className="w-full bg-card h-14 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold ml-1">Correo Electrónico</label>
+                        <Input
+                            type="email"
+                            placeholder="tu@correo.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled={isSubmitting}
+                            className="w-full bg-card h-14 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold ml-1">Número de WhatsApp</label>
+                        <div className="relative">
+                            <span className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-muted-foreground/50">+57</span>
                             <Input
-                                type="text"
-                                placeholder="Escribe tu nombre completo"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                type="tel"
+                                placeholder="300 123 4567"
+                                value={phone}
+                                onChange={(e) => {
+                                    const rawValue = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                    let formattedValue = rawValue;
+                                    if (rawValue.length > 6) {
+                                        formattedValue = `${rawValue.slice(0, 3)} ${rawValue.slice(3, 6)} ${rawValue.slice(6)}`;
+                                    } else if (rawValue.length > 3) {
+                                        formattedValue = `${rawValue.slice(0, 3)} ${rawValue.slice(3)}`;
+                                    }
+                                    setPhone(formattedValue);
+                                }}
                                 disabled={isSubmitting}
-                                className="w-full bg-card rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
+                                className="w-full h-14 bg-card focus:border-primary/20 rounded-2xl py-4 pl-16 pr-6 outline-none font-bold text-lg transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5"
                             />
                         </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold">Tu Correo Institucional o Personal</label>
-                            <p className="text-xs text-muted-foreground">Te enviaremos un código de validación a este correo.</p>
-                            <Input
-                                type="email"
-                                placeholder="tu-correo@ejemplo.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                disabled={isSubmitting}
-                                className="w-full bg-card rounded-2xl py-4 px-4 outline-none font-medium transition-all disabled:opacity-50"
-                            />
-                        </div>
-
-                        <Button
-                            variant="default"
-                            onClick={handleSendOTP}
-                            disabled={isSubmitting || name.length < 3 || email.length < 5 || !email.includes('@')}
-                            className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-                        >
-                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Enviar código al correo"}
-                        </Button>
                     </div>
-                )}
 
-                {verificationStep === 1 && (
-                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-                        <div className="p-4 bg-accent/50 rounded-2xl text-sm border-2 border-dashed">
-                            Enviamos un código de 6 dígitos a <span className="font-bold">{email}</span>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-4">
-                            <label className="text-sm font-bold">Código de verificación</label>
-                            <div className="w-full flex items-center justify-center">
-                                <InputOTP
-                                    maxLength={6}
-                                    id="otp-verification"
-                                    required
-                                    value={otp}
-                                    onChange={(value) => setOtp(value)}
-                                    disabled={isSubmitting}
-                                >
-                                    <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
-                                        <InputOTPSlot index={0} />
-                                        <InputOTPSlot index={1} />
-                                        <InputOTPSlot index={2} />
-                                    </InputOTPGroup>
-                                    <InputOTPSeparator className="mx-2" />
-                                    <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
-                                        <InputOTPSlot index={3} />
-                                        <InputOTPSlot index={4} />
-                                        <InputOTPSlot index={5} />
-                                    </InputOTPGroup>
-                                </InputOTP>
-                            </div>
-                        </div>
-
-                        <Button
-                            variant="default"
-                            onClick={handleVerifyOTP}
-                            disabled={isSubmitting || otp.length < 6}
-                            className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-                        >
-                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Verificar código"}
-                        </Button>
-
-                        <button
-                            onClick={handleSendOTP}
-                            disabled={isSubmitting}
-                            className="w-full text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
-                        >
-                            ¿No has recibido el código? Reenviar
-                        </button>
-
-                        <button
-                            onClick={() => { setVerificationStep(0); setOtp(""); setError(null); }}
-                            disabled={isSubmitting}
-                            className="w-full text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
-                        >
-                            Cambiar correo electrónico
-                        </button>
-                    </div>
-                )}
-
-                {verificationStep === 2 && (
-                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-                        <div className="space-y-4">
-                            <label className="text-sm font-bold">Número de WhatsApp</label>
-                            <p className="text-xs text-muted-foreground">El profesional te contactará a este número.</p>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold">+57</span>
-                                <Input
-                                    type="tel"
-                                    pattern="[0-9]*"
-                                    placeholder="300 000 0000"
-                                    value={phone}
-                                    onChange={(e) => {
-                                        const rawValue = e.target.value.replace(/\D/g, '').slice(0, 10);
-                                        let formattedValue = rawValue;
-                                        if (rawValue.length > 6) {
-                                            formattedValue = `${rawValue.slice(0, 3)} ${rawValue.slice(3, 6)} ${rawValue.slice(6)}`;
-                                        } else if (rawValue.length > 3) {
-                                            formattedValue = `${rawValue.slice(0, 3)} ${rawValue.slice(3)}`;
-                                        }
-                                        setPhone(formattedValue);
-                                    }}
-                                    disabled={isSubmitting}
-                                    className="w-full h-14 bg-card focus:border-primary rounded-2xl py-4 pl-14 pr-4 outline-none font-bold text-lg transition-all disabled:opacity-50"
-                                />
-                            </div>
-                        </div>
-
-                        <Button
-                            variant="default"
-                            onClick={handleBooking}
-                            disabled={isSubmitting || phone.replace(/\D/g, '').length < 10}
-                            className="w-full h-12 text-xl font-bold"
-                        >
-                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Confirmar Cita"}
-                        </Button>
-                    </div>
-                )}
+                    <Button
+                        variant="default"
+                        onClick={handleBooking}
+                        disabled={isSubmitting || name.length < 3 || email.length < 5 || phone.replace(/\D/g, '').length < 10}
+                        className="w-full h-14 bg-primary text-primary-foreground rounded-2xl font-black text-xl shadow-2xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-3 active:scale-[0.98] hover:shadow-primary/40 hover:-translate-y-1"
+                    >
+                        {isSubmitting ? (
+                            <Loader2 className="h-6 w-6 animate-spin" />
+                        ) : (
+                            <>
+                                <Check className="h-6 w-6" />
+                                <span>Confirmar Cita</span>
+                            </>
+                        )}
+                    </Button>
+                </div>
             </section>
         </div>
     )
