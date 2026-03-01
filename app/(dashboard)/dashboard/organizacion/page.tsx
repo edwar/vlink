@@ -5,10 +5,12 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, Shield, Building2, UserCircle, Briefcase } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
 import { CopyLink } from "@/components/copy-link"
+import { ToggleOrgVisibility } from "@/components/toggle-org-visibility"
+import { RenameOrganization } from "@/components/rename-organization"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -49,7 +51,9 @@ export default async function OrganizacionPage() {
         orderBy: { role: 'asc' }
     })
 
-    const currentUserRole = members.find(m => m.userId === session.user.id)?.role
+    const currentUserMember = members.find(m => m.userId === session.user.id)
+    const currentUserRole = currentUserMember?.role
+    const isOwnerOrManager = currentUserRole === "OWNER" || currentUserRole === "MANAGER"
 
     const ROLE_LABELS: Record<string, string> = {
         OWNER: "Propietario",
@@ -71,9 +75,16 @@ export default async function OrganizacionPage() {
                             <Building2 className="h-3 w-3" />
                             Gestión Corporativa
                         </div>
-                        <h1 className="text-5xl font-display font-black tracking-tighter text-primary uppercase">
-                            {organization.name}
-                        </h1>
+                        {isOwnerOrManager ? (
+                            <RenameOrganization
+                                organizationId={organization.id}
+                                currentName={organization.name}
+                            />
+                        ) : (
+                            <h1 className="text-5xl font-display font-black tracking-tighter text-primary uppercase">
+                                {organization.name}
+                            </h1>
+                        )}
                         <p className="text-muted-foreground font-medium text-lg max-w-2xl">
                             Administra tu equipo de profesionales, coordina agendas compartidas y escala tu negocio centralizadamente.
                         </p>
@@ -98,9 +109,20 @@ export default async function OrganizacionPage() {
                             <div className="h-8 w-1 bg-primary rounded-full" />
                             <h2 className="text-3xl font-display font-black tracking-tight">Mi Equipo</h2>
                         </div>
-                        <span className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 shadow-sm shadow-primary/5">
-                            {members.length} Profesionales
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <span className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 shadow-sm shadow-primary/5">
+                                {members.length} Profesionales
+                            </span>
+                            <a
+                                href={`/org/${organization.slug}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-4 py-1.5 bg-accent text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border hover:border-primary/30 hover:text-primary transition-colors flex items-center gap-1.5"
+                            >
+                                <Globe className="h-3 w-3" />
+                                Ver página pública
+                            </a>
+                        </div>
                     </div>
 
                     <div className="grid gap-6">
@@ -148,7 +170,8 @@ export default async function OrganizacionPage() {
                                                 </div>
                                             </div>
 
-                                            <div className="shrink-0 absolute -top-1 -right-2 lg:relative lg:top-0 lg:right-0">
+                                            {/* Visibility toggle + Role badge */}
+                                            <div className="shrink-0 flex flex-col sm:flex-row items-start sm:items-center gap-3 absolute -top-1 -right-2 lg:relative lg:top-0 lg:right-0">
                                                 <span className={cn(
                                                     "px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-sm",
                                                     member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
@@ -157,6 +180,14 @@ export default async function OrganizacionPage() {
                                                 )}>
                                                     {ROLE_LABELS[member.role]}
                                                 </span>
+                                                {/* OWNER and MANAGER can toggle visibility of any member */}
+                                                {isOwnerOrManager && member.user.profile && (
+                                                    <ToggleOrgVisibility
+                                                        initialValue={member.user.profile.showOnOrgPage ?? true}
+                                                        targetUserId={member.userId}
+                                                        memberName={member.user.name}
+                                                    />
+                                                )}
                                             </div>
                                         </div>
                                     </CardContent>

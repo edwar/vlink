@@ -20,10 +20,24 @@ export const auth = betterAuth({
         user: {
             create: {
                 after: async (user) => {
+                    // Derive base username from email prefix
+                    const base = user.email
+                        .split('@')[0]
+                        .toLowerCase()
+                        .replace(/[^a-z0-9_-]/g, "") // Only allow valid URL chars
+                        || "user"
+
+                    // Find a unique username: base, base2, base3...
+                    let username = base
+                    let counter = 2
+                    while (await prisma.profile.findUnique({ where: { username } })) {
+                        username = `${base}${counter++}`
+                    }
+
                     await prisma.profile.create({
                         data: {
                             userId: user.id,
-                            username: user.email.split('@')[0] + Math.random().toString(36).slice(-4), // Simple unique username generation
+                            username,
                         }
                     });
                 }

@@ -44,27 +44,32 @@ export async function getProfile() {
 export async function updateProfile(data: { username: string, bio: string }) {
     const profile = await getEffectiveProfile()
 
-    const { username, bio } = data
+    const rawUsername = data.username.trim().toLowerCase()
+    const { bio } = data
 
-    // Basic validation
-    if (!username || username.trim() === "") {
-        throw new Error("Username cannot be empty")
+    // Validate username format
+    if (!rawUsername || rawUsername.length < 3) {
+        throw new Error("El username debe tener al menos 3 caracteres")
+    }
+
+    if (!/^[a-z0-9_-]+$/.test(rawUsername)) {
+        throw new Error("El username solo puede contener letras, números, guiones (-) y guiones bajos (_)")
     }
 
     // Check if username is taken by another user
     const existingProfile = await prisma.profile.findUnique({
-        where: { username }
+        where: { username: rawUsername }
     })
 
     if (existingProfile && existingProfile.id !== profile.id) {
-        throw new Error("Username is already taken")
+        throw new Error(`El username "${rawUsername}" ya está en uso. Por favor elige otro.`)
     }
 
     // Update the profile
     await prisma.profile.update({
         where: { id: profile.id },
         data: {
-            username: username.trim(),
+            username: rawUsername,
             bio: bio.trim()
         }
     })

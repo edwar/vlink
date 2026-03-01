@@ -18,7 +18,11 @@ export async function createOrganization(name: string) {
         throw new Error("Unauthorized")
     }
 
-    const slug = name.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "") + "-" + Math.random().toString(36).slice(-4)
+    const slug = name.toLowerCase().trim().replace(/ /g, "-").replace(/[^\w-]+/g, "")
+
+    // Check for duplicate name
+    const existing = await prisma.organization.findUnique({ where: { name } })
+    if (existing) throw new Error(`Ya existe una organización con el nombre "${name}". Por favor elige otro nombre.`)
 
     const organization = await prisma.$transaction(async (tx) => {
         const org = await tx.organization.create({
@@ -157,10 +161,6 @@ export async function acceptInvitation(token: string) {
             where: { userId: session.user.id },
             data: { organizationId: invitation.organizationId }
         })
-
-        // 3. Delete invitation (one-time use or keep it? Let's keep it clean)
-        // Optionally delete invitation if you want it to be single-use
-        // await tx.invitation.delete({ where: { id: invitation.id } })
     })
 
     revalidatePath("/dashboard")
@@ -199,7 +199,6 @@ export async function getManagedProfiles(organizationId: string) {
 
     if (!session?.user?.id) throw new Error("Unauthorized")
 
-    // Obtener el rol del usuario actual en la organización
     const currentMember = await prisma.member.findFirst({
         where: {
             organizationId,
@@ -207,16 +206,14 @@ export async function getManagedProfiles(organizationId: string) {
         }
     })
 
-    // Si no es miembro o no tiene rol de gestión, no devuelve perfiles
     if (!currentMember || !["OWNER", "ADMIN", "MANAGER"].includes(currentMember.role)) {
         return []
     }
 
-    // Obtener todos los miembros de la organización con sus perfiles
     const allMembers = await prisma.member.findMany({
         where: {
             organizationId,
-            userId: { not: session.user.id } // No incluimos al usuario mismo (ya tiene su opción "Personal")
+            userId: { not: session.user.id }
         },
         include: {
             user: {
@@ -227,20 +224,13 @@ export async function getManagedProfiles(organizationId: string) {
         }
     })
 
-    // Aplicar lógica de visibilidad solicitada:
-    // 1. OWNER le aparece al MANAGER (para administrar su agenda)
-    // 2. MANAGER NO le sale al OWNER
     const filteredMembers = allMembers.filter(m => {
         if (currentMember.role === "OWNER") {
-            // El propietario solo ve profesionales, no gestores/admins
             return m.role === "PROFESSIONAL"
         }
-
         if (currentMember.role === "MANAGER" || currentMember.role === "ADMIN") {
-            // El gestor puede ver a todos (Owner y Profesionales) para administrar sus agendas
             return m.role === "OWNER" || m.role === "PROFESSIONAL"
         }
-
         return false
     })
 
@@ -251,4 +241,136 @@ export async function getManagedProfiles(organizationId: string) {
             user: members.user,
             role: members.role
         }))
+}
+
+/**
+ * Fetches public-facing profiles of an organization (showOnOrgPage = true)
+ */
+export async function getOrganizationPublicProfiles(slug: string) {
+    const organization = await prisma.organization.findUnique({
+        where: { slug }
+    })
+
+    if (!organization) return null
+
+    // Query through Member - the source of truth for org membership
+    const members = await prisma.member.findMany({
+        where: { organizationId: organization.id },
+        include: {
+            user: {
+                include: {
+                    profile: {
+                        where: { showOnOrgPage: true },
+                        include: {
+                            services: { where: { isActive: true }, select: { id: true } }
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+    // Keep only members who have a profile with showOnOrgPage = true
+    const visibleProfiles = members
+        .filter(m => m.user.profile !== null)
+        .map(m => ({
+            username: m.user.profile!.username,
+            displayName: m.user.profile!.displayName || m.user.name || m.user.profile!.username,
+            bio: m.user.profile!.bio,
+            image: m.user.image,
+            serviceCount: m.user.profile!.services.length,
+        }))
+        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+
+    return {
+        id: organization.id,
+        name: organization.name,
+        slug: organization.slug,
+        profiles: visibleProfiles
+    }
+}
+
+/**
+ * Toggles the showOnOrgPage flag for a profile.
+ * - Any user can toggle their own profile.
+ * - OWNER and MANAGER can toggle any member's profile within their organization.
+ */
+export async function toggleShowOnOrgPage(value: boolean, targetUserId?: string) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("Unauthorized")
+
+    const resolvedTargetUserId = targetUserId ?? session.user.id
+
+    // If modifying someone else's profile, verify caller has OWNER or MANAGER role
+    if (resolvedTargetUserId !== session.user.id) {
+        // Find a shared organization where the caller is OWNER or MANAGER
+        const callerMembership = await prisma.member.findFirst({
+            where: {
+                userId: session.user.id,
+                role: { in: ["OWNER", "MANAGER"] },
+                organization: {
+                    members: {
+                        some: { userId: resolvedTargetUserId }
+                    }
+                }
+            }
+        })
+
+        if (!callerMembership) throw new Error("No tienes permisos para modificar este perfil")
+    }
+
+    await prisma.profile.update({
+        where: { userId: resolvedTargetUserId },
+        data: { showOnOrgPage: value }
+    })
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
+}
+
+/**
+ * Updates the organization name (and slug). Only OWNER and MANAGER allowed.
+ */
+export async function updateOrganizationName(organizationId: string, newName: string) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("Unauthorized")
+
+    // Verify caller is OWNER or MANAGER
+    const membership = await prisma.member.findFirst({
+        where: {
+            organizationId,
+            userId: session.user.id,
+            role: { in: ["OWNER", "MANAGER"] }
+        }
+    })
+
+    if (!membership) throw new Error("No tienes permisos para cambiar el nombre de la organización")
+
+    const trimmedName = newName.trim()
+
+    if (!trimmedName || trimmedName.length < 2) {
+        throw new Error("El nombre debe tener al menos 2 caracteres")
+    }
+
+    // Check uniqueness (excluding current organization)
+    const existing = await prisma.organization.findFirst({
+        where: { name: trimmedName, NOT: { id: organizationId } }
+    })
+    if (existing) throw new Error(`Ya existe una organización con el nombre "${trimmedName}"`)
+
+    const newSlug = trimmedName.toLowerCase().trim().replace(/ /g, "-").replace(/[^\w-]+/g, "")
+
+    await prisma.organization.update({
+        where: { id: organizationId },
+        data: { name: trimmedName, slug: newSlug }
+    })
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true, newSlug }
 }

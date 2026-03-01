@@ -164,11 +164,16 @@ export function ProfileSettings() {
                                             <InputGroupInput
                                                 type="text"
                                                 value={username}
-                                                onChange={(e) => setUsername(e.target.value)}
+                                                onChange={(e) => setUsername(
+                                                    e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "")
+                                                )}
                                                 className="font-black text-xl px-6 h-14 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30"
                                                 placeholder="tu-nombre"
                                             />
                                         </InputGroup>
+                                        <p className="text-[10px] text-muted-foreground/50 font-medium mt-2 ml-2">
+                                            Solo letras minúsculas, números, guiones <code className="font-mono">-</code> y guiones bajos <code className="font-mono">_</code>. Mínimo 3 caracteres.
+                                        </p>
                                     </div>
                                 </div>
 

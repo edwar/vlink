@@ -43,6 +43,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [slots, setSlots] = useState<string[]>([])
     const [loadingSlots, setLoadingSlots] = useState(false)
     const [imageError, setImageError] = useState(false)
+    const [noServices, setNoServices] = useState(false)
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -53,14 +54,13 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                     return
                 }
                 setProfileData(data)
-                // If only one service, auto-select it
+                // If only one service, auto-select it and skip service-selection step
                 if (data.services.length === 1) {
                     setSelectedService(data.services[0])
                     setStep(1)
                 } else if (data.services.length === 0) {
-                    // No services configured, go directly to date/time with default 30 min
-                    setSelectedService({ id: "", name: "Cita General", durationMinutes: 30, price: 0 })
-                    setStep(1)
+                    // No services configured — show informative empty state
+                    setNoServices(true)
                 }
             } catch (error) {
                 console.error(error)
@@ -100,6 +100,37 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
 
     if (loadingProfile) {
         return <LoadingState />
+    }
+
+    if (noServices && profileData) {
+        return (
+            <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground overflow-hidden flex flex-col relative px-6">
+                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full -z-10" />
+                <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-accent blur-[100px] rounded-full -z-10 opacity-50" />
+
+                <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
+                    <div className="space-y-4">
+                        <div className="h-20 w-20 bg-primary/10 rounded-[28px] mx-auto flex items-center justify-center border-2 border-primary/20 shadow-xl shadow-primary/10">
+                            <Briefcase className="h-10 w-10 text-primary opacity-60" />
+                        </div>
+                        <div className="space-y-2">
+                            <h1 className="text-3xl font-display font-black tracking-tighter">
+                                Sin servicios disponibles
+                            </h1>
+                            <p className="text-muted-foreground font-medium max-w-xs mx-auto text-sm leading-relaxed">
+                                <span className="text-foreground font-bold">{profileData.displayName || `@${username}`}</span> aún no ha configurado servicios para agendar.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="pt-4">
+                        <div className="flex items-center gap-2 opacity-30 grayscale hover:grayscale-0 transition-all cursor-default">
+                            <Logo className="h-5 w-5" />
+                            <span className="text-sm font-display font-black tracking-tighter">VLINK</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     if (profileError || !profileData) {
