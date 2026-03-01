@@ -11,6 +11,8 @@ import { UserAvatar } from "@/components/user-avatar"
 import { CopyLink } from "@/components/copy-link"
 import { ToggleOrgVisibility } from "@/components/toggle-org-visibility"
 import { RenameOrganization } from "@/components/rename-organization"
+import { OrgQRCode } from "@/components/org-qr-code"
+import { OrgBusinessCard } from "@/components/org-business-card"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -101,7 +103,61 @@ export default async function OrganizacionPage() {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-16">
+            {/* Section: Marketing and Resources */}
+            <div className="space-y-10 relative">
+                <div className="flex items-center gap-3 px-2">
+                    <div className="h-8 w-1 bg-blue-500/40 rounded-full" />
+                    <h2 className="text-3xl font-display font-black tracking-tight text-foreground">Marketing & Recursos</h2>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+
+                    {/* QR Code Column */}
+                    <div className="xl:col-span-4 lg:col-span-5 space-y-4">
+                        <div className="space-y-2">
+                            <h3 className="text-xl font-bold">QR Inteligente</h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed">
+                                Descarga el QR base o compártelo al instante con tus clientes en redes sociales.
+                            </p>
+                        </div>
+                        <div className="p-1 rounded-[2rem] bg-linear-to-b from-primary/10 to-transparent">
+                            <div className="bg-card/80 backdrop-blur-xl border border-primary/5 rounded-[1.8rem] p-6 shadow-xl shadow-primary/5 space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="5" height="5" x="3" y="3" rx="1" /><rect width="5" height="5" x="16" y="3" rx="1" /><rect width="5" height="5" x="3" y="16" rx="1" /><path d="M21 16h-3a2 2 0 0 0-2 2v3" /><path d="M21 21v.01" /><path d="M12 7v3a2 2 0 0 1-2 2H7" /><path d="M3 12h.01" /><path d="M12 3h.01" /><path d="M12 16v.01" /><path d="M16 12h1" /><path d="M21 12v.01" /><path d="M12 21v-1" /></svg>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Código QR</p>
+                                        <p className="text-sm font-black text-foreground">Página pública</p>
+                                    </div>
+                                </div>
+                                <OrgQRCode
+                                    orgName={organization.name}
+                                    orgSlug={organization.slug}
+                                    appUrl={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Business Card Column */}
+                    <div className="xl:col-span-8 lg:col-span-7 space-y-4">
+                        <div className="space-y-2">
+                            <h3 className="text-xl font-bold">Tarjeta de Presentación</h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
+                                Previsualiza y descarga en alta resolución (SVG) tu tarjeta de presentación oficial lista para enviar a la imprenta.
+                            </p>
+                        </div>
+                        <OrgBusinessCard
+                            orgName={organization.name}
+                            orgSlug={organization.slug}
+                            appUrl={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-16 pt-12 mt-12 border-t-2 border-border/50">
                 {/* Miembros / Mi Equipo */}
                 <div className="xl:col-span-8 space-y-8">
                     <div className="flex items-center justify-between px-2">
@@ -201,7 +257,7 @@ export default async function OrganizacionPage() {
                 <div className="xl:col-span-4 space-y-10">
                     <div className="flex items-center gap-3 px-2">
                         <div className="h-8 w-1 bg-muted-foreground/30 rounded-full" />
-                        <h2 className="text-3xl font-display font-black tracking-tight text-muted-foreground">Crecer</h2>
+                        <h2 className="text-3xl font-display font-black tracking-tight text-muted-foreground">Crecer / Equipo</h2>
                     </div>
 
                     <InviteMember
