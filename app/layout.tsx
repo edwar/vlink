@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { DM_Sans, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import "sileo/styles.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SileoToasterProvider } from "@/components/sileo-provider";
 
-const inter = Inter({
-  variable: "--font-inter",
+const fontSans = DM_Sans({
   subsets: ["latin"],
+  variable: "--font-sans",
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const fontMono = Geist_Mono({
   subsets: ["latin"],
+  variable: "--font-mono",
+});
+
+const fontDisplay = Outfit({
+  subsets: ["latin"],
+  variable: "--font-display",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${outfit.variable} antialiased font-sans`}
+        className={`${fontSans.variable} ${fontMono.variable} ${fontDisplay.variable} antialiased font-sans`}
       >
         <ThemeProvider
           attribute="class"
