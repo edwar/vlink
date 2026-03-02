@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { getOrganizationPublicProfiles } from "@/app/actions/organization"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
@@ -38,13 +39,17 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
             {/* Avatar */}
             <div className="relative mb-5">
                 {profile.image && !imageError ? (
-                    <img
-                        src={profile.image}
-                        alt={profile.displayName}
-                        onError={() => setImageError(true)}
-                        referrerPolicy="no-referrer"
-                        className={`h-24 w-24 rounded-3xl object-cover border-2 shadow-xl transition-transform duration-500 ${hasServices ? "border-primary/10 group-hover:scale-105" : "border-border grayscale opacity-60"}`}
-                    />
+                    <div className={`relative h-24 w-24 rounded-3xl overflow-hidden border-2 shadow-xl transition-transform duration-500 ${hasServices ? "border-primary/10 group-hover:scale-105" : "border-border grayscale opacity-60"}`}>
+                        <Image
+                            src={profile.image}
+                            alt={profile.displayName}
+                            fill
+                            sizes="96px"
+                            onError={() => setImageError(true)}
+                            referrerPolicy="no-referrer"
+                            className="object-cover"
+                        />
+                    </div>
                 ) : (
                     <div className={`h-24 w-24 rounded-3xl flex items-center justify-center text-3xl font-black border-2 shadow-xl uppercase transition-transform duration-500 ${hasServices ? "bg-primary/10 text-primary border-primary/10 group-hover:scale-105" : "bg-muted text-muted-foreground border-border opacity-60"}`}>
                         {profile.displayName.charAt(0)}
@@ -78,8 +83,8 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
                     {showExpertise && (
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[180px] animate-in zoom-in-90 fade-in duration-300">
                             <div className="flex flex-wrap gap-2 justify-center">
-                                {profile.expertise.map((skill, i) => (
-                                    <span key={i} className="px-2 py-0.5 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[8px] font-black uppercase tracking-tight whitespace-nowrap">
+                                {profile.expertise.map((skill) => (
+                                    <span key={skill} className="px-2 py-0.5 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[8px] font-black uppercase tracking-tight whitespace-nowrap">
                                         {skill}
                                     </span>
                                 ))}

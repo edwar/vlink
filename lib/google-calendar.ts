@@ -1,7 +1,7 @@
 import { google } from "googleapis"
 import prisma from "./prisma"
 
-export async function getGoogleAuthClient(userId: string) {
+async function getGoogleAuthClient(userId: string) {
     const account = await prisma.account.findFirst({
         where: {
             userId,

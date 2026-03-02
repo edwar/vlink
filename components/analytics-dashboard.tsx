@@ -111,8 +111,8 @@ export function AnalyticsDashboard({ data }: AnalyticsDashboardProps) {
                         <PieChart>
                             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
                             <Pie data={data.serviceStats} dataKey="count" label nameKey="name">
-                                {data.serviceStats.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                                {data.serviceStats.map((entry) => (
+                                    <Cell key={entry.name} fill={entry.fill} />
                                 ))}
                             </Pie>
                         </PieChart>

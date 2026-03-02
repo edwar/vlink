@@ -395,8 +395,9 @@ export function AvailabilityManagement() {
                     </DialogHeader>
                     <div className="space-y-6 py-4">
                         <div>
-                            <label className="block text-sm font-bold mb-2">Fecha</label>
+                            <label htmlFor="block-date" className="block text-sm font-bold mb-2">Fecha</label>
                             <Input
+                                id="block-date"
                                 type="date"
                                 value={newBlock.date}
                                 onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
@@ -405,8 +406,9 @@ export function AvailabilityManagement() {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-bold mb-2">Desde</label>
+                                <label htmlFor="block-start" className="block text-sm font-bold mb-2">Desde</label>
                                 <Input
+                                    id="block-start"
                                     type="time"
                                     value={newBlock.start}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
@@ -414,8 +416,9 @@ export function AvailabilityManagement() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold mb-2">Hasta</label>
+                                <label htmlFor="block-end" className="block text-sm font-bold mb-2">Hasta</label>
                                 <Input
+                                    id="block-end"
                                     type="time"
                                     value={newBlock.end}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}

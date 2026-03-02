@@ -30,11 +30,6 @@ export function MobileNav() {
         router.push("/")
     }
 
-    // Close menu when clicking a link or changing path
-    useEffect(() => {
-        setIsOpen(false)
-    }, [pathname])
-
     // Prevent scrolling when menu is open
     useEffect(() => {
         if (isOpen) {
@@ -65,8 +60,10 @@ export function MobileNav() {
             {/* Menu Overlay */}
             {isOpen && (
                 <div
+                    role="presentation"
                     className="fixed inset-0 z-50 bg-background/30 backdrop-blur-xs animate-in fade-in duration-200"
                     onClick={() => setIsOpen(false)}
+                    onKeyDown={() => setIsOpen(false)}
                 />
             )}
 
@@ -92,6 +89,7 @@ export function MobileNav() {
                                     <li key={item.name}>
                                         <Link
                                             href={item.href}
+                                            onClick={() => setIsOpen(false)}
                                             className={cn(
                                                 pathname === item.href
                                                     ? 'bg-accent text-accent-foreground'

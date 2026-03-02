@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles } from "lucide-react"
@@ -39,7 +40,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [profileError, setProfileError] = useState(false)
 
     const [selectedService, setSelectedService] = useState<ServiceOption | null>(null)
-    const [selectedDate, setSelectedDate] = useState<Date>(startOfTomorrow())
+    const [selectedDate, setSelectedDate] = useState<Date>(() => startOfTomorrow())
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
     const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: Client details, 3: Success
     const [slots, setSlots] = useState<string[]>([])
@@ -217,13 +218,17 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                 {/* Header Perfil */}
                 <header className="text-center space-y-4">
                     {profileData.image && !imageError ? (
-                        <img
-                            src={profileData.image}
-                            alt={displayName}
-                            onError={() => setImageError(true)}
-                            referrerPolicy="no-referrer"
-                            className="h-20 w-20 rounded-full mx-auto object-cover border-2 border-primary/10 shadow-sm transition-opacity duration-300"
-                        />
+                        <div className="relative h-20 w-20 mx-auto">
+                            <Image
+                                src={profileData.image}
+                                alt={displayName}
+                                fill
+                                sizes="80px"
+                                onError={() => setImageError(true)}
+                                referrerPolicy="no-referrer"
+                                className="rounded-full object-cover border-2 border-primary/10 shadow-sm"
+                            />
+                        </div>
                     ) : (
                         <div className="h-20 w-20 bg-primary/5 rounded-full mx-auto flex items-center justify-center text-2xl font-black border-2 border-primary/10 text-primary uppercase tracking-tighter">
                             {displayName.charAt(0)}
@@ -246,8 +251,8 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                     {showExpertise && (
                                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
                                             <div className="flex flex-wrap gap-2 justify-center">
-                                                {profileData.expertise.map((skill, i) => (
-                                                    <span key={i} className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[9px] font-black uppercase tracking-tight">
+                                                {profileData.expertise.map((skill) => (
+                                                    <span key={skill} className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[9px] font-black uppercase tracking-tight">
                                                         {skill}
                                                     </span>
                                                 ))}
@@ -545,34 +550,37 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
 
                 <div className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-bold ml-1">Tu Nombre Completo</label>
+                        <label htmlFor="client-name" className="text-sm font-bold ml-1">Tu Nombre Completo</label>
                         <Input
+                            id="client-name"
                             type="text"
                             placeholder="Ej: Juan Pérez"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             disabled={isSubmitting}
-                            className="w-full bg-card h-14 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
+                            className="w-full bg-card h-12 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-bold ml-1">Correo Electrónico</label>
+                        <label htmlFor="client-email" className="text-sm font-bold ml-1">Correo Electrónico</label>
                         <Input
+                            id="client-email"
                             type="email"
                             placeholder="tu@correo.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={isSubmitting}
-                            className="w-full bg-card h-14 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
+                            className="w-full bg-card h-12 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-bold ml-1">Número de WhatsApp</label>
+                        <label htmlFor="client-phone" className="text-sm font-bold ml-1">Número de WhatsApp</label>
                         <div className="relative">
                             <span className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-muted-foreground/50">+57</span>
                             <Input
+                                id="client-phone"
                                 type="tel"
                                 placeholder="300 123 4567"
                                 value={phone}
@@ -587,7 +595,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                                     setPhone(formattedValue);
                                 }}
                                 disabled={isSubmitting}
-                                className="w-full h-14 bg-card focus:border-primary/20 rounded-2xl py-4 pl-16 pr-6 outline-none font-bold text-lg transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5"
+                                className="w-full h-12 bg-card focus:border-primary/20 rounded-2xl py-4 pl-16 pr-6 outline-none font-bold text-lg transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5"
                             />
                         </div>
                     </div>
@@ -596,7 +604,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                         variant="default"
                         onClick={handleBooking}
                         disabled={isSubmitting || name.length < 3 || email.length < 5 || phone.replace(/\D/g, '').length < 10}
-                        className="w-full h-14 bg-primary text-primary-foreground rounded-2xl font-black text-xl shadow-2xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-3 active:scale-[0.98] hover:shadow-primary/40 hover:-translate-y-1"
+                        className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-black text-xl shadow-2xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-3 active:scale-[0.98] hover:shadow-primary/40 hover:-translate-y-1"
                     >
                         {isSubmitting ? (
                             <Loader2 className="h-6 w-6 animate-spin" />

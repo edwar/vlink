@@ -1,5 +1,11 @@
 import Link from "next/link"
 import { Shield, Lock, Eye, FileText, ArrowLeft, Globe, Zap } from "lucide-react"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Política de Privacidad — VLink",
+    description: "Conoce cómo VLink protege y gestiona tus datos personales y de calendario.",
+}
 
 export default function PrivacyPage() {
     return (

@@ -96,7 +96,7 @@ export function ProfileSwitcher() {
                         </div>
                     </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="rounded-xl border-2 shadow-xl">
+                <SelectContent position="popper" side="bottom" align="start" className="rounded-xl border-2 shadow-xl">
                     <SelectGroup>
                         <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50">Personal</SelectLabel>
                         <SelectItem value="personal" className="py-2.5 focus:bg-primary/5 rounded-lg cursor-pointer">

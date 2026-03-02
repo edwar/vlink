@@ -248,7 +248,7 @@ export function ConfigurationSettings() {
                                 {!showNewForm && (
                                     <Button
                                         onClick={() => setShowNewForm(true)}
-                                        className="shrink-0 h-14 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
+                                        className="shrink-0 h-12 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
                                     >
                                         <Plus className="h-5 w-5 mr-2" />
                                         Nuevo Servicio
@@ -268,8 +268,7 @@ export function ConfigurationSettings() {
                                             value={newName}
                                             onChange={(e) => setNewName(e.target.value)}
                                             placeholder="Ej: Consultoría Estratégica, Sesión de Coaching..."
-                                            className="h-16 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
-                                            autoFocus
+                                            className="h-12 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
                                         />
                                     </div>
 
@@ -277,8 +276,8 @@ export function ConfigurationSettings() {
                                         <div className="space-y-4">
                                             <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Inversión (COP)</Label>
                                             <div className="group transition-all">
-                                                <InputGroup className="h-16 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
-                                                    <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-16 flex items-center justify-center">
+                                                <InputGroup className="h-12 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                                    <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-12 flex items-center justify-center">
                                                         <InputGroupText className="text-primary font-black text-xl">$</InputGroupText>
                                                     </InputGroupAddon>
                                                     <InputGroupInput
@@ -287,7 +286,7 @@ export function ConfigurationSettings() {
                                                         pattern="[0-9.]*"
                                                         value={newPrice}
                                                         onChange={(e) => setNewPrice(formatPrice(e.target.value))}
-                                                        className="font-black text-xl px-6 h-16 bg-transparent border-none focus:ring-0"
+                                                        className="font-black text-xl px-6 h-12 bg-transparent border-none focus:ring-0"
                                                         placeholder="0"
                                                     />
                                                 </InputGroup>
@@ -300,7 +299,7 @@ export function ConfigurationSettings() {
                                                 value={newDuration.toString()}
                                                 onValueChange={(val) => setNewDuration(parseInt(val))}
                                             >
-                                                <SelectTrigger className="h-16 w-full rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner">
+                                                <SelectTrigger className="h-12 w-full rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner">
                                                     <div className="flex items-center gap-3">
                                                         <Clock className="h-5 w-5 text-primary" />
                                                         <SelectValue placeholder="Duración" />
@@ -327,14 +326,14 @@ export function ConfigurationSettings() {
                                         <Button
                                             variant="ghost"
                                             onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
-                                            className="rounded-2xl font-black h-14 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                            className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
                                         >
                                             Descartar
                                         </Button>
                                         <Button
                                             onClick={handleCreateService}
                                             disabled={creatingService || !newName.trim()}
-                                            className="rounded-2xl font-black h-14 px-10 uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+                                            className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
                                         >
                                             {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Check className="h-5 w-5 mr-2" />}
                                             Publicar Servicio
@@ -350,7 +349,7 @@ export function ConfigurationSettings() {
                                         <Briefcase className="h-10 w-10 text-primary/30" />
                                     </div>
                                     <div className="space-y-2">
-                                        <p className="text-2xl font-black font-display tracking-tight text-foreground/80 lowercase italic">Tu mesa está vacía</p>
+                                        <p className="text-2xl font-black font-display tracking-tight text-foreground/80 uppercase italic">Tu agenda está vacía</p>
                                         <p className="text-muted-foreground font-medium max-w-[320px] mx-auto leading-relaxed">
                                             Crea tu primer servicio para empezar a recibir agendamientos profesionalmente.
                                         </p>
@@ -394,14 +393,13 @@ export function ConfigurationSettings() {
                                                                 type="text"
                                                                 value={editName}
                                                                 onChange={(e) => setEditName(e.target.value)}
-                                                                className="h-14 rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6"
-                                                                autoFocus
+                                                                className="h-12 rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6"
                                                             />
                                                         </div>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                             <div className="space-y-4">
                                                                 <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Precio</Label>
-                                                                <InputGroup className="h-14 rounded-xl border-2 border-primary/10 focus-within:border-primary/30 focus-within:ring-4 focus-within:ring-primary/5 transition-all bg-background px-0 overflow-hidden shadow-none">
+                                                                <InputGroup className="h-12 rounded-xl border-2 border-primary/10 focus-within:border-primary/30 focus-within:ring-4 focus-within:ring-primary/5 transition-all bg-background px-0 overflow-hidden shadow-none">
                                                                     <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-5 flex items-center justify-center">
                                                                         <InputGroupText className="font-black text-primary">$</InputGroupText>
                                                                     </InputGroupAddon>
@@ -411,7 +409,7 @@ export function ConfigurationSettings() {
                                                                         pattern="[0-9.]*"
                                                                         value={editPrice}
                                                                         onChange={(e) => setEditPrice(formatPrice(e.target.value))}
-                                                                        className="font-black text-lg px-5 h-14 bg-transparent border-none focus:ring-0"
+                                                                        className="font-black text-lg px-5 h-12 bg-transparent border-none focus:ring-0"
                                                                     />
                                                                 </InputGroup>
                                                             </div>
@@ -421,7 +419,7 @@ export function ConfigurationSettings() {
                                                                     value={editDuration.toString()}
                                                                     onValueChange={(val) => setEditDuration(parseInt(val))}
                                                                 >
-                                                                    <SelectTrigger className="h-14 w-full rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6">
+                                                                    <SelectTrigger className="h-12 w-full rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6">
                                                                         <SelectValue placeholder="Duración" />
                                                                     </SelectTrigger>
                                                                     <SelectContent position="popper" className="rounded-xl border-2 border-primary/5 shadow-2xl p-2 bg-popover/90 backdrop-blur-xl">
@@ -456,7 +454,7 @@ export function ConfigurationSettings() {
                                                     <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
                                                         {/* Status Indicator */}
                                                         <div className={cn(
-                                                            "h-16 w-16 sm:h-20 sm:w-20 rounded-[1.5rem] flex items-center justify-center shrink-0 border-2 transition-all duration-700",
+                                                            "h-12 w-16 sm:h-20 sm:w-20 rounded-[1.5rem] flex items-center justify-center shrink-0 border-2 transition-all duration-700",
                                                             service.isActive
                                                                 ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-110 group-hover:rotate-6"
                                                                 : "bg-muted border-muted-foreground/10 opacity-50 shrink-0"
@@ -561,7 +559,7 @@ export function ConfigurationSettings() {
                                             value={displayName}
                                             onChange={(e) => setDisplayName(e.target.value)}
                                             placeholder="Ej: Ing. Marco Antonio Solís"
-                                            className="h-16 w-full rounded-2xl border-2 border-primary/5 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner outline-none"
+                                            className="h-12 w-full rounded-2xl border-2 border-primary/5 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner outline-none"
                                         />
                                     </div>
 
@@ -581,8 +579,8 @@ export function ConfigurationSettings() {
                                             Tiempo mínimo para aceptar citas. <span className="text-primary font-bold">0 = mismo día</span>.
                                         </p>
                                         <div className="group transition-all">
-                                            <InputGroup className="h-16 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
-                                                <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-16 flex items-center justify-center">
+                                            <InputGroup className="h-12 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                                <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-12 flex items-center justify-center">
                                                     <Clock className="h-6 w-6 text-primary" />
                                                 </InputGroupAddon>
                                                 <InputGroupInput
@@ -596,7 +594,7 @@ export function ConfigurationSettings() {
                                                         // This forces the input to sync visually if the browser is holding a leading zero string like "04"
                                                         e.target.value = cleanValue.toString();
                                                     }}
-                                                    className="font-black text-xl px-6 h-16 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                    className="font-black text-xl px-6 h-12 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                 />
                                             </InputGroup>
                                         </div>
@@ -605,7 +603,7 @@ export function ConfigurationSettings() {
                                     <Button
                                         onClick={handleSaveConfig}
                                         disabled={savingConfig}
-                                        className="w-full h-16 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
+                                        className="w-full h-12 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
                                     >
                                         {savingConfig ? (
                                             <Loader2 className="h-6 w-6 animate-spin mr-3" />
@@ -636,7 +634,7 @@ export function ConfigurationSettings() {
                         <Button
                             variant="ghost"
                             onClick={() => setServiceToDelete(null)}
-                            className="flex-1 rounded-2xl font-black h-14 uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
+                            className="flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
                         >
                             Conservar
                         </Button>
@@ -646,7 +644,7 @@ export function ConfigurationSettings() {
                             }}
                             disabled={deletingId === serviceToDelete?.id}
                             variant="destructive"
-                            className="flex-1 rounded-2xl font-black h-14 uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
+                            className="flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
                         >
                             {deletingId === serviceToDelete?.id ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <Trash2 className="h-5 w-5 mr-2" />}
                             Confirmar Baja

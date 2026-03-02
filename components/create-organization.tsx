@@ -55,9 +55,8 @@ export function CreateOrganization() {
                             placeholder="Ej: Clínica Dental VLink"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="h-14 text-lg border-2 focus:border-primary rounded-xl transition-all"
+                            className="h-12 text-lg border-2 focus:border-primary rounded-xl transition-all"
                             disabled={isPending}
-                            autoFocus
                         />
                     </div>
                     {error && (

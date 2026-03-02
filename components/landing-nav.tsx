@@ -93,8 +93,10 @@ export function LandingNav() {
                     {menuOpen && (
                         <>
                             <div
+                                role="presentation"
                                 className="fixed inset-0 z-40 bg-background/60 backdrop-blur-md animate-in fade-in duration-300"
                                 onClick={() => setMenuOpen(false)}
+                                onKeyDown={() => setMenuOpen(false)}
                             />
                             <div className="absolute top-full right-4 mt-2 w-56 bg-card border border-border/60 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                                 {/* Dashboard / Empezar */}

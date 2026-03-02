@@ -2,7 +2,7 @@ import * as React from "react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export interface PillInputProps extends Omit<React.ComponentProps<"input">, "value" | "onChange" | "onKeyDown"> {
+interface PillInputProps extends Omit<React.ComponentProps<"input">, "value" | "onChange" | "onKeyDown"> {
     value: string[]
     onChange: (value: string[]) => void
     placeholder?: string
@@ -36,16 +36,18 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
 
         return (
             <div
+                role="presentation"
                 className={cn(
-                    "min-h-16 w-full rounded-2xl border-2 border-primary/5 bg-background/50 px-6 py-3 flex flex-wrap gap-2 items-center cursor-text transition-all",
+                    "min-h-12 w-full rounded-2xl border-2 border-primary/5 bg-background/50 px-6 py-3 flex flex-wrap gap-2 items-center cursor-text transition-all",
                     "focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/5",
                     className
                 )}
                 onClick={() => inputRef.current?.focus()}
+                onKeyDown={() => inputRef.current?.focus()}
             >
                 {value.map((pill, index) => (
                     <div
-                        key={index}
+                        key={pill}
                         className="px-3 py-1 bg-primary text-primary-foreground border border-primary/20 rounded-xl text-[11px] font-black uppercase tracking-wider flex items-center gap-2 animate-in zoom-in duration-300 shadow-sm"
                     >
                         {pill}

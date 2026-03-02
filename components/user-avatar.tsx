@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { UserCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -15,19 +16,23 @@ export function UserAvatar({ image, name, className }: UserAvatarProps) {
 
     if (!image || error) {
         return (
-            <div className={cn("h-full w-full rounded-2xl bg-muted/50 flex items-center justify-center text-primary/40", className)}>
+            <div className={cn("bg-muted/50 flex items-center justify-center text-primary/40", className)}>
                 <UserCircle className="h-2/3 w-2/3" />
             </div>
         )
     }
 
     return (
-        <img
-            src={image}
-            alt={name || "Usuario"}
-            className={cn("h-full w-full rounded-2xl object-cover", className)}
-            onError={() => setError(true)}
-            referrerPolicy="no-referrer"
-        />
+        <div className={cn("relative overflow-hidden", className)}>
+            <Image
+                src={image}
+                alt={name || "Usuario"}
+                fill
+                sizes="128px"
+                className="object-cover"
+                onError={() => setError(true)}
+                referrerPolicy="no-referrer"
+            />
+        </div>
     )
 }

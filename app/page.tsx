@@ -3,6 +3,12 @@ import { Calendar, CheckCircle2, MessageSquare, ShieldCheck, ArrowRight, Smartph
 import { Logo } from "@/components/logo"
 import { AuthCTA } from "@/components/auth-cta"
 import { LandingNav } from "@/components/landing-nav"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "VLink — Agendamiento profesional sin fricciones",
+  description: "Conecta tu Google Calendar, comparte tu link único y deja que tus clientes agenden por WhatsApp en segundos.",
+}
 
 export default function LandingPage() {
   return (
@@ -58,9 +64,9 @@ export default function LandingPage() {
               title: "Link de Marca Único",
               desc: "Tu propio espacio profesional bajo vlink.cognilab.dev/tu-nombre. Minimalista, moderno y oscuro."
             }
-          ].map((feature, i) => (
+          ].map((feature) => (
             <div
-              key={i}
+              key={feature.title}
               className="p-8 bg-card border border-primary/5 rounded-[32px] space-y-6 hover:shadow-2xl transition-all hover:-translate-y-2 group"
             >
               <div className="h-14 w-14 bg-accent rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -85,8 +91,8 @@ export default function LandingPage() {
               { step: "01", title: "Conecta", desc: "Sincroniza tu Google Calendar en un clic." },
               { step: "02", title: "Configura", desc: "Define tus horarios y bloqueos de agenda." },
               { step: "03", title: "Comparte", desc: "Envía tu link y recibe citas confirmadas." }
-            ].map((step, i) => (
-              <div key={i} className="space-y-4">
+            ].map((step) => (
+              <div key={step.step} className="space-y-4">
                 <span className="text-7xl font-display font-black text-primary/10 block leading-none">{step.step}</span>
                 <h4 className="text-xl font-bold">{step.title}</h4>
                 <p className="text-muted-foreground font-medium">{step.desc}</p>

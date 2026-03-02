@@ -9,23 +9,6 @@ async function getProfileForUser() {
     return { profile }
 }
 
-export async function getServices() {
-    const { profile } = await getProfileForUser()
-
-    const services = await prisma.service.findMany({
-        where: { profileId: profile.id },
-        orderBy: { createdAt: 'asc' }
-    })
-
-    return services.map(s => ({
-        id: s.id,
-        name: s.name,
-        durationMinutes: s.durationMinutes,
-        isActive: s.isActive,
-        price: (s as any).price ?? 0
-    }))
-}
-
 export async function getConfiguration() {
     const { profile } = await getProfileForUser()
 
