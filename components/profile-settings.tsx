@@ -133,7 +133,7 @@ export function ProfileSettings() {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-700">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Column 1: Profile Info (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
                     <section className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
@@ -199,7 +199,7 @@ export function ProfileSettings() {
                 </div>
 
                 {/* Column 2: Link and Google (Right) */}
-                <div className="lg:col-span-12 xl:col-span-5 space-y-10">
+                <div className="lg:col-span-12 xl:col-span-5 space-y-6">
                     {/* Section: Public Link */}
                     <section className="group p-1 rounded-[2.5rem] bg-linear-to-b from-primary/5 to-transparent">
                         <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 shadow-xl shadow-primary/5 space-y-8 h-full">
