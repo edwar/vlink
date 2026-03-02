@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Copy, Check, Calendar as CalendarIcon, Loader2, Save, AlertCircle } from "lucide-react"
+import { Copy, Check, Calendar as CalendarIcon, Loader2, Save, AlertCircle, Clock } from "lucide-react"
 import { getProfile, updateProfile, disconnectGoogle } from "@/app/actions/profile"
 import { cn } from "@/lib/utils"
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "@/components/ui/input-group"
@@ -149,7 +149,7 @@ export function ProfileSettings() {
                                 </p>
                             </div>
 
-                            <div className="grid gap-10 mt-6">
+                            <div className="grid gap-4 mt-6">
                                 <div className="space-y-4">
                                     <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">
                                         Identidad VLink (Username)
@@ -193,13 +193,38 @@ export function ProfileSettings() {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="flex justify-end pt-4">
+                                    <Button
+                                        onClick={handleSave}
+                                        disabled={saving}
+                                        className={cn(
+                                            "w-fit h-14 px-6 rounded-2xl font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
+                                            success
+                                                ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
+                                                : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
+                                        )}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            {saving ? (
+                                                <Loader2 className="h-7 w-7 animate-spin" />
+                                            ) : success ? (
+                                                <Check className="h-7 w-7 animate-in zoom-in duration-500" />
+                                            ) : (
+                                                <Save className="h-7 w-7 group-hover/btn:rotate-12 transition-transform" />
+                                            )}
+                                            <span className="uppercase tracking-widest text-sm">
+                                                {saving ? "Procesando..." : success ? "Éxito total" : "Guardar perfil"}
+                                            </span>
+                                        </div>
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </section>
                 </div>
 
                 {/* Column 2: Link and Google (Right) */}
-                <div className="lg:col-span-12 xl:col-span-5 space-y-6">
+                <div className="lg:col-span-12 xl:col-span-5 space-y-6 xl:space-y-16">
                     {/* Section: Public Link */}
                     <section className="group p-1 rounded-[2.5rem] bg-linear-to-b from-primary/5 to-transparent">
                         <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 shadow-xl shadow-primary/5 space-y-8 h-full">
@@ -274,25 +299,25 @@ export function ProfileSettings() {
                                 </div>
 
                                 {isGoogleConnected ? (
-                                    <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-5 relative group overflow-hidden">
+                                    <div className="bg-primary/10 border border-primary/20 rounded-2xl p-5 relative group overflow-hidden">
                                         <div className="flex items-start gap-4 relative z-10">
-                                            <div className="p-2.5 bg-green-500/20 rounded-xl shrink-0 ring-1 ring-green-500/20">
-                                                <Check className="h-5 w-5 text-green-600" />
+                                            <div className="p-2.5 bg-primary/20 rounded-xl shrink-0 ring-1 ring-primary/20">
+                                                <Check className="h-5 w-5 text-primary" />
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-sm font-black tracking-tight text-green-600">Sincronización Total</p>
-                                                <p className="text-[11px] font-medium text-green-700/70 leading-relaxed pr-2">
+                                                <p className="text-sm font-black tracking-tight text-primary">Sincronización Total</p>
+                                                <p className="text-[11px] font-medium text-primary/70 leading-relaxed pr-2">
                                                     Tu disponibilidad pública se ajustará automáticamente según los eventos en tu calendario Google.
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="mt-4 pt-4 border-t border-green-500/10">
+                                        <div className="mt-4 pt-4 border-t border-primary/10">
                                             <Button
-                                                variant="ghost"
+                                                variant="outline"
                                                 size="sm"
                                                 onClick={handleDisconnectGoogle}
                                                 disabled={isDisconnecting}
-                                                className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 hover:text-destructive h-10"
+                                                className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest text-primary-foreground bg-primary hover:bg-primary/80 hover:text-primary-foreground h-10"
                                             >
                                                 {isDisconnecting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : "Revocar Acceso de Google"}
                                             </Button>
@@ -309,34 +334,6 @@ export function ProfileSettings() {
                             </div>
                         </div>
                     </section>
-                </div>
-            </div>
-
-            <div className="sticky bottom-8 z-50 px-2 lg:px-0 flex justify-end">
-                <div className="p-2 rounded-[2rem] bg-background/40 backdrop-blur-xl border-2 border-primary/10 shadow-2xl w-fit">
-                    <Button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className={cn(
-                            "w-full sm:w-auto h-16 px-12 rounded-[1.5rem] font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
-                            success
-                                ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
-                                : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
-                        )}
-                    >
-                        <div className="flex items-center gap-4">
-                            {saving ? (
-                                <Loader2 className="h-7 w-7 animate-spin" />
-                            ) : success ? (
-                                <Check className="h-7 w-7 animate-in zoom-in duration-500" />
-                            ) : (
-                                <Save className="h-7 w-7 group-hover/btn:rotate-12 transition-transform" />
-                            )}
-                            <span className="uppercase tracking-widest text-sm">
-                                {saving ? "Procesando..." : success ? "Éxito total" : "Guardar cambios de mi perfil"}
-                            </span>
-                        </div>
-                    </Button>
                 </div>
             </div>
 

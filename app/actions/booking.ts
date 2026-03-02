@@ -24,6 +24,7 @@ export async function getProfileForBooking(username: string) {
         bio: profile.bio || "",
         username: profile.username,
         image: profile.user.image,
+        advanceNoticeHours: profile.advanceNoticeHours,
         services: profile.services.map((s: any) => ({
             id: s.id,
             name: s.name,
@@ -37,7 +38,7 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
     const profile = await prisma.profile.findUnique({
         where: { username },
         include: { availabilities: true }
-    })
+    }) as any
 
     if (!profile) throw new Error("Perfil no encontrado")
 
@@ -89,6 +90,12 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         const em = slotEndMinutes % 60;
         const slotEndStr = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
 
+        // Create Date object for this specific slot to check against advanceNoticeHours
+        const slotStartDateTime = new Date(`${isoDate}T${timeStr}:00-05:00`)
+        const now = new Date()
+        const requiredAdvanceNoticeMs = (profile.advanceNoticeHours ?? 24) * 60 * 60 * 1000
+        const isTooSoon = (slotStartDateTime.getTime() - now.getTime()) < requiredAdvanceNoticeMs
+
         // Check if slot is blocked by specific block
         const isBlocked = blocks.some((b: any) => timeStr < b.endTime && slotEndStr > b.startTime)
 
@@ -100,7 +107,7 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
             return currentMinutes < apptEndMins && slotEndMinutes > apptStartMins;
         })
 
-        if (!isBlocked && !isOccupied) {
+        if (!isBlocked && !isOccupied && !isTooSoon) {
             slots.push(timeStr)
         }
 

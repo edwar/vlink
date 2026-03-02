@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Loader2, Plus, Pencil, Trash2, Check, X, Clock, Save, Briefcase } from "lucide-react"
-import { getConfiguration, updateDisplayName, createService, updateService, deleteService } from "@/app/actions/services"
+import { getConfiguration, updateConfiguration, createService, updateService, deleteService } from "@/app/actions/services"
 import { cn, formatPrice, parsePrice } from "@/lib/utils"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
@@ -47,7 +47,8 @@ interface ServiceItem {
 export function ConfigurationSettings() {
     const [loading, setLoading] = useState(true)
     const [displayName, setDisplayName] = useState("")
-    const [savingName, setSavingName] = useState(false)
+    const [advanceNoticeHours, setAdvanceNoticeHours] = useState(24)
+    const [savingConfig, setSavingConfig] = useState(false)
     const [services, setServices] = useState<ServiceItem[]>([])
 
     // New service form
@@ -73,6 +74,7 @@ export function ConfigurationSettings() {
             try {
                 const data = await getConfiguration()
                 setDisplayName(data.displayName)
+                setAdvanceNoticeHours(data.advanceNoticeHours ?? 24)
                 setServices(data.services)
             } catch (err) {
                 console.error(err)
@@ -87,13 +89,13 @@ export function ConfigurationSettings() {
         fetchData()
     }, [])
 
-    const handleSaveName = async () => {
-        setSavingName(true)
+    const handleSaveConfig = async () => {
+        setSavingConfig(true)
         try {
-            await updateDisplayName(displayName)
+            await updateConfiguration({ displayName, advanceNoticeHours })
             sileo.success({
-                title: "Nombre actualizado",
-                description: "Tu nombre público se ha guardado correctamente.",
+                title: "Configuración guardada",
+                description: "Marca y logística actualizadas correctamente.",
                 styles: {
                     title: "text-green-600! font-bold!",
                     badge: "text-green-600!"
@@ -102,10 +104,10 @@ export function ConfigurationSettings() {
         } catch (err: any) {
             sileo.error({
                 title: "Error al guardar",
-                description: err.message || "No se pudo actualizar tu nombre público."
+                description: err.message || "No se pudo actualizar la configuración."
             })
         } finally {
-            setSavingName(false)
+            setSavingConfig(false)
         }
     }
 
@@ -541,52 +543,68 @@ export function ConfigurationSettings() {
                 {/* Column 2: Commercial Name (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-10">
                     <section className="p-1 rounded-[2.5rem] bg-linear-to-b from-primary/5 to-transparent">
-                        <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-10">
-                            <div className="space-y-2">
-                                <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Marca Comercial</h3>
-                                <p className="text-sm text-muted-foreground font-medium">Define el título público de tu espacio.</p>
-                            </div>
-
-                            <div className="space-y-8">
-                                <div className="space-y-4">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
-                                    <Input
-                                        type="text"
-                                        value={displayName}
-                                        onChange={(e) => setDisplayName(e.target.value)}
-                                        placeholder="Ej: Ing. Marco Antonio Solís"
-                                        className="h-16 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
-                                    />
+                        <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-12">
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Marca y Logística</h3>
+                                    <p className="text-sm text-muted-foreground font-medium">Personaliza tu identidad y reglas de negocio.</p>
                                 </div>
 
-                                <Button
-                                    onClick={handleSaveName}
-                                    disabled={savingName}
-                                    className="w-full h-16 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
-                                >
-                                    {savingName ? (
-                                        <Loader2 className="h-6 w-6 animate-spin mr-3" />
-                                    ) : (
-                                        <Save className="h-6 w-6 mr-3 group-hover/save:rotate-12 transition-transform" />
-                                    )}
-                                    {savingName ? "Asegurando..." : "Firmar Nombre Comercial"}
-                                </Button>
+                                <div className="space-y-8">
+                                    <div className="space-y-4">
+                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
+                                        <Input
+                                            type="text"
+                                            value={displayName}
+                                            onChange={(e) => setDisplayName(e.target.value)}
+                                            placeholder="Ej: Ing. Marco Antonio Solís"
+                                            className="h-16 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Horas de Antelación Mínima</Label>
+                                        <p className="text-[11px] text-muted-foreground font-medium mb-3 ml-1 leading-tight">
+                                            Tiempo mínimo para aceptar citas. <span className="text-primary font-bold">0 = mismo día</span>.
+                                        </p>
+                                        <div className="group transition-all">
+                                            <InputGroup className="h-16 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                                <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-16 flex items-center justify-center">
+                                                    <Clock className="h-6 w-6 text-primary" />
+                                                </InputGroupAddon>
+                                                <InputGroupInput
+                                                    type="number"
+                                                    min={0}
+                                                    value={advanceNoticeHours}
+                                                    onChange={(e) => {
+                                                        const val = parseInt(e.target.value, 10);
+                                                        const cleanValue = isNaN(val) ? 0 : val;
+                                                        setAdvanceNoticeHours(cleanValue);
+                                                        // This forces the input to sync visually if the browser is holding a leading zero string like "04"
+                                                        e.target.value = cleanValue.toString();
+                                                    }}
+                                                    className="font-black text-xl px-6 h-16 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                />
+                                            </InputGroup>
+                                        </div>
+                                    </div>
+
+                                    <Button
+                                        onClick={handleSaveConfig}
+                                        disabled={savingConfig}
+                                        className="w-full h-16 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
+                                    >
+                                        {savingConfig ? (
+                                            <Loader2 className="h-6 w-6 animate-spin mr-3" />
+                                        ) : (
+                                            <Save className="h-6 w-6 mr-3 group-hover/save:rotate-12 transition-transform" />
+                                        )}
+                                        {savingConfig ? "Asegurando..." : "Guardar Configuración"}
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </section>
-
-                    <div className="relative p-8 rounded-[2rem] bg-background/40 backdrop-blur-md border-2 border-primary/10 overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-transform duration-1000" />
-                        <div className="relative z-10 space-y-4">
-                            <div className="flex items-center gap-3">
-                                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                                <h4 className="text-xs font-black font-display uppercase tracking-widest text-primary/80">Protocolo de Confianza</h4>
-                            </div>
-                            <p className="text-[11px] text-muted-foreground leading-relaxed font-bold italic">
-                                "La claridad en el nombre y la oferta comercial reduce la fricción en el embudo de ventas. Un perfil bien configurado convierte un 40% más de visitas en agendamientos reales."
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
 

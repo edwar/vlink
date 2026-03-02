@@ -27,6 +27,7 @@ interface ProfileData {
     bio: string
     username: string
     image: string | null
+    advanceNoticeHours: number
     services: ServiceOption[]
 }
 
@@ -89,8 +90,25 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
         fetchSlots()
     }, [selectedDate, username, selectedService, step])
 
+    // Calculate the first selectable day based on advanceNoticeHours
+    // If advanceNoticeHours is 0, they can book today (if there are slots left in the day).
+    const firstEligibleDate = profileData
+        ? new Date(Date.now() + (profileData.advanceNoticeHours ?? 24) * 60 * 60 * 1000)
+        : startOfTomorrow()
+
+    // Reset the time portion to the start of the day so the calendar selection starts cleanly
+    const baseDate = new Date(firstEligibleDate)
+    baseDate.setHours(0, 0, 0, 0)
+
     // Next 14 days for date selection
-    const days = [...Array(14)].map((_, i) => addDays(startOfTomorrow(), i))
+    const days = [...Array(14)].map((_, i) => addDays(baseDate, i))
+
+    // Set initial selected date to the first eligible date if not set already
+    useEffect(() => {
+        if (profileData && selectedDate.getTime() < baseDate.getTime()) {
+            setSelectedDate(baseDate)
+        }
+    }, [profileData])
 
     const handleSelectService = (service: ServiceOption) => {
         setSelectedService(service)

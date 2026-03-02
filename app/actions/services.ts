@@ -36,6 +36,7 @@ export async function getConfiguration() {
 
     return {
         displayName: profile.displayName || profile.username || "",
+        advanceNoticeHours: profile.advanceNoticeHours,
         services: services.map(s => ({
             id: s.id,
             name: s.name,
@@ -46,19 +47,34 @@ export async function getConfiguration() {
     }
 }
 
-export async function updateDisplayName(displayName: string) {
+export async function updateConfiguration(data: { displayName?: string, advanceNoticeHours?: number }) {
     const { profile } = await getProfileForUser()
 
-    if (!displayName || displayName.trim() === "") {
-        throw new Error("El nombre no puede estar vacío")
+    const updateData: any = {}
+
+    if (data.displayName !== undefined) {
+        if (!data.displayName.trim()) {
+            throw new Error("El nombre no puede estar vacío")
+        }
+        updateData.displayName = data.displayName.trim()
     }
+
+    if (data.advanceNoticeHours !== undefined) {
+        if (data.advanceNoticeHours < 0) {
+            throw new Error("La antelación debe ser mayor o igual a 0")
+        }
+        updateData.advanceNoticeHours = data.advanceNoticeHours
+    }
+
+    if (Object.keys(updateData).length === 0) return { success: true }
 
     await prisma.profile.update({
         where: { id: profile.id },
-        data: { displayName: displayName.trim() }
+        data: updateData
     })
 
     revalidatePath("/dashboard/configuracion")
+    revalidatePath("/dashboard/perfil")
     return { success: true }
 }
 

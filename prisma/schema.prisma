@@ -120,21 +120,22 @@ model Invitation {
 }
 
 model Profile {
-  id               String         @id @default(cuid())
-  userId           String         @unique
-  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organizationId   String?
-  organization     Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  username         String         @unique
-  bio              String?
-  displayName      String?
-  googleCalendarId String? // For syncing
-  availabilities   Availability[]
-  appointments     Appointment[]
-  services         Service[]
-  showOnOrgPage    Boolean        @default(true)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  id                 String         @id @default(cuid())
+  userId             String         @unique
+  user               User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId     String?
+  organization       Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  username           String         @unique
+  bio                String?
+  displayName        String?
+  googleCalendarId   String? // For syncing
+  availabilities     Availability[]
+  appointments       Appointment[]
+  services           Service[]
+  showOnOrgPage      Boolean        @default(true)
+  advanceNoticeHours Int            @default(24)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 
   @@map("profile")
 }
