@@ -21,7 +21,7 @@ export async function createOrganization(name: string) {
     const slug = name.toLowerCase().trim().replace(/ /g, "-").replace(/[^\w-]+/g, "")
 
     // Check for duplicate name
-    const existing = await prisma.organization.findUnique({ where: { name } })
+    const existing = await prisma.organization.findFirst({ where: { name } })
     if (existing) throw new Error(`Ya existe una organización con el nombre "${name}". Por favor elige otro nombre.`)
 
     const organization = await prisma.$transaction(async (tx) => {
@@ -224,17 +224,7 @@ export async function getManagedProfiles(organizationId: string) {
         }
     })
 
-    const filteredMembers = allMembers.filter(m => {
-        if (currentMember.role === "OWNER") {
-            return m.role === "PROFESSIONAL"
-        }
-        if (currentMember.role === "MANAGER" || currentMember.role === "ADMIN") {
-            return m.role === "OWNER" || m.role === "PROFESSIONAL"
-        }
-        return false
-    })
-
-    return filteredMembers
+    return allMembers
         .filter(m => m.user.profile)
         .map(members => ({
             ...members.user.profile!,

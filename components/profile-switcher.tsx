@@ -140,8 +140,10 @@ export function ProfileSwitcher() {
                                                 <span className="font-bold text-sm truncate max-w-[150px]">
                                                     {profile.displayName || profile.user?.name}
                                                 </span>
-                                                <span className="text-[10px] text-muted-foreground truncate">
-                                                    @{profile.username}
+                                                <span className="text-[10px] text-muted-foreground truncate flex flex-wrap gap-1">
+                                                    <span>@{profile.username}</span>
+                                                    <span>•</span>
+                                                    <span className="capitalize">{profile.role?.toLowerCase() || 'Profesional'}</span>
                                                 </span>
                                             </div>
                                         </div>
