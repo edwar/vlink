@@ -75,7 +75,7 @@ export function LandingNav() {
                         href={isLoggedIn ? "/dashboard" : "/login"}
                         className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-sm transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20"
                     >
-                        {isLoggedIn ? "Dashboard" : "Empezar"}
+                        {isLoggedIn ? "Ir al Dashboard" : "Empezar ahora"}
                     </Link>
                 </div>
 
@@ -84,7 +84,7 @@ export function LandingNav() {
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
                         className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-                        aria-label="Menú"
+                        aria-label="Menú principal"
                     >
                         {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                     </button>
@@ -105,7 +105,7 @@ export function LandingNav() {
                                     onClick={() => setMenuOpen(false)}
                                     className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-accent transition-colors"
                                 >
-                                    {isLoggedIn ? "Ir al dashboard" : "Empezar"}
+                                    {isLoggedIn ? "Ir al dashboard" : "Empezar ahora"}
                                 </Link>
 
                                 {/* Divider */}
