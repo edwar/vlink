@@ -8,6 +8,7 @@ import { ThemeToggle } from "./theme-toggle"
 import { signOut } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import Image from "next/image"
+import { Logo } from "./logo"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -31,7 +32,7 @@ export function DashboardSidebar() {
         <div className="flex h-full flex-col gap-y-6 overflow-y-auto bg-card border-r border-primary/5 px-6 pb-6">
             <div className="flex h-20 shrink-0 items-center justify-between">
                 <div className="flex items-center gap-2 group cursor-pointer">
-                    <Image src="/logo.png" alt="Logo" width={32} height={32} />
+                    <Logo className="h-8 w-8 text-primary" />
                     <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                 </div>
                 <ThemeToggle />

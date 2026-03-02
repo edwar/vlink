@@ -6,7 +6,7 @@ import { getOrganizationPublicProfiles } from "@/app/actions/organization"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
 import { LoadingState } from "@/components/loading-state"
-import { Building2, Briefcase, Calendar, UserX, AlertCircle } from "lucide-react"
+import { Building2, Briefcase, Calendar, UserX, AlertCircle, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface OrgProfile {
@@ -14,6 +14,7 @@ interface OrgProfile {
     displayName: string
     bio: string | null
     image: string | null
+    expertise: string[]
     serviceCount: number
 }
 
@@ -26,6 +27,7 @@ interface OrgData {
 
 function ProfileCard({ profile }: { profile: OrgProfile }) {
     const [imageError, setImageError] = useState(false)
+    const [showExpertise, setShowExpertise] = useState(false)
     const hasServices = profile.serviceCount > 0
 
     const cardContent = (
@@ -61,6 +63,33 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
                 {profile.displayName}
             </h3>
 
+            {/* Expertise Tooltip */}
+            {profile.expertise && profile.expertise.length > 0 && (
+                <div className="relative mt-2">
+                    <button
+                        onMouseEnter={() => setShowExpertise(true)}
+                        onMouseLeave={() => setShowExpertise(false)}
+                        onClick={(e) => { e.preventDefault(); setShowExpertise(!showExpertise) }}
+                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-black uppercase tracking-widest transition-all shadow-sm"
+                    >
+                        <Sparkles className="h-3 w-3" />
+                        <span>Experticia</span>
+                    </button>
+                    {showExpertise && (
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[180px] animate-in zoom-in-90 fade-in duration-300">
+                            <div className="flex flex-wrap gap-2 justify-center">
+                                {profile.expertise.map((skill, i) => (
+                                    <span key={i} className="px-2 py-0.5 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[8px] font-black uppercase tracking-tight whitespace-nowrap">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                            <div className="absolute top-[99%] left-1/2 -translate-x-1/2 border-8 border-transparent border-t-card" />
+                        </div>
+                    )}
+                </div>
+            )}
+
             {/* Bio */}
             {profile.bio && (
                 <p className="text-sm text-muted-foreground text-center mt-2 line-clamp-2 font-medium leading-relaxed">
@@ -85,8 +114,8 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
 
             {/* CTA */}
             <div className={`mt-5 w-full py-3 rounded-2xl text-center text-xs font-black uppercase tracking-wider transition-all duration-300 ${hasServices
-                    ? "bg-primary/5 border border-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary"
-                    : "bg-muted border border-border text-muted-foreground cursor-not-allowed"
+                ? "bg-primary/5 border border-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary"
+                : "bg-muted border border-border text-muted-foreground cursor-not-allowed"
                 }`}>
                 {hasServices ? "Agendar cita" : "No disponible"}
             </div>

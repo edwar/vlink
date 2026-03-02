@@ -134,6 +134,7 @@ model Profile {
   services           Service[]
   showOnOrgPage      Boolean        @default(true)
   advanceNoticeHours Int            @default(24)
+  expertise          String[]       @default([])
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 

@@ -25,6 +25,7 @@ export async function getProfileForBooking(username: string) {
         username: profile.username,
         image: profile.user.image,
         advanceNoticeHours: profile.advanceNoticeHours,
+        expertise: (profile as any).expertise || [],
         services: profile.services.map((s: any) => ({
             id: s.id,
             name: s.name,

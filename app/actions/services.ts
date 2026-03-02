@@ -37,6 +37,7 @@ export async function getConfiguration() {
     return {
         displayName: profile.displayName || profile.username || "",
         advanceNoticeHours: profile.advanceNoticeHours,
+        expertise: (profile as any).expertise || [],
         services: services.map(s => ({
             id: s.id,
             name: s.name,
@@ -47,7 +48,7 @@ export async function getConfiguration() {
     }
 }
 
-export async function updateConfiguration(data: { displayName?: string, advanceNoticeHours?: number }) {
+export async function updateConfiguration(data: { displayName?: string, advanceNoticeHours?: number, expertise?: string[] }) {
     const { profile } = await getProfileForUser()
 
     const updateData: any = {}
@@ -64,6 +65,10 @@ export async function updateConfiguration(data: { displayName?: string, advanceN
             throw new Error("La antelación debe ser mayor o igual a 0")
         }
         updateData.advanceNoticeHours = data.advanceNoticeHours
+    }
+
+    if (data.expertise !== undefined) {
+        updateData.expertise = data.expertise
     }
 
     if (Object.keys(updateData).length === 0) return { success: true }

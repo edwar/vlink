@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Loader2, Plus, Pencil, Trash2, Check, X, Clock, Save, Briefcase } from "lucide-react"
+import { Loader2, Plus, Pencil, Trash2, Check, X, Clock, Save, Briefcase, Sparkles } from "lucide-react"
 import { getConfiguration, updateConfiguration, createService, updateService, deleteService } from "@/app/actions/services"
 import { cn, formatPrice, parsePrice } from "@/lib/utils"
 import { Input } from "./ui/input"
@@ -16,6 +16,7 @@ import {
     SelectValue,
 } from "./ui/select"
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "./ui/input-group"
+import { PillInput } from "./ui/pill-input"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
 import {
@@ -48,6 +49,7 @@ export function ConfigurationSettings() {
     const [loading, setLoading] = useState(true)
     const [displayName, setDisplayName] = useState("")
     const [advanceNoticeHours, setAdvanceNoticeHours] = useState(24)
+    const [expertise, setExpertise] = useState<string[]>([])
     const [savingConfig, setSavingConfig] = useState(false)
     const [services, setServices] = useState<ServiceItem[]>([])
 
@@ -75,6 +77,7 @@ export function ConfigurationSettings() {
                 const data = await getConfiguration()
                 setDisplayName(data.displayName)
                 setAdvanceNoticeHours(data.advanceNoticeHours ?? 24)
+                setExpertise(data.expertise || [])
                 setServices(data.services)
             } catch (err) {
                 console.error(err)
@@ -92,7 +95,7 @@ export function ConfigurationSettings() {
     const handleSaveConfig = async () => {
         setSavingConfig(true)
         try {
-            await updateConfiguration({ displayName, advanceNoticeHours })
+            await updateConfiguration({ displayName, advanceNoticeHours, expertise })
             sileo.success({
                 title: "Configuración guardada",
                 description: "Marca y logística actualizadas correctamente.",
@@ -558,7 +561,17 @@ export function ConfigurationSettings() {
                                             value={displayName}
                                             onChange={(e) => setDisplayName(e.target.value)}
                                             placeholder="Ej: Ing. Marco Antonio Solís"
-                                            className="h-16 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
+                                            className="h-16 w-full rounded-2xl border-2 border-primary/5 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner outline-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Áreas de Experticia</Label>
+                                        <PillInput
+                                            value={expertise}
+                                            onChange={setExpertise}
+                                            placeholder="Ej: Estrategia, Marketing, etc"
+                                            className="px-8" // Match spacing of other inputs
                                         />
                                     </div>
 
@@ -568,7 +581,7 @@ export function ConfigurationSettings() {
                                             Tiempo mínimo para aceptar citas. <span className="text-primary font-bold">0 = mismo día</span>.
                                         </p>
                                         <div className="group transition-all">
-                                            <InputGroup className="h-16 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                            <InputGroup className="h-16 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
                                                 <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-16 flex items-center justify-center">
                                                     <Clock className="h-6 w-6 text-primary" />
                                                 </InputGroupAddon>

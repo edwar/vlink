@@ -268,6 +268,7 @@ export async function getOrganizationPublicProfiles(slug: string) {
             displayName: m.user.profile!.displayName || m.user.name || m.user.profile!.username,
             bio: m.user.profile!.bio,
             image: m.user.image,
+            expertise: (m.user.profile as any).expertise || [],
             serviceCount: m.user.profile!.services.length,
         }))
         .sort((a, b) => a.displayName.localeCompare(b.displayName))

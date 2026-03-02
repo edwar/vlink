@@ -9,6 +9,7 @@ import { ThemeToggle } from "./theme-toggle"
 import { signOut } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import { Users } from "lucide-react"
+import { Logo } from "./logo"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -50,7 +51,8 @@ export function MobileNav() {
         <div className="md:hidden">
             {/* Header with Hamburger */}
             <header className="flex h-16 items-center justify-between border-b bg-card px-4 sticky top-0 z-50">
-                <span className="text-xl font-display font-bold tracking-tight text-primary">VLink</span>
+                <Logo className="h-8 w-8 text-primary" />
+                <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -74,7 +76,8 @@ export function MobileNav() {
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b">
-                    <span className="text-xl font-display font-bold tracking-tight text-primary">VLink</span>
+                    <Logo className="h-8 w-8 text-primary" />
+                    <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                     <ThemeToggle />
                 </div>
                 <div className="px-1 border-b">

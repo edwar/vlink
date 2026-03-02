@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react"
 import Link from "next/link"
 import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -28,6 +28,7 @@ interface ProfileData {
     username: string
     image: string | null
     advanceNoticeHours: number
+    expertise: string[]
     services: ServiceOption[]
 }
 
@@ -45,6 +46,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
     const [loadingSlots, setLoadingSlots] = useState(false)
     const [imageError, setImageError] = useState(false)
     const [noServices, setNoServices] = useState(false)
+    const [showExpertise, setShowExpertise] = useState(false)
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -228,12 +230,40 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                         </div>
                     )}
                     <div>
-                        <h1 className="text-2xl font-display font-bold">Reserva con {displayName}</h1>
+                        <div className="flex flex-col items-center gap-3">
+                            <h1 className="text-2xl font-display font-bold">Reserva con {displayName}</h1>
+                            {profileData.expertise && profileData.expertise.length > 0 && (
+                                <div className="relative inline-block">
+                                    <button
+                                        onMouseEnter={() => setShowExpertise(true)}
+                                        onMouseLeave={() => setShowExpertise(false)}
+                                        onClick={() => setShowExpertise(!showExpertise)}
+                                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-sm group"
+                                    >
+                                        <Sparkles className="h-3 w-3 group-hover:animate-pulse" />
+                                        <span>Experticia</span>
+                                    </button>
+                                    {showExpertise && (
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
+                                            <div className="flex flex-wrap gap-2 justify-center">
+                                                {profileData.expertise.map((skill, i) => (
+                                                    <span key={i} className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[9px] font-black uppercase tracking-tight">
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            {/* Tooltip Arrow */}
+                                            <div className="absolute top-[99%] left-1/2 -translate-x-1/2 border-8 border-transparent border-t-card/95" />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         {profileData.bio && (
-                            <p className="text-muted-foreground text-sm mt-1">{profileData.bio}</p>
+                            <p className="text-muted-foreground text-sm mt-3">{profileData.bio}</p>
                         )}
                         {!profileData.bio && (
-                            <p className="text-muted-foreground text-sm">Escoge el mejor momento para nuestra cita.</p>
+                            <p className="text-muted-foreground text-sm mt-3">Escoge el mejor momento para nuestra cita.</p>
                         )}
                     </div>
                 </header>
