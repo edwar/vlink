@@ -5,7 +5,7 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 ## 1. Objetivos Principales (Completados)
 - Proporcionar una herramienta de agendamiento eficiente, intuitiva y minimalista.
 - Automatizar al 100% la sincronización bidireccional de citas con Google Calendar (incluyendo creación y cancelación de eventos).
-- Simplificar el acceso de los clientes mediante validación por correo electrónico (OTP) evitando tener que usar contraseñas.
+- Simplificar el acceso de los clientes mediante captura de correo y WhatsApp, sin necesidad de crear una cuenta.
 - Proveer paneles de administración avanzados para el profesional (gestión de disponibilidad, catálogo de servicios y monitoreo de agenda).
 - Ofrecer una experiencia visual premium, priorizando dispositivos móviles (Mobile First).
 
@@ -28,9 +28,6 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 ### C. Sistema de Agendamiento (Usuarios Finales)
 - **Catálogo de Servicios:** Pantalla inicial que permite escoger el tipo de cita, enseñando su precio y su duración si hubiese más de uno habilitado.
 - **Selección Inteligente:** Calendario adaptativo de 14 días que esconde u oculta *slots* en tiempo real según los bloqueos, duraciones del servicio, o superposición de otras citas empleando zonas horarias en UTC-5 (Colombia).
-- **Flujo de Seguridad OTP (One Time Password):**
-  1. El usuario entrega su Email y Nombre.
-  2. VLink verifica empleando Resend un código numérico temporal enviado al correo para validar la identidad.
 - **Entrada de Datos de Contacto:** Captura de correo y número de WhatsApp con un sistema avanzado de formateado estético automático (`300 000 0000`).
 - **Prevención Over-booking:** Re-verificación atómica al instante del guardado para asegurar que no existan empalmes en la base de datos.
 
@@ -53,7 +50,7 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Comunicaciones:** Resend para envío de Emails (Formatos React-Email y HTML).
 - **Infraestructura Cloud:** Vercel (Optimizaciones orientadas al modelo de funciones Serverless y Edge). Integración API de GCP (Google Calendar).
 
-## 5. Próximo Alcance: Gestión Organizacional y Multicuenta (En Desarrollo)
+## 5. Gestión Organizacional y Multicuenta (En Desarrollo)
 
 VLink evolucionará de una herramienta individual a una plataforma de gestión para equipos y organizaciones, permitiendo que gestores o administradores manejen múltiples agendas de forma centralizada.
 
@@ -75,6 +72,41 @@ Para garantizar la facilidad de uso y rapidez en la implementación:
 - **Centralización:** Ideal para secretarios/as o asistentes que gestionan la agenda de varios doctores, abogados o consultores.
 - **Privacidad Segura:** El profesional mantiene el control de su cuenta personal de Google, delegando solo la gestión operativa dentro de VLink.
 - **Escalabilidad Horizontal:** Permite que VLink sea adoptado por empresas con decenas de empleados con una fricción de configuración casi nula.
+
+## 6. Oportunidades de Mejora Identificadas
+
+### 🔥 Alta Prioridad (Alto Impacto, Bajo Esfuerzo)
+
+#### A. Recordatorios Automáticos por Email
+La función `sendAppointmentEmail` ya soporta los tipos `REMINDER_24H` y `REMINDER_2H`, pero actualmente no hay ningún mecanismo que los dispare. Implementar un endpoint `/api/reminders/cron` invocado por Vercel Cron cada hora para buscar citas próximas completaría esta funcionalidad sin esfuerzo significativo.
+
+#### B. Email de Cancelación al Cliente
+Cuando el profesional cancela una cita, el cliente no recibe notificación alguna por email. Agregar un tipo `CANCELLATION` a la función de email y llamarla dentro de `cancelAppointmentAction` es un cambio menor de alto valor.
+
+#### C. Reprogramación de Citas
+Actualmente solo existe la opción de cancelar. Un flujo de reprogramación que permita al profesional mover una cita a otra fecha/hora disponible mejoraría significativamente la experiencia operativa, sin requerir cambios en el modelo de datos.
+
+### 🚀 Media Prioridad (Alto Impacto, Esfuerzo Medio)
+
+#### D. Link de Auto-Cancelación para Clientes
+El cliente actualmente no puede cancelar su propia cita sin contactar al profesional. Incluir un token hash único en el email de confirmación que dirija a `/cancelar/[token]` resolvería esto de forma segura y sin requerir login.
+
+#### E. Notas Internas en Citas
+Agregar un campo `notes` al modelo `Appointment` para que el profesional pueda registrar el motivo de consulta, antecedentes o cualquier nota operativa privada. Alta utilidad en clínicas, consultorios y despachos.
+
+#### F. Vista Consolidada de Disponibilidad por Organización
+La página pública de la organización ya lista los perfiles, pero el cliente debe ingresar a cada uno individualmente para consultar disponibilidad. Un componente de disponibilidad unificada elevaría enormemente la utilidad de la vista organizacional.
+
+### 💡 Menor Prioridad (Impacto Medio, Esfuerzo Mayor)
+
+#### G. Sincronización Bidireccional con Google Calendar (Webhooks)
+VLink actualmente escribe en Google Calendar pero no escucha cambios externos. Si el profesional bloquea tiempo directamente en su Google Calendar, VLink no se entera. La API de Google Calendar soporta push notifications para sincronización verdaderamente bidireccional.
+
+#### H. Exportación de Historial a CSV
+Un botón "Exportar" en el dashboard que genere un archivo CSV con las citas del período seleccionado, útil para reportes contables y seguimiento de ingresos.
+
+#### I. Pagos en Línea (Wompi / Stripe)
+El campo `price` ya existe en `Service` y se muestra al cliente, pero no hay mecanismo de cobro. Integrar Wompi (Colombia) o Stripe transformaría VLink en una plataforma de booking con cobro integrado.
 
 ---
 *Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*
