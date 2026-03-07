@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma"
 import { startOfDay, endOfDay, format, isAfter } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, TrendingUp, Users } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, TrendingUp, Users, Download } from "lucide-react"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { subDays, eachDayOfInterval, format as formatDateFns } from "date-fns"
@@ -119,10 +119,25 @@ export default async function DashboardPage() {
                         </TabsTrigger>
                     </TabsList>
 
-                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 w-fit bg-card/40 px-6 py-2 rounded-full border border-primary/5 backdrop-blur">
-                        <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-primary shadow-sm shadow-primary/50" /> {totalAppointmentsToday} Hoy</span>
-                        <div className="h-3 w-px bg-border/50" />
-                        <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50" /> {allAppointments.length} Activas</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 w-fit bg-card/40 px-6 py-2 rounded-full border border-primary/5 backdrop-blur overflow-x-auto custom-scrollbar">
+                            <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-primary shadow-sm shadow-primary/50" /> {totalAppointmentsToday} Hoy</span>
+                            <div className="h-3 w-px bg-border/50 shrink-0" />
+                            <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50" /> {allAppointments.length} Activas</span>
+                            <div className="h-3 w-px bg-border/50 shrink-0" />
+                            <a
+                                href="/api/export/appointments"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-2 shrink-0 text-primary/70 hover:text-primary transition-colors cursor-pointer"
+                                title="Exportar historial a CSV"
+                            >
+                                <div className="p-1 rounded bg-primary/10">
+                                    <Download className="h-3 w-3" />
+                                </div>
+                                CSV
+                            </a>
+                        </div>
                     </div>
                 </div>
 
