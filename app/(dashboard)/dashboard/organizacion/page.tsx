@@ -160,7 +160,7 @@ export default async function OrganizacionPage() {
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-16 pt-12 mt-12 border-t-2 border-border/50">
                 {/* Miembros / Mi Equipo */}
                 <div className="xl:col-span-8 space-y-8">
-                    <div className="flex items-center justify-between px-2">
+                    <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between px-2">
                         <div className="flex items-center gap-3">
                             <div className="h-8 w-1 bg-primary rounded-full" />
                             <h2 className="text-3xl font-display font-black tracking-tight">Mi Equipo</h2>

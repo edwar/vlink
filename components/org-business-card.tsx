@@ -148,7 +148,7 @@ export function OrgBusinessCard({ orgName, orgSlug, appUrl }: OrgBusinessCardPro
                         </div>
                     </div>
 
-                    <div className="p-4 md:p-8 flex flex-col items-center justify-center gap-4 relative z-10 bg-linear-to-l from-white via-white to-transparent md:w-2/5 min-w-[200px]">
+                    <div className="p-4 md:p-8 flex flex-col items-center justify-center gap-4 relative z-10 bg-linear-to-l from-white via-white to-transparent md:w-2/5 min-w-[150px]">
                         <div className="bg-white p-3 md:p-4 rounded-[1rem] lg:rounded-[2rem] shadow-lg border-[6px] border-slate-50">
                             <QRCodeSVG
                                 value={publicUrl}
