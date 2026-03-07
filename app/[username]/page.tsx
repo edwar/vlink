@@ -249,7 +249,7 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                         <span>Experticia</span>
                                     </button>
                                     {showExpertise && (
-                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
                                             <div className="flex flex-wrap gap-2 justify-center">
                                                 {profileData.expertise.map((skill) => (
                                                     <span key={skill} className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[9px] font-black uppercase tracking-tight">
@@ -258,7 +258,8 @@ export default function BookingPage({ params }: { params: Promise<{ username: st
                                                 ))}
                                             </div>
                                             {/* Tooltip Arrow */}
-                                            <div className="absolute top-[99%] left-1/2 -translate-x-1/2 border-8 border-transparent border-t-card/95" />
+                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-x-[9px] border-x-transparent border-b-[9px] border-b-primary/20" />
+                                            <div className="absolute bottom-[calc(100%-1px)] left-1/2 -translate-x-1/2 border-x-8 border-x-transparent border-b-[9px] border-b-card/95" />
                                         </div>
                                     )}
                                 </div>
