@@ -46,8 +46,8 @@ export function ToggleOrgVisibility({ initialValue, targetUserId, memberName }: 
                 aria-label={`Visibilidad de ${memberName} en página de organización`}
                 title={enabled ? "Visible en página pública" : "Oculto de página pública"}
                 className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed ${enabled
-                        ? "bg-primary border-primary"
-                        : "bg-muted border-muted-foreground/20"
+                    ? "bg-primary dark:bg-primary-foreground border-primary"
+                    : "bg-muted dark:bg-muted-foreground border-muted-foreground/20"
                     }`}
             >
                 <span

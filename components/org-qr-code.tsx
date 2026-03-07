@@ -140,8 +140,8 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                     onClick={downloadQR}
                     className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg shadow-primary/20 group"
                 >
-                    <Download className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Descargar</span>
+                    <Download className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest">Descargar</span>
                 </button>
 
                 <button
@@ -149,10 +149,10 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                     className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border-2 border-border hover:border-primary/20 hover:bg-accent active:scale-95 transition-all group"
                 >
                     {copied
-                        ? <Check className="h-5 w-5 text-green-500" />
-                        : <Copy className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                        ? <Check className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 text-green-500" />
+                        : <Copy className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
                     }
-                    <span className="text-[10px] font-black uppercase tracking-widest">
+                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest">
                         {copied ? "¡Copiado!" : "Copiar"}
                     </span>
                 </button>
@@ -161,8 +161,8 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                     onClick={shareLink}
                     className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border-2 border-border hover:border-primary/20 hover:bg-accent active:scale-95 transition-all group"
                 >
-                    <Share2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Compartir</span>
+                    <Share2 className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest">Compartir</span>
                 </button>
             </div>
 

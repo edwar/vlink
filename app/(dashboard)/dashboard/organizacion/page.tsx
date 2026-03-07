@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
@@ -203,7 +203,7 @@ export default async function OrganizacionPage() {
                 <div className="grid grid-cols-1 gap-6">
                     {members.map((member) => (
                         <div key={member.id} className="p-1 rounded-xl bg-linear-to-r from-primary/5 to-transparent hover:from-primary/10 transition-colors duration-500 h-full">
-                            <Card className="h-full bg-card/60 backdrop-blur-xl border border-primary/5 rounded-xl hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden flex flex-col justify-center">
+                            <Card className="h-full bg-card/10 backdrop-blur-xl border border-primary/5 rounded-xl hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden flex flex-col justify-center">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                                 <CardContent className="p-3 sm:px-4 sm:py-3.5">
                                     <div className="flex flex-col 2xl:flex-row 2xl:items-center gap-5 sm:gap-6 relative">
