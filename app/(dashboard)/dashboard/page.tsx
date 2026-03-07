@@ -225,15 +225,13 @@ export default async function DashboardPage() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="bg-card/40 backdrop-blur rounded-[2.5rem] p-12 border-2 border-dashed border-blue-500/10">
-                                        <EmptyState
-                                            title="Sin futuras citas"
-                                            description="No hay reservas en el horizonte cercano. ¡Prueba compartiendo tu link público!"
-                                            actionText="Ir a mi Perfil"
-                                            actionHref="/dashboard/perfil"
-                                            icon={CalendarOff}
-                                        />
-                                    </div>
+                                    <EmptyState
+                                        title="Sin futuras citas"
+                                        description="No hay reservas en el horizonte cercano. ¡Prueba compartiendo tu link público!"
+                                        actionText="Ir a mi Perfil"
+                                        actionHref="/dashboard/perfil"
+                                        icon={CalendarOff}
+                                    />
                                 )}
                             </section>
                         </div>

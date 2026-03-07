@@ -27,7 +27,7 @@ export default async function DisponibilidadPage() {
                 </div>
             </header>
 
-            <div className="bg-card/40 backdrop-blur-xl rounded-[2.5rem] border-2 border-primary/5 shadow-xl p-2 sm:p-6 lg:p-10">
+            <div className="bg-card/40 backdrop-blur-xl rounded-[2.5rem] border-2 border-primary/5 shadow-xl p-4 sm:p-8 lg:p-10">
                 <AvailabilityManagement />
             </div>
         </div>

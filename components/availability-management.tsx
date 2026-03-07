@@ -221,118 +221,113 @@ export function AvailabilityManagement() {
                             <div
                                 key={day.id}
                                 className={cn(
-                                    "flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all duration-300",
+                                    "group relative flex flex-col 2xl:flex-row 2xl:items-center justify-between w-full p-5 rounded-3xl border transition-all duration-300 gap-6",
                                     active
                                         ? "bg-card border-primary/20 shadow-sm"
-                                        : "bg-muted/30 grayscale-[0.5] opacity-80"
+                                        : "bg-muted/5 border-transparent opacity-60"
                                 )}
                             >
-                                <div className="flex items-center justify-between sm:justify-start gap-4 mb-4 sm:mb-0">
-                                    <div className="flex items-center gap-3 sm:gap-4">
-                                        <Checkbox
-                                            checked={active}
-                                            onCheckedChange={() => toggleDay(day.id)}
-                                            aria-label={`Activar ${day.name}`}
-                                        />
+                                {/* Day Selector Section */}
+                                <div className="flex items-center justify-between md:justify-start gap-4 md:min-w-[180px] select-none">
+                                    <div
+                                        className="flex items-center gap-4 cursor-pointer"
+                                        onClick={() => toggleDay(day.id)}
+                                    >
+                                        <div className={cn(
+                                            "h-12 w-12 rounded-full flex items-center justify-center transition-all duration-500",
+                                            active ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-muted text-muted-foreground"
+                                        )}>
+                                            <Checkbox
+                                                checked={active}
+                                                onCheckedChange={() => toggleDay(day.id)}
+                                                className="hidden" // We handle via onClick on the parent trigger
+                                            />
+                                            {active ? <CheckCircle2 className="h-6 w-6" /> : <Clock className="h-6 w-6 opacity-40" />}
+                                        </div>
                                         <span className={cn(
-                                            "font-semibold text-base sm:text-lg sm:min-w-[100px] transition-colors",
-                                            active ? "text-foreground" : "text-muted-foreground"
+                                            "font-black text-xl tracking-tight transition-colors",
+                                            active ? "text-foreground" : "text-muted-foreground/30"
                                         )}>
                                             {day.name}
                                         </span>
                                     </div>
+
                                     {!active && (
-                                        <div className="sm:hidden flex items-center gap-2 px-3 py-1 bg-muted/50 rounded-lg">
-                                            <span className="text-[10px] text-muted-foreground font-medium italic">Cerrado</span>
-                                        </div>
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/30 px-3 py-1 border border-dashed border-muted-foreground/20 rounded-full">
+                                            Cerrado
+                                        </span>
                                     )}
                                 </div>
 
-                                {active && (
-                                    <div className="flex flex-col gap-4 animate-in zoom-in-95 duration-200">
-                                        <div className="flex items-center gap-3 sm:gap-4">
-                                            <div className="relative group flex-1 sm:flex-initial">
-                                                <Input
-                                                    type="time"
-                                                    value={start}
-                                                    onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                    className="w-full bg-background rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                />
-                                            </div>
-                                            <span className="text-muted-foreground font-bold">a</span>
-                                            <div className="relative group flex-1 sm:flex-initial">
-                                                <Input
-                                                    type="time"
-                                                    value={end}
-                                                    onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                    className="w-full bg-background rounded-xl px-3 sm:px-4 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-muted-foreground/10">
-                                            <div className="flex items-center gap-2">
-                                                <Checkbox
-                                                    checked={dayState?.lunchActive}
-                                                    onCheckedChange={() => toggleLunch(day.id)}
-                                                    id={`lunch-${day.id}`}
-                                                />
-                                                <label htmlFor={`lunch-${day.id}`} className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-wider cursor-pointer">
-                                                    ¿Hora de Almuerzo?
-                                                </label>
-                                            </div>
-
-
-                                            <div className="flex items-center justify-between sm:justify-start gap-3 px-2 py-0 rounded-xl animate-in slide-in-from-left-2 duration-200">
-                                                <Input
-                                                    type="time"
-                                                    disabled={!dayState?.lunchActive}
-                                                    value={dayState?.lunchStart}
-                                                    onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                    className="bg-transparent px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                />
-                                                <span className="text-primary/40 text-[10px] font-bold">a</span>
-                                                <Input
-                                                    type="time"
-                                                    disabled={!dayState?.lunchActive}
-                                                    value={dayState?.lunchEnd}
-                                                    onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                    className="bg-transparent px-4 text-xs font-bold outline-none focus:text-primary transition-colors text-center w-full [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                {!active && (
-                                    <>
-                                        <div className="flex flex-col gap-4 pointer-events-none select-none">
-                                            <div className="flex items-center gap-3 sm:gap-4">
-                                                <div className="relative group flex-1 sm:flex-initial">
-                                                    <div className="h-[38px] w-full lg:w-[82px] bg-transparent border-[0.5px] border-primary/10 rounded-xl" />
+                                {/* Controls Section */}
+                                <div className="flex-1 w-full">
+                                    {active ? (
+                                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 lg:gap-12 animate-in fade-in slide-in-from-left-4 duration-500">
+                                            {/* Hours Selection */}
+                                            <div className="flex items-center gap-3 bg-muted/40 p-2 rounded-2xl w-full sm:w-fit">
+                                                <div className="flex-1 sm:w-28 relative">
+                                                    <Input
+                                                        type="time"
+                                                        value={start}
+                                                        onChange={(e) => updateTime(day.id, 'start', e.target.value)}
+                                                        className="w-full bg-background border-none h-11 text-sm font-black rounded-xl text-center shadow-sm focus-visible:ring-primary/20"
+                                                    />
                                                 </div>
-                                                <span className="text-primary/40 font-bold">a</span>
-                                                <div className="relative group flex-1 sm:flex-initial">
-                                                    <div className="h-[38px] w-full lg:w-[83px] bg-transparent border-[0.5px] border-primary/10 rounded-xl" />
+                                                <span className="text-[10px] font-black text-muted-foreground/40 uppercase px-1 shrink-0">a</span>
+                                                <div className="flex-1 sm:w-28 relative">
+                                                    <Input
+                                                        type="time"
+                                                        value={end}
+                                                        onChange={(e) => updateTime(day.id, 'end', e.target.value)}
+                                                        className="w-full bg-background border-none h-11 text-sm font-black rounded-xl text-center shadow-sm focus-visible:ring-primary/20"
+                                                    />
                                                 </div>
                                             </div>
-                                            <div className="h-[0.25px] w-full bg-primary/10 rounded-xl" />
-                                            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                                                <div className="flex flex-col sm:flex-row sm:items-center">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="h-[24px] w-[24px] rounded-md bg-transparent border-[0.5px] border-primary/10" />
-                                                        <div className="h-4 w-[152px] bg-transparent border-[0.5px] border-primary/10 rounded-full" />
+
+                                            {/* Lunch Settings */}
+                                            <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row sm:items-center gap-4 lg:pl-8 lg:border-l-2 lg:border-primary/10">
+                                                <div
+                                                    className="flex items-center gap-3 cursor-pointer group/lunch shrink-0 touch-none py-1"
+                                                    onClick={() => toggleLunch(day.id)}
+                                                >
+                                                    <div className={cn(
+                                                        "h-6 w-6 rounded-lg border-2 transition-all flex items-center justify-center",
+                                                        dayState?.lunchActive ? "border-primary bg-primary text-primary-foreground shadow-md shadow-primary/10" : "border-muted-foreground/20"
+                                                    )}>
+                                                        {dayState?.lunchActive && <CheckCircle2 className="h-4 w-4 stroke-4" />}
                                                     </div>
+                                                    <span className={cn(
+                                                        "text-[11px] font-black uppercase tracking-widest transition-colors",
+                                                        dayState?.lunchActive ? "text-primary" : "text-muted-foreground/40"
+                                                    )}>
+                                                        ¿Almuerzo?
+                                                    </span>
                                                 </div>
-                                                <div className="flex items-center justify-between sm:justify-start gap-3 px-2 py-0 rounded-xl animate-in slide-in-from-left-2 duration-200">
-                                                    <div className="h-7 w-full lg:w-[78px] bg-transparent border-[0.5px] border-primary/10 rounded-md mt-1" />
-                                                    <span className="text-primary/40 text-[10px] font-bold">a</span>
-                                                    <div className="h-7 w-full lg:w-[78px] bg-transparent border-[0.5px] border-primary/10 rounded-md mt-1" />
+
+                                                <div className={cn(
+                                                    "flex items-center gap-3 transition-all duration-300 w-full sm:w-fit",
+                                                    dayState?.lunchActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none hidden sm:flex"
+                                                )}>
+                                                    <Input
+                                                        type="time"
+                                                        value={dayState?.lunchStart}
+                                                        onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
+                                                        className="flex-1 sm:w-24 bg-primary/5 border-none h-10 text-xs font-black rounded-xl text-center shadow-xs"
+                                                    />
+                                                    <span className="text-[10px] font-black text-primary/30 uppercase shrink-0">a</span>
+                                                    <Input
+                                                        type="time"
+                                                        value={dayState?.lunchEnd}
+                                                        onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
+                                                        className="flex-1 sm:w-24 bg-primary/5 border-none h-10 text-xs font-black rounded-xl text-center shadow-xs"
+                                                    />
                                                 </div>
                                             </div>
-
                                         </div>
-                                    </>
-                                )}
+                                    ) : (
+                                        <div className="hidden md:block h-px w-full bg-muted/20 rounded-full" />
+                                    )}
+                                </div>
                             </div>
                         )
                     })}
@@ -446,15 +441,15 @@ export function AvailabilityManagement() {
                 </DialogContent>
             </Dialog>
 
-            <div className="fixed sm:sticky bottom-0 sm:bottom-6 left-0 right-0 p-4 sm:p-0 bg-background/80 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border-t sm:border-t-0 z-20 flex justify-end">
+            <div className="fixed md:sticky bottom-0 md:bottom-10 left-0 right-0 p-4 md:p-0 bg-linear-to-t from-background via-background/90 to-transparent md:from-transparent md:to-transparent z-30 flex justify-center md:justify-end">
                 <Button
                     onClick={handleSave}
                     disabled={saving}
                     className={cn(
-                        "w-full sm:w-auto h-12 rounded-2xl font-bold text-lg duration-500 hover:scale-105 transition-all active:scale-95 overflow-hidden",
+                        "w-full md:w-auto h-14 md:h-12 px-8 rounded-2xl font-black text-base md:text-sm uppercase tracking-widest duration-500 hover:scale-105 transition-all active:scale-95 overflow-hidden shadow-2xl shadow-primary/20",
                         success
-                            ? "bg-secondary text-secondary-foreground shadow-primary/30 shadow-2xs ring-4 ring-secondary/20 hover:bg-secondary/90"
-                            : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:shadow-md hover:-translate-y-0.5"
+                            ? "bg-secondary text-secondary-foreground ring-4 ring-secondary/20 hover:bg-secondary/90"
+                            : "bg-primary text-primary-foreground hover:shadow-primary/40 hover:-translate-y-0.5"
                     )}
                 >
                     <div className="flex items-center gap-3 relative">
@@ -471,6 +466,6 @@ export function AvailabilityManagement() {
                     </div>
                 </Button>
             </div>
-        </div>
+        </div >
     )
 }
