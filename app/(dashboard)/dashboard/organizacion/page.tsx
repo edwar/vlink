@@ -5,7 +5,8 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Building2, UserCircle, Briefcase, Globe } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard } from "lucide-react"
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
 import { CopyLink } from "@/components/copy-link"
@@ -114,7 +115,7 @@ export default async function OrganizacionPage() {
                         <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Marketing & QR</h2>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-4 flex flex-col">
                         <p className="text-muted-foreground text-sm leading-relaxed px-2">
                             Descarga el QR base o compártelo al instante con tus clientes en redes.
                         </p>
@@ -126,6 +127,32 @@ export default async function OrganizacionPage() {
                                     appUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
                                 />
                             </div>
+                        </div>
+
+                        <div className="px-2 pt-2">
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <button className="w-full h-14 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden relative flex items-center justify-center gap-3 bg-card border-none hover:bg-primary/10 text-foreground hover:text-primary shadow-xl shadow-primary/5 group">
+                                        <div className="absolute inset-0 border-2 border-primary/20 rounded-2xl group-hover:border-primary/40 transition-colors" />
+                                        <IdCard className="h-5 w-5 relative z-10" />
+                                        <span className="relative z-10">Tarjeta de Presentación</span>
+                                    </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden bg-background/95 backdrop-blur-3xl border-2 border-primary/10 sm:rounded-4xl p-6 sm:p-10 shadow-2xl flex flex-col">
+                                    <DialogTitle className="text-2xl md:text-3xl font-display font-black tracking-tight uppercase text-primary mb-1">
+                                        Tarjeta de Presentación
+                                    </DialogTitle>
+                                    <p className="text-muted-foreground text-sm font-medium mb-4 sm:mb-8 max-w-xl">
+                                        Previsualiza y estampa tu identidad. Descarga en alta resolución (SVG) tu tarjeta de presentación oficial lista para imprimir.
+                                    </p>
+                                    <div className="w-full relative flex-1 min-h-0 flex flex-col items-center justify-center">
+                                        <OrgBusinessCard
+                                            organization={organization}
+                                            publicUrl={publicUrl}
+                                        />
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </div>
                 </div>
@@ -150,24 +177,7 @@ export default async function OrganizacionPage() {
                 </div>
             </div>
 
-            {/* Row 2: Tarjeta de Presentación */}
-            <div className="pt-8 mb-8 mt-8 border-t border-border/50 space-y-6">
-                <div className="flex items-center gap-3 px-2">
-                    <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
-                    <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Tarjeta de Presentación</h2>
-                </div>
-                <div className="space-y-4 px-2">
-                    <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
-                        Previsualiza y estampa tu identidad. Descarga en alta resolución (SVG) tu tarjeta de presentación oficial lista para imprimir.
-                    </p>
-                    <OrgBusinessCard
-                        organization={organization}
-                        publicUrl={publicUrl}
-                    />
-                </div>
-            </div>
-
-            {/* Row 3: Mi Equipo */}
+            {/* Row 2: Mi Equipo */}
             <div className="pt-8 mt-8 border-t border-border/50 space-y-6">
                 <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between px-2">
                     <div className="flex items-center gap-3">
