@@ -69,7 +69,7 @@ export default async function OrganizacionPage() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
-            <header className="relative p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+            <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
                 </div>
@@ -94,13 +94,27 @@ export default async function OrganizacionPage() {
                             Administra tu equipo de profesionales, coordina agendas compartidas y escala tu negocio centralizadamente.
                         </p>
                     </div>
-                    <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-sm inline-flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                            <Shield className="h-5 w-5" />
-                        </div>
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tu Rol</p>
-                            <p className="text-sm font-black text-foreground">{currentUserRole ? ROLE_LABELS[currentUserRole] : "Miembro"}</p>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        {isOwnerOrManager && (
+                            <a href="/dashboard/organizacion/planes" className="px-6 py-3 bg-primary/10 hover:bg-primary/20 transition-colors backdrop-blur border border-primary/20 rounded-2xl shadow-sm inline-flex flex-col gap-1 items-start justify-center group">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-primary/80 group-hover:text-primary flex items-center gap-2">
+                                    <Globe className="h-3 w-3" /> Cambiar Plan
+                                </p>
+                                <p className="text-sm font-black text-primary">
+                                    {organization.subscriptionPlan === "FREE" ? "Gratuito" :
+                                        organization.subscriptionPlan === "TEAM" ? "Equipos" : "Corporativo"}
+                                </p>
+                            </a>
+                        )}
+
+                        <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-sm inline-flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Shield className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tu Rol</p>
+                                <p className="text-sm font-black text-foreground">{currentUserRole ? ROLE_LABELS[currentUserRole] : "Miembro"}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,7 +133,7 @@ export default async function OrganizacionPage() {
                         <p className="text-muted-foreground text-sm leading-relaxed px-2">
                             Descarga el QR base o compártelo al instante con tus clientes en redes.
                         </p>
-                        <div className="p-1 rounded-[2rem] bg-linear-to-b from-primary/10 to-transparent">
+                        <div className="p-1 rounded-4xl bg-linear-to-b from-primary/10 to-transparent">
                             <div className="bg-card/80 backdrop-blur-xl border border-primary/5 rounded-[1.8rem] p-4 sm:p-6 shadow-xl shadow-primary/5">
                                 <OrgQRCode
                                     orgName={organization.name}
@@ -167,6 +181,13 @@ export default async function OrganizacionPage() {
                         <p className="text-muted-foreground text-sm leading-relaxed px-2">
                             Invita nuevos profesionales a tu organización copiando el enlace mágico para escalar tu negocio.
                         </p>
+                        <div className="px-2">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-foreground/70">
+                                    Capstone ({organization.subscriptionPlan === "FREE" ? "1 Base" : organization.subscriptionPlan === "TEAM" ? "Hasta 5" : "Ilimitado"})
+                                </span>
+                            </div>
+                        </div>
                         <div className="px-2 flex-1">
                             <InviteMember
                                 organizationId={organization.id}

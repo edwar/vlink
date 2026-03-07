@@ -205,6 +205,22 @@ export async function subscribeToGoogleCalendar(profileId: string) {
         const channelId = randomUUID()
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vlink.com"
 
+        // Google Webhooks REQUIRE a verified HTTPS domain. Bypass for local dev.
+        if (appUrl.includes("localhost") || !appUrl.startsWith("https://")) {
+            console.warn("⚠️ Bypass de Webhook para entorno local: Google Calendar requiere dominios HTTPS válidos y verificados. Simulando suscripción de webhook para pruebas locales.")
+
+            await prisma.profile.update({
+                where: { id: profileId },
+                data: {
+                    syncToken: nextSyncToken || null,
+                    webhookChannelId: channelId,
+                    webhookResourceId: "dev-resource-id-" + Math.random().toString(36).substring(7),
+                    webhookExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+                }
+            })
+            return true
+        }
+
         const watchResponse = await calendar.events.watch({
             calendarId: "primary",
             requestBody: {

@@ -105,12 +105,11 @@ VLink actualmente escribe en Google Calendar pero no escucha cambios externos. S
 #### H. Exportación de Historial a CSV
 Un botón "Exportar" en el dashboard que genere un archivo CSV con las citas del período seleccionado, útil para reportes contables y seguimiento de ingresos.
 
-#### I. Planes de Suscripción Recurrentes (SaaS)
-Implementar un modelo de monetización basado en niveles de membresía para las organizaciones. En lugar de cobrar por cada cita, la plataforma funcionaría como un SaaS con los siguientes niveles:
-- **Plan Gratuito (Individual):** Acceso para y gestión de 1 solo perfil profesional por usuario, con funcionalidades estándar.
-- **Plan Equipos:** Para organizaciones pequeñas (hasta 5 colaboradores), permitiendo vistas de disponibilidad de grupo y panel compartido por suscripción mensual base.
-- **Plan Corporativo:** Para organizaciones con más de 5 colaboradores, con cobro diferenciado, mayor nivel de soporte o características premium de personalización.
-Esto transformaría VLink en un negocio recurrente B2B, preparando la arquitectura de facturación mensual (Stripe/Wompi Suscripciones).
+- **Planes de Suscripción Recurrentes (SaaS):** Implementación de niveles de membresía para organizaciones integrados con **Mercado Pago**.
+  - **Plan Gratuito:** 1 solo perfil/miembro.
+  - **Plan Equipos:** Hasta 5 colaboradores con panel compartido.
+  - **Plan Corporativo:** Colaboradores ilimitados y soporte prioritario.
+  - Sistema de Webhooks y Billing Dashboard dedicado.
 
 ---
 *Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*

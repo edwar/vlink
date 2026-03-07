@@ -82,7 +82,7 @@ export function LoadingState({
                 </g>
 
             </svg>
-            <p className="text-[24px] md:text-[48px] font-display font-black tracking-tighter leading-none text-primary/10">{message}</p>
+            <p className="text-[24px] md:text-[48px] font-display font-black tracking-tighter leading-none text-primary">{message}</p>
         </div>
     )
 

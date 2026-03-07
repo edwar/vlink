@@ -99,6 +99,31 @@ export async function createInvitation(organizationId: string, role: "MANAGER" |
         throw new Error("You don't have permission to create invitations for this organization")
     }
 
+    // Check SaaS limits
+    const orgData = await prisma.organization.findUnique({
+        where: { id: organizationId },
+        include: {
+            _count: {
+                select: {
+                    members: true,
+                    invitations: { where: { expiresAt: { gt: new Date() } } }
+                }
+            }
+        }
+    })
+
+    if (!orgData) throw new Error("Organización no encontrada")
+
+    const totalSeatsUsed = orgData._count.members + orgData._count.invitations;
+
+    if (orgData.subscriptionPlan === "FREE") {
+        throw new Error("El plan Gratuito solo permite 1 miembro. Actualiza al plan Equipos para invitar colaboradores.")
+    }
+
+    if (orgData.subscriptionPlan === "TEAM" && totalSeatsUsed >= 5) {
+        throw new Error("El plan Equipos tiene un límite de 5 miembros. Actualiza al plan Corporativo para asientos ilimitados.")
+    }
+
     const invitation = await prisma.invitation.create({
         data: {
             organizationId,
