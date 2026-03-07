@@ -108,6 +108,46 @@ export async function createGoogleCalendarEvent(appointmentId: string) {
     }
 }
 
+export async function updateGoogleCalendarEvent(appointmentId: string) {
+    try {
+        const appointment = await prisma.appointment.findUnique({
+            where: { id: appointmentId },
+            include: {
+                profile: { include: { user: true } },
+                service: true
+            }
+        })
+
+        if (!appointment || !appointment.googleEventId || !appointment.profile.userId) {
+            return null // Not synced — nothing to update
+        }
+
+        const auth = await getGoogleAuthClient(appointment.profile.userId)
+        const calendar = google.calendar({ version: "v3", auth })
+
+        await calendar.events.patch({
+            calendarId: "primary",
+            eventId: appointment.googleEventId,
+            sendUpdates: "all", // Notify attendees of the change
+            requestBody: {
+                start: {
+                    dateTime: appointment.startTime.toISOString(),
+                    timeZone: "UTC",
+                },
+                end: {
+                    dateTime: appointment.endTime.toISOString(),
+                    timeZone: "UTC",
+                },
+            },
+        })
+
+        return true
+    } catch (error) {
+        console.error("Error updating Google Calendar event:", error)
+        return false
+    }
+}
+
 export async function deleteGoogleCalendarEvent(appointmentId: string) {
     try {
         const appointment = await prisma.appointment.findUnique({

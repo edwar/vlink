@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { cancelAppointmentAction } from "@/app/actions/cancel-appointment"
+import { RescheduleDialog } from "@/components/reschedule-dialog"
 import { sileo } from "sileo"
 
 export function AppointmentCard({ appt, showDate = false }: { appt: any, showDate?: boolean }) {
@@ -108,6 +109,16 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                 >
                     WhatsApp
                 </Link>
+
+                {appt.status !== "CANCELLED" && (
+                    <RescheduleDialog appt={{
+                        id: appt.id,
+                        clientName: appt.clientName,
+                        startTime: appt.startTime,
+                        profile: { username: appt.profile?.username ?? appt.profileId },
+                        service: appt.service ?? null,
+                    }} />
+                )}
 
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>

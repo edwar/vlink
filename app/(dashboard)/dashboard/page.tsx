@@ -20,7 +20,8 @@ export default async function DashboardPage() {
             profileId: profile.id,
         },
         include: {
-            service: true
+            service: true,
+            profile: { select: { username: true } }
         }
     })
 

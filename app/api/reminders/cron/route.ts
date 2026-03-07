@@ -26,8 +26,9 @@ export async function GET(request: NextRequest) {
             status: 'CONFIRMED',
             clientEmail: { not: null },
             startTime: { gte: window24hStart, lte: window24hEnd },
+            // Only send if reminder hasn't been sent yet
             reminder24hSentAt: null,
-        },
+        } as any,
         include: {
             profile: { include: { user: true } },
             service: true,
@@ -36,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     const results = { sent: 0, errors: 0 }
 
-    for (const appt of appointments) {
+    for (const appt of appointments as any[]) {
         try {
             await sendAppointmentEmail({
                 to: appt.clientEmail!,
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
             })
             await prisma.appointment.update({
                 where: { id: appt.id },
-                data: { reminder24hSentAt: now },
+                data: { reminder24hSentAt: now } as any,
             })
             results.sent++
         } catch (error) {
