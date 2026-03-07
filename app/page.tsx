@@ -1,13 +1,13 @@
 import Link from "next/link"
-import { Calendar, CheckCircle2, MessageSquare, ShieldCheck, ArrowRight, Smartphone, Sparkles } from "lucide-react"
+import { Calendar, CheckCircle2, MessageSquare, ShieldCheck, ArrowRight, Smartphone, Sparkles, Users, Briefcase, Activity } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { AuthCTA } from "@/components/auth-cta"
 import { LandingNav } from "@/components/landing-nav"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "VLink — Agendamiento profesional sin fricciones",
-  description: "Conecta tu Google Calendar, comparte tu link único y deja que tus clientes agenden por WhatsApp en segundos.",
+  title: "VLink — Agendamiento profesional para individuos y equipos",
+  description: "Conecta tu Google Calendar, gestiona múltiples agendas y permite que tus clientes reserven en segundos con una experiencia premium.",
 }
 
 export default function LandingPage() {
@@ -24,14 +24,14 @@ export default function LandingPage() {
 
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-1000">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/50 rounded-full border border-primary/10 text-xs font-bold uppercase tracking-widest text-primary">
-            <Smartphone className="h-3.5 w-3.5" />
-            Optimizado para Móviles
+            <Sparkles className="h-3.5 w-3.5" />
+            Novedad: Soporte para Organizaciones
           </div>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter leading-[0.9]">
-            Agendamiento <span className="text-primary italic">profesional</span>, sin fricciones.
+            Agendamiento <span className="text-primary italic">profesional</span>, para equipos.
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Conecta tu Google Calendar, comparte tu link único y deja que tus clientes agenden por WhatsApp en segundos.
+            Conecta tu Google Calendar, gestiona múltiples agendas y permite que tus clientes reserven en segundos con una experiencia premium.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <AuthCTA
@@ -50,19 +50,19 @@ export default function LandingPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             {
-              icon: <MessageSquare className="h-6 w-6" />,
-              title: "Validación WhatsApp",
-              desc: "Tus clientes se registran con su número de WhatsApp. Sin contraseñas, sin formularios infinitos."
+              icon: <Users className="h-6 w-6" />,
+              title: "Gestión de Equipos",
+              desc: "Crea organizaciones y asigna roles. Managers pueden coordinar múltiples agendas desde un solo lugar."
             },
             {
               icon: <Calendar className="h-6 w-6" />,
               title: "Agenda Inteligente",
-              desc: "Sincronización total con Google Calendar. Definie bloqueos recurrentes y evita el double-booking."
+              desc: "Sincronización total con Google Calendar. Bloqueos recurrentes y preventivos para evitar empalmes."
             },
             {
-              icon: <ShieldCheck className="h-6 w-6" />,
-              title: "Link de Marca Único",
-              desc: "Tu propio espacio profesional bajo vlink.cognilab.dev/tu-nombre. Minimalista, moderno y oscuro."
+              icon: <Briefcase className="h-6 w-6" />,
+              title: "Catálogo de Servicios",
+              desc: "Define múltiples servicios con duraciones y precios personalizados. Tus clientes eligen lo que necesitan."
             }
           ].map((feature) => (
             <div
@@ -79,18 +79,59 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Value Proposition */}
+      <section className="max-w-7xl mx-auto px-6 py-20">
+        <div className="bg-card/50 border border-primary/10 rounded-[48px] p-8 md:p-16 grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-8">
+            <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter leading-tight">
+              Diseñado para el <span className="text-primary">flujo de trabajo</span> moderno.
+            </h2>
+            <div className="space-y-6">
+              {[
+                { title: "Mobile First Extremo", desc: "Tus clientes pueden agendar desde cualquier lugar con una interfaz de tipo nativa." },
+                { title: "Privacidad Delegada", desc: "Los profesionales mantienen el control de su Google Calendar personal." },
+                { title: "Captura Inteligente", desc: "Formateo automático de WhatsApp y validación de datos para evitar errores en las citas." },
+                { title: "Link Único Premium", desc: "Tu propia URL vlink.cognilab.dev/nombre para compartir en redes y perfiles." }
+              ].map((item) => (
+                <div key={item.title} className="flex gap-4">
+                  <div className="mt-1 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="h-3 w-3 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg">{item.title}</h4>
+                    <p className="text-muted-foreground font-medium">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative aspect-square bg-accent/20 rounded-3xl overflow-hidden border border-primary/5 group">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="space-y-4 text-center p-8">
+                <Activity className="h-12 w-12 text-primary mx-auto opacity-50 group-hover:scale-110 transition-transform duration-500" />
+                <p className="text-sm font-bold uppercase tracking-widest text-primary/40">Visualización de Estadísticas</p>
+                <p className="text-muted-foreground font-medium">Monitorea tus citas, ingresos y próximos clientes en tiempo real.</p>
+              </div>
+            </div>
+            {/* Decorative Elements */}
+            <div className="absolute top-4 right-4 h-24 w-24 bg-primary/10 rounded-2xl blur-2xl" />
+            <div className="absolute bottom-4 left-4 h-32 w-32 bg-accent/30 rounded-full blur-3xl opacity-50" />
+          </div>
+        </div>
+      </section>
+
       {/* How it works */}
       <section className="bg-accent/30 py-32 px-6">
         <div className="max-w-5xl mx-auto space-y-16">
           <div className="text-center space-y-4">
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter">Cómo funciona</h2>
-            <p className="text-muted-foreground text-lg font-medium">Tres pasos simples para automatizar tu tiempo.</p>
+            <p className="text-muted-foreground text-lg font-medium">Tres pasos simples para automatizar tu equipo.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-12 text-center">
             {[
-              { step: "01", title: "Conecta", desc: "Sincroniza tu Google Calendar en un clic." },
-              { step: "02", title: "Configura", desc: "Define tus horarios y bloqueos de agenda." },
-              { step: "03", title: "Comparte", desc: "Envía tu link y recibe citas confirmadas." }
+              { step: "01", title: "Conecta", desc: "Sincroniza Google Calendar y configura tu organización." },
+              { step: "02", title: "Organiza", desc: "Agrega servicios, precios y define tu disponibilidad." },
+              { step: "03", title: "Comparte", desc: "Envía el link y recibe citas sincronizadas al instante." }
             ].map((step) => (
               <div key={step.step} className="space-y-4">
                 <span className="text-7xl font-display font-black text-primary/10 block leading-none">{step.step}</span>
