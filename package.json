@@ -30,7 +30,8 @@
     "recharts": "2.15.4",
     "resend": "^6.9.2",
     "sileo": "^0.1.5",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

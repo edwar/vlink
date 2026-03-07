@@ -8,12 +8,13 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { UserCircle, Briefcase, Building2, ChevronDown, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "./user-avatar"
+import { useProfileStore } from "@/lib/store/profile-store"
 
 export function ProfileSwitcher() {
     const [organizations, setOrganizations] = useState<any[]>([])
     const [managedProfiles, setManagedProfiles] = useState<Record<string, any[]>>({})
     const [activeProfile, setActiveProfile] = useState<any>(null)
-    const [selectedProfileId, setSelectedProfileId] = useState<string>("")
+    const { viewAsProfileId: selectedProfileId, setViewAsProfileId } = useProfileStore()
     const router = useRouter()
 
     useEffect(() => {
@@ -34,18 +35,6 @@ export function ProfileSwitcher() {
                     profileMap[org.id] = profiles
                 }
                 setManagedProfiles(profileMap)
-
-                // 4. Initial value from cookie (if possible)
-                const cookies = document.cookie.split('; ')
-                const viewAs = cookies.find(row => row.startsWith('vlink-view-as-profile-id='))?.split('=')[1]
-
-                if (viewAs) {
-                    setSelectedProfileId(viewAs)
-                } else {
-                    // Try to finding the profile ID for the current personal profile username
-                    // This is a bit tricky since getProfile returns limited data. 
-                    // Let's just default to empty if cookie is not set.
-                }
             } catch (err) {
                 console.error("Error loading switcher data:", err)
             }
@@ -54,19 +43,12 @@ export function ProfileSwitcher() {
     }, [])
 
     const handleSwitch = (profileId: string) => {
-        // Set cookie
-        if (profileId === "personal") {
-            document.cookie = "vlink-view-as-profile-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
-        } else {
-            document.cookie = `vlink-view-as-profile-id=${profileId}; path=/; max-age=31536000` // 1 year
-        }
-
-        setSelectedProfileId(profileId)
+        setViewAsProfileId(profileId)
 
         // Reload to apply changes in server actions/components
         router.refresh()
-        // Wait a bit for server data to sync, then push to dashboard to force state reset
-        setTimeout(() => router.push("/dashboard"), 100)
+        // Force navigate to dashboard to ensure all server data is re-fetched with the new cookie
+        router.push("/dashboard")
     }
 
     if (organizations.length === 0) return null

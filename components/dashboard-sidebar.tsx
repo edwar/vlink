@@ -9,6 +9,7 @@ import { signOut } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import Image from "next/image"
 import { Logo } from "./logo"
+import { useProfileStore } from "@/lib/store/profile-store"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -22,8 +23,10 @@ const navigation = [
 export function DashboardSidebar() {
     const pathname = usePathname()
     const router = useRouter()
+    const clearProfile = useProfileStore((state) => state.clearProfile)
 
     const handleSignOut = async () => {
+        clearProfile()
         await signOut()
         router.push("/")
     }
