@@ -224,7 +224,7 @@ export function AvailabilityManagement() {
                                     "group relative flex flex-col xl:flex-row xl:items-center justify-between w-full p-4 sm:p-5 rounded-4xl border transition-all duration-300 gap-5 xl:gap-8 overflow-hidden",
                                     active
                                         ? "bg-card border-primary/20 shadow-sm"
-                                        : "bg-muted/5 border-transparent opacity-60 hover:opacity-100 hover:bg-muted/10 transition-all"
+                                        : "bg-muted/30 border-primary/20 opacity-90 py-5 sm:py-6 hover:opacity-100 hover:bg-muted/10 transition-all"
                                 )}
                             >
                                 {/* Day Selector Section */}
@@ -260,7 +260,7 @@ export function AvailabilityManagement() {
                                     {!active && (
                                         <div className="xl:hidden flex items-center gap-2 px-3 py-1 bg-muted/20 border border-muted-foreground/10 rounded-full animate-in fade-in zoom-in duration-500">
                                             <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
                                                 Cerrado
                                             </span>
                                         </div>
@@ -334,7 +334,7 @@ export function AvailabilityManagement() {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="hidden xl:flex items-center justify-end w-full group-hover:px-4 transition-all duration-500">
+                                        <div className="hidden xl:flex items-center justify-end w-full sha group-hover:px-4 transition-all duration-500">
                                             <div className="h-px flex-1 bg-linear-to-r from-transparent via-muted-foreground/10 to-transparent" />
                                             <span className="text-[10px] font-black text-muted-foreground/20 uppercase tracking-[0.2em] ml-4 bg-muted/10 px-4 py-1.5 rounded-full border border-dashed border-muted-foreground/10">
                                                 Día Cerrado
@@ -455,14 +455,14 @@ export function AvailabilityManagement() {
                 </DialogContent>
             </Dialog>
 
-            <div className="fixed md:sticky bottom-0 md:bottom-10 left-0 right-0 p-4 md:p-0 bg-linear-to-t from-background via-background/90 to-transparent md:from-transparent md:to-transparent z-30 flex justify-center md:justify-end">
+            <div className="fixed md:sticky bottom-0 md:bottom-10 left-0 right-0 p-4 md:p-0 z-30 flex justify-center md:justify-end pointer-events-none">
                 <Button
                     onClick={handleSave}
                     disabled={saving}
                     className={cn(
-                        "w-full md:w-auto h-12 px-10 rounded-2xl font-bold text-sm tracking-tight duration-500 hover:scale-[1.02] transition-all active:scale-95 overflow-hidden shadow-xl",
+                        "pointer-events-auto w-full md:w-auto h-12 px-10 rounded-2xl font-bold text-sm tracking-tight duration-500 hover:scale-[1.02] transition-all active:scale-95 overflow-hidden shadow-xl",
                         success
-                            ? "bg-secondary text-secondary-foreground ring-4 ring-secondary/20 hover:bg-secondary/90 shadow-secondary/20"
+                            ? "bg-secondary text-secondary-foreground ring-4 ring-secondary/20 shadow-secondary/20"
                             : "bg-primary text-primary-foreground hover:shadow-primary/30 hover:-translate-y-0.5"
                     )}
                 >
