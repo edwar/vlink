@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Copy, Check, Calendar as CalendarIcon, Loader2, Save, AlertCircle, Clock } from "lucide-react"
-import { getProfile, updateProfile, disconnectGoogle } from "@/app/actions/profile"
+import { getProfile, updateProfile, disconnectGoogle, enableCalendarSync } from "@/app/actions/profile"
 import { cn } from "@/lib/utils"
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "@/components/ui/input-group"
 import { Textarea } from "./ui/textarea"
@@ -30,7 +30,9 @@ export function ProfileSettings() {
     const [email, setEmail] = useState("")
     const [isGoogleConnected, setIsGoogleConnected] = useState(false)
     const [hasCalendarScope, setHasCalendarScope] = useState(false)
+    const [isSyncEnabled, setIsSyncEnabled] = useState(false)
     const [isDisconnecting, setIsDisconnecting] = useState(false)
+    const [enablingSync, setEnablingSync] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [copied, setCopied] = useState(false)
 
@@ -44,6 +46,7 @@ export function ProfileSettings() {
                 setEmail(data.email)
                 setIsGoogleConnected(data.isGoogleConnected)
                 setHasCalendarScope(data.hasCalendarScope)
+                setIsSyncEnabled(data.isSyncEnabled)
             } catch (err) {
                 console.error("Error fetching profile:", err)
                 setError("No se pudo cargar el perfil")
@@ -98,6 +101,26 @@ export function ProfileSettings() {
         setConfirmOpen(true)
     }
 
+    const handleEnableSync = async () => {
+        setEnablingSync(true)
+        try {
+            await enableCalendarSync()
+            setIsSyncEnabled(true)
+            sileo.success({
+                title: "Sincronización activada",
+                description: "VLink reaccionará automáticamente a cambios en tu calendario."
+            })
+        } catch (err: any) {
+            console.error(err)
+            sileo.error({
+                title: "Error al activar",
+                description: err.message || "Hubo un problema de conexión con Google."
+            })
+        } finally {
+            setEnablingSync(false)
+        }
+    }
+
     const confirmDisconnect = async () => {
         setConfirmOpen(false)
         setIsDisconnecting(true)
@@ -136,7 +159,7 @@ export function ProfileSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Column 1: Profile Info (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
+                    <section className="relative p-1 rounded-[2.5rem] bg-linear-to-br from-primary/5 to-transparent overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
                         <div className="relative z-10 bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-10">
                             <div className="space-y-2">
@@ -185,7 +208,7 @@ export function ProfileSettings() {
                                         <Textarea
                                             value={bio}
                                             onChange={(e) => setBio(e.target.value)}
-                                            className="w-full bg-background/40 backdrop-blur-sm border-2 border-primary/5 rounded-[2rem] p-8 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-lg min-h-[300px] font-medium leading-relaxed resize-none shadow-inner"
+                                            className="w-full bg-background/40 backdrop-blur-sm border-2 border-primary/5 rounded-4xl p-8 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-lg min-h-[300px] font-medium leading-relaxed resize-none shadow-inner"
                                             placeholder="Describe tu experiencia, especialidades y el valor que ofreces a tus clientes..."
                                         />
                                         <div className="absolute bottom-6 right-8 text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest">
@@ -233,7 +256,7 @@ export function ProfileSettings() {
                                 <p className="text-sm text-muted-foreground font-medium">Comparte este link para recibir reservas.</p>
                             </div>
 
-                            <div className="flex items-center gap-3 p-3 bg-muted/20 rounded-[1.5rem] border border-muted-foreground/10 shadow-inner group-hover:border-primary/20 transition-all">
+                            <div className="flex items-center gap-3 p-3 bg-muted/20 rounded-3xl border border-muted-foreground/10 shadow-inner group-hover:border-primary/20 transition-all">
                                 <div className="flex-1 px-5 py-3.5 text-sm font-black overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-primary/5 shadow-inner-sm text-primary group-hover:bg-background transition-colors">
                                     {profileUrl.replace(/^https?:\/\//, '')}
                                 </div>
@@ -276,7 +299,7 @@ export function ProfileSettings() {
                             )}
 
                             <div className={cn(
-                                "p-6 border-2 rounded-[2rem] space-y-6 transition-all duration-500 relative overflow-hidden",
+                                "p-6 border-2 rounded-4xl space-y-6 transition-all duration-500 relative overflow-hidden",
                                 isGoogleConnected
                                     ? "bg-primary/5 border-primary/10 shadow-inner"
                                     : "bg-background/20 border-dashed border-muted-foreground/20"
@@ -302,7 +325,7 @@ export function ProfileSettings() {
                                     <div className="bg-primary/10 border border-primary/20 rounded-2xl p-5 relative group overflow-hidden">
                                         <div className="flex items-start gap-4 relative z-10">
                                             <div className="p-2.5 bg-primary/20 rounded-xl shrink-0 ring-1 ring-primary/20">
-                                                <Check className="h-5 w-5 text-primary" />
+                                                {isSyncEnabled ? <Check className="h-5 w-5 text-primary" /> : <Clock className="h-5 w-5 text-amber-500" />}
                                             </div>
                                             <div className="space-y-1">
                                                 <p className="text-sm font-black tracking-tight text-primary">Sincronización Total</p>
@@ -311,6 +334,20 @@ export function ProfileSettings() {
                                                 </p>
                                             </div>
                                         </div>
+
+                                        {!isSyncEnabled && hasCalendarScope && (
+                                            <div className="mt-4 pt-4 border-t border-primary/10">
+                                                <Button
+                                                    size="sm"
+                                                    onClick={handleEnableSync}
+                                                    disabled={enablingSync}
+                                                    className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest text-primary-foreground bg-primary hover:bg-primary/90 h-10 shadow-md"
+                                                >
+                                                    {enablingSync ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Empezar Sincronización"}
+                                                </Button>
+                                            </div>
+                                        )}
+
                                         <div className="mt-4 pt-4 border-t border-primary/10">
                                             <Button
                                                 variant="outline"

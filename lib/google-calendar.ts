@@ -1,5 +1,6 @@
 import { google } from "googleapis"
 import prisma from "./prisma"
+import { randomUUID } from "crypto"
 
 async function getGoogleAuthClient(userId: string) {
     const account = await prisma.account.findFirst({
@@ -174,5 +175,150 @@ export async function deleteGoogleCalendarEvent(appointmentId: string) {
     } catch (error) {
         console.error("Error deleting Google Calendar event:", error)
         return false
+    }
+}
+
+/**
+ * Subscribes to Google Calendar push notifications (webhooks) for a given profile
+ */
+export async function subscribeToGoogleCalendar(profileId: string) {
+    try {
+        const profile = await prisma.profile.findUnique({
+            where: { id: profileId },
+            include: { user: true }
+        })
+
+        if (!profile || !profile.userId) return false
+
+        const auth = await getGoogleAuthClient(profile.userId)
+        const calendar = google.calendar({ version: "v3", auth })
+
+        // 1. Fetch initial syncToken
+        const eventsResponse = await calendar.events.list({
+            calendarId: "primary",
+            timeMin: new Date().toISOString(),
+        })
+
+        const nextSyncToken = eventsResponse.data.nextSyncToken
+
+        // 2. Setup Watch Channel
+        const channelId = randomUUID()
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vlink.com"
+
+        const watchResponse = await calendar.events.watch({
+            calendarId: "primary",
+            requestBody: {
+                id: channelId,
+                type: "web_hook",
+                address: `${appUrl}/api/webhooks/google-calendar`,
+            }
+        })
+
+        // 3. Save to database
+        await prisma.profile.update({
+            where: { id: profileId },
+            data: {
+                syncToken: nextSyncToken || null,
+                webhookChannelId: watchResponse.data.id || channelId,
+                webhookResourceId: watchResponse.data.resourceId,
+                webhookExpiresAt: watchResponse.data.expiration
+                    ? new Date(parseInt(watchResponse.data.expiration))
+                    : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Default 7 days
+            }
+        })
+
+        return true
+    } catch (error) {
+        console.error("Error subscribing to Google Calendar:", error)
+        return false
+    }
+}
+
+/**
+ * Reacts to incoming webhooks by requesting incremental changes (syncToken) and syncing our DB
+ */
+export async function handleGoogleCalendarWebhookSync(channelId: string, resourceId: string) {
+    try {
+        const profile = await prisma.profile.findUnique({
+            where: { webhookChannelId: channelId, webhookResourceId: resourceId },
+            include: { user: true }
+        })
+
+        if (!profile || !profile.userId) return
+
+        const auth = await getGoogleAuthClient(profile.userId)
+        const calendar = google.calendar({ version: "v3", auth })
+
+        // Fetch changes using syncToken
+        const options: any = {
+            calendarId: "primary",
+        }
+
+        if (profile.syncToken) {
+            options.syncToken = profile.syncToken
+        } else {
+            // Fallback if no syncToken
+            options.timeMin = new Date().toISOString()
+        }
+
+        const response = await calendar.events.list(options)
+        const events = response.data.items || []
+
+        // Update syncToken for next time
+        if (response.data.nextSyncToken) {
+            await prisma.profile.update({
+                where: { id: profile.id },
+                data: { syncToken: response.data.nextSyncToken }
+            })
+        }
+
+        // Process changed events
+        for (const event of events) {
+            // We only care about events that exist in our DB (modifications/cancellations)
+            if (!event.id) continue
+
+            const appointment = await prisma.appointment.findFirst({
+                where: { googleEventId: event.id, profileId: profile.id }
+            })
+
+            if (!appointment) continue
+
+            // If event was deleted in Google Calendar
+            if (event.status === "cancelled" && appointment.status !== "CANCELLED") {
+                await prisma.appointment.update({
+                    where: { id: appointment.id },
+                    data: { status: "CANCELLED" }
+                })
+                continue
+            }
+
+            // If event timing was changed in Google Calendar
+            if (event.start?.dateTime && event.end?.dateTime) {
+                const newStart = new Date(event.start.dateTime)
+                const newEnd = new Date(event.end.dateTime)
+
+                if (newStart.getTime() !== appointment.startTime.getTime() ||
+                    newEnd.getTime() !== appointment.endTime.getTime()) {
+
+                    await prisma.appointment.update({
+                        where: { id: appointment.id },
+                        data: {
+                            startTime: newStart,
+                            endTime: newEnd,
+                            // Could reset reminders here too if we wanted
+                        }
+                    })
+                }
+            }
+        }
+    } catch (error) {
+        // If syncToken is invalid (e.g. 410 Gone), we should clear it to do a full resync next time
+        if ((error as any)?.code === 410) {
+            await prisma.profile.updateMany({
+                where: { webhookChannelId: channelId },
+                data: { syncToken: null }
+            })
+        }
+        console.error("Error handling Google Calendar sync:", error)
     }
 }

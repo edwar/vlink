@@ -37,7 +37,8 @@ export async function getProfile() {
         bio: fullProfile.bio || "",
         email: email,
         isGoogleConnected: isGoogleConnected,
-        hasCalendarScope: !!hasCalendarScope
+        hasCalendarScope: !!hasCalendarScope,
+        isSyncEnabled: !!fullProfile.webhookChannelId && !!fullProfile.webhookExpiresAt && fullProfile.webhookExpiresAt > new Date()
     }
 }
 
@@ -92,5 +93,23 @@ export async function disconnectGoogle() {
 
     revalidatePath("/dashboard/perfil")
 
+    return { success: true }
+}
+
+export async function enableCalendarSync() {
+    const profile = await getEffectiveProfile()
+    const { subscribeToGoogleCalendar } = await import("@/lib/google-calendar")
+
+    const dbProfile = await prisma.profile.findUnique({ where: { id: profile.id } })
+    if (dbProfile?.webhookChannelId && dbProfile?.webhookExpiresAt && dbProfile.webhookExpiresAt > new Date()) {
+        return { success: true }
+    }
+
+    const success = await subscribeToGoogleCalendar(profile.id)
+    if (!success) {
+        throw new Error("No se pudo activar la sincronización con Google Calendar")
+    }
+
+    revalidatePath("/dashboard/perfil")
     return { success: true }
 }

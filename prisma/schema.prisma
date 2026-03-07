@@ -129,6 +129,10 @@ model Profile {
   bio                String?
   displayName        String?
   googleCalendarId   String? // For syncing
+  syncToken          String? // Google Calendar sync token for incremental updates
+  webhookChannelId   String?        @unique // Google Calendar watch channel ID
+  webhookResourceId  String? // Google Calendar watch resource ID
+  webhookExpiresAt   DateTime? // When the watch channel expires
   availabilities     Availability[]
   appointments       Appointment[]
   services           Service[]
