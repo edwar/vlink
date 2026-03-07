@@ -7,6 +7,7 @@ import { getOrganizationPublicProfiles } from "@/app/actions/organization"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
 import { LoadingState } from "@/components/loading-state"
+import { ConsolidatedAvailability } from "@/components/consolidated-availability"
 import { Building2, Briefcase, Calendar, UserX, AlertCircle, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -210,6 +211,11 @@ export default function OrgPublicPage({ params }: { params: Promise<{ slug: stri
                         </span>
                     </div>
                 </header>
+
+                {/* Consolidated Availability Search */}
+                {orgData.profiles.length > 0 && (
+                    <ConsolidatedAvailability orgSlug={orgData.slug} />
+                )}
 
                 {/* Empty state */}
                 {orgData.profiles.length === 0 && (
