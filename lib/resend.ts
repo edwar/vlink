@@ -11,6 +11,7 @@ export async function sendAppointmentEmail({
     price,
     date,
     time,
+    cancelLink,
 }: {
     to: string;
     type: 'CONFIRMATION' | 'CANCELLATION' | 'RESCHEDULE' | 'REMINDER_24H' | 'REMINDER_2H';
@@ -20,6 +21,7 @@ export async function sendAppointmentEmail({
     price?: number | null;
     date: string;
     time: string;
+    cancelLink?: string;
 }) {
     const subjects = {
         CONFIRMATION: `Cita confirmada con ${professionalName}`,
@@ -53,6 +55,11 @@ export async function sendAppointmentEmail({
             <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Hora:</strong> ${time}</p>
           </div>
           <p style="color: #475569; font-size: 14px; margin-top: 30px;">${isCancellation ? 'Si tienes alguna pregunta o deseas agendar una nueva cita, por favor contacta al profesional directamente.' : 'Si necesitas cancelar o reprogramar, por favor contacta al profesional directamente.'}</p>
+          ${cancelLink && type === 'CONFIRMATION' ? `
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+            <p style="color: #94a3b8; font-size: 12px; margin: 0 0 12px 0;">¿Necesitas cancelar? Tienes hasta 2 horas antes de tu cita.</p>
+            <a href="${cancelLink}" style="display: inline-block; background-color: #fee2e2; color: #dc2626; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: bold; text-decoration: none;">Cancelar mi cita</a>
+          </div>` : ''}
         </div>
       `,
         });

@@ -184,6 +184,7 @@ model Appointment {
   endTime           DateTime
   status            String    @default("PENDING") // PENDING, CONFIRMED, CANCELLED
   googleEventId     String?
+  cancelToken       String?   @unique // Unique token for client self-cancellation link
   reminder24hSentAt DateTime? // Timestamp when 24h reminder was sent (null = not yet sent)
   reminder2hSentAt  DateTime? // Timestamp when 2h reminder was sent (null = not yet sent)
   createdAt         DateTime  @default(now())

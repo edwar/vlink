@@ -164,6 +164,8 @@ export async function createAppointment(data: {
 
     if (collision) throw new Error("Slot ya ocupado")
 
+    const cancelToken = crypto.randomUUID()
+
     const appointment = await prisma.appointment.create({
         data: {
             profileId: profile.id,
@@ -173,12 +175,15 @@ export async function createAppointment(data: {
             clientEmail: data.clientEmail,
             startTime,
             endTime,
-            status: "CONFIRMED"
+            status: "CONFIRMED",
+            cancelToken,
         }
     })
 
     // Get professional name for email
     const user = await prisma.user.findUnique({ where: { id: profile.userId } })
+
+    const cancelLink = `${process.env.NEXT_PUBLIC_APP_URL}/cancelar/${cancelToken}`
 
     // Send confirmation email
     await sendAppointmentEmail({
@@ -189,7 +194,8 @@ export async function createAppointment(data: {
         serviceName,
         price: servicePrice,
         date: format(startTime, "EEEE, d 'de' MMMM", { locale: es }),
-        time: data.time
+        time: data.time,
+        cancelLink,
     })
 
     // Sync with Google Calendar (Awaiting execution to prevent serverless suspension/timeouts on Prisma)
