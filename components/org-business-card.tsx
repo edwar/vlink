@@ -5,16 +5,17 @@ import { QRCodeSVG } from "qrcode.react"
 import { Download, CreditCard, Sparkles } from "lucide-react"
 import { sileo } from "sileo"
 
+import type { Organization } from "@prisma/client"
+
 interface OrgBusinessCardProps {
-    orgName: string
-    orgSlug: string
-    appUrl: string
+    organization: Organization
+    publicUrl: string
 }
 
-export function OrgBusinessCard({ orgName, orgSlug, appUrl }: OrgBusinessCardProps) {
+export function OrgBusinessCard({ organization, publicUrl }: OrgBusinessCardProps) {
+    const orgName = organization.name
+    const orgSlug = organization.slug
     const qrRef = useRef<HTMLDivElement>(null)
-
-    const publicUrl = `${appUrl}/org/${orgSlug}`
 
     const downloadBusinessCard = () => {
         const svgElement = qrRef.current?.querySelector("svg")
@@ -98,7 +99,6 @@ export function OrgBusinessCard({ orgName, orgSlug, appUrl }: OrgBusinessCardPro
 
     return (
         <div className="w-full">
-            {/* Hidden QR for generating SVG */}
             <div className="hidden" ref={qrRef}>
                 <QRCodeSVG
                     value={publicUrl}
@@ -113,49 +113,43 @@ export function OrgBusinessCard({ orgName, orgSlug, appUrl }: OrgBusinessCardPro
                     }}
                 />
             </div>
-
-            {/* Visual Preview */}
             <div className="group relative">
-                {/* Decorative background glow */}
                 <div className="absolute inset-0 bg-primary/10 rounded-[2rem] blur-xl group-hover:bg-primary/20 transition-all duration-500 opacity-50" />
 
                 <div className="relative overflow-hidden w-full aspect-1.75/1 rounded-[2rem] bg-white border border-primary/10 shadow-xl shadow-primary/5 flex transition-transform duration-300 group-hover:scale-[1.02]">
-                    {/* Background Pattern */}
                     <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px]" />
-
-                    {/* Left accent */}
                     <div className="w-2 md:w-3 h-full bg-slate-900 relative z-10" />
 
-                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-center relative z-10 w-3/5">
-                        <div className="space-y-4">
+                    <div className="flex-1 p-4 md:p-6 lg:p-8 flex flex-col justify-center relative z-10 min-w-0">
+                        <div className="space-y-2 md:space-y-3">
                             <div>
-                                <h3 className="text-3xl md:text-4xl lg:text-5xl font-black font-display text-slate-800 tracking-tighter leading-[1.1] line-clamp-2">
+                                <h3 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-black font-display text-slate-800 tracking-tighter leading-tight line-clamp-2">
                                     {orgName}
                                 </h3>
-                                <p className="text-sm md:text-base lg:text-lg font-semibold text-slate-500 mt-2">
-                                    Agenda tu cita con nosotros
+                                <p className="text-[8px] md:text-sm lg:text-base font-bold text-slate-500 mt-0.5 uppercase tracking-wider">
+                                    Agenda tu cita
                                 </p>
                             </div>
 
-                            <div className="space-y-1 pt-4 md:pt-8 mt-4 border-t-2 border-slate-100">
-                                <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">
+                            <div className="space-y-0.5 pt-2 md:pt-4 lg:pt-6 mt-1 border-t border-slate-100">
+                                <p className="text-[7px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                     Tecnología de VLink
                                 </p>
-                                <p className="text-sm md:text-base lg:text-lg font-bold text-primary truncate">
+                                <p className="text-[10px] md:text-sm lg:text-base xl:text-lg font-bold text-primary truncate">
                                     {publicUrl.replace(/^https?:\/\//, "")}
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-4 md:p-8 flex flex-col items-center justify-center gap-4 relative z-10 bg-linear-to-l from-white via-white to-transparent md:w-2/5 min-w-[150px]">
-                        <div className="bg-white p-3 md:p-4 rounded-[1rem] lg:rounded-[2rem] shadow-lg border-[6px] border-slate-50">
+                    <div className="p-3 md:p-6 lg:p-8 flex flex-col items-center justify-center gap-2 md:gap-4 relative z-10 bg-linear-to-l from-white via-white to-transparent">
+                        <div className="bg-white p-2 md:p-4 rounded-[1rem] lg:rounded-[2rem] shadow-lg border-[4px] md:border-[6px] border-slate-50">
                             <QRCodeSVG
                                 value={publicUrl}
                                 size={400}
                                 level="H"
                                 marginSize={0}
-                                className="w-10 h-10 sm:w-30 sm:h-30 lg:w-40 lg:h-40"
+                                className="w-8 h-8 sm:w-20 sm:h-20 md:w-30 md:h-30 lg:w-40 lg:h-40"
                                 imageSettings={{
                                     src: "/icon.svg",
                                     height: 50,
@@ -167,7 +161,6 @@ export function OrgBusinessCard({ orgName, orgSlug, appUrl }: OrgBusinessCardPro
                     </div>
                 </div>
 
-                {/* Download Overlay */}
                 <div className="absolute inset-0 bg-black/10 backdrop-blur-2xs lg:bg-black/20 lg:backdrop-blur-sm rounded-[2rem] opacity-100 lg:opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20 hover:scale-[1.02]">
                     <button
                         onClick={downloadBusinessCard}

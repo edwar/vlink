@@ -44,13 +44,13 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
     }
 
     return (
-        <section className="p-1 rounded-[2.5rem] bg-linear-to-br from-primary/10 via-transparent to-transparent group/invite">
-            <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 shadow-xl shadow-primary/5 space-y-8 relative overflow-hidden">
+        <section className="h-full flex flex-col p-1 rounded-[2.5rem] bg-linear-to-br from-primary/10 via-transparent to-transparent group/invite">
+            <div className="flex-1 flex flex-col justify-between bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-6 shadow-xl shadow-primary/5 space-y-6 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover/invite:scale-150 transition-transform duration-1000" />
 
                 <div className="flex items-start gap-4 relative z-10">
-                    <div className="h-14 w-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0 border border-primary/20 shadow-inner">
-                        <UserPlus className="h-7 w-7" />
+                    <div className="h-12 w-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0 border border-primary/20 shadow-inner">
+                        <UserPlus className="h-6 w-6" />
                     </div>
                     <div className="space-y-1">
                         <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Invitar a un Miembro</h3>
@@ -58,8 +58,8 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     </div>
                 </div>
 
-                <div className="space-y-6 relative z-10">
-                    <div className="space-y-3">
+                <div className="flex-1 flex flex-col justify-between space-y-4 relative z-10">
+                    <div className="flex-1 flex flex-col justify-around space-y-3">
                         <Label htmlFor="role" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Rol del invitado</Label>
                         <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
                             <SelectTrigger id="role" className="h-14 rounded-2xl border-2 border-primary/5 bg-background/40 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
