@@ -58,8 +58,8 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     </div>
                 </div>
 
-                <div className="flex-1 flex flex-col relative z-10">
-                    <div className="flex-1 flex flex-col h-full justify-center gap-8">
+                <div className="flex-1 flex flex-col gap-8 relative z-10">
+                    <div className="flex-1 flex flex-col h-full justify-center gap-6">
                         <Label htmlFor="role" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Rol del invitado</Label>
                         <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
                             <SelectTrigger id="role" className="h-14 rounded-2xl border-2 border-primary/5 bg-background/40 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
