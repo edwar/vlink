@@ -43,7 +43,7 @@ export function MobileNav() {
     }, [isOpen])
 
     return (
-        <div className="md:hidden">
+        <div className="lg:hidden">
             {/* Header with Hamburger */}
             <header className="flex h-16 items-center justify-between border-b bg-card px-4 sticky top-0 z-50">
                 <Logo className="h-8 w-8 text-primary" />
