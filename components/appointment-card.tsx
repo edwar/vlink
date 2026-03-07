@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cancelAppointmentAction } from "@/app/actions/cancel-appointment"
 import { RescheduleDialog } from "@/components/reschedule-dialog"
+import { AppointmentNotesDialog } from "@/components/appointment-notes-dialog"
 import { sileo } from "sileo"
 
 export function AppointmentCard({ appt, showDate = false }: { appt: any, showDate?: boolean }) {
@@ -119,6 +120,12 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                         service: appt.service ?? null,
                     }} />
                 )}
+
+                <AppointmentNotesDialog
+                    apptId={appt.id}
+                    clientName={appt.clientName}
+                    initialNotes={appt.notes ?? null}
+                />
 
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>

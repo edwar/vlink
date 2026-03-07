@@ -185,6 +185,7 @@ model Appointment {
   status            String    @default("PENDING") // PENDING, CONFIRMED, CANCELLED
   googleEventId     String?
   cancelToken       String?   @unique // Unique token for client self-cancellation link
+  notes             String?   @db.Text // Internal notes visible only to the professional
   reminder24hSentAt DateTime? // Timestamp when 24h reminder was sent (null = not yet sent)
   reminder2hSentAt  DateTime? // Timestamp when 2h reminder was sent (null = not yet sent)
   createdAt         DateTime  @default(now())
