@@ -105,8 +105,12 @@ VLink actualmente escribe en Google Calendar pero no escucha cambios externos. S
 #### H. Exportación de Historial a CSV
 Un botón "Exportar" en el dashboard que genere un archivo CSV con las citas del período seleccionado, útil para reportes contables y seguimiento de ingresos.
 
-#### I. Pagos en Línea (Wompi / Stripe)
-El campo `price` ya existe en `Service` y se muestra al cliente, pero no hay mecanismo de cobro. Integrar Wompi (Colombia) o Stripe transformaría VLink en una plataforma de booking con cobro integrado.
+#### I. Planes de Suscripción Recurrentes (SaaS)
+Implementar un modelo de monetización basado en niveles de membresía para las organizaciones. En lugar de cobrar por cada cita, la plataforma funcionaría como un SaaS con los siguientes niveles:
+- **Plan Gratuito (Individual):** Acceso para y gestión de 1 solo perfil profesional por usuario, con funcionalidades estándar.
+- **Plan Equipos:** Para organizaciones pequeñas (hasta 5 colaboradores), permitiendo vistas de disponibilidad de grupo y panel compartido por suscripción mensual base.
+- **Plan Corporativo:** Para organizaciones con más de 5 colaboradores, con cobro diferenciado, mayor nivel de soporte o características premium de personalización.
+Esto transformaría VLink en un negocio recurrente B2B, preparando la arquitectura de facturación mensual (Stripe/Wompi Suscripciones).
 
 ---
 *Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*
