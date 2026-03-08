@@ -140,6 +140,47 @@ export async function updateSystemConfig(data: {
     return { success: true }
 }
 
+export async function getPlanConfigs() {
+    await ensureAdmin()
+
+    const plans = await prisma.planConfig.findMany({
+        orderBy: { id: 'asc' }
+    })
+
+    // If no plans exist yet, seed them with defaults
+    if (plans.length === 0) {
+        const defaults = [
+            { id: 'FREE', name: 'FREE', price: '$0', limit: '1 Miembro', features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
+            { id: 'TEAM', name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager'], active: true },
+            { id: 'CORPORATE', name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', features: ['Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
+        ]
+
+        for (const plan of defaults) {
+            await prisma.planConfig.create({ data: plan })
+        }
+        return await prisma.planConfig.findMany({ orderBy: { id: 'asc' } })
+    }
+
+    return plans
+}
+
+export async function updatePlanConfig(id: string, data: {
+    price?: string,
+    limit?: string,
+    features?: string[],
+    active?: boolean
+}) {
+    await ensureAdmin()
+
+    await prisma.planConfig.update({
+        where: { id },
+        data
+    })
+
+    revalidatePath("/admin/plans")
+    return { success: true }
+}
+
 export async function getPublicSystemConfig() {
     return await prisma.systemConfig.findUnique({
         where: { id: 'global' }

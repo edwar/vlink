@@ -117,15 +117,16 @@ Este módulo está diseñado exclusivamente para los propietarios de VLink, perm
 - **Gráficas de Crecimiento:** Monitoreo de nuevos registros y retención de usuarios.
 
 ### B. Gestión de Organizaciones y Usuarios
+### B. Gestión de Organizaciones y Usuarios (Implementado)
 - **Directorio Maestro:** Lista completa de todas las organizaciones registradas con filtros por plan y fecha de creación.
-- **Control de Acceso:** Capacidad para suspender organizaciones o cambiar sus planes de suscripción manualmente (bypass de pasarela).
-- **Suplantación Segura (Impersonation):** Herramienta para que el soporte técnico pueda visualizar el dashboard de una organización específica para resolver incidencias.
+- **Control de Usuarios:** Capacidad para cambiar roles de usuario (promocionar a ADMIN) y visualizar perfiles asociados.
 
-### C. Configuración Maestra del SaaS (System Config)
-- **Editor de Planes:** Configuración dinámica de precios, límites de asientos y funcionalidades activas para cada tier de suscripción (Free, Team, Corp).
-- **Gestor de Contenido Global:** Configuración de anuncios en el dashboard (banners de mantenimiento, novedades o promociones).
+### C. Configuración Maestra del SaaS (System Config) (Implementado)
+- **Editor de Planes:** Configuración dinámica y persistente en base de datos de precios, límites y características para cada nivel (FREE, TEAM, CORPORATE).
+- **Modo Mantenimiento:** Interruptor maestro que bloquea el sistema público con una pantalla informativa.
+- **Gestor de Contenido Global:** Configuración de anuncios en el dashboard mediante banners dinámicos (INFO, SUCCESS, WARNING).
 
-### D. Salud del Sistema y Conectividad
+### D. Salud del Sistema y Conectividad (En Desarrollo)
 - **Centro de Webhooks:** Monitoreo del estado de los webhooks de Google Calendar y notificaciones de Mercado Pago.
 - **Logs de Auditoría:** Registro detallado de cambios críticos realizados por los administradores en el sistema.
 - **Alertas de Errores:** Panel de errores recientes reportados por la infraestructura para detección temprana de fallos.

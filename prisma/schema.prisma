@@ -223,3 +223,15 @@ model SystemConfig {
 
   @@map("system_config")
 }
+
+model PlanConfig {
+  id        String   @id // Corresponds to SubscriptionPlan name (FREE, TEAM, CORPORATE)
+  name      String
+  price     String
+  limit     String
+  features  String[] @default([])
+  active    Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+
+  @@map("plan_config")
+}
