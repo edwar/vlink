@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, UserPlus, Copy, Check, Info, Sparkles } from "lucide-react"
+import { sileo } from "sileo"
 
 interface InviteMemberProps {
     organizationId: string
@@ -24,12 +25,25 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
     const handleCreateInvitation = async () => {
         setIsPending(true)
         try {
-            const result = await createInvitation(organizationId, role)
+            const result = await createInvitation(organizationId, role) as any
             if (result.success && result.invitationUrl) {
                 setInvitationUrl(result.invitationUrl)
+                sileo.success({
+                    title: "Acceso generado",
+                    description: "Se ha creado un enlace de invitación correctamente."
+                })
+            } else if (result.error) {
+                sileo.info({
+                    title: "Límite alcanzado",
+                    description: result.error
+                })
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error)
+            sileo.error({
+                title: "Error inesperado",
+                description: "No se pudo realizar la invitación en este momento."
+            })
         } finally {
             setIsPending(false)
         }

@@ -229,6 +229,7 @@ model PlanConfig {
   name      String
   price     String
   limit     String
+  maxSeats  Int      @default(0) // 0 for unlimited, or specific seat count
   features  String[] @default([])
   active    Boolean  @default(true)
   updatedAt DateTime @updatedAt

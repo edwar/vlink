@@ -150,9 +150,9 @@ export async function getPlanConfigs() {
     // If no plans exist yet, seed them with defaults
     if (plans.length === 0) {
         const defaults = [
-            { id: 'FREE', name: 'FREE', price: '$0', limit: '1 Miembro', features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
-            { id: 'TEAM', name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager'], active: true },
-            { id: 'CORPORATE', name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', features: ['Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
+            { id: 'FREE', name: 'FREE', price: '$0', limit: '1 Miembro', maxSeats: 1, features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
+            { id: 'TEAM', name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', maxSeats: 5, features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager'], active: true },
+            { id: 'CORPORATE', name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', maxSeats: 0, features: ['Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
         ]
 
         for (const plan of defaults) {
@@ -167,6 +167,7 @@ export async function getPlanConfigs() {
 export async function updatePlanConfig(id: string, data: {
     price?: string,
     limit?: string,
+    maxSeats?: number,
     features?: string[],
     active?: boolean
 }) {
@@ -178,11 +179,18 @@ export async function updatePlanConfig(id: string, data: {
     })
 
     revalidatePath("/admin/plans")
+    revalidatePath("/dashboard/organizacion/planes")
     return { success: true }
 }
 
 export async function getPublicSystemConfig() {
     return await prisma.systemConfig.findUnique({
         where: { id: 'global' }
+    })
+}
+
+export async function getPublicPlanConfigs() {
+    return await prisma.planConfig.findMany({
+        orderBy: { id: 'asc' }
     })
 }

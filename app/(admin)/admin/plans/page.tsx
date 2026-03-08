@@ -2,6 +2,7 @@ import { CreditCard, ShieldCheck, CheckCircle2, AlertTriangle, Settings2, Save }
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { getPlanConfigs, updatePlanConfig } from "@/app/actions/admin"
+import { PlanFeaturesEditor } from "./plan-features-editor"
 
 export default async function AdminPlans() {
     const plansInfo = await getPlanConfigs()
@@ -31,12 +32,14 @@ export default async function AdminPlans() {
                                 "use server"
                                 const price = formData.get("price") as string
                                 const limit = formData.get("limit") as string
+                                const maxSeats = Number(formData.get("maxSeats"))
                                 const featuresString = formData.get("features") as string
                                 const features = featuresString.split(',').map(f => f.trim()).filter(Boolean)
 
                                 await updatePlanConfig(p.id, {
                                     price,
                                     limit,
+                                    maxSeats,
                                     features
                                 })
                             }} className="space-y-4">
@@ -49,7 +52,7 @@ export default async function AdminPlans() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Visible</label>
                                     <input
                                         name="limit"
                                         defaultValue={p.limit}
@@ -57,13 +60,15 @@ export default async function AdminPlans() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Características (separadas por coma)</label>
-                                    <textarea
-                                        name="features"
-                                        defaultValue={p.features.join(', ')}
-                                        className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-xs font-medium focus:ring-2 focus:ring-primary/20 transition-all min-h-[80px]"
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Técnico (Max Miembros, 0 = Ilimitado)</label>
+                                    <input
+                                        name="maxSeats"
+                                        type="number"
+                                        defaultValue={p.maxSeats}
+                                        className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
                                     />
                                 </div>
+                                <PlanFeaturesEditor initialFeatures={p.features} />
 
                                 <div className="pt-6 border-t border-border/50">
                                     <Button className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">

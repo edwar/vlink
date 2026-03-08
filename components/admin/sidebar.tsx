@@ -17,7 +17,7 @@ export function Sidebar() {
     ]
 
     return (
-        <aside className="w-64 border-r bg-card flex flex-col h-screen sticky top-0">
+        <aside className="hidden lg:flex w-64 border-r bg-card flex-col h-screen sticky top-0">
             <div className="p-6 border-b">
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-black">V</div>

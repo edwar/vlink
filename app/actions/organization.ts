@@ -83,7 +83,7 @@ export async function createInvitation(organizationId: string, role: "MANAGER" |
     })
 
     if (!session?.user?.id) {
-        throw new Error("Unauthorized")
+        return { success: false, error: "No autorizado" }
     }
 
     // Check if user is OWNER or ADMIN of the organization
@@ -96,7 +96,7 @@ export async function createInvitation(organizationId: string, role: "MANAGER" |
     })
 
     if (!membership) {
-        throw new Error("You don't have permission to create invitations for this organization")
+        return { success: false, error: "No tienes permisos para crear invitaciones en esta organización" }
     }
 
     // Check SaaS limits
@@ -112,16 +112,20 @@ export async function createInvitation(organizationId: string, role: "MANAGER" |
         }
     })
 
-    if (!orgData) throw new Error("Organización no encontrada")
+    if (!orgData) return { success: false, error: "Organización no encontrada" }
 
     const totalSeatsUsed = orgData._count.members + orgData._count.invitations;
 
-    if (orgData.subscriptionPlan === "FREE") {
-        throw new Error("El plan Gratuito solo permite 1 miembro. Actualiza al plan Equipos para invitar colaboradores.")
-    }
+    // Fetch plan configuration to check limits
+    const planConfig = await prisma.planConfig.findUnique({
+        where: { id: orgData.subscriptionPlan }
+    })
 
-    if (orgData.subscriptionPlan === "TEAM" && totalSeatsUsed >= 5) {
-        throw new Error("El plan Equipos tiene un límite de 5 miembros. Actualiza al plan Corporativo para asientos ilimitados.")
+    if (planConfig && planConfig.maxSeats > 0 && totalSeatsUsed >= planConfig.maxSeats) {
+        return {
+            success: false,
+            error: `El plan ${planConfig.name} tiene un límite de ${planConfig.maxSeats} ${planConfig.maxSeats === 1 ? 'miembro' : 'miembros'}. Actualiza tu plan para invitar más colaboradores.`
+        }
     }
 
     const invitation = await prisma.invitation.create({

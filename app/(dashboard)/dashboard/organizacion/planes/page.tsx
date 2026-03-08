@@ -3,6 +3,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserOrganizations } from "@/app/actions/organization"
 import { testSetPlan } from "@/app/actions/billing"
+import { getPublicPlanConfigs } from "@/app/actions/admin"
 import { PricingPlans } from "@/components/pricing-plans"
 import { CreditCard, ArrowLeft, CheckCircle } from "lucide-react"
 import Link from "next/link"
@@ -26,6 +27,8 @@ export default async function BillingPage({
     if (!organization) {
         redirect("/dashboard/organizacion")
     }
+
+    const planInfo = await getPublicPlanConfigs()
 
     // Auto-update plan if coming back from successful payment (DEMO/LOCAL fallthrough)
     let justSubscribed = false;
@@ -85,6 +88,7 @@ export default async function BillingPage({
                     organizationId={organization.id}
                     currentPlan={organization.subscriptionPlan}
                     isAdmin={organization.members.find(m => m.userId === session.user.id)?.role === "ADMIN"}
+                    initialPlans={planInfo}
                 />
             </section>
         </div>

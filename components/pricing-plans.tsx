@@ -8,13 +8,21 @@ import { Button } from "@/components/ui/button"
 
 type PlanType = "FREE" | "TEAM" | "CORPORATE"
 
+interface DatabasePlanConfig {
+    id: string
+    price: string
+    limit: string
+    features: string[]
+}
+
 interface PricingPlansProps {
     organizationId: string
     currentPlan: PlanType
     isAdmin?: boolean
+    initialPlans?: DatabasePlanConfig[]
 }
 
-export function PricingPlans({ organizationId, currentPlan, isAdmin = false }: PricingPlansProps) {
+export function PricingPlans({ organizationId, currentPlan, isAdmin = false, initialPlans }: PricingPlansProps) {
     const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null)
     const [error, setError] = useState<string | null>(null)
 
@@ -43,60 +51,62 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false }: P
         setLoadingPlan(null)
     }
 
+    // Map database plans to UI display properties
+    const plansInfo = initialPlans || []
     const plans = [
         {
             id: "FREE" as const,
             name: "Individual",
-            price: "$0",
+            price: plansInfo.find(p => p.id === 'FREE')?.price || "Gratis",
             period: "para siempre",
             description: "Para profesionales independientes empezando.",
             icon: User,
             color: "text-zinc-500",
             bgLight: "bg-zinc-500/10",
             border: "border-zinc-500/20",
-            features: [
+            features: plansInfo.find(p => p.id === 'FREE')?.features || [
                 "1 Perfil profesional",
                 "Link de reservas público",
                 "Agenda básica",
                 "Recordatorios por email"
             ],
-            limit: "Máximo 1 asiento"
+            limit: plansInfo.find(p => p.id === 'FREE')?.limit || "Máximo 1 asiento"
         },
         {
             id: "TEAM" as const,
             name: "Equipos",
-            price: "$49.000",
+            price: plansInfo.find(p => p.id === 'TEAM')?.price || "$49.000",
             period: "COP / mes",
             description: "Para clínicas y agencias en crecimiento.",
             icon: ShieldCheck,
             color: "text-blue-500",
             bgLight: "bg-blue-500/10",
             border: "border-blue-500/20",
-            features: [
+            features: plansInfo.find(p => p.id === 'TEAM')?.features || [
                 "Hasta 5 profesionales separados",
                 "Página de organización (Directorio)",
                 "Analytics avanzadas del equipo",
                 "Soporte prioritario"
             ],
-            limit: "Hasta 5 asientos"
+            limit: plansInfo.find(p => p.id === 'TEAM')?.limit || "Hasta 5 asientos"
         },
         {
             id: "CORPORATE" as const,
             name: "Corporativo",
-            price: "$99.000",
+            price: plansInfo.find(p => p.id === 'CORPORATE')?.price || "$99.000",
             period: "COP / mes",
             description: "Gestión a gran escala y múltiples sedes.",
             icon: Building,
             color: "text-primary",
             bgLight: "bg-primary/10",
             border: "border-primary/20",
-            features: [
+            features: plansInfo.find(p => p.id === 'CORPORATE')?.features || [
                 "Profesionales ilimitados",
                 "Subdominios personalizados (Pronto)",
                 "Integración con Zapier (Pronto)",
                 "Manager de cuentas dedicado"
             ],
-            limit: "Asientos ilimitados"
+            limit: plansInfo.find(p => p.id === 'CORPORATE')?.limit || "Asientos ilimitados"
         }
     ]
 
@@ -162,7 +172,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false }: P
 
                             <div className="mb-8 flex items-end gap-2 border-b border-border/50 pb-8">
                                 <span className={cn("text-5xl font-black font-display tracking-tighter leading-none", plan.id === "FREE" ? "text-foreground" : plan.color)}>
-                                    {plan.price}
+                                    {plan.price === "Gratis" ? "Gratis" : Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0 }).format(Number(plan.price))}
                                 </span>
                                 <span className="text-muted-foreground font-bold tracking-tight pb-1">{plan.period}</span>
                             </div>
@@ -170,7 +180,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false }: P
                             <div className="flex-1 space-y-4 mb-8">
                                 <p className="text-xs font-black uppercase tracking-widest text-foreground/70">{plan.limit}</p>
                                 <ul className="space-y-4">
-                                    {plan.features.map((feat, i) => (
+                                    {plan.features.map((feat: string, i: number) => (
                                         <li key={i} className="flex items-start gap-3 text-sm font-medium text-muted-foreground">
                                             <div className={cn("h-5 w-5 rounded-full flex items-center justify-center shrink-0", plan.bgLight)}>
                                                 <CheckCircle2 className={cn("h-3.5 w-3.5", plan.color)} />
