@@ -18,16 +18,19 @@ async function ensureAdmin() {
 export async function getGlobalStats() {
     await ensureAdmin()
 
+    const orgWhereClause = { members: { none: { user: { role: "ADMIN" as const } } } }
+
     const [orgCount, userCount, apptCount, memberCount] = await Promise.all([
-        prisma.organization.count(),
-        prisma.user.count(),
-        prisma.appointment.count(),
-        prisma.member.count()
+        prisma.organization.count({ where: orgWhereClause }),
+        prisma.user.count({ where: { role: "USER" } }),
+        prisma.appointment.count(), // Let's keep all appointments for now or we could filter them too
+        prisma.member.count({ where: { user: { role: "USER" } } })
     ])
 
     // Get revenue stats (simplified for now: just count orgs by plan)
     const planStats = await prisma.organization.groupBy({
         by: ['subscriptionPlan'],
+        where: orgWhereClause,
         _count: {
             _all: true
         }
@@ -60,6 +63,15 @@ export async function getAllOrganizations() {
     await ensureAdmin()
 
     return await prisma.organization.findMany({
+        where: {
+            members: {
+                none: {
+                    user: {
+                        role: "ADMIN"
+                    }
+                }
+            }
+        },
         include: {
             members: {
                 include: { user: true }
@@ -79,6 +91,9 @@ export async function getAllUsers() {
     await ensureAdmin()
 
     return await prisma.user.findMany({
+        where: {
+            role: "USER"
+        },
         include: {
             profile: true,
             memberships: {
@@ -194,3 +209,34 @@ export async function getPublicPlanConfigs() {
         orderBy: { id: 'asc' }
     })
 }
+
+/**
+ * Permite a un administrador unirse temporalmente a una organización como OWNER
+ * para dar soporte, modificar planes o resolver problemas.
+ */
+export async function supportOrganization(organizationId: string) {
+    const session = await ensureAdmin()
+
+    // check if they are already a member
+    const existing = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: { userId: session.user.id, organizationId }
+        }
+    })
+
+    if (!existing) {
+        await prisma.member.create({
+            data: { userId: session.user.id, organizationId, role: "OWNER" }
+        })
+    } else if (existing.role !== "OWNER") {
+        await prisma.member.update({
+            where: { id: existing.id },
+            data: { role: "OWNER" }
+        })
+    }
+
+    revalidatePath("/")
+    revalidatePath("/admin/organizations")
+    return { success: true }
+}
+

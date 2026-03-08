@@ -214,9 +214,6 @@ export async function acceptInvitation(token: string) {
     return { success: true, organizationName: invitation.organization.name }
 }
 
-/**
- * Gets organizations for the current user
- */
 export async function getUserOrganizations() {
     const session = await auth.api.getSession({
         headers: await headers()
@@ -224,7 +221,7 @@ export async function getUserOrganizations() {
 
     if (!session?.user?.id) return []
 
-    return await prisma.organization.findMany({
+    const orgs = await prisma.organization.findMany({
         where: {
             members: {
                 some: { userId: session.user.id }
@@ -239,6 +236,13 @@ export async function getUserOrganizations() {
             }
         }
     })
+
+    // Sort by when the current user joined, descending (newest memberships first)
+    return orgs.sort((a, b) => {
+        const joinA = a.members.find(m => m.userId === session.user.id)?.createdAt.getTime() || 0;
+        const joinB = b.members.find(m => m.userId === session.user.id)?.createdAt.getTime() || 0;
+        return joinB - joinA;
+    });
 }
 
 /**

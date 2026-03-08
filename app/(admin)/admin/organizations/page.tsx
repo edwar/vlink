@@ -4,8 +4,12 @@ import { Card, CardContent } from "@/components/ui/card"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import Link from "next/link"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { SupportOrganizationButton } from "@/components/support-organization-button"
 
 export default async function AdminOrganizations() {
+    const session = await auth.api.getSession({ headers: await headers() })
     const orgs = await getAllOrganizations()
 
     return (
@@ -29,8 +33,8 @@ export default async function AdminOrganizations() {
                                         <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">slug: {org.slug}</p>
                                         <div className="flex items-center gap-3 mt-2">
                                             <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${org.subscriptionPlan === "FREE" ? "bg-zinc-500/10 text-zinc-600 border-zinc-500/20" :
-                                                    org.subscriptionPlan === "TEAM" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
-                                                        "bg-primary/10 text-primary border-primary/20"
+                                                org.subscriptionPlan === "TEAM" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
+                                                    "bg-primary/10 text-primary border-primary/20"
                                                 }`}>
                                                 {org.subscriptionPlan}
                                             </span>
@@ -50,13 +54,21 @@ export default async function AdminOrganizations() {
                                         </p>
                                     </div>
 
-                                    <Link
-                                        href={`/org/${org.slug}`}
-                                        target="_blank"
-                                        className="h-12 w-12 bg-muted/40 text-muted-foreground rounded-2xl flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
-                                    >
-                                        <ArrowRight className="h-5 w-5" />
-                                    </Link>
+                                    <div className="flex items-center gap-3">
+                                        <SupportOrganizationButton
+                                            organizationId={org.id}
+                                            organizationName={org.name}
+                                            isAlreadyMember={org.members.some(m => m.userId === session?.user?.id)}
+                                        />
+                                        <Link
+                                            href={`/org/${org.slug}`}
+                                            target="_blank"
+                                            className="h-10 w-10 sm:h-12 sm:w-12 bg-muted/40 text-muted-foreground rounded-2xl flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm shrink-0"
+                                            title="Ver página pública"
+                                        >
+                                            <ArrowRight className="h-5 w-5" />
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
