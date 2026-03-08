@@ -1,8 +1,9 @@
 import { getSystemConfig } from "@/app/actions/admin"
-import { Settings, Tool, Radio, Megaphone, Save, ShieldAlert, CheckCircle2 } from "lucide-react"
+import { Megaphone, Save, ShieldAlert } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { updateSystemConfig } from "@/app/actions/admin"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default async function AdminSettings() {
     const config = await getSystemConfig()
@@ -68,7 +69,17 @@ export default async function AdminSettings() {
                         </div>
                     </CardHeader>
                     <CardContent className="p-6 pt-0">
-                        <form className="space-y-4">
+                        <form action={async (formData: FormData) => {
+                            "use server"
+                            const title = formData.get("title") as string
+                            const body = formData.get("body") as string
+                            const type = formData.get("type") as string
+                            await updateSystemConfig({
+                                announcementTitle: title,
+                                announcementBody: body,
+                                announcementType: type
+                            })
+                        }} className="space-y-4">
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Título del Anuncio</label>
                                 <input
@@ -90,15 +101,16 @@ export default async function AdminSettings() {
                             <div className="flex items-center gap-4">
                                 <div className="space-y-2 flex-1">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tipo</label>
-                                    <select
-                                        name="type"
-                                        defaultValue={config.announcementType}
-                                        className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                                    >
-                                        <option value="INFO">Información</option>
-                                        <option value="SUCCESS">Novedad</option>
-                                        <option value="WARNING">Advertencia</option>
-                                    </select>
+                                    <Select name="type" defaultValue={config.announcementType}>
+                                        <SelectTrigger className="w-full bg-muted/40 border-none rounded-xl h-12 px-4 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all">
+                                            <SelectValue placeholder="Tipo" />
+                                        </SelectTrigger>
+                                        <SelectContent position="popper" className="rounded-2xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">
+                                            <SelectItem value="INFO" className="rounded-xl focus:bg-primary/10 focus:text-primary">Información</SelectItem>
+                                            <SelectItem value="SUCCESS" className="rounded-xl focus:bg-primary/10 focus:text-primary">Novedad</SelectItem>
+                                            <SelectItem value="WARNING" className="rounded-xl focus:bg-primary/10 focus:text-primary">Advertencia</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="pt-6">
                                     <Button className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 flex items-center gap-2">

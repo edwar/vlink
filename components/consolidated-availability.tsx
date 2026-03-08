@@ -138,7 +138,7 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                                     </div>
 
                                     <Link
-                                        href={`/${data.profile.username}?date=${selectedDate ? selectedDate.toISOString().split("T")[0] : ""}`}
+                                        href={`/${data.profile.username}?date=${selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}`}
                                         className="mt-auto flex items-center justify-between w-full p-3 bg-primary/5 text-primary text-sm font-bold rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
                                     >
                                         Seleccionar horario

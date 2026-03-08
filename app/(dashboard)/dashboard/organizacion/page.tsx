@@ -191,7 +191,7 @@ export default async function OrganizacionPage() {
                         <div className="px-2 flex-1">
                             <InviteMember
                                 organizationId={organization.id}
-                                disabled={currentUserRole !== "OWNER"}
+                                disabled={currentUserRole !== "OWNER" && currentUserRole !== "ADMIN"}
                             />
                         </div>
                     </div>

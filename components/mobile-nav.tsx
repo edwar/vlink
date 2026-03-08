@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, X, LogOut, LayoutDashboard, Calendar, Clock, User, Settings } from "lucide-react"
+import { Menu, X, LogOut, LayoutDashboard, Calendar, Clock, User, Settings, ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
-import { signOut } from "@/lib/auth-client"
+import { signOut, useSession } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import { Users } from "lucide-react"
 import { Logo } from "./logo"
@@ -24,6 +24,8 @@ export function MobileNav() {
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
     const router = useRouter()
+    const { data: session } = useSession()
+    const isAdmin = session?.user?.role === "ADMIN"
 
     const handleSignOut = async () => {
         await signOut()
@@ -104,7 +106,25 @@ export function MobileNav() {
                                 ))}
                             </ul>
                         </li>
-                        <li className="mt-auto">
+                        <li className="mt-auto space-y-1">
+                            {isAdmin && (
+                                <Link
+                                    href="/admin"
+                                    onClick={() => setIsOpen(false)}
+                                    className={cn(
+                                        pathname.startsWith('/admin')
+                                            ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-sm'
+                                            : 'text-muted-foreground hover:bg-amber-500/5 hover:text-amber-600',
+                                        'group flex gap-x-3 rounded-md p-3 text-base font-semibold transition-colors'
+                                    )}
+                                >
+                                    <ShieldCheck className={cn(
+                                        "h-6 w-6 shrink-0",
+                                        pathname.startsWith('/admin') ? "text-amber-600" : "text-muted-foreground"
+                                    )} aria-hidden="true" />
+                                    VLink Admin
+                                </Link>
+                            )}
                             <button
                                 onClick={handleSignOut}
                                 className="group -mx-2 flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"

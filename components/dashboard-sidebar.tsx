@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard, Users } from "lucide-react"
+import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard, Users, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
-import { signOut } from "@/lib/auth-client"
+import { signOut, useSession } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import Image from "next/image"
 import { Logo } from "./logo"
@@ -24,6 +24,8 @@ export function DashboardSidebar() {
     const pathname = usePathname()
     const router = useRouter()
     const clearProfile = useProfileStore((state) => state.clearProfile)
+    const { data: session } = useSession()
+    const isAdmin = session?.user?.role === "ADMIN"
 
     const handleSignOut = async () => {
         clearProfile()
@@ -74,7 +76,24 @@ export function DashboardSidebar() {
                             })}
                         </ul>
                     </li>
-                    <li className="mt-auto">
+                    <li className="mt-auto space-y-1">
+                        {isAdmin && (
+                            <Link
+                                href="/admin"
+                                className={cn(
+                                    pathname.startsWith('/admin')
+                                        ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-sm'
+                                        : 'text-muted-foreground hover:bg-amber-500/5 hover:text-amber-600',
+                                    'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-all duration-300'
+                                )}
+                            >
+                                <ShieldCheck className={cn(
+                                    "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                    pathname.startsWith('/admin') ? "text-amber-600" : "text-muted-foreground group-hover:text-amber-600"
+                                )} aria-hidden="true" />
+                                VLink Admin
+                            </Link>
+                        )}
                         <button
                             onClick={handleSignOut}
                             className="group -mx-2 flex w-full gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"

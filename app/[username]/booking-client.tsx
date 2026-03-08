@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { format, addDays, startOfTomorrow, isSameDay } from "date-fns"
+import { format, addDays, startOfTomorrow, isSameDay, parseISO, isValid } from "date-fns"
 import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -35,12 +36,22 @@ interface ProfileData {
 
 export function BookingClient({ params }: { params: { username: string } }) {
     const { username } = params
+    const searchParams = useSearchParams()
+    const queryDate = searchParams.get("date")
+
     const [profileData, setProfileData] = useState<ProfileData | null>(null)
     const [loadingProfile, setLoadingProfile] = useState(true)
     const [profileError, setProfileError] = useState(false)
 
     const [selectedService, setSelectedService] = useState<ServiceOption | null>(null)
-    const [selectedDate, setSelectedDate] = useState<Date>(() => startOfTomorrow())
+    const [selectedDate, setSelectedDate] = useState<Date>(() => {
+        if (queryDate) {
+            const [year, month, day] = queryDate.split('-').map(Number)
+            const parsed = new Date(year, month - 1, day)
+            if (isValid(parsed)) return parsed
+        }
+        return startOfTomorrow()
+    })
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
     const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: Client details, 3: Success
     const [slots, setSlots] = useState<string[]>([])
@@ -108,10 +119,26 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
     // Set initial selected date to the first eligible date if not set already
     useEffect(() => {
-        if (profileData && selectedDate.getTime() < baseDate.getTime()) {
-            setSelectedDate(baseDate)
+        if (profileData) {
+            // Priority 1: Query param date (if valid and within range)
+            if (queryDate) {
+                const [year, month, day] = queryDate.split('-').map(Number)
+                const parsed = new Date(year, month - 1, day)
+                if (isValid(parsed)) {
+                    const isInRange = days.some(day => isSameDay(day, parsed))
+                    if (isInRange) {
+                        setSelectedDate(parsed)
+                        return
+                    }
+                }
+            }
+
+            // Priority 2: Ensure selectedDate isn't before baseDate
+            if (selectedDate.getTime() < baseDate.getTime()) {
+                setSelectedDate(baseDate)
+            }
         }
-    }, [profileData])
+    }, [profileData, queryDate])
 
     const handleSelectService = (service: ServiceOption) => {
         setSelectedService(service)

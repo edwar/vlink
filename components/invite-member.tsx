@@ -65,7 +65,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                             <SelectTrigger id="role" className="h-14 rounded-2xl border-2 border-primary/5 bg-background/40 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
                                 <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
-                            <SelectContent className="rounded-2xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">
+                            <SelectContent position="popper" className="rounded-2xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">
                                 <SelectItem value="PROFESSIONAL" className="rounded-xl focus:bg-primary/10 focus:text-primary">Profesional (Tiene su propia agenda)</SelectItem>
                                 <SelectItem value="MANAGER" className="rounded-xl focus:bg-primary/10 focus:text-primary">Gestor (Administra agendas de otros)</SelectItem>
                             </SelectContent>
