@@ -14,6 +14,7 @@ import { ToggleOrgVisibility } from "@/components/toggle-org-visibility"
 import { RenameOrganization } from "@/components/rename-organization"
 import { OrgQRCode } from "@/components/org-qr-code"
 import { OrgBusinessCard } from "@/components/org-business-card"
+import { LeaveOrganization } from "@/components/leave-organization"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -64,7 +65,7 @@ export default async function OrganizacionPage() {
         ]
     })
     const sortedMembers = [...members].sort((a, b) => {
-        const roleOrder = { "OWNER": 0, "ADMIN": 1, "MANAGER": 2, "PROFESSIONAL": 3 };
+        const roleOrder = { "OWNER": 0, "MANAGER": 1, "PROFESSIONAL": 2 };
         const aVal = roleOrder[a.role as keyof typeof roleOrder] ?? 99;
         const bVal = roleOrder[b.role as keyof typeof roleOrder] ?? 99;
         if (aVal !== bVal) return aVal - bVal;
@@ -73,11 +74,10 @@ export default async function OrganizacionPage() {
 
     const currentUserMember = members.find(m => m.userId === session.user.id)
     const currentUserRole = currentUserMember?.role
-    const isOwnerOrManager = currentUserRole === "OWNER" || currentUserRole === "MANAGER" || currentUserRole === "ADMIN"
+    const isOwnerOrManager = currentUserRole === "OWNER" || currentUserRole === "MANAGER"
 
     const ROLE_LABELS: Record<string, string> = {
         OWNER: "Propietario",
-        ADMIN: "Administrador",
         PROFESSIONAL: "Profesional",
         MANAGER: "Gestor"
     }
@@ -206,7 +206,7 @@ export default async function OrganizacionPage() {
                         <div className="px-2 flex-1">
                             <InviteMember
                                 organizationId={organization.id}
-                                disabled={currentUserRole !== "OWNER" && currentUserRole !== "ADMIN"}
+                                disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
                             />
                         </div>
                     </div>
@@ -272,7 +272,7 @@ export default async function OrganizacionPage() {
                                                         name={member.user.name ?? "Usuario"}
                                                         className="h-full w-full rounded-2xl shadow-lg border-2 border-background ring-4 ring-primary/5"
                                                     />
-                                                    {(member.role === "OWNER" || member.role === "ADMIN") && (
+                                                    {member.role === "OWNER" && (
                                                         <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10">
                                                             <Shield className="h-2.5 w-2.5" />
                                                         </div>
@@ -315,7 +315,7 @@ export default async function OrganizacionPage() {
                                                 <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
                                                     <span className={cn(
                                                         "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
-                                                        (member.role === "OWNER" || member.role === "ADMIN") ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
+                                                        member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
                                                             member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
                                                                 "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
                                                     )}>
@@ -351,6 +351,14 @@ export default async function OrganizacionPage() {
                             </div>
                         );
                     })}
+                </div>
+
+                {/* Row 3: Peligro / Salir */}
+                <div className="pt-12 border-t border-red-500/10 flex justify-center">
+                    <LeaveOrganization
+                        organizationId={organization.id}
+                        organizationName={organization.name}
+                    />
                 </div>
             </div>
         </div>

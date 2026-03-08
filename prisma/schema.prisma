@@ -116,7 +116,6 @@ model Member {
 
 enum MemberRole {
   OWNER
-  ADMIN
   MANAGER
   PROFESSIONAL
 }

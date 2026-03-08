@@ -1,10 +1,11 @@
 "use server"
 
 import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
+import { headers, cookies } from "next/headers"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { randomUUID } from "crypto"
+import { includes } from "better-auth"
 
 /**
  * Creates a new organization and assigns the current user as OWNER
@@ -86,12 +87,12 @@ export async function createInvitation(organizationId: string, role: "MANAGER" |
         return { success: false, error: "No autorizado" }
     }
 
-    // Check if user is OWNER or ADMIN of the organization
+    // Check if user is OWNER of the organization
     const membership = await prisma.member.findFirst({
         where: {
             organizationId,
             userId: session.user.id,
-            role: { in: ["OWNER", "ADMIN"] }
+            role: { in: ["OWNER"] }
         }
     })
 
@@ -213,7 +214,12 @@ export async function getUserOrganizations() {
             }
         },
         include: {
-            members: true
+            members: true,
+            profiles: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
 }
@@ -235,7 +241,7 @@ export async function getManagedProfiles(organizationId: string) {
         }
     })
 
-    if (!currentMember || !["OWNER", "ADMIN", "MANAGER"].includes(currentMember.role)) {
+    if (!currentMember || !["OWNER", "MANAGER"].includes(currentMember.role)) {
         return []
     }
 
@@ -262,9 +268,9 @@ export async function getManagedProfiles(organizationId: string) {
 
 
     // Sort all members to determine who is active under the current plan
-    // Priority: OWNER > ADMIN > MANAGER > PROFESSIONAL, then by createdAt
+    // Priority: OWNER > MANAGER > PROFESSIONAL, then by createdAt
     const sortedMembers = [...allMembers].sort((a, b) => {
-        const roleOrder = { "OWNER": 0, "ADMIN": 1, "MANAGER": 2, "PROFESSIONAL": 3 };
+        const roleOrder = { "OWNER": 0, "MANAGER": 1, "PROFESSIONAL": 2 };
         const aVal = roleOrder[a.role as keyof typeof roleOrder] ?? 99;
         const bVal = roleOrder[b.role as keyof typeof roleOrder] ?? 99;
         if (aVal !== bVal) return aVal - bVal;
@@ -364,7 +370,7 @@ export async function toggleShowOnOrgPage(value: boolean, targetUserId?: string)
         const callerMembership = await prisma.member.findFirst({
             where: {
                 userId: session.user.id,
-                role: { in: ["OWNER", "MANAGER", "ADMIN"] },
+                role: { in: ["OWNER", "MANAGER"] },
                 organization: {
                     members: {
                         some: { userId: resolvedTargetUserId }
@@ -400,7 +406,7 @@ export async function updateOrganizationName(organizationId: string, newName: st
         where: {
             organizationId,
             userId: session.user.id,
-            role: { in: ["OWNER", "MANAGER", "ADMIN"] }
+            role: { in: ["OWNER", "MANAGER"] }
         }
     })
 
@@ -427,4 +433,72 @@ export async function updateOrganizationName(organizationId: string, newName: st
 
     revalidatePath("/dashboard/organizacion")
     return { success: true, newSlug }
+}
+
+/**
+ * Permite a un usuario abandonar una organización.
+ */
+export async function leaveOrganization(organizationId: string) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) {
+        throw new Error("No autorizado")
+    }
+
+    // Buscar la membresía del usuario
+    const membership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: {
+                userId: session.user.id,
+                organizationId
+            }
+        }
+    })
+
+    if (!membership) {
+        throw new Error("No eres miembro de esta organización")
+    }
+
+    // Verificar si es el único OWNER
+    if (membership.role === "OWNER") {
+        const ownerCount = await prisma.member.count({
+            where: {
+                organizationId,
+                role: "OWNER"
+            }
+        })
+
+        if (ownerCount <= 1) {
+            throw new Error("Eres el único propietario. Debes transferir la propiedad o eliminar la organización antes de salir.")
+        }
+    }
+
+    // Transacción para salir
+    await prisma.$transaction(async (tx) => {
+        // 1. Eliminar membresía
+        await tx.member.delete({
+            where: { id: membership.id }
+        })
+
+        // 2. Limpiar el vínculo en el perfil si esta era su organización activa
+        await tx.profile.updateMany({
+            where: {
+                userId: session.user.id,
+                organizationId
+            },
+            data: {
+                organizationId: null
+            }
+        })
+    })
+
+    // 3. Limpiar cookie de "ver como" para evitar errores de permisos al redirigir
+    const cookieStore = await cookies()
+    cookieStore.delete("vlink-view-as-profile-id")
+
+    revalidatePath("/dashboard")
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
 }

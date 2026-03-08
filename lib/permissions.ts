@@ -49,7 +49,7 @@ export async function getEffectiveProfile() {
     const commonMembership = await prisma.member.findFirst({
         where: {
             userId: session.user.id,
-            role: { in: ["OWNER", "ADMIN", "MANAGER"] },
+            role: { in: ["OWNER", "MANAGER"] },
             organization: {
                 members: { some: { userId: targetProfile.userId } }
             }

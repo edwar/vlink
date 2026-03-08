@@ -33,7 +33,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     description: "Se ha creado un enlace de invitación correctamente."
                 })
             } else if (result.error) {
-                sileo.info({
+                sileo.warning({
                     title: "Límite alcanzado",
                     description: result.error
                 })

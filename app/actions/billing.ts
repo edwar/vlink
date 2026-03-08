@@ -21,7 +21,7 @@ export async function createCheckoutSession(organizationId: string, planType: "T
             where: {
                 organizationId,
                 userId: session.user.id,
-                role: { in: ["OWNER", "ADMIN"] }
+                role: { in: ["OWNER"] }
             }
         });
 
