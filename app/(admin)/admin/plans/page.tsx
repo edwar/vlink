@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { getPlanConfigs, updatePlanConfig } from "@/app/actions/admin"
 import { PlanFeaturesEditor } from "./plan-features-editor"
+import { AdminEmptyState } from "@/components/admin/admin-empty-state"
 
 export default async function AdminPlans() {
     const plansInfo = await getPlanConfigs()
@@ -17,68 +18,78 @@ export default async function AdminPlans() {
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {plansInfo.map((p) => (
-                    <Card key={p.id} className="border-none shadow-xl shadow-primary/5 bg-card flex flex-col pt-4">
-                        <CardHeader className="text-center pb-2">
-                            <div className={`h-16 w-16 mx-auto rounded-3xl flex items-center justify-center mb-4 ${p.id === 'FREE' ? 'bg-zinc-100 text-zinc-500' :
-                                p.id === 'TEAM' ? 'bg-blue-100 text-blue-500' : 'bg-primary/10 text-primary'
-                                }`}>
-                                <CreditCard className="h-8 w-8" />
-                            </div>
-                            <CardTitle className="text-2xl font-black font-display tracking-tight">{p.id}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex-1 space-y-6 flex flex-col">
-                            <form action={async (formData: FormData) => {
-                                "use server"
-                                const price = formData.get("price") as string
-                                const limit = formData.get("limit") as string
-                                const maxSeats = Number(formData.get("maxSeats"))
-                                const featuresString = formData.get("features") as string
-                                const features = featuresString.split(',').map(f => f.trim()).filter(Boolean)
+                {plansInfo.length === 0 ? (
+                    <div className="lg:col-span-3">
+                        <AdminEmptyState
+                            title="No hay planes configurados"
+                            description="No se encontraron configuraciones de planes de suscripción en el sistema."
+                            icon={CreditCard}
+                        />
+                    </div>
+                ) : (
+                    plansInfo.map((p) => (
+                        <Card key={p.id} className="border-none shadow-xl shadow-primary/5 bg-card flex flex-col pt-4">
+                            <CardHeader className="text-center pb-2">
+                                <div className={`h-16 w-16 mx-auto rounded-3xl flex items-center justify-center mb-4 ${p.id === 'FREE' ? 'bg-zinc-100 text-zinc-500' :
+                                    p.id === 'TEAM' ? 'bg-blue-100 text-blue-500' : 'bg-primary/10 text-primary'
+                                    }`}>
+                                    <CreditCard className="h-8 w-8" />
+                                </div>
+                                <CardTitle className="text-2xl font-black font-display tracking-tight">{p.id}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex-1 space-y-6 flex flex-col">
+                                <form action={async (formData: FormData) => {
+                                    "use server"
+                                    const price = formData.get("price") as string
+                                    const limit = formData.get("limit") as string
+                                    const maxSeats = Number(formData.get("maxSeats"))
+                                    const featuresString = formData.get("features") as string
+                                    const features = featuresString.split(',').map(f => f.trim()).filter(Boolean)
 
-                                await updatePlanConfig(p.id, {
-                                    price,
-                                    limit,
-                                    maxSeats,
-                                    features
-                                })
-                            }} className="space-y-4">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Precio Visible</label>
-                                    <input
-                                        name="price"
-                                        defaultValue={p.price}
-                                        className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Visible</label>
-                                    <input
-                                        name="limit"
-                                        defaultValue={p.limit}
-                                        className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Técnico (Max Miembros, 0 = Ilimitado)</label>
-                                    <input
-                                        name="maxSeats"
-                                        type="number"
-                                        defaultValue={p.maxSeats}
-                                        className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <PlanFeaturesEditor initialFeatures={p.features} />
+                                    await updatePlanConfig(p.id, {
+                                        price,
+                                        limit,
+                                        maxSeats,
+                                        features
+                                    })
+                                }} className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Precio Visible</label>
+                                        <input
+                                            name="price"
+                                            defaultValue={p.price}
+                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Visible</label>
+                                        <input
+                                            name="limit"
+                                            defaultValue={p.limit}
+                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Técnico (Max Miembros, 0 = Ilimitado)</label>
+                                        <input
+                                            name="maxSeats"
+                                            type="number"
+                                            defaultValue={p.maxSeats}
+                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                        />
+                                    </div>
+                                    <PlanFeaturesEditor initialFeatures={p.features} />
 
-                                <div className="pt-6 border-t border-border/50">
-                                    <Button className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">
-                                        <Save className="h-4 w-4" /> Guardar Plan
-                                    </Button>
-                                </div>
-                            </form>
-                        </CardContent>
-                    </Card>
-                ))}
+                                    <div className="pt-6 border-t border-border/50">
+                                        <Button className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">
+                                            <Save className="h-4 w-4" /> Guardar Plan
+                                        </Button>
+                                    </div>
+                                </form>
+                            </CardContent>
+                        </Card>
+                    ))
+                )}
             </div>
 
             <Card className="bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-[2.5rem] p-8">
