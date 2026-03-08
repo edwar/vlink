@@ -239,11 +239,18 @@ export async function getManagedProfiles(organizationId: string) {
         return []
     }
 
+    const org = await prisma.organization.findUnique({
+        where: { id: organizationId }
+    })
+
+    const planConfig = org ? await prisma.planConfig.findUnique({
+        where: { id: org.subscriptionPlan }
+    }) : null;
+
+    const maxSeats = planConfig?.maxSeats ?? 0;
+
     const allMembers = await prisma.member.findMany({
-        where: {
-            organizationId,
-            userId: { not: session.user.id }
-        },
+        where: { organizationId },
         include: {
             user: {
                 include: {
@@ -253,13 +260,28 @@ export async function getManagedProfiles(organizationId: string) {
         }
     })
 
-    return allMembers
-        .filter(m => m.user.profile)
-        .map(members => ({
-            ...members.user.profile!,
-            user: members.user,
-            role: members.role
-        }))
+
+    // Sort all members to determine who is active under the current plan
+    // Priority: OWNER > ADMIN > MANAGER > PROFESSIONAL, then by createdAt
+    const sortedMembers = [...allMembers].sort((a, b) => {
+        const roleOrder = { "OWNER": 0, "ADMIN": 1, "MANAGER": 2, "PROFESSIONAL": 3 };
+        const aVal = roleOrder[a.role as keyof typeof roleOrder] ?? 99;
+        const bVal = roleOrder[b.role as keyof typeof roleOrder] ?? 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.createdAt.getTime() - b.createdAt.getTime();
+    });
+
+    return sortedMembers
+        .filter(m => m.user.profile && m.userId !== session.user.id)
+        .map(m => {
+            const memberIndex = sortedMembers.findIndex(sm => sm.id === m.id);
+            return {
+                ...m.user.profile!,
+                user: m.user,
+                role: m.role,
+                isPlanActive: maxSeats === 0 || memberIndex < maxSeats
+            };
+        })
 }
 
 /**
@@ -270,6 +292,10 @@ export async function getOrganizationPublicProfiles(slug: string) {
         where: { slug }
     })
 
+    const planConfig = organization ? await prisma.planConfig.findUnique({
+        where: { id: organization.subscriptionPlan }
+    }) : null;
+
     if (!organization) return null
 
     // Query through Member - the source of truth for org membership
@@ -279,27 +305,35 @@ export async function getOrganizationPublicProfiles(slug: string) {
             user: {
                 include: {
                     profile: {
-                        where: { showOnOrgPage: true },
                         include: {
                             services: { where: { isActive: true }, select: { id: true } }
                         }
                     }
                 }
             }
-        }
+        },
+        orderBy: [
+            { role: 'asc' },
+            { createdAt: 'asc' }
+        ]
     })
 
     // Keep only members who have a profile with showOnOrgPage = true
+    const maxSeats = planConfig?.maxSeats ?? 0;
+
+    // Filter by plan limits and visibility
     const visibleProfiles = members
-        .filter(m => m.user.profile !== null)
-        .map(m => ({
+        .filter(m => m.user.profile !== null && m.user.profile.showOnOrgPage)
+        .map((m, index) => ({
             username: m.user.profile!.username,
             displayName: m.user.profile!.displayName || m.user.name || m.user.profile!.username,
             bio: m.user.profile!.bio,
             image: m.user.image,
             expertise: (m.user.profile as any).expertise || [],
             serviceCount: m.user.profile!.services.length,
+            isPlanActive: maxSeats === 0 || index < maxSeats
         }))
+        .filter(p => p.isPlanActive) // Only return profiles active in the plan
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
 
     return {

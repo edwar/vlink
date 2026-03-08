@@ -5,7 +5,7 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, AlertTriangle } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -43,6 +43,11 @@ export default async function OrganizacionPage() {
 
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/org/${organization.slug}`
 
+    const planConfig = await prisma.planConfig.findUnique({
+        where: { id: organization.subscriptionPlan }
+    })
+    const maxSeats = planConfig?.maxSeats ?? 0;
+
     // Fetch members of the organization
     const members = await prisma.member.findMany({
         where: { organizationId: organization.id },
@@ -53,8 +58,18 @@ export default async function OrganizacionPage() {
                 }
             }
         },
-        orderBy: { role: 'asc' }
+        orderBy: [
+            { role: 'asc' },
+            { createdAt: 'asc' }
+        ]
     })
+    const sortedMembers = [...members].sort((a, b) => {
+        const roleOrder = { "OWNER": 0, "ADMIN": 1, "MANAGER": 2, "PROFESSIONAL": 3 };
+        const aVal = roleOrder[a.role as keyof typeof roleOrder] ?? 99;
+        const bVal = roleOrder[b.role as keyof typeof roleOrder] ?? 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.createdAt.getTime() - b.createdAt.getTime();
+    });
 
     const currentUserMember = members.find(m => m.userId === session.user.id)
     const currentUserRole = currentUserMember?.role
@@ -229,80 +244,113 @@ export default async function OrganizacionPage() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
-                    {members.map((member) => (
-                        <div key={member.id} className="p-1 rounded-xl bg-linear-to-r from-primary/5 to-transparent hover:from-primary/10 transition-colors duration-500 h-full">
-                            <Card className="h-full bg-card/10 backdrop-blur-xl border border-primary/5 rounded-xl hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden flex flex-col justify-center">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                                <CardContent className="p-3 sm:px-4 sm:py-3.5">
-                                    <div className="flex flex-col 2xl:flex-row 2xl:items-center gap-5 sm:gap-6 relative">
-                                        {/* Header: Avatar, Name, Email */}
-                                        <div className="flex items-center gap-3 min-w-0">
-                                            <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 group-hover:scale-105 transition-transform duration-500 relative">
-                                                <UserAvatar
-                                                    image={member.user.image}
-                                                    name={member.user.name}
-                                                    className="h-full w-full rounded-2xl shadow-lg border-2 border-background ring-4 ring-primary/5"
-                                                />
-                                                {(member.role === "OWNER" || member.role === "ADMIN") && (
-                                                    <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10">
-                                                        <Shield className="h-2.5 w-2.5" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h3 className="text-lg sm:text-xl font-black font-display tracking-tight truncate text-foreground/90">
-                                                    {member.user.name}
-                                                </h3>
-                                                <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate flex items-center gap-1.5 mt-0.5">
-                                                    <UserCircle className="h-3.5 w-3.5 opacity-50 shrink-0" />
-                                                    <span className="truncate">{member.user.email}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        {/* Middle & Actions Section */}
-                                        <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row 2xl:items-center justify-between flex-1 gap-4 pt-4 sm:pt-0 xl:pt-4 2xl:pt-0 border-t sm:border-t-0 xl:border-t 2xl:border-t-0 border-border/10">
-                                            {/* Profile Link */}
-                                            <div className="flex-1 min-w-0">
-                                                {member.user.profile?.username && (
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="flex items-center gap-2 bg-muted/30 px-2.5 py-1 rounded-lg border border-border/50 min-w-0 hover:bg-muted/50 transition-colors">
-                                                            <Briefcase className="h-3 w-3 text-primary shrink-0" />
-                                                            <span className="text-[10px] font-black text-foreground/80 truncate">
-                                                                {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
-                                                            </span>
+                    {sortedMembers.map((member, index) => {
+                        const isPlanActive = maxSeats === 0 || index < maxSeats;
+                        return (
+                            <div
+                                key={member.id}
+                                className={cn(
+                                    "p-1 rounded-xl bg-linear-to-r transition-colors duration-500 h-full",
+                                    isPlanActive
+                                        ? "from-primary/5 to-transparent hover:from-primary/10"
+                                        : "from-red-500/5 to-transparent hover:from-red-500/10 opacity-70 grayscale-[0.3]"
+                                )}
+                                style={{ animationDelay: `${index * 50}ms` }}
+                            >
+                                <Card className={cn(
+                                    "h-full bg-card/10 backdrop-blur-xl border border-primary/5 rounded-xl hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden flex flex-col justify-center",
+                                    !isPlanActive && "border-red-500/20"
+                                )}>
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                    <CardContent className="p-3 sm:px-4 sm:py-3.5">
+                                        <div className="flex flex-col 2xl:flex-row 2xl:items-center gap-5 sm:gap-6 relative">
+                                            {/* Header: Avatar, Name, Email */}
+                                            <div className="flex items-center gap-3 min-w-0">
+                                                <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 group-hover:scale-105 transition-transform duration-500 relative">
+                                                    <UserAvatar
+                                                        image={member.user.image}
+                                                        name={member.user.name ?? "Usuario"}
+                                                        className="h-full w-full rounded-2xl shadow-lg border-2 border-background ring-4 ring-primary/5"
+                                                    />
+                                                    {(member.role === "OWNER" || member.role === "ADMIN") && (
+                                                        <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10">
+                                                            <Shield className="h-2.5 w-2.5" />
                                                         </div>
-                                                        <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
-                                                    </div>
-                                                )}
+                                                    )}
+                                                    {!isPlanActive && (
+                                                        <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10" title="Suspendido por límite de plan">
+                                                            <AlertTriangle className="h-2.5 w-2.5" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <h3 className="text-lg sm:text-xl font-black font-display tracking-tight truncate text-foreground/90">
+                                                        {member.user.name}
+                                                    </h3>
+                                                    <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate flex items-center gap-1.5 mt-0.5">
+                                                        <UserCircle className="h-3.5 w-3.5 opacity-50 shrink-0" />
+                                                        <span className="truncate">{member.user.email}</span>
+                                                    </p>
+                                                </div>
                                             </div>
 
-                                            {/* Role & Visibility */}
-                                            <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-                                                <span className={cn(
-                                                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
-                                                    (member.role === "OWNER" || member.role === "ADMIN") ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
-                                                        member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
-                                                            "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
-                                                )}>
-                                                    {ROLE_LABELS[member.role]}
-                                                </span>
-                                                {isOwnerOrManager && member.user.profile && (
-                                                    <div className="pl-3 border-l border-border/10">
-                                                        <ToggleOrgVisibility
-                                                            initialValue={member.user.profile.showOnOrgPage ?? true}
-                                                            targetUserId={member.userId}
-                                                            memberName={member.user.name}
-                                                        />
-                                                    </div>
-                                                )}
+                                            {/* Middle & Actions Section */}
+                                            <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row 2xl:items-center justify-between flex-1 gap-4 pt-4 sm:pt-0 xl:pt-4 2xl:pt-0 border-t sm:border-t-0 xl:border-t 2xl:border-t-0 border-border/10">
+                                                {/* Profile Link */}
+                                                <div className="flex-1 min-w-0">
+                                                    {member.user.profile?.username && (
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="flex items-center gap-2 bg-muted/30 px-2.5 py-1 rounded-lg border border-border/50 min-w-0 hover:bg-muted/50 transition-colors">
+                                                                <Briefcase className="h-3 w-3 text-primary shrink-0" />
+                                                                <span className="text-[10px] font-black text-foreground/80 truncate">
+                                                                    {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
+                                                                </span>
+                                                            </div>
+                                                            <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Role & Visibility */}
+                                                <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+                                                    <span className={cn(
+                                                        "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
+                                                        (member.role === "OWNER" || member.role === "ADMIN") ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
+                                                            member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
+                                                                "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
+                                                    )}>
+                                                        {ROLE_LABELS[member.role]}
+                                                    </span>
+
+                                                    {!isPlanActive && (
+                                                        <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-red-500/10 text-red-600 border-red-500/20 shadow-red-500/5">
+                                                            Suspendido (Plan)
+                                                        </span>
+                                                    )}
+
+                                                    {isPlanActive && (
+                                                        <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/20 shadow-emerald-500/5 hidden sm:inline-flex">
+                                                            Activo
+                                                        </span>
+                                                    )}
+
+                                                    {isOwnerOrManager && member.user.profile && (
+                                                        <div className="pl-3 border-l border-border/10">
+                                                            <ToggleOrgVisibility
+                                                                initialValue={member.user.profile.showOnOrgPage ?? true}
+                                                                targetUserId={member.userId}
+                                                                memberName={member.user.name}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    ))}
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
