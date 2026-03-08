@@ -77,11 +77,8 @@ Para garantizar la facilidad de uso y rapidez en la implementación:
 
 ### 🔥 Alta Prioridad (Alto Impacto, Bajo Esfuerzo)
 
-#### A. Recordatorios Automáticos por Email
-La función `sendAppointmentEmail` ya soporta los tipos `REMINDER_24H` y `REMINDER_2H`, pero actualmente no hay ningún mecanismo que los dispare. Implementar un endpoint `/api/reminders/cron` invocado por Vercel Cron cada hora para buscar citas próximas completaría esta funcionalidad sin esfuerzo significativo.
-
-#### B. Email de Cancelación al Cliente
-Cuando el profesional cancela una cita, el cliente no recibe notificación alguna por email. Agregar un tipo `CANCELLATION` a la función de email y llamarla dentro de `cancelAppointmentAction` es un cambio menor de alto valor.
+- **Recordatorios Automáticos por Email:** Sistema integrado con Resend + Vercel Cron. Envía avisos automáticos 24h y 2h antes de cada cita (requiere `CRON_SECRET` en producción).
+- **Email de Cancelación al Cliente:** Cuando el profesional cancela una cita, el cliente recibe una notificación automática con los detalles de la cita anulada.
 
 #### C. Reprogramación de Citas
 Actualmente solo existe la opción de cancelar. Un flujo de reprogramación que permita al profesional mover una cita a otra fecha/hora disponible mejoraría significativamente la experiencia operativa, sin requerir cambios en el modelo de datos.

@@ -5,7 +5,7 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -209,6 +209,13 @@ export default async function OrganizacionPage() {
                         <span className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 shadow-sm shadow-primary/5">
                             {members.length} {members.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>
+                        <a
+                            href="/dashboard/organizacion/agenda"
+                            className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 hover:bg-primary/20 transition-colors flex items-center gap-1.5"
+                        >
+                            <CalendarRange className="h-3 w-3" />
+                            Agenda de Equipo
+                        </a>
                         <a
                             href={`/org/${organization.slug}`}
                             target="_blank"
