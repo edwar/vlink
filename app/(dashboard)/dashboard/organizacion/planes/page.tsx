@@ -84,6 +84,7 @@ export default async function BillingPage({
                 <PricingPlans
                     organizationId={organization.id}
                     currentPlan={organization.subscriptionPlan}
+                    isAdmin={organization.members.find(m => m.userId === session.user.id)?.role === "OWNER" || organization.members.find(m => m.userId === session.user.id)?.role === "ADMIN"}
                 />
             </section>
         </div>

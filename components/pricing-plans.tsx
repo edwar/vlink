@@ -11,9 +11,10 @@ type PlanType = "FREE" | "TEAM" | "CORPORATE"
 interface PricingPlansProps {
     organizationId: string
     currentPlan: PlanType
+    isAdmin?: boolean
 }
 
-export function PricingPlans({ organizationId, currentPlan }: PricingPlansProps) {
+export function PricingPlans({ organizationId, currentPlan, isAdmin = false }: PricingPlansProps) {
     const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null)
     const [error, setError] = useState<string | null>(null)
 
@@ -109,20 +110,22 @@ export function PricingPlans({ organizationId, currentPlan }: PricingPlansProps)
             )}
 
             {/* Test Controls (Developer/Admin bypass) */}
-            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <ShieldCheck className="h-5 w-5 text-amber-600" />
-                    <div>
-                        <p className="text-sm font-black text-amber-700">Modo Desarrollo (Simulador)</p>
-                        <p className="text-xs text-amber-600/80 font-medium">Fuerza el cambio de plan sin pasar por pasarela para probar límites en la app.</p>
+            {isAdmin && (
+                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <ShieldCheck className="h-5 w-5 text-amber-600" />
+                        <div>
+                            <p className="text-sm font-black text-amber-700">Modo Desarrollo (Simulador)</p>
+                            <p className="text-xs text-amber-600/80 font-medium">Fuerza el cambio de plan sin pasar por pasarela para probar límites en la app.</p>
+                        </div>
+                    </div>
+                    <div className="flex bg-background border border-border/50 rounded-xl p-1 gap-1">
+                        <button onClick={() => handleTestChange("FREE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "FREE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Free</button>
+                        <button onClick={() => handleTestChange("TEAM")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "TEAM" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Team</button>
+                        <button onClick={() => handleTestChange("CORPORATE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "CORPORATE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Corp</button>
                     </div>
                 </div>
-                <div className="flex bg-background border border-border/50 rounded-xl p-1 gap-1">
-                    <button onClick={() => handleTestChange("FREE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "FREE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Free</button>
-                    <button onClick={() => handleTestChange("TEAM")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "TEAM" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Team</button>
-                    <button onClick={() => handleTestChange("CORPORATE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "CORPORATE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Corp</button>
-                </div>
-            </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {plans.map((plan) => {
