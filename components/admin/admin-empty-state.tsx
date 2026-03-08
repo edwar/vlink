@@ -18,7 +18,7 @@ export function AdminEmptyState({
             <div className="flex items-center justify-center w-40 h-40 rounded-full bg-muted mb-4">
                 <Icon className="w-32 h-32 text-muted-foreground" />
             </div>
-            <h3 className="mb-1 text-6xl font-semibold tracking-tight font-display font-black">{title}</h3>
+            <h3 className="mb-1 text-6xl tracking-tight font-display font-black">{title}</h3>
             <p className="mb-4 text-2xl text-muted-foreground max-w-sm font-display">
                 {description}
             </p>

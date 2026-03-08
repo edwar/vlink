@@ -23,11 +23,10 @@ export async function getGlobalStats() {
     const [orgCount, userCount, apptCount, memberCount] = await Promise.all([
         prisma.organization.count({ where: orgWhereClause }),
         prisma.user.count({ where: { role: "USER" } }),
-        prisma.appointment.count(), // Let's keep all appointments for now or we could filter them too
+        prisma.appointment.count(),
         prisma.member.count({ where: { user: { role: "USER" } } })
     ])
 
-    // Get revenue stats (simplified for now: just count orgs by plan)
     const planStats = await prisma.organization.groupBy({
         by: ['subscriptionPlan'],
         where: orgWhereClause,
@@ -43,6 +42,64 @@ export async function getGlobalStats() {
         }
     })
 
+    // --- NUEVAS MÉTRICAS ---
+
+    // 1. Top 5 Servicios más demandados globalmente (Servicios con más citas cruzando toda la plataforma)
+    const topServicesData = await prisma.service.findMany({
+        take: 5,
+        orderBy: {
+            appointments: {
+                _count: 'desc'
+            }
+        },
+        select: {
+            name: true,
+            _count: {
+                select: { appointments: true }
+            }
+        }
+    })
+
+    // 2. Crecimiento Mensual de Organizaciones (Últimos 6 meses)
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1); // Empezar desde el día 1 de ese mes
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
+    const recentOrgs = await prisma.organization.findMany({
+        where: {
+            createdAt: { gte: sixMonthsAgo },
+            ...orgWhereClause
+        },
+        select: { createdAt: true }
+    });
+
+    const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const monthlyGrowthRaw: Record<string, number> = {};
+    const monthlyGrowthKeys: string[] = [];
+
+    // Pre-poblar los últimos 6 meses en orden cronológico
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date();
+        d.setMonth(d.getMonth() - i);
+        const m = `${monthNames[d.getMonth()]} ${d.getFullYear().toString().slice(2)}`;
+        monthlyGrowthRaw[m] = 0;
+        monthlyGrowthKeys.push(m);
+    }
+
+    recentOrgs.forEach(org => {
+        const d = org.createdAt;
+        const m = `${monthNames[d.getMonth()]} ${d.getFullYear().toString().slice(2)}`;
+        if (monthlyGrowthRaw[m] !== undefined) {
+            monthlyGrowthRaw[m]++;
+        }
+    });
+
+    const monthlyGrowth = monthlyGrowthKeys.map(key => ({
+        month: key,
+        count: monthlyGrowthRaw[key]
+    }));
+
     return {
         orgCount,
         userCount,
@@ -55,7 +112,12 @@ export async function getGlobalStats() {
         appointmentsByStatus: appointmentsByStatus.map(s => ({
             status: s.status,
             count: s._count._all
-        }))
+        })),
+        topServices: topServicesData.map(ts => ({
+            name: ts.name,
+            count: ts._count.appointments
+        })),
+        monthlyGrowth
     }
 }
 

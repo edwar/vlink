@@ -1,6 +1,7 @@
 import { getGlobalStats } from "@/app/actions/admin"
-import { Building2, Users, CalendarCheck2, TrendingUp, ShieldCheck, Globe } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Building2, Users, CalendarCheck2, TrendingUp, ShieldCheck } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { AdminCharts } from "@/components/admin/admin-charts"
 
 export default async function AdminDashboard() {
     const stats = await getGlobalStats()
@@ -42,49 +43,12 @@ export default async function AdminDashboard() {
                 })}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Distribución por Plan */}
-                <Card className="border-none shadow-xl shadow-primary/5">
-                    <CardHeader className="p-6 pb-2">
-                        <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2">
-                            <Globe className="h-5 w-5 text-primary" /> Distribución por Plan
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6 pt-2 space-y-4">
-                        {stats.planStats.map(ps => (
-                            <div key={ps.plan} className="flex items-center justify-between p-4 bg-muted/40 rounded-2xl">
-                                <span className="text-xs font-black uppercase tracking-widest">{ps.plan}</span>
-                                <span className={`px-4 py-1 rounded-full text-xs font-black ${ps.plan === 'FREE' ? 'bg-zinc-500 text-white' :
-                                        ps.plan === 'TEAM' ? 'bg-blue-500 text-white' : 'bg-primary text-white'
-                                    }`}>
-                                    {ps.count} orgs
-                                </span>
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
-
-                {/* Estado de Citas */}
-                <Card className="border-none shadow-xl shadow-primary/5">
-                    <CardHeader className="p-6 pb-2">
-                        <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2">
-                            <CalendarCheck2 className="h-5 w-5 text-primary" /> Salud del Ecosistema
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6 pt-2 space-y-4">
-                        {stats.appointmentsByStatus.map(s => (
-                            <div key={s.status} className="flex items-center justify-between p-4 bg-muted/40 rounded-2xl">
-                                <span className="text-xs font-black uppercase tracking-widest">{s.status}</span>
-                                <span className={`px-4 py-1 rounded-full text-xs font-black ${s.status === 'CANCELLED' ? 'bg-red-500 text-white' :
-                                        s.status === 'CONFIRMED' ? 'bg-green-500 text-white' : 'bg-amber-500 text-white'
-                                    }`}>
-                                    {s.count}
-                                </span>
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
-            </div>
+            <AdminCharts
+                planStats={stats.planStats}
+                appointmentsByStatus={stats.appointmentsByStatus}
+                topServices={stats.topServices}
+                monthlyGrowth={stats.monthlyGrowth}
+            />
         </div>
     )
 }
