@@ -108,5 +108,27 @@ Un botón "Exportar" en el dashboard que genere un archivo CSV con las citas del
   - **Plan Corporativo:** Colaboradores ilimitados y soporte prioritario.
   - Sistema de Webhooks y Billing Dashboard dedicado.
 
+## 7. Módulo de Administración de Plataforma (VLink Admin)
+
+Este módulo está diseñado exclusivamente para los propietarios de VLink, permitiendo una gestión centralizada de toda la infraestructura y el ecosistema de negocio.
+
+### A. Dashboard Global de Métricas
+- **KPIs en Tiempo Real:** Visualización de total de organizaciones, perfiles activos, citas generadas globalmente y volumen de transacciones de suscripción.
+- **Gráficas de Crecimiento:** Monitoreo de nuevos registros y retención de usuarios.
+
+### B. Gestión de Organizaciones y Usuarios
+- **Directorio Maestro:** Lista completa de todas las organizaciones registradas con filtros por plan y fecha de creación.
+- **Control de Acceso:** Capacidad para suspender organizaciones o cambiar sus planes de suscripción manualmente (bypass de pasarela).
+- **Suplantación Segura (Impersonation):** Herramienta para que el soporte técnico pueda visualizar el dashboard de una organización específica para resolver incidencias.
+
+### C. Configuración Maestra del SaaS (System Config)
+- **Editor de Planes:** Configuración dinámica de precios, límites de asientos y funcionalidades activas para cada tier de suscripción (Free, Team, Corp).
+- **Gestor de Contenido Global:** Configuración de anuncios en el dashboard (banners de mantenimiento, novedades o promociones).
+
+### D. Salud del Sistema y Conectividad
+- **Centro de Webhooks:** Monitoreo del estado de los webhooks de Google Calendar y notificaciones de Mercado Pago.
+- **Logs de Auditoría:** Registro detallado de cambios críticos realizados por los administradores en el sistema.
+- **Alertas de Errores:** Panel de errores recientes reportados por la infraestructura para detección temprana de fallos.
+
 ---
 *Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*

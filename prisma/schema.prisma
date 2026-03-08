@@ -16,6 +16,7 @@ model User {
   email         String    @unique
   emailVerified Boolean
   image         String?
+  role          UserRole  @default(USER)
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]
@@ -24,6 +25,11 @@ model User {
   memberships   Member[]
 
   @@map("user")
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model Session {
@@ -205,4 +211,15 @@ model Appointment {
   updatedAt         DateTime  @updatedAt
 
   @@map("appointment")
+}
+
+model SystemConfig {
+  id                String   @id @default("global")
+  maintenanceMode   Boolean  @default(false)
+  announcementTitle String?
+  announcementBody  String?
+  announcementType  String   @default("INFO") // INFO, WARNING, SUCCESS
+  updatedAt         DateTime @updatedAt
+
+  @@map("system_config")
 }
