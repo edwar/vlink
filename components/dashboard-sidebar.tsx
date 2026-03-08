@@ -25,7 +25,7 @@ export function DashboardSidebar() {
     const router = useRouter()
     const clearProfile = useProfileStore((state) => state.clearProfile)
     const { data: session } = useSession()
-    const isAdmin = session?.user?.role === "ADMIN"
+    const isAdmin = (session?.user as any)?.role === "ADMIN"
 
     const handleSignOut = async () => {
         clearProfile()
