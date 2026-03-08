@@ -98,7 +98,7 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                                 <UserAvatar
                                     image={item.profile.image}
                                     name={item.profile.displayName}
-                                    className="h-12 w-12 rounded-xl"
+                                    className="min-h-12 min-w-12 rounded-xl"
                                 />
                                 <div>
                                     <h3 className="font-black text-foreground group-hover:text-primary transition-colors">{item.profile.displayName}</h3>

@@ -32,7 +32,7 @@ export async function createOrganization(name: string) {
                 members: {
                     create: {
                         userId: session.user.id,
-                        role: { in: ["OWNER", "ADMIN"] }
+                        role: "OWNER"
                     }
                 }
             }

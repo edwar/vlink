@@ -400,7 +400,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         key={day.toString()}
                                         onClick={() => setSelectedDate(day)}
                                         className={cn(
-                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl transition-all",
+                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl border border-primary/10 transition-all",
                                             isSameDay(day, selectedDate)
                                                 ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105"
                                                 : "bg-card hover:border-accent"
@@ -438,7 +438,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                             key={time}
                                             onClick={() => setSelectedTime(time)}
                                             className={cn(
-                                                "py-3 rounded-xl font-semibold text-sm transition-all",
+                                                "py-3 rounded-xl font-semibold text-sm border border-primary/10 transition-all",
                                                 selectedTime === time
                                                     ? "bg-primary text-primary-foreground border-primary shadow-md"
                                                     : "bg-card hover:border-accent"
