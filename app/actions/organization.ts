@@ -32,7 +32,7 @@ export async function createOrganization(name: string) {
                 members: {
                     create: {
                         userId: session.user.id,
-                        role: "OWNER"
+                        role: { in: ["OWNER", "ADMIN"] }
                     }
                 }
             }
@@ -330,7 +330,7 @@ export async function toggleShowOnOrgPage(value: boolean, targetUserId?: string)
         const callerMembership = await prisma.member.findFirst({
             where: {
                 userId: session.user.id,
-                role: { in: ["OWNER", "MANAGER"] },
+                role: { in: ["OWNER", "MANAGER", "ADMIN"] },
                 organization: {
                     members: {
                         some: { userId: resolvedTargetUserId }
@@ -366,7 +366,7 @@ export async function updateOrganizationName(organizationId: string, newName: st
         where: {
             organizationId,
             userId: session.user.id,
-            role: { in: ["OWNER", "MANAGER"] }
+            role: { in: ["OWNER", "MANAGER", "ADMIN"] }
         }
     })
 

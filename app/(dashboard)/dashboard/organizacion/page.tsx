@@ -243,7 +243,7 @@ export default async function OrganizacionPage() {
                                                     name={member.user.name}
                                                     className="h-full w-full rounded-2xl shadow-lg border-2 border-background ring-4 ring-primary/5"
                                                 />
-                                                {member.role === "OWNER" && (
+                                                {member.role === "OWNER" || member.role === "ADMIN" && (
                                                     <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10">
                                                         <Shield className="h-2.5 w-2.5" />
                                                     </div>
@@ -281,7 +281,7 @@ export default async function OrganizacionPage() {
                                             <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
                                                 <span className={cn(
                                                     "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
-                                                    member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
+                                                    member.role === "OWNER" || member.role === "ADMIN" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
                                                         member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
                                                             "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
                                                 )}>
