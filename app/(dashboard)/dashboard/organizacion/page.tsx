@@ -58,7 +58,7 @@ export default async function OrganizacionPage() {
 
     const currentUserMember = members.find(m => m.userId === session.user.id)
     const currentUserRole = currentUserMember?.role
-    const isOwnerOrManager = currentUserRole === "OWNER" || currentUserRole === "MANAGER"
+    const isOwnerOrManager = currentUserRole === "OWNER" || currentUserRole === "MANAGER" || currentUserRole === "ADMIN"
 
     const ROLE_LABELS: Record<string, string> = {
         OWNER: "Propietario",
