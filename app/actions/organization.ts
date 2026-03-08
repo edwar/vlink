@@ -166,6 +166,23 @@ export async function acceptInvitation(token: string) {
         throw new Error("Invitation invalid or expired")
     }
 
+    // Block if the user is already OWNER of another organization
+    const existingOwnership = await prisma.member.findFirst({
+        where: {
+            userId: session.user.id,
+            role: "OWNER",
+            // Make sure it's not the same organization (re-accepting an invite)
+            NOT: { organizationId: invitation.organizationId }
+        },
+        include: { organization: { select: { name: true } } }
+    })
+
+    if (existingOwnership) {
+        throw new Error(
+            `No puedes unirte a "${invitation.organization.name}" porque ya eres propietario de "${existingOwnership.organization.name}". Debes cerrar o transferir tu organización antes de unirte a otra.`
+        )
+    }
+
     // Atomic transaction: Join organization and link profile
     await prisma.$transaction(async (tx) => {
         // 1. Create membership
@@ -501,4 +518,234 @@ export async function leaveOrganization(organizationId: string) {
     revalidatePath("/dashboard")
     revalidatePath("/dashboard/organizacion")
     return { success: true }
+}
+
+/**
+ * Elimina permanentemente una organización.
+ * Solo permitido si el solicitante es OWNER y es el único miembro.
+ */
+export async function deleteOrganization(organizationId: string) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) {
+        throw new Error("No autorizado")
+    }
+
+    // Verificar que el usuario es OWNER
+    const membership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: {
+                userId: session.user.id,
+                organizationId
+            }
+        }
+    })
+
+    if (!membership || membership.role !== "OWNER") {
+        throw new Error("Solo el propietario puede cerrar la organización")
+    }
+
+    // Verificar que no quedan otros miembros
+    const memberCount = await prisma.member.count({
+        where: { organizationId }
+    })
+
+    if (memberCount > 1) {
+        throw new Error(
+            `Aún hay ${memberCount - 1} ${memberCount - 1 === 1 ? "miembro" : "miembros"} en la organización. Debes eliminarlos antes de cerrarla.`
+        )
+    }
+
+    // Eliminar la organización (las relaciones en cascada limpiarán Members e Invitations)
+    // Primero desvincular perfiles para no violar FK
+    await prisma.$transaction(async (tx) => {
+        // 1. Desvincular perfiles de la organización
+        await tx.profile.updateMany({
+            where: { organizationId },
+            data: { organizationId: null }
+        })
+
+        // 2. Eliminar la organización (cascada elimina members e invitations)
+        await tx.organization.delete({
+            where: { id: organizationId }
+        })
+    })
+
+    // Limpiar cookie de "ver como"
+    const cookieStore = await cookies()
+    cookieStore.delete("vlink-view-as-profile-id")
+
+    revalidatePath("/dashboard")
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
+}
+
+/**
+ * Transfiere la propiedad de la organización a otro miembro.
+ * El OWNER actual pasa a ser MANAGER y el target pasa a ser OWNER.
+ */
+export async function transferOwnership(organizationId: string, targetUserId: string) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) {
+        throw new Error("No autorizado")
+    }
+
+    if (targetUserId === session.user.id) {
+        throw new Error("No puedes transferirte la propiedad a ti mismo")
+    }
+
+    // Verificar que el solicitante es el OWNER actual
+    const callerMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: {
+                userId: session.user.id,
+                organizationId
+            }
+        }
+    })
+
+    if (!callerMembership || callerMembership.role !== "OWNER") {
+        throw new Error("Solo el propietario puede transferir la propiedad")
+    }
+
+    // Verificar que el destinatario es miembro de la organización
+    const targetMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: {
+                userId: targetUserId,
+                organizationId
+            }
+        },
+        include: { user: { select: { name: true } } }
+    })
+
+    if (!targetMembership) {
+        throw new Error("El usuario no es miembro de esta organización")
+    }
+
+    // Intercambio atómico de roles
+    await prisma.$transaction([
+        // Target pasa a ser OWNER
+        prisma.member.update({
+            where: { id: targetMembership.id },
+            data: { role: "OWNER" }
+        }),
+        // Caller pasa a ser MANAGER
+        prisma.member.update({
+            where: { id: callerMembership.id },
+            data: { role: "MANAGER" }
+        })
+    ])
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true, newOwnerName: targetMembership.user.name }
+}
+
+/**
+ * Cambia el rol de un miembro dentro de la organización.
+ * Solo el OWNER puede hacerlo. No puede cambiar su propio rol ni el de otro OWNER.
+ * Para transferir propiedad usar transferOwnership.
+ */
+export async function updateMemberRole(
+    organizationId: string,
+    targetUserId: string,
+    newRole: "MANAGER" | "PROFESSIONAL"
+) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("No autorizado")
+
+    if (targetUserId === session.user.id) {
+        throw new Error("No puedes cambiar tu propio rol")
+    }
+
+    // Verificar que el caller es OWNER
+    const callerMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: { userId: session.user.id, organizationId }
+        }
+    })
+
+    if (!callerMembership || callerMembership.role !== "OWNER") {
+        throw new Error("Solo el propietario puede cambiar roles")
+    }
+
+    // Verificar que el target existe y no es OWNER
+    const targetMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: { userId: targetUserId, organizationId }
+        }
+    })
+
+    if (!targetMembership) throw new Error("El miembro no existe en esta organización")
+    if (targetMembership.role === "OWNER") {
+        throw new Error("No puedes cambiar el rol de otro propietario. Usa 'Transferir Propiedad'.")
+    }
+
+    await prisma.member.update({
+        where: { id: targetMembership.id },
+        data: { role: newRole }
+    })
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
+}
+
+/**
+ * Elimina a un miembro de la organización.
+ * Solo el OWNER puede hacerlo, no puede eliminarse a sí mismo ni a otro OWNER.
+ */
+export async function removeMember(organizationId: string, targetUserId: string) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("No autorizado")
+
+    if (targetUserId === session.user.id) {
+        throw new Error("No puedes eliminarte a ti mismo. Usa 'Abandonar Organización'.")
+    }
+
+    // Verificar que el caller es OWNER
+    const callerMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: { userId: session.user.id, organizationId }
+        }
+    })
+
+    if (!callerMembership || callerMembership.role !== "OWNER") {
+        throw new Error("Solo el propietario puede eliminar miembros")
+    }
+
+    // Verificar que el target existe y no es OWNER
+    const targetMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: { userId: targetUserId, organizationId }
+        },
+        include: { user: { select: { name: true } } }
+    })
+
+    if (!targetMembership) throw new Error("El miembro no existe en esta organización")
+    if (targetMembership.role === "OWNER") throw new Error("No puedes eliminar a otro propietario")
+
+    // Transacción: eliminar membresía y desvincular perfil de la org
+    await prisma.$transaction(async (tx) => {
+        await tx.member.delete({ where: { id: targetMembership.id } })
+
+        // Desvincular el perfil si su org activa era esta
+        await tx.profile.updateMany({
+            where: { userId: targetUserId, organizationId },
+            data: { organizationId: null }
+        })
+    })
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true, removedName: targetMembership.user.name }
 }

@@ -55,8 +55,9 @@ export default function InvitePage() {
                     }, 1500)
                 }
             } catch (err: any) {
-                // If auto-join fails, we stay in "valid" state to let them try manually
-                console.error("Auto-join failed:", err.message)
+                // Show the error (e.g. ownership conflict) prominently in the UI
+                setError(err.message || "No se pudo unir a la organización.")
+                setStatus("error")
                 setIsJoining(false)
             }
         }

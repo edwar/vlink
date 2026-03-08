@@ -15,6 +15,10 @@ import { RenameOrganization } from "@/components/rename-organization"
 import { OrgQRCode } from "@/components/org-qr-code"
 import { OrgBusinessCard } from "@/components/org-business-card"
 import { LeaveOrganization } from "@/components/leave-organization"
+import { CloseOrganization } from "@/components/close-organization"
+import { TransferOwnership } from "@/components/transfer-ownership"
+import { ChangeMemberRole } from "@/components/change-member-role"
+import { RemoveMember } from "@/components/remove-member"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -313,14 +317,24 @@ export default async function OrganizacionPage() {
 
                                                 {/* Role & Visibility */}
                                                 <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-                                                    <span className={cn(
-                                                        "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
-                                                        member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
-                                                            member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
-                                                                "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
-                                                    )}>
-                                                        {ROLE_LABELS[member.role]}
-                                                    </span>
+                                                    {/* Role badge / selector */}
+                                                    {isOwnerOrManager && member.userId !== currentUserMember?.userId ? (
+                                                        <ChangeMemberRole
+                                                            organizationId={organization.id}
+                                                            targetUserId={member.userId}
+                                                            currentRole={member.role as "OWNER" | "MANAGER" | "PROFESSIONAL"}
+                                                            memberName={member.user.name}
+                                                        />
+                                                    ) : (
+                                                        <span className={cn(
+                                                            "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
+                                                            member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
+                                                                member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
+                                                                    "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
+                                                        )}>
+                                                            {ROLE_LABELS[member.role]}
+                                                        </span>
+                                                    )}
 
                                                     {!isPlanActive && (
                                                         <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-red-500/10 text-red-600 border-red-500/20 shadow-red-500/5">
@@ -329,20 +343,29 @@ export default async function OrganizacionPage() {
                                                     )}
 
                                                     {isPlanActive && (
-                                                        <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/20 shadow-emerald-500/5 hidden sm:inline-flex">
+                                                        <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/20 shadow-emerald-500/5 hidden md:inline-flex">
                                                             Activo
                                                         </span>
                                                     )}
 
-                                                    {isOwnerOrManager && member.user.profile && (
-                                                        <div className="pl-3 border-l border-border/10">
-                                                            <ToggleOrgVisibility
-                                                                initialValue={member.user.profile.showOnOrgPage ?? true}
-                                                                targetUserId={member.userId}
-                                                                memberName={member.user.name}
-                                                            />
+                                                    {(isOwnerOrManager && member.user.profile) || (currentUserRole === "OWNER" && member.userId !== currentUserMember?.userId && member.role !== "OWNER") ? (
+                                                        <div className="pl-3 border-l border-border/10 flex items-center gap-1">
+                                                            {isOwnerOrManager && member.user.profile && (
+                                                                <ToggleOrgVisibility
+                                                                    initialValue={member.user.profile.showOnOrgPage ?? true}
+                                                                    targetUserId={member.userId}
+                                                                    memberName={member.user.name}
+                                                                />
+                                                            )}
+                                                            {currentUserRole === "OWNER" && member.userId !== currentUserMember?.userId && member.role !== "OWNER" && (
+                                                                <RemoveMember
+                                                                    organizationId={organization.id}
+                                                                    targetUserId={member.userId}
+                                                                    memberName={member.user.name}
+                                                                />
+                                                            )}
                                                         </div>
-                                                    )}
+                                                    ) : null}
                                                 </div>
                                             </div>
                                         </div>
@@ -353,12 +376,39 @@ export default async function OrganizacionPage() {
                     })}
                 </div>
 
-                {/* Row 3: Peligro / Salir */}
-                <div className="pt-12 border-t border-red-500/10 flex justify-center">
-                    <LeaveOrganization
-                        organizationId={organization.id}
-                        organizationName={organization.name}
-                    />
+                {/* Row 3: Zona de Peligro */}
+                <div className="pt-12 border-t border-red-500/10 flex flex-col items-center gap-4">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-red-500/50">Zona de Peligro</p>
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                        {currentUserRole !== "OWNER" && (
+                            <LeaveOrganization
+                                organizationId={organization.id}
+                                organizationName={organization.name}
+                            />
+                        )}
+                        {currentUserRole === "OWNER" && (
+                            <>
+                                <TransferOwnership
+                                    organizationId={organization.id}
+                                    organizationName={organization.name}
+                                    members={members.map(m => ({
+                                        id: m.id,
+                                        userId: m.userId,
+                                        role: m.role,
+                                        user: {
+                                            name: m.user.name,
+                                            email: m.user.email,
+                                            image: m.user.image
+                                        }
+                                    }))}
+                                />
+                                <CloseOrganization
+                                    organizationId={organization.id}
+                                    organizationName={organization.name}
+                                />
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
