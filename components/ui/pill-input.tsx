@@ -1,5 +1,5 @@
 import * as React from "react"
-import { X } from "lucide-react"
+import { X, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface PillInputProps extends Omit<React.ComponentProps<"input">, "value" | "onChange" | "onKeyDown"> {
@@ -16,14 +16,18 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
         // Merge refs
         React.useImperativeHandle(ref, () => inputRef.current!)
 
+        const addPill = () => {
+            const newValue = inputValue.trim().replace(/,$/, '')
+            if (newValue && !value.includes(newValue)) {
+                onChange([...value, newValue])
+            }
+            setInputValue("")
+        }
+
         const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
             if ((e.key === 'Enter' || e.key === 'Tab' || e.key === ',') && inputValue.trim()) {
                 e.preventDefault()
-                const newValue = inputValue.trim().replace(/,$/, '')
-                if (newValue && !value.includes(newValue)) {
-                    onChange([...value, newValue])
-                }
-                setInputValue("")
+                addPill()
             } else if (e.key === 'Backspace' && !inputValue && value.length > 0) {
                 e.preventDefault()
                 onChange(value.slice(0, -1))
@@ -57,9 +61,9 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
                                 e.stopPropagation()
                                 removePill(index)
                             }}
-                            className="hover:text-destructive-foreground/80 transition-colors shrink-0"
+                            className="hover:text-destructive-foreground/80 transition-colors shrink-0 p-1 -m-1"
                         >
-                            <X className="h-3 w-3" />
+                            <X className="h-3.5 w-3.5" />
                         </button>
                     </div>
                 ))}
@@ -70,9 +74,27 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onBlur={() => {
+                        if (inputValue.trim()) addPill()
+                    }}
+                    enterKeyHint="done"
+                    autoCapitalize="sentences"
                     placeholder={value.length === 0 ? placeholder : ""}
                     className="flex-1 bg-transparent border-0 ring-0 focus:ring-0 outline-none text-xl md:text-sm font-black min-w-[120px] py-1 placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground"
                 />
+                {inputValue.trim() && (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            addPill()
+                            inputRef.current?.focus()
+                        }}
+                        className="h-8 w-8 bg-primary/20 text-primary rounded-lg flex items-center justify-center hover:bg-primary/30 active:scale-90 transition-all animate-in fade-in zoom-in duration-300"
+                    >
+                        <Plus className="h-5 w-5" />
+                    </button>
+                )}
             </div>
         )
     }
