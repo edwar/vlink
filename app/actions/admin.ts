@@ -227,9 +227,9 @@ export async function getPlanConfigs() {
     // If no plans exist yet, seed them with defaults
     if (plans.length === 0) {
         const defaults = [
-            { id: 'FREE', name: 'FREE', price: '$0', limit: '1 Miembro', maxSeats: 1, features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
-            { id: 'TEAM', name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', maxSeats: 5, features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager'], active: true },
-            { id: 'CORPORATE', name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', maxSeats: 0, features: ['Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
+            { id: 'FREE' as const, name: 'FREE', price: '$0', limit: '1 Miembro', maxSeats: 1, features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
+            { id: 'TEAM' as const, name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', maxSeats: 5, features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager'], active: true },
+            { id: 'CORPORATE' as const, name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', maxSeats: 0, features: ['Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
         ]
 
         for (const plan of defaults) {
@@ -251,7 +251,7 @@ export async function updatePlanConfig(id: string, data: {
     await ensureAdmin()
 
     await prisma.planConfig.update({
-        where: { id },
+        where: { id: id as 'FREE' | 'TEAM' | 'CORPORATE' },
         data
     })
 
