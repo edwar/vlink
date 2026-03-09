@@ -137,7 +137,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                 </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-4">
                 {plans.map((plan) => {
                     const isCurrent = currentPlan === plan.id;
                     const Icon = plan.icon;
@@ -148,7 +148,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                 "relative flex flex-col p-8 rounded-[2.5rem] border-2 transition-all duration-300",
                                 isCurrent
                                     ? `bg-card border-[3px] shadow-2xl ${plan.id === 'TEAM' ? 'border-blue-500 shadow-blue-500/20' : plan.id === 'CORPORATE' ? 'border-primary shadow-primary/20' : 'border-zinc-500/50 shadow-zinc-500/10'}`
-                                    : "bg-muted/20 border-border/50 hover:bg-card hover:border-border hover:shadow-xl"
+                                    : "bg-muted/20 border-primary/20 hover:bg-card hover:border-primary hover:shadow-xl"
                             )}
                         >
                             {isCurrent && (
@@ -198,7 +198,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                         "w-full h-14 rounded-xl font-black uppercase tracking-widest text-xs",
                                         !isCurrent && plan.id === "TEAM" ? "bg-blue-500 hover:bg-blue-600 text-white" : "",
                                         !isCurrent && plan.id === "CORPORATE" ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "",
-                                        isCurrent ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                                        isCurrent ? "shadow-2xl shadow-blue-500 cursor-not-allowed pointer-events-none" : ""
                                     )}
                                     onClick={() => {
                                         if (plan.id === "FREE") {

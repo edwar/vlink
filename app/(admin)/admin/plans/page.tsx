@@ -17,7 +17,7 @@ export default async function AdminPlans() {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                 {plansInfo.length === 0 ? (
                     <div className="lg:col-span-3">
                         <AdminEmptyState
