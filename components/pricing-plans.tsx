@@ -193,13 +193,9 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
 
                             <div className="pt-auto mt-auto">
                                 <Button
-                                    variant={isCurrent ? "outline" : "default"}
-                                    className={cn(
-                                        "w-full h-14 rounded-xl font-black uppercase tracking-widest text-xs",
-                                        !isCurrent && plan.id === "TEAM" ? "bg-blue-500 hover:bg-blue-600 text-white" : "",
-                                        !isCurrent && plan.id === "CORPORATE" ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "",
-                                        isCurrent ? "shadow-2xl shadow-blue-500 cursor-not-allowed pointer-events-none" : ""
-                                    )}
+                                    variant={isCurrent ? "outline" : "vlink"}
+                                    size="lg"
+                                    className="w-full"
                                     onClick={() => {
                                         if (plan.id === "FREE") {
                                             handleTestChange("FREE")

@@ -81,7 +81,7 @@ export default async function AdminPlans() {
                                     <PlanFeaturesEditor initialFeatures={p.features} />
 
                                     <div className="pt-6 border-t border-border/50">
-                                        <Button className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">
+                                        <Button variant="vlink" className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">
                                             <Save className="h-4 w-4" /> Guardar Plan
                                         </Button>
                                     </div>

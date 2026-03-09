@@ -19,6 +19,7 @@ import { CloseOrganization } from "@/components/close-organization"
 import { TransferOwnership } from "@/components/transfer-ownership"
 import { ChangeMemberRole } from "@/components/change-member-role"
 import { RemoveMember } from "@/components/remove-member"
+import { Button } from "@/components/ui/button"
 
 export default async function OrganizacionPage() {
     const session = await auth.api.getSession({
@@ -57,7 +58,10 @@ export default async function OrganizacionPage() {
     const members = await prisma.member.findMany({
         where: {
             organizationId: organization.id,
-            user: { role: { not: "ADMIN" } } // Exclude admins providing support
+            OR: [
+                { user: { role: { not: "ADMIN" } } },
+                { role: "OWNER" }
+            ]
         },
         include: {
             user: {
@@ -168,11 +172,15 @@ export default async function OrganizacionPage() {
                         <div className="px-2 pt-2">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <button className="w-full h-14 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden relative flex items-center justify-center gap-3 bg-card border-none hover:bg-primary/10 text-foreground hover:text-primary shadow-xl shadow-primary/5 group">
+                                    <Button
+                                        variant="outline"
+                                        size="lg"
+                                        className="w-full text-xs overflow-hidden relative group border-none hover:bg-primary/10 text-foreground hover:text-primary shadow-xl shadow-primary/5 p-0"
+                                    >
                                         <div className="absolute inset-0 border-2 border-primary/20 rounded-2xl group-hover:border-primary/40 transition-colors" />
                                         <IdCard className="h-5 w-5 relative z-10" />
                                         <span className="relative z-10">Tarjeta de Presentación</span>
-                                    </button>
+                                    </Button>
                                 </DialogTrigger>
                                 <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden bg-background/95 backdrop-blur-3xl border-2 border-primary/10 sm:rounded-4xl p-6 sm:p-10 shadow-2xl flex flex-col">
                                     <DialogTitle className="text-2xl md:text-3xl font-display font-black tracking-tight uppercase text-primary mb-1">

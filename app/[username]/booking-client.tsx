@@ -205,19 +205,27 @@ export function BookingClient({ params }: { params: { username: string } }) {
                     </div>
 
                     <div className="flex flex-col gap-3 w-full max-w-[280px]">
-                        <Link
-                            href="/"
-                            className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                        <Button
+                            asChild
+                            size="lg"
+                            variant="vlink"
+                            className="w-full"
                         >
-                            <CalendarIcon className="h-4 w-4" />
-                            Ver otras agendas
-                        </Link>
-                        <Link
-                            href="/login"
-                            className="w-full py-4 bg-card border border-primary/10 rounded-2xl font-bold text-sm transition-all hover:bg-accent flex items-center justify-center gap-2"
+                            <Link href="/">
+                                <CalendarIcon className="h-4 w-4" />
+                                Ver otras agendas
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="outline"
+                            size="lg"
+                            className="w-full"
                         >
-                            Crear mi propio VLink
-                        </Link>
+                            <Link href="/login">
+                                Crear mi propio VLink
+                            </Link>
+                        </Button>
                     </div>
 
                     <div className="pt-8">
@@ -315,7 +323,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         key={service.id}
                                         onClick={() => handleSelectService(service)}
                                         className={cn(
-                                            "w-full p-5 rounded-[2rem] border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
+                                            "w-full p-5 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
                                             selectedService?.id === service.id
                                                 ? "bg-primary/90 text-primary-foreground border-primary shadow-2xl shadow-primary/20 scale-[1.02]"
                                                 : "bg-card hover:border-2 hover:border-primary/30 hover:bg-primary/5"
@@ -486,7 +494,9 @@ export function BookingClient({ params }: { params: { username: string } }) {
                     <Button
                         disabled={!selectedTime}
                         onClick={() => setStep(2)}
-                        className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 disabled:opacity-50 disabled:shadow-none transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                        variant="vlink"
+                        size="lg"
+                        className="w-full"
                     >
                         Continuar
                         <ChevronRight className="h-5 w-5" />
@@ -629,10 +639,11 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                     </div>
 
                     <Button
-                        variant="default"
+                        variant="vlink"
+                        size="lg"
                         onClick={handleBooking}
                         disabled={isSubmitting || name.length < 3 || email.length < 5 || phone.replace(/\D/g, '').length < 10}
-                        className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-black text-xl shadow-2xl shadow-primary/20 disabled:opacity-50 disabled:shadow-none transition-all flex items-center justify-center gap-3 active:scale-[0.98] hover:shadow-primary/40 hover:-translate-y-1"
+                        className="w-full text-xl hover:shadow-primary/40 hover:-translate-y-1"
                     >
                         {isSubmitting ? (
                             <Loader2 className="h-6 w-6 animate-spin" />
@@ -712,12 +723,14 @@ function SuccessView({ bookingInfo, displayName, serviceName, price }: {
                 Recibirás los recordatorios en tu correo de Gmail según lo configurado.
             </p>
 
-            <button
+            <Button
+                variant="outline"
+                size="lg"
                 onClick={() => window.location.reload()}
-                className="w-full h-12 border-2 border-primary text-primary rounded-2xl font-bold hover:bg-primary hover:text-primary-foreground transition-all active:scale-[0.98]"
+                className="w-full"
             >
                 Agendar otra cita
-            </button>
+            </Button>
         </div>
     )
 }

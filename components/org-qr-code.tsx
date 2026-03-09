@@ -5,6 +5,7 @@ import { QRCodeSVG } from "qrcode.react"
 import { Download, Share2, Printer, QrCode, Copy, Check } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { sileo } from "sileo"
+import { Button } from "@/components/ui/button"
 
 interface OrgQRCodeProps {
     orgName: string
@@ -136,34 +137,36 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
 
             {/* Actions */}
             <div className="grid grid-cols-3 gap-3">
-                <button
+                <Button
                     onClick={downloadQR}
-                    className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg shadow-primary/20 group"
+                    className="flex flex-col h-auto p-3 gap-1.5 group"
                 >
                     <Download className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest">Descargar</span>
-                </button>
+                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">Descargar</span>
+                </Button>
 
-                <button
+                <Button
+                    variant="outline"
                     onClick={copyLink}
-                    className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border-2 border-border hover:border-primary/20 hover:bg-accent active:scale-95 transition-all group"
+                    className="flex flex-col h-auto p-3 gap-1.5 group"
                 >
                     {copied
                         ? <Check className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 text-green-500" />
                         : <Copy className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
                     }
-                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest">
+                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">
                         {copied ? "¡Copiado!" : "Copiar"}
                     </span>
-                </button>
+                </Button>
 
-                <button
+                <Button
+                    variant="outline"
                     onClick={shareLink}
-                    className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border-2 border-border hover:border-primary/20 hover:bg-accent active:scale-95 transition-all group"
+                    className="flex flex-col h-auto p-3 gap-1.5 group"
                 >
                     <Share2 className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest">Compartir</span>
-                </button>
+                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">Compartir</span>
+                </Button>
             </div>
 
             <p className="text-[10px] text-muted-foreground/60 text-center font-medium leading-relaxed">

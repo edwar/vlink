@@ -31,6 +31,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
 type ViewType = 'day' | 'week' | 'month'
 
@@ -60,59 +61,82 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                     </p>
                 </div>
 
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={onMenuToggle}
-                    className="p-2 hover:bg-accent rounded-md sm:hidden transition-colors"
+                    className="sm:hidden"
                     aria-label="Toggle menu"
                 >
                     {isMenuOpen ? <X className="h-6 w-6" /> : <CalendarIcon className="h-6 w-6" />}
-                </button>
+                </Button>
             </div>
 
             <div className="hidden sm:flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center gap-2 bg-muted/50 p-1 rounded-lg border">
-                    <button
+                <div className="flex items-center bg-muted/50 p-1 rounded-2xl border">
+                    <Button
+                        variant={view === 'day' ? "secondary" : "ghost"}
+                        size="sm"
                         onClick={() => onViewChange('day')}
                         className={cn(
-                            "px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2",
-                            view === 'day' ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                            "px-3 py-1.5 h-8 rounded-xl",
+                            view === 'day' ? "bg-background shadow-xs text-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                     >
                         <Clock className="h-4 w-4" />
                         Día
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant={view === 'week' ? "secondary" : "ghost"}
+                        size="sm"
                         onClick={() => onViewChange('week')}
                         className={cn(
-                            "px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2",
-                            view === 'week' ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                            "px-3 py-1.5 h-8 rounded-xl",
+                            view === 'week' ? "bg-background shadow-xs text-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                     >
                         <CalendarIcon className="h-4 w-4" />
                         Semana
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant={view === 'month' ? "secondary" : "ghost"}
+                        size="sm"
                         onClick={() => onViewChange('month')}
                         className={cn(
-                            "px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2",
-                            view === 'month' ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                            "px-3 py-1.5 h-8 rounded-xl",
+                            view === 'month' ? "bg-background shadow-xs text-foreground" : "text-muted-foreground hover:text-foreground"
                         )}
                     >
                         <LayoutGrid className="h-4 w-4" />
                         Mes
-                    </button>
+                    </Button>
                 </div>
 
-                <div className="flex items-center border rounded-lg overflow-hidden">
-                    <button onClick={onPrevious} className="p-2 hover:bg-accent border-r">
+                <div className="flex items-center border rounded-2xl overflow-hidden shadow-xs">
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={onPrevious}
+                        className="rounded-none border-r border-border h-9"
+                    >
                         <ChevronLeft className="h-4 w-4" />
-                    </button>
-                    <button onClick={onToday} className="px-4 py-2 text-sm font-medium hover:bg-accent">
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onToday}
+                        className="rounded-none h-9 px-4 font-bold"
+                    >
                         Hoy
-                    </button>
-                    <button onClick={onNext} className="p-2 hover:bg-accent border-l">
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={onNext}
+                        className="rounded-none border-l border-border h-9"
+                    >
                         <ChevronRight className="h-4 w-4" />
-                    </button>
+                    </Button>
                 </div>
             </div>
 
@@ -121,62 +145,65 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                     <div className="flex flex-col gap-2">
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Vista</p>
                         <div className="grid grid-cols-3 gap-2">
-                            <button
+                            <Button
+                                variant={view === 'day' ? "vlink" : "secondary"}
+                                size="sm"
                                 onClick={() => { onViewChange('day'); onMenuToggle(); }}
-                                className={cn(
-                                    "px-3 py-2 text-xs font-medium rounded-lg border transition-all flex flex-col items-center gap-2",
-                                    view === 'day' ? "bg-primary text-primary-foreground border-primary" : "bg-muted/30 text-muted-foreground"
-                                )}
+                                className="h-auto py-3 text-[10px] flex-col rounded-xl"
                             >
                                 <Clock className="h-4 w-4" />
                                 Día
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                variant={view === 'week' ? "vlink" : "secondary"}
+                                size="sm"
                                 onClick={() => { onViewChange('week'); onMenuToggle(); }}
-                                className={cn(
-                                    "px-3 py-2 text-xs font-medium rounded-lg border transition-all flex flex-col items-center gap-2",
-                                    view === 'week' ? "bg-primary text-primary-foreground border-primary" : "bg-muted/30 text-muted-foreground"
-                                )}
+                                className="h-auto py-3 text-[10px] flex-col rounded-xl"
                             >
                                 <CalendarIcon className="h-4 w-4" />
                                 Semana
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                variant={view === 'month' ? "vlink" : "secondary"}
+                                size="sm"
                                 onClick={() => { onViewChange('month'); onMenuToggle(); }}
-                                className={cn(
-                                    "px-3 py-2 text-xs font-medium rounded-lg border transition-all flex flex-col items-center gap-2",
-                                    view === 'month' ? "bg-primary text-primary-foreground border-primary" : "bg-muted/30 text-muted-foreground"
-                                )}
+                                className="h-auto py-3 text-[10px] flex-col rounded-xl"
                             >
                                 <LayoutGrid className="h-4 w-4" />
                                 Mes
-                            </button>
+                            </Button>
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Navegación</p>
                         <div className="flex items-center gap-2">
-                            <button
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => { onPrevious(); onMenuToggle(); }}
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg hover:bg-accent text-sm"
+                                className="flex-1 h-10 rounded-xl"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                                 Anterior
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => { onToday(); onMenuToggle(); }}
-                                className="flex-1 px-4 py-2 border rounded-lg hover:bg-accent text-sm font-bold"
+                                className="flex-1 h-10 rounded-xl font-bold"
                             >
                                 Hoy
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => { onNext(); onMenuToggle(); }}
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg hover:bg-accent text-sm"
+                                className="flex-1 h-10 rounded-xl"
                             >
                                 Siguiente
                                 <ChevronRight className="h-4 w-4" />
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>
