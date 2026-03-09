@@ -137,7 +137,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {plans.map((plan) => {
                     const isCurrent = currentPlan === plan.id;
                     const Icon = plan.icon;
