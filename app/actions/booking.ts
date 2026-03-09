@@ -1,9 +1,10 @@
 "use server"
 
 import prisma from "@/lib/prisma"
-import { startOfDay, endOfDay, addMinutes, format, isBefore } from "date-fns"
+import { format } from "date-fns"
 import { sendAppointmentEmail } from "@/lib/resend"
 import { es } from "date-fns/locale"
+import { randomUUID } from "crypto"
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -11,7 +12,7 @@ export async function getProfileForBooking(username: string) {
         include: {
             user: {
                 include: {
-                    members: {
+                    memberships: {
                         include: {
                             organization: true
                         }
@@ -28,7 +29,7 @@ export async function getProfileForBooking(username: string) {
     if (!profile) return null
 
     // Soft-Lock Check: Priority: OWNER > MANAGER > PROFESSIONAL, then by createdAt
-    const membership = profile.user.members[0];
+    const membership = profile.user.memberships[0];
     if (membership && membership.organization) {
         const org = membership.organization;
         const planConfig = await prisma.planConfig.findUnique({
@@ -39,16 +40,27 @@ export async function getProfileForBooking(username: string) {
         if (maxSeats > 0) {
             const allOrgMembers = await prisma.member.findMany({
                 where: { organizationId: org.id },
-                orderBy: [
-                    { role: 'asc' },
-                    { createdAt: 'asc' }
-                ]
+                orderBy: { createdAt: 'asc' }
             });
 
-            const myIndex = allOrgMembers.findIndex(m => m.userId === profile.userId);
+            // Definir prioridad: OWNER (0) > MANAGER (1) > PROFESSIONAL (2)
+            const rolePriority: Record<string, number> = {
+                OWNER: 0,
+                MANAGER: 1,
+                PROFESSIONAL: 2
+            };
+
+            const sortedMembers = allOrgMembers.sort((a, b) => {
+                const priorityA = rolePriority[a.role] ?? 10;
+                const priorityB = rolePriority[b.role] ?? 10;
+                if (priorityA !== priorityB) return priorityA - priorityB;
+                return a.createdAt.getTime() - b.createdAt.getTime();
+            });
+
+            const myIndex = sortedMembers.findIndex(m => m.userId === profile.userId);
             if (myIndex >= maxSeats) {
                 console.log(`[Soft-Lock] Perfil ${username} bloqueado por límite de asientos del plan ${org.subscriptionPlan}`);
-                return null; // Return null to hide/disable booking
+                return null;
             }
         }
     }
@@ -59,8 +71,8 @@ export async function getProfileForBooking(username: string) {
         username: profile.username,
         image: profile.user.image,
         advanceNoticeHours: profile.advanceNoticeHours,
-        expertise: (profile as any).expertise || [],
-        services: profile.services.map((s: any) => ({
+        expertise: profile.expertise || [],
+        services: profile.services.map((s) => ({
             id: s.id,
             name: s.name,
             durationMinutes: s.durationMinutes,
@@ -73,29 +85,29 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
     const profile = await prisma.profile.findUnique({
         where: { username },
         include: { availabilities: true }
-    }) as any
+    });
 
     if (!profile) throw new Error("Perfil no encontrado")
 
     const dayOfWeek = date.getDay()
 
-    // 1. Get recurring availability for this day of week
-    const recurring = profile.availabilities.find((a: any) => a.dayOfWeek === dayOfWeek && !a.isBlocked)
+    // 1. Obtener disponibilidad recurrente para este día de la semana
+    const recurring = profile.availabilities.find(a => a.dayOfWeek === dayOfWeek && !a.isBlocked)
 
     if (!recurring) return []
 
-    // Force Colombia timezone for correct boundary limits
+    // Timezone safe boundaries (Colombia -05:00)
     const isoDate = date.toISOString().split("T")[0];
     const dayStart = new Date(`${isoDate}T00:00:00-05:00`);
     const dayEnd = new Date(`${isoDate}T23:59:59-05:00`);
 
-    // 2. Get specific blocks for this date
-    const blocks = profile.availabilities.filter((a: any) => {
+    // 2. Obtener bloqueos específicos para esta fecha
+    const blocks = profile.availabilities.filter(a => {
         if (!a.isBlocked || !a.specificDate) return false;
         return a.specificDate.toISOString().split("T")[0] === isoDate;
     })
 
-    // 3. Get existing appointments for this date using precise UTC boundaries
+    // 3. Obtener citas existentes para esta fecha
     const appointments = await prisma.appointment.findMany({
         where: {
             profileId: profile.id,
@@ -105,7 +117,7 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         }
     })
 
-    // 4. Generate slots based on recurring hours
+    // 4. Generar slots basados en las horas recurrentes
     const slots: string[] = []
 
     const [startHour, startMin] = recurring.startTime.split(":").map(Number)
@@ -125,18 +137,16 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         const em = slotEndMinutes % 60;
         const slotEndStr = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
 
-        // Create Date object for this specific slot to check against advanceNoticeHours
         const slotStartDateTime = new Date(`${isoDate}T${timeStr}:00-05:00`)
         const now = new Date()
         const requiredAdvanceNoticeMs = (profile.advanceNoticeHours ?? 24) * 60 * 60 * 1000
         const isTooSoon = (slotStartDateTime.getTime() - now.getTime()) < requiredAdvanceNoticeMs
 
-        // Check if slot is blocked by specific block
-        const isBlocked = blocks.some((b: any) => timeStr < b.endTime && slotEndStr > b.startTime)
+        // Verificar si el slot está bloqueado por un bloqueo específico
+        const isBlocked = blocks.some(b => timeStr < b.endTime && slotEndStr > b.startTime)
 
-        // Check if slot overlaps with existing appointment
-        const isOccupied = appointments.some((appt: any) => {
-            // Compare accurately using minutes difference from midnight Colombia time
+        // Verificar si el slot solapa con una cita existente
+        const isOccupied = appointments.some(appt => {
             const apptStartMins = (appt.startTime.getTime() - dayStart.getTime()) / 60000;
             const apptEndMins = (appt.endTime.getTime() - dayStart.getTime()) / 60000;
             return currentMinutes < apptEndMins && slotEndMinutes > apptStartMins;
@@ -184,21 +194,19 @@ export async function createAppointment(data: {
     // Explicit end time using math
     const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
 
-    // Re-verify availability (Atomic check)
+    // Re-verify availability (Atomic check) - Simplified overlap logic
     const collision = await prisma.appointment.findFirst({
         where: {
             profileId: profile.id,
             status: { not: "CANCELLED" },
-            OR: [
-                { startTime: { lt: endTime, gte: startTime } },
-                { endTime: { gt: startTime, lte: endTime } }
-            ]
+            startTime: { lt: endTime },
+            endTime: { gt: startTime }
         }
     })
 
     if (collision) throw new Error("Slot ya ocupado")
 
-    const cancelToken = crypto.randomUUID()
+    const cancelToken = randomUUID()
 
     const appointment = await prisma.appointment.create({
         data: {
