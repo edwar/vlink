@@ -5,15 +5,16 @@ import { useRouter } from "next/navigation"
 import { getUserOrganizations, getManagedProfiles } from "@/app/actions/organization"
 import { getProfile } from "@/app/actions/profile"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { UserCircle, Briefcase, Building2, ChevronDown, Check } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Building2 } from "lucide-react"
 import { UserAvatar } from "./user-avatar"
 import { useProfileStore } from "@/lib/store/profile-store"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function ProfileSwitcher() {
     const [organizations, setOrganizations] = useState<any[]>([])
     const [managedProfiles, setManagedProfiles] = useState<Record<string, any[]>>({})
     const [activeProfile, setActiveProfile] = useState<any>(null)
+    const [isLoading, setIsLoading] = useState(true)
     const { viewAsProfileId: selectedProfileId, setViewAsProfileId } = useProfileStore()
     const router = useRouter()
 
@@ -37,6 +38,8 @@ export function ProfileSwitcher() {
                 setManagedProfiles(profileMap)
             } catch (err) {
                 console.error("Error loading switcher data:", err)
+            } finally {
+                setIsLoading(false)
             }
         }
         loadData()
@@ -49,6 +52,18 @@ export function ProfileSwitcher() {
         router.refresh()
         // Force navigate to dashboard to ensure all server data is re-fetched with the new cookie
         router.push("/dashboard")
+    }
+
+    if (isLoading) {
+        return (
+            <div className="px-1 py-4 bg-muted/20">
+                <div className="flex items-center gap-2 mb-2 px-2">
+                    <Skeleton className="h-3 w-3" />
+                    <Skeleton className="h-3 w-24" />
+                </div>
+                <Skeleton className="w-full h-12 rounded-xl" />
+            </div>
+        )
     }
 
     if (organizations.length === 0) return null
