@@ -3,47 +3,47 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendAppointmentEmail({
-    to,
-    type,
-    clientName,
-    professionalName,
-    serviceName,
-    price,
-    date,
-    time,
-    cancelLink,
+  to,
+  type,
+  clientName,
+  professionalName,
+  serviceName,
+  price,
+  date,
+  time,
+  cancelLink,
 }: {
-    to: string;
-    type: 'CONFIRMATION' | 'CANCELLATION' | 'RESCHEDULE' | 'REMINDER_24H' | 'REMINDER_2H';
-    clientName: string;
-    professionalName: string;
-    serviceName?: string;
-    price?: number | null;
-    date: string;
-    time: string;
-    cancelLink?: string;
+  to: string;
+  type: 'CONFIRMATION' | 'CANCELLATION' | 'RESCHEDULE' | 'REMINDER_24H' | 'REMINDER_2H';
+  clientName: string;
+  professionalName: string;
+  serviceName?: string;
+  price?: number | null;
+  date: string;
+  time: string;
+  cancelLink?: string;
 }) {
-    const subjects = {
-        CONFIRMATION: `Cita confirmada con ${professionalName}`,
-        CANCELLATION: `Tu cita con ${professionalName} ha sido cancelada`,
-        RESCHEDULE: `Tu cita con ${professionalName} ha sido reprogramada`,
-        REMINDER_24H: `Recordatorio: Tienes una cita mañana con ${professionalName}`,
-        REMINDER_2H: `Recordatorio: Tu cita con ${professionalName} es en 2 horas`,
-    };
+  const subjects = {
+    CONFIRMATION: `Cita confirmada con ${professionalName}`,
+    CANCELLATION: `Tu cita con ${professionalName} ha sido cancelada`,
+    RESCHEDULE: `Tu cita con ${professionalName} ha sido reprogramada`,
+    REMINDER_24H: `Recordatorio: Tienes una cita mañana con ${professionalName}`,
+    REMINDER_2H: `Recordatorio: Tu cita con ${professionalName} es en 2 horas`,
+  };
 
-    const isCancellation = type === 'CANCELLATION'
-    const isReschedule = type === 'RESCHEDULE'
+  const isCancellation = type === 'CANCELLATION'
+  const isReschedule = type === 'RESCHEDULE'
 
-    const formattedPrice = price !== undefined && price !== null
-        ? `$ ${price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
-        : null;
+  const formattedPrice = price !== undefined && price !== null
+    ? `$ ${price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
+    : null;
 
-    try {
-        await resend.emails.send({
-            from: 'VLink <hola@cognilab.dev>', // Assuming verified domain or testing with resend email
-            to,
-            subject: subjects[type],
-            html: `
+  try {
+    await resend.emails.send({
+      from: 'VLink <hola@cognilab.dev>', // Assuming verified domain or testing with resend email
+      to,
+      subject: subjects[type],
+      html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid ${isCancellation ? '#fee2e2' : '#e2e8f0'}; border-radius: 12px;">
           <h1 style="color: ${isCancellation ? '#dc2626' : '#0f172a'}; font-size: 24px; font-weight: bold; margin-bottom: 20px;">VLink - ${subjects[type]}</h1>
           <p style="color: #475569; font-size: 16px;">Hola ${clientName},</p>
@@ -62,9 +62,60 @@ export async function sendAppointmentEmail({
           </div>` : ''}
         </div>
       `,
-        });
-    } catch (error) {
-        console.error('Error sending email:', error);
-    }
+    });
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
 }
 
+export async function sendSubscriptionEmail({
+  to,
+  organizationName,
+  type,
+  planName,
+  gracePeriodEnd
+}: {
+  to: string;
+  organizationName: string;
+  type: 'GRACE_PERIOD' | 'DEGRADED' | 'PAYMENT_FAILED';
+  planName: string;
+  gracePeriodEnd?: string;
+}) {
+  const subjects = {
+    GRACE_PERIOD: `⚠️ Problema con tu suscripción de ${organizationName}`,
+    DEGRADED: `Plan degradado a FREE - ${organizationName}`,
+    PAYMENT_FAILED: `Error en el pago recurrente de ${organizationName}`,
+  };
+
+  const colors = {
+    GRACE_PERIOD: '#f59e0b', // Amber
+    DEGRADED: '#ef4444', // Red
+    PAYMENT_FAILED: '#ef4444', // Red
+  };
+
+  try {
+    await resend.emails.send({
+      from: 'VLink Billing <billing@cognilab.dev>',
+      to,
+      subject: subjects[type],
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+          <h1 style="color: ${colors[type]}; font-size: 24px; font-weight: bold; margin-bottom: 20px;">VLink - ${subjects[type]}</h1>
+          <p style="color: #475569; font-size: 16px;">Hola,</p>
+          <p style="color: #475569; font-size: 16px;">
+            ${type === 'GRACE_PERIOD'
+          ? `Hemos tenido un problema al procesar el pago de tu plan <strong>${planName}</strong> para la organización <strong>${organizationName}</strong>. Tienes hasta el <strong>${gracePeriodEnd}</strong> (7 días de gracia) para actualizar tus datos de pago antes de que el plan sea degradado.`
+          : type === 'DEGRADED'
+            ? `Lamentamos informarte que el periodo de gracia ha terminado y tu organización <strong>${organizationName}</strong> ha sido degradada automáticamente al plan <strong>FREE</strong>.`
+            : `No hemos podido procesar tu pago recurrente. Por favor, revisa tus medios de pago en la sección de administración.`}
+          </p>
+          <div style="margin-top: 30px; text-align: center;">
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/organizacion/planes" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; text-decoration: none;">Gestionar Suscripción</a>
+          </div>
+        </div>
+      `,
+    });
+  } catch (error) {
+    console.error('Error sending subscription email:', error);
+  }
+}

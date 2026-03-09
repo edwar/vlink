@@ -9,7 +9,15 @@ export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
         where: { username },
         include: {
-            user: true,
+            user: {
+                include: {
+                    members: {
+                        include: {
+                            organization: true
+                        }
+                    }
+                }
+            },
             services: {
                 where: { isActive: true },
                 orderBy: { createdAt: 'asc' }
@@ -18,6 +26,32 @@ export async function getProfileForBooking(username: string) {
     })
 
     if (!profile) return null
+
+    // Soft-Lock Check: Priority: OWNER > MANAGER > PROFESSIONAL, then by createdAt
+    const membership = profile.user.members[0];
+    if (membership && membership.organization) {
+        const org = membership.organization;
+        const planConfig = await prisma.planConfig.findUnique({
+            where: { id: org.subscriptionPlan }
+        });
+
+        const maxSeats = planConfig?.maxSeats ?? 0;
+        if (maxSeats > 0) {
+            const allOrgMembers = await prisma.member.findMany({
+                where: { organizationId: org.id },
+                orderBy: [
+                    { role: 'asc' },
+                    { createdAt: 'asc' }
+                ]
+            });
+
+            const myIndex = allOrgMembers.findIndex(m => m.userId === profile.userId);
+            if (myIndex >= maxSeats) {
+                console.log(`[Soft-Lock] Perfil ${username} bloqueado por límite de asientos del plan ${org.subscriptionPlan}`);
+                return null; // Return null to hide/disable booking
+            }
+        }
+    }
 
     return {
         displayName: profile.displayName || profile.user.name || username,

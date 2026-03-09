@@ -84,11 +84,20 @@ enum SubscriptionPlan {
   CORPORATE
 }
 
+enum BillingStatus {
+  ACTIVE
+  OVERDUE
+  DEGRADED
+}
+
 model Organization {
   id               String           @id @default(cuid())
   name             String           @unique
   slug             String           @unique
   subscriptionPlan SubscriptionPlan @default(FREE)
+  billingStatus    BillingStatus    @default(ACTIVE)
+  lastPaymentDate  DateTime?
+  gracePeriodEnd   DateTime?
   mpCustomerId     String?          @unique
   mpSubscriptionId String?          @unique
   members          Member[]
@@ -116,6 +125,7 @@ model Member {
 
 enum MemberRole {
   OWNER
+  ADMIN
   MANAGER
   PROFESSIONAL
 }
@@ -224,14 +234,14 @@ model SystemConfig {
 }
 
 model PlanConfig {
-  id        String   @id // Corresponds to SubscriptionPlan name (FREE, TEAM, CORPORATE)
+  id        SubscriptionPlan @id
   name      String
   price     String
   limit     String
-  maxSeats  Int      @default(0) // 0 for unlimited, or specific seat count
-  features  String[] @default([])
-  active    Boolean  @default(true)
-  updatedAt DateTime @updatedAt
+  maxSeats  Int              @default(0) // 0 for unlimited, or specific seat count
+  features  String[]         @default([])
+  active    Boolean          @default(true)
+  updatedAt DateTime         @updatedAt
 
   @@map("plan_config")
 }

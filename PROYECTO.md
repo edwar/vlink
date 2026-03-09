@@ -24,6 +24,8 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Bloqueos Recurrentes:** Configuración predeterminada de los horarios semanales del profesional.
 - **Bloqueos Puntuales (Vacaciones/Permisos):** Capacidad para elegir un día en específico e inhabilitar los turnos de manera total o parcial.
 - **Cancelación:** Posibilidad de cancelar citas desde el administrador, replicando al mismo tiempo la cancelación en Google Calendar.
+- **Notas Internas:** Campo `notes` en las citas para que el profesional registre información privada del cliente o la sesión.
+- **Exportación de Datos:** Botón para exportar el historial de citas a formato CSV para reportes externos.
 
 ### C. Sistema de Agendamiento (Usuarios Finales)
 - **Catálogo de Servicios:** Pantalla inicial que permite escoger el tipo de cita, enseñando su precio y su duración si hubiese más de uno habilitado.
@@ -32,14 +34,17 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Prevención Over-booking:** Re-verificación atómica al instante del guardado para asegurar que no existan empalmes en la base de datos.
 
 ### D. Notificaciones y Sincronización
-- **Eventos en Google Calendar:** Transacción asíncrona ("Serverless friendly") para escribir detalles completos (Nombre, Correo y WhatsApp del cliente, Nombre del servicio) en la agenda de Google. Si la cita cae, Google notificará también por ese medio al invitado.
-- **Confirmaciones por Email:** Envío automático e inmediato de correos personalizados al cliente dictando los detalles del turno, hora y el nombre del profesional a través de Resend tras hacer su reserva.
+- **Eventos en Google Calendar:** Transacción asíncrona ("Serverless friendly") para escribir detalles completos (Nombre, Correo y WhatsApp del cliente, Nombre del servicio) en la agenda de Google.
+- **Confirmaciones por Email:** Envío automático e inmediato de correos personalizados al cliente a través de Resend.
+- **Recordatorios Automáticos:** Sistema integrado con Vercel Cron que envía avisos por email 24h y 2h antes de cada cita.
+- **Auto-Cancelación:** Los clientes pueden cancelar su propia cita a través de un enlace seguro con token hash incluido en su correo de confirmación.
 
 ## 3. Requisitos de Diseño (UI/UX)
-- **Mobile First Extremo:** Uso de modales y drawers nativos, fondos de navegación tipo cristal, *overlays* y animaciones (`animate-in` de Tailwind).
-- **Modos Visuales:** Sistema robusto y testeado de Light Mode / Dark Mode controlable por el usuario con el componente ThemeToggle.
-- **Open Graph Dinámicos:** Generación de tarjetas de vista previa renderizadas con Next.js Edge (OG Images) en `/opengraph-image`, mostrando la imagen insignia cuando el enlace se envía por chats de texto (WhatsApp, Twitter).
-- **Microinteracciones y Feedback:** Estados vacíos amoldables (`EmptyState`), *Loaders* integrados en los botones durante submits, formateos instantáneos y Alertas tipo Toast (con `sileo`).
+- **Mobile First Extremo:** Uso de modales y drawers nativos, fondos de navegación tipo cristal y animaciones fluidas.
+- **Skeleton Loaders:** Implementación de placeholders animados durante la carga de componentes asíncronos (como el switcher de perfiles) para eliminar el Layout Shift (CLS).
+- **Modos Visuales:** Soporte completo de Light/Dark Mode con persistencia.
+- **Open Graph Dinámicos:** Generación dinámica de tarjetas de vista previa para redes sociales y chats.
+- **Microinteracciones y Feedback:** Estados vacíos amoldables (`EmptyState`), *Loaders* integrados en los botones durante submits, formateos instantáneos y Alertas tipo Toast.
 
 ## 4. Stack Tecnológico (Implementado)
 - **Framework:** Next.js (App Router, Server Actions, Server Components).
@@ -50,81 +55,41 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Comunicaciones:** Resend para envío de Emails (Formatos React-Email y HTML).
 - **Infraestructura Cloud:** Vercel (Optimizaciones orientadas al modelo de funciones Serverless y Edge). Integración API de GCP (Google Calendar).
 
-## 5. Gestión Organizacional y Multicuenta (En Desarrollo)
+## 5. Gestión Organizacional y Multicuenta
 
-VLink evolucionará de una herramienta individual a una plataforma de gestión para equipos y organizaciones, permitiendo que gestores o administradores manejen múltiples agendas de forma centralizada.
+### A. Modelo de Organizaciones y Roles (Implementado)
+- **Estructura Escalable:** Tablas `Organization` y `Member` para agrupar profesionales.
+- **Sistema de Roles (RBAC):** OWNER, MANAGER y PROFESSIONAL.
+- **Dashboard Multicuenta:** Switcher de perfiles para que administradores gestionen múltiples agendas fluidamente.
 
-### A. Modelo de Organizaciones y Roles
-- **Estructura Escalable:** Implementación de tablas `Organization` y `Member` para agrupar profesionales bajo una misma entidad (empresa, clínica, asociación).
-- **Sistema de Roles (RBAC):**
-  - **OWNER/ADMIN:** Control total de la organización y facturación.
-  - **MANAGER (Gestor):** Capacidad para visualizar, editar y coordinar las agendas de los profesionales asignados.
-  - **PROFESSIONAL:** Dueño de la agenda sincronizada con Google.
-- **Permisos Delegados:** Los gestores podrán actuar en nombre del profesional (crear servicios, bloquear horarios, cancelar citas) utilizando la conexión "offline" ya establecida con Google.
+### B. Políticas de Facturación y Límites (Nueva Política)
+- **Límites de Miembros:** Restricción automática de visibilidad y acceso basado en el plan contratado (FREE, TEAM, CORPORATE).
+- **Degradación con Periodo de Gracia:**
+  - En caso de fallo en el pago recurrente, el sistema otorga una **semana de gracia** (7 días) antes de aplicar restricciones.
+  - Al cumplirse el plazo, la organización se degrada automáticamente al plan **FREE**.
+  - **Notificación:** Envío automático de correo al propietario informando sobre la degradación y los pasos para reactivar el servicio.
+- **Soft-Lock de Miembros:** Al degradar a un plan inferior, los miembros excedentes se ocultan automáticamente de la página pública y se inhabilitan para recibir citas nuevas, protegiendo sus datos históricos.
 
-### B. Flujo de Conexión "Minimal Click"
-Para garantizar la facilidad de uso y rapidez en la implementación:
-- **Invitación por Enlace:** El gestor genera un enlace único de invitación para la organización.
-- **Onboarding Flash:** El profesional abre el enlace, inicia sesión con Google y, en un solo paso, autoriza la gestión de su agenda y la sincronización del calendario.
-- **Dashboard Multicuenta:** Los gestores contarán con un "Switcher" de perfiles para alternar entre agendas sin cerrar sesión, permitiendo una coordinación fluida de múltiples profesionales.
-
-### C. Beneficios para el Negocio
-- **Centralización:** Ideal para secretarios/as o asistentes que gestionan la agenda de varios doctores, abogados o consultores.
-- **Privacidad Segura:** El profesional mantiene el control de su cuenta personal de Google, delegando solo la gestión operativa dentro de VLink.
-- **Escalabilidad Horizontal:** Permite que VLink sea adoptado por empresas con decenas de empleados con una fricción de configuración casi nula.
-
-## 6. Oportunidades de Mejora Identificadas
-
-### 🔥 Alta Prioridad (Alto Impacto, Bajo Esfuerzo)
-
-- **Recordatorios Automáticos por Email:** Sistema integrado con Resend + Vercel Cron. Envía avisos automáticos 24h y 2h antes de cada cita (requiere `CRON_SECRET` en producción).
-- **Email de Cancelación al Cliente:** Cuando el profesional cancela una cita, el cliente recibe una notificación automática con los detalles de la cita anulada.
-
-#### C. Reprogramación de Citas
-Actualmente solo existe la opción de cancelar. Un flujo de reprogramación que permita al profesional mover una cita a otra fecha/hora disponible mejoraría significativamente la experiencia operativa, sin requerir cambios en el modelo de datos.
-
-### 🚀 Media Prioridad (Alto Impacto, Esfuerzo Medio)
-
-#### D. Link de Auto-Cancelación para Clientes
-El cliente actualmente no puede cancelar su propia cita sin contactar al profesional. Incluir un token hash único en el email de confirmación que dirija a `/cancelar/[token]` resolvería esto de forma segura y sin requerir login.
-
-#### E. Notas Internas en Citas
-Agregar un campo `notes` al modelo `Appointment` para que el profesional pueda registrar el motivo de consulta, antecedentes o cualquier nota operativa privada. Alta utilidad en clínicas, consultorios y despachos.
-
-#### F. Vista Consolidada de Disponibilidad por Organización
-La página pública de la organización ya lista los perfiles, pero el cliente debe ingresar a cada uno individualmente para consultar disponibilidad. Un componente de disponibilidad unificada elevaría enormemente la utilidad de la vista organizacional.
-
-### 💡 Menor Prioridad (Impacto Medio, Esfuerzo Mayor)
-
-#### G. Sincronización Bidireccional con Google Calendar (Webhooks)
-VLink actualmente escribe en Google Calendar pero no escucha cambios externos. Si el profesional bloquea tiempo directamente en su Google Calendar, VLink no se entera. La API de Google Calendar soporta push notifications para sincronización verdaderamente bidireccional.
-
-#### H. Exportación de Historial a CSV
-Un botón "Exportar" en el dashboard que genere un archivo CSV con las citas del período seleccionado, útil para reportes contables y seguimiento de ingresos.
-
-- **Planes de Suscripción Recurrentes (SaaS):** Implementación de niveles de membresía para organizaciones integrados con **Mercado Pago**.
-  - **Plan Gratuito:** 1 solo perfil/miembro.
-  - **Plan Equipos:** Hasta 5 colaboradores con panel compartido.
-  - **Plan Corporativo:** Colaboradores ilimitados y soporte prioritario.
-  - Sistema de Webhooks y Billing Dashboard dedicado.
+## 6. Oportunidades de Mejora Identificadas (Próximos Pasos)
+- **Reprogramación de Citas:** Flujo para permitir al profesional mover una cita a otra fecha/hora disponible.
+- **Sincronización Bidireccional Completa:** Integración de Webhooks de Google Calendar para escuchar bloqueos realizados directamente en la app de Google.
+- **Vista Unificada de Disponibilidad:** Página organizacional que agrupe todos los horarios del equipo en un solo calendario consolidado.
 
 ## 7. Módulo de Administración de Plataforma (VLink Admin)
 
-Este módulo está diseñado exclusivamente para los propietarios de VLink, permitiendo una gestión centralizada de toda la infraestructura y el ecosistema de negocio.
+### A. Dashboard Global de Métricas (Implementado)
+- **KPIs y Estadísticas:** Total de organizaciones, usuarios, citas y distribución de planes.
+- **Análisis de Rendimiento:** Servicios más demandados y crecimiento mensual de registros.
 
-### A. Dashboard Global de Métricas
-- **KPIs en Tiempo Real:** Visualización de total de organizaciones, perfiles activos, citas generadas globalmente y volumen de transacciones de suscripción.
-- **Gráficas de Crecimiento:** Monitoreo de nuevos registros y retención de usuarios.
+### B. Gestión y Soporte (Implementado)
+- **Directorio Maestro:** Control total de organizaciones y usuarios.
+- **Modo Soporte:** Los administradores pueden unirse temporalmente a cualquier organización con rol de OWNER para resolver problemas técnicos o de facturación.
+- **Editor de Planes:** Configuración dinámica de precios, límites técnicos (`maxSeats`) y características visibles.
 
-### B. Gestión de Organizaciones y Usuarios
-### B. Gestión de Organizaciones y Usuarios (Implementado)
-- **Directorio Maestro:** Lista completa de todas las organizaciones registradas con filtros por plan y fecha de creación.
-- **Control de Usuarios:** Capacidad para cambiar roles de usuario (promocionar a ADMIN) y visualizar perfiles asociados.
-
-### C. Configuración Maestra del SaaS (System Config) (Implementado)
-- **Editor de Planes:** Configuración dinámica y persistente en base de datos de precios, límites y características para cada nivel (FREE, TEAM, CORPORATE).
-- **Modo Mantenimiento:** Interruptor maestro que bloquea el sistema público con una pantalla informativa.
-- **Gestor de Contenido Global:** Configuración de anuncios en el dashboard mediante banners dinámicos (INFO, SUCCESS, WARNING).
+### C. Configuración de Sistema (Implementado)
+- **Anuncios Globales:** Banner dinámico en el dashboard para comunicaciones críticas (INFO, SUCCESS, WARNING).
+- **Modo Mantenimiento:** Interruptor global para estados fuera de línea controlados.
+- **Admin Empty States:** Interfaz pulida con estados vacíos consistentes en todas las tablas administrativas.
 
 ### D. Salud del Sistema y Conectividad (En Desarrollo)
 - **Centro de Webhooks:** Monitoreo del estado de los webhooks de Google Calendar y notificaciones de Mercado Pago.

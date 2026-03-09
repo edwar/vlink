@@ -62,6 +62,20 @@ export default async function BillingPage({
                 </div>
             )}
 
+            {organization.billingStatus === "OVERDUE" && (
+                <div className="p-6 bg-amber-500/10 border-2 border-amber-500/20 rounded-3xl flex items-center gap-4 animate-in zoom-in-95 fade-in duration-500">
+                    <div className="h-12 w-12 rounded-2xl bg-amber-500 flex items-center justify-center text-white shrink-0">
+                        <CreditCard className="h-6 w-6" />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-black text-amber-700">Periodo de Gracia Activo</h3>
+                        <p className="text-amber-600/80 font-medium text-sm">
+                            Hemos tenido un problema con tu pago recurrente. Tienes hasta el <strong>{organization.gracePeriodEnd?.toLocaleDateString('es-CO')}</strong> para regularizar tu situación antes de que la organización sea degradada al plan FREE.
+                        </p>
+                    </div>
+                </div>
+            )}
+
             <header className="relative p-8 px-4 sm:px-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <CreditCard className="h-24 w-24 text-primary -rotate-12" />
