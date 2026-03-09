@@ -55,7 +55,10 @@ export default async function OrganizacionPage() {
 
     // Fetch members of the organization
     const members = await prisma.member.findMany({
-        where: { organizationId: organization.id },
+        where: {
+            organizationId: organization.id,
+            user: { role: { not: "ADMIN" } } // Exclude admins providing support
+        },
         include: {
             user: {
                 include: {
@@ -226,7 +229,7 @@ export default async function OrganizacionPage() {
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 shadow-sm shadow-primary/5">
-                            {members.length} {members.length === 1 ? 'Profesional' : 'Profesionales'}
+                            {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>
                         <a
                             href="/dashboard/organizacion/agenda"

@@ -277,7 +277,10 @@ export async function getManagedProfiles(organizationId: string) {
     const maxSeats = planConfig?.maxSeats ?? 0;
 
     const allMembers = await prisma.member.findMany({
-        where: { organizationId },
+        where: {
+            organizationId,
+            user: { role: { not: "ADMIN" } }
+        },
         include: {
             user: {
                 include: {
@@ -327,7 +330,10 @@ export async function getOrganizationPublicProfiles(slug: string) {
 
     // Query through Member - the source of truth for org membership
     const members = await prisma.member.findMany({
-        where: { organizationId: organization.id },
+        where: {
+            organizationId: organization.id,
+            user: { role: { not: "ADMIN" } }
+        },
         include: {
             user: {
                 include: {
