@@ -221,10 +221,10 @@ export function AvailabilityManagement() {
                             <div
                                 key={day.id}
                                 className={cn(
-                                    "group relative flex flex-col xl:flex-row xl:items-center justify-between w-full p-4 sm:p-5 rounded-4xl border transition-all duration-300 gap-5 xl:gap-8 overflow-hidden",
+                                    "group relative flex flex-col xl:flex-row xl:items-center justify-between w-full p-4 sm:p-5 sm:px-6 sm:py-5 rounded-[2.5rem] border border-border/40 transition-all duration-300 gap-5 xl:gap-8 overflow-hidden",
                                     active
-                                        ? "bg-card border-primary/20 shadow-sm"
-                                        : "bg-muted/30 border-primary/20 opacity-90 py-5 sm:py-6 hover:opacity-100 hover:bg-muted/10 transition-all"
+                                        ? "bg-linear-to-br from-primary/10 border-border/50 hover:border-primary/20 hover:bg-primary/5 shadow-[none]"
+                                        : "bg-muted/10 border-primary/20 opacity-70 hover:opacity-100 hover:bg-muted/20"
                                 )}
                             >
                                 {/* Day Selector Section */}
@@ -234,8 +234,8 @@ export function AvailabilityManagement() {
                                         onClick={() => toggleDay(day.id)}
                                     >
                                         <div className={cn(
-                                            "h-12 w-12 rounded-2xl flex items-center justify-center transition-all duration-500",
-                                            active ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 rotate-0" : "bg-muted text-muted-foreground -rotate-12"
+                                            "h-12 w-12 flex items-center justify-center transition-all duration-500",
+                                            active ? "bg-primary text-primary-foreground shadow-[none] rotate-0 rounded-full" : "bg-muted/60 text-muted-foreground/60 -rotate-12 rounded-2xl"
                                         )}>
                                             <Checkbox
                                                 checked={active}
@@ -272,24 +272,24 @@ export function AvailabilityManagement() {
                                     {active ? (
                                         <div className="flex flex-col xl:flex-row xl:items-center justify-between w-full gap-5 animate-in fade-in slide-in-from-left-4 duration-500">
                                             {/* Hours Selection */}
-                                            <div className="flex items-center gap-2 bg-muted/40 p-2 rounded-2xl w-full xl:w-fit group-hover:bg-muted-foreground/5 transition-colors">
+                                            <div className="flex items-center gap-2 bg-muted/30 p-1.5 rounded-full w-full xl:w-fit group-hover:bg-muted-foreground/5 transition-colors">
                                                 <div className="flex-1 xl:w-28">
                                                     <Input
                                                         type="time"
                                                         value={start}
                                                         onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                        className="w-full bg-background border-none h-11 text-sm font-black rounded-xl text-center shadow-xs focus-visible:ring-primary/20 appearance-none"
+                                                        className="w-full bg-background/50 hover:bg-background border-none h-11 text-sm font-black rounded-full text-center shadow-[none] focus-visible:ring-primary/20 appearance-none transition-colors"
                                                     />
                                                 </div>
                                                 <div className="w-6 flex justify-center">
-                                                    <span className="text-xs font-black text-muted-foreground/30 uppercase">a</span>
+                                                    <span className="text-[10px] font-black tracking-widest text-muted-foreground/30 uppercase">a</span>
                                                 </div>
                                                 <div className="flex-1 xl:w-28">
                                                     <Input
                                                         type="time"
                                                         value={end}
                                                         onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                        className="w-full bg-background border-none h-11 text-sm font-black rounded-xl text-center shadow-xs focus-visible:ring-primary/20 appearance-none"
+                                                        className="w-full bg-background/50 hover:bg-background border-none h-11 text-sm font-black rounded-full text-center shadow-[none] focus-visible:ring-primary/20 appearance-none transition-colors"
                                                     />
                                                 </div>
                                             </div>
@@ -301,10 +301,10 @@ export function AvailabilityManagement() {
                                                     onClick={() => toggleLunch(day.id)}
                                                 >
                                                     <div className={cn(
-                                                        "h-6 w-6 rounded-lg border-2 transition-all flex items-center justify-center",
-                                                        dayState?.lunchActive ? "border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20" : "border-muted-foreground/20"
+                                                        "h-6 w-6 rounded-full transition-all flex items-center justify-center border-0",
+                                                        dayState?.lunchActive ? "bg-primary text-primary-foreground shadow-[none]" : "bg-muted-foreground/10"
                                                     )}>
-                                                        {dayState?.lunchActive && <CheckCircle2 className="h-4 w-4 stroke-4" />}
+                                                        {dayState?.lunchActive && <CheckCircle2 className="h-4 w-4 stroke-[3px]" />}
                                                     </div>
                                                     <span className={cn(
                                                         "text-[10px] font-black uppercase tracking-widest transition-colors",
@@ -315,19 +315,19 @@ export function AvailabilityManagement() {
                                                 </div>
 
                                                 {dayState?.lunchActive && (
-                                                    <div className="flex items-center gap-2 animate-in slide-in-from-right-2 fade-in duration-300 w-full xl:w-fit">
+                                                    <div className="flex items-center gap-2 animate-in slide-in-from-right-2 fade-in duration-300 w-full xl:w-fit bg-muted/30 p-1.5 rounded-full">
                                                         <Input
                                                             type="time"
                                                             value={dayState?.lunchStart}
                                                             onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                            className="flex-1 xl:w-24 bg-primary/5 border-none h-10 text-xs font-black rounded-xl text-center shadow-xs focus-visible:ring-primary/10"
+                                                            className="flex-1 xl:w-24 bg-background/50 hover:bg-background border-none h-10 text-xs font-black rounded-full text-center shadow-[none] focus-visible:ring-primary/10 transition-colors"
                                                         />
-                                                        <span className="text-[10px] font-black text-primary/30 uppercase shrink-0 px-1">a</span>
+                                                        <span className="text-[10px] font-black text-muted-foreground/30 uppercase shrink-0 px-1">a</span>
                                                         <Input
                                                             type="time"
                                                             value={dayState?.lunchEnd}
                                                             onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                            className="flex-1 xl:w-24 bg-primary/5 border-none h-10 text-xs font-black rounded-xl text-center shadow-xs focus-visible:ring-primary/10"
+                                                            className="flex-1 xl:w-24 bg-background/50 hover:bg-background border-none h-10 text-xs font-black rounded-full text-center shadow-[none] focus-visible:ring-primary/10 transition-colors"
                                                         />
                                                     </div>
                                                 )}
@@ -357,7 +357,7 @@ export function AvailabilityManagement() {
                     <Button
                         variant="secondary"
                         onClick={() => setShowBlockModal(true)}
-                        className="w-full md:w-auto h-12 rounded-xl font-bold active:scale-95"
+                        className="w-full md:w-auto h-12 rounded-full font-bold active:scale-95 text-[11px] uppercase tracking-widest shadow-[none]"
                     >
                         <Plus className="h-4 w-4" />
                         Añadir Bloqueo
@@ -367,23 +367,23 @@ export function AvailabilityManagement() {
                 {specialBlocks.length > 0 ? (
                     <div className="grid gap-3">
                         {specialBlocks.map((block) => (
-                            <div key={block.id} className="flex items-center justify-between p-4 bg-card border rounded-2xl shadow-sm animate-in slide-in-from-left-4 duration-300">
+                            <div key={block.id} className="flex items-center justify-between px-6 py-4 bg-transparent border border-border/50 rounded-full animate-in slide-in-from-left-4 duration-300 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm transition-all shadow-[none]">
                                 <div className="flex items-center gap-4">
-                                    <div className="bg-red-50 text-red-600 p-2 rounded-xl">
-                                        <CalendarIcon className="h-5 w-5" />
+                                    <div className="bg-red-500/10 text-red-500 rounded-full h-10 w-10 flex items-center justify-center">
+                                        <CalendarIcon className="h-4 w-4" />
                                     </div>
-                                    <div>
-                                        <p className="font-bold">{format(new Date(block.specificDate), "EEEE, d 'de' MMMM", { locale: es })}</p>
-                                        <p className="text-sm text-muted-foreground">{block.startTime} a {block.endTime}</p>
+                                    <div className="flex flex-col">
+                                        <p className="font-bold text-foreground/90">{format(new Date(block.specificDate), "EEEE, d 'de' MMMM", { locale: es })}</p>
+                                        <p className="text-[11px] font-bold text-muted-foreground/70">{block.startTime} a {block.endTime}</p>
                                     </div>
                                 </div>
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleDeleteBlock(block.id)}
-                                    className="text-muted-foreground hover:text-destructive transition-colors"
+                                    className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors rounded-full"
                                 >
-                                    <Trash2 className="h-5 w-5" />
+                                    <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
                         ))}
@@ -460,22 +460,22 @@ export function AvailabilityManagement() {
                     onClick={handleSave}
                     disabled={saving}
                     className={cn(
-                        "pointer-events-auto w-full md:w-auto h-12 px-10 rounded-2xl font-bold text-sm tracking-tight duration-500 hover:scale-[1.02] transition-all active:scale-95 overflow-hidden shadow-xl",
+                        "pointer-events-auto w-full md:w-auto h-14 px-10 rounded-full font-black text-[11px] uppercase tracking-widest duration-500 hover:scale-[1.02] transition-all active:scale-95 overflow-hidden shadow-2xl shadow-primary/10",
                         success
-                            ? "bg-secondary text-secondary-foreground ring-4 ring-secondary/20 shadow-secondary/20"
-                            : "bg-primary text-primary-foreground hover:shadow-primary/30 hover:-translate-y-0.5"
+                            ? "bg-secondary text-secondary-foreground"
+                            : "bg-primary text-primary-foreground hover:-translate-y-0.5"
                     )}
                 >
                     <div className="flex items-center gap-3 relative">
                         {saving ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         ) : success ? (
-                            <CheckCircle2 className="h-5 w-5 animate-in zoom-in duration-300 fill-secondary-foreground/10" />
+                            <CheckCircle2 className="h-5 w-5 animate-in zoom-in duration-300" />
                         ) : (
                             <Save className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                         )}
                         <span className="animate-in fade-in slide-in-from-right-2 duration-300 flex items-center">
-                            {saving ? "Guardando..." : success ? "¡Guardado con éxito!" : "Guardar cambios"}
+                            {saving ? "Guardando..." : success ? "¡Guardado con éxito!" : "Guardar Disponibilidad"}
                         </span>
                     </div>
                 </Button>

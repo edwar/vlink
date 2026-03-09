@@ -8,7 +8,7 @@ export default async function ConfiguracionPage() {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
-            <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+            <header className="relative p-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <Hammer className="h-24 w-24 text-primary rotate-12" />
                 </div>

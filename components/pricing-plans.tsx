@@ -145,10 +145,10 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                         <div
                             key={plan.id}
                             className={cn(
-                                "relative flex flex-col p-8 rounded-[2.5rem] border-2 transition-all duration-300",
+                                "relative flex flex-col p-8 rounded-3xl border transition-all duration-300",
                                 isCurrent
-                                    ? `bg-card border-[3px] shadow-2xl ${plan.id === 'TEAM' ? 'border-blue-500 shadow-blue-500/20' : plan.id === 'CORPORATE' ? 'border-primary shadow-primary/20' : 'border-zinc-500/50 shadow-zinc-500/10'}`
-                                    : "bg-muted/20 border-primary/20 hover:bg-card hover:border-primary hover:shadow-xl"
+                                    ? `bg-card border-2 shadow-md ${plan.id === 'TEAM' ? 'border-blue-500/60 shadow-blue-500/10' : plan.id === 'CORPORATE' ? 'border-primary/60 shadow-primary/10' : 'border-zinc-500/40 shadow-zinc-500/5'}`
+                                    : "bg-muted/10 border-border/40 hover:bg-card hover:border-border/80 hover:shadow-sm"
                             )}
                         >
                             {isCurrent && (

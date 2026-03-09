@@ -8,7 +8,7 @@ export default async function DisponibilidadPage() {
 
     return (
         <div className="space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 px-4 sm:px-0">
-            <header className="relative p-6 sm:p-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+            <header className="relative p-6 sm:p-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
                     <Clock className="h-24 w-24 text-primary rotate-12" />
                 </div>
@@ -27,7 +27,7 @@ export default async function DisponibilidadPage() {
                 </div>
             </header>
 
-            <div className="bg-card/40 backdrop-blur-xl rounded-[2.5rem] border-2 border-primary/5 shadow-xl p-4 sm:p-8 lg:p-10">
+            <div className="w-full">
                 <AvailabilityManagement />
             </div>
         </div>

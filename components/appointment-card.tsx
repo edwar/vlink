@@ -51,7 +51,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
     }
 
     return (
-        <div className="p-4 sm:p-6 bg-card border-2 border-primary/5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6 hover:shadow-lg hover:shadow-muted transition-all group overflow-hidden relative">
+        <div className="p-4 sm:p-5 bg-transparent border border-dashed border-border/60 rounded-4xl flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6 hover:bg-primary/5 hover:border-primary/20 transition-all group overflow-hidden relative">
             {/* Top Right Date Badge (Mobile Context) */}
             {showDate && (
                 <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 border-l-2 border-b-2 border-primary/5 rounded-bl-3xl flex flex-col items-center justify-center md:hidden">
@@ -65,7 +65,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
             )}
 
             <div className="flex items-center gap-2 sm:gap-6">
-                <div className="h-14 w-14 sm:h-16 sm:w-16 bg-accent rounded-full flex items-center justify-center text-xl font-black text-primary border-2 border-background shadow-sm shrink-0">
+                <div className="h-14 w-14 sm:h-16 sm:w-16 bg-primary/10 rounded-full flex items-center justify-center text-xl font-black text-primary shrink-0">
                     {appt.clientName.charAt(0)}
                 </div>
                 <div className="space-y-1.5 flex-1 min-w-0">
@@ -106,7 +106,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                 <Link
                     href={`https://wa.me/${appt.clientPhone.replace(/\D/g, '')}`}
                     target="_blank"
-                    className="h-12 flex-1 md:flex-none px-6 bg-background text-primary rounded-2xl flex items-center justify-center font-bold text-sm border-2 border-primary/5 shadow-sm hover:bg-primary hover:text-white hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="h-12 flex-1 md:flex-none px-6 bg-transparent text-primary rounded-2xl flex items-center justify-center font-bold text-sm border-2 border-primary/20 hover:bg-primary/10 transition-all"
                 >
                     WhatsApp
                 </Link>
@@ -152,7 +152,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                             <Button
                                 variant="outline"
                                 onClick={() => setIsOpen(false)}
-                                className="flex-1 rounded-xl border-2 font-bold h-12"
+                                className="flex-1 rounded-full border-border/50 font-bold h-12"
                                 disabled={isPending}
                             >
                                 Mantener cita
@@ -160,7 +160,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                             <Button
                                 variant="destructive"
                                 onClick={handleCancel}
-                                className="flex-1 rounded-xl font-bold h-12 shadow-lg shadow-red-500/20"
+                                className="flex-1 rounded-full font-bold h-12 shadow-[none]"
                                 disabled={isPending}
                             >
                                 {isPending ? "Cancelando..." : "Sí, cancelar cita"}

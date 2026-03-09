@@ -232,9 +232,9 @@ export function ConfigurationSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Services (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
-                        <div className="relative z-10 bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-10">
+                    <section className="bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
+                        <div className="relative z-10 space-y-10">
                             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-3">
@@ -258,8 +258,8 @@ export function ConfigurationSettings() {
 
                             {/* New Service Form */}
                             {showNewForm && (
-                                <div className="p-8 border-2 border-dashed border-primary/20 rounded-[2rem] space-y-10 bg-primary/5 animate-in slide-in-from-top-6 duration-500 overflow-hidden relative">
-                                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
+                                <div className="p-8 border border-dashed border-border/60 rounded-[2rem] space-y-10 bg-transparent animate-in slide-in-from-top-6 duration-500 overflow-hidden relative">
+                                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
                                     <div className="space-y-4">
                                         <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Nombre del Servicio</Label>
@@ -368,17 +368,14 @@ export function ConfigurationSettings() {
                                         <div
                                             key={service.id}
                                             className={cn(
-                                                "group relative p-1 rounded-[2rem] transition-all duration-500",
-                                                editingId === service.id ? "bg-linear-to-br from-primary/20 to-transparent" : "bg-transparent"
+                                                "group relative p-6 sm:p-8 rounded-[2rem] border transition-all duration-500 overflow-hidden",
+                                                !service.isActive
+                                                    ? "bg-muted/10 border-border/40 opacity-60 grayscale"
+                                                    : "bg-card border-border/40 hover:border-border/80 hover:shadow-sm",
+                                                editingId === service.id && "bg-linear-to-br from-primary/5 to-transparent border-primary/20 shadow-sm"
                                             )}
                                         >
-                                            <div className={cn(
-                                                "relative z-10 p-6 sm:p-8 rounded-[1.8rem] border transition-all duration-500",
-                                                !service.isActive
-                                                    ? "bg-muted/10 border-transparent opacity-60 grayscale"
-                                                    : "bg-background/40 backdrop-blur-md border-primary/5 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
-                                                editingId === service.id && "bg-card shadow-2xl border-primary shadow-primary/10"
-                                            )}>
+                                            <div className="relative z-10">
                                                 {editingId === service.id ? (
                                                     <div className="space-y-8">
                                                         <div className="flex items-center gap-3">
@@ -531,7 +528,7 @@ export function ConfigurationSettings() {
                                                 )}
                                             </div>
                                             {!editingId && (
-                                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
                                             )}
                                         </div>
                                     ))}
@@ -543,8 +540,8 @@ export function ConfigurationSettings() {
 
                 {/* Column 2: Commercial Name (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-10">
-                    <section className="p-1 rounded-[2.5rem] bg-linear-to-b from-primary/5 to-transparent">
-                        <div className="bg-card/60 backdrop-blur-xl border border-primary/5 rounded-[2.3rem] p-8 sm:p-10 shadow-xl shadow-primary/5 space-y-12">
+                    <section className="bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-12 relative overflow-hidden">
+                        <div className="relative z-10 space-y-12">
                             <div className="space-y-6">
                                 <div className="space-y-2">
                                     <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Marca y Logística</h3>
@@ -620,7 +617,7 @@ export function ConfigurationSettings() {
             </div>
 
             <Dialog open={!!serviceToDelete} onOpenChange={(open) => !open && setServiceToDelete(null)}>
-                <DialogContent className="rounded-[2.5rem] border-2 border-primary/10 bg-card/95 backdrop-blur-2xl p-10 max-w-md">
+                <DialogContent className="rounded-3xl border border-border/40 bg-card p-10 max-w-md shadow-lg">
                     <DialogHeader className="space-y-4">
                         <div className="h-16 w-16 bg-destructive/10 rounded-2xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
                             <Trash2 className="h-8 w-8" />

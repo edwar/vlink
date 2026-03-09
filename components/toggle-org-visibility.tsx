@@ -4,6 +4,7 @@ import { useState } from "react"
 import { toggleShowOnOrgPage } from "@/app/actions/organization"
 import { sileo } from "sileo"
 import { Globe, EyeOff } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface ToggleOrgVisibilityProps {
     initialValue: boolean
@@ -35,24 +36,26 @@ export function ToggleOrgVisibility({ initialValue, targetUserId, memberName }: 
     }
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
             {enabled
-                ? <Globe className="h-3.5 w-3.5 text-primary shrink-0" />
-                : <EyeOff className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                ? <Globe className="h-4 w-4 text-foreground/80 shrink-0" />
+                : <EyeOff className="h-4 w-4 text-muted-foreground/60 shrink-0" />
             }
             <button
                 onClick={handleToggle}
                 disabled={loading}
                 aria-label={`Visibilidad de ${memberName} en página de organización`}
                 title={enabled ? "Visible en página pública" : "Oculto de página pública"}
-                className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed ${enabled
-                    ? "bg-primary dark:bg-primary-foreground border-primary"
-                    : "bg-muted dark:bg-muted-foreground border-muted-foreground/20"
-                    }`}
+                className={cn(
+                    "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+                    enabled ? "bg-primary" : "bg-input"
+                )}
             >
                 <span
-                    className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-md transform transition-transform duration-300 ${enabled ? "translate-x-5" : "translate-x-0.5"
-                        }`}
+                    className={cn(
+                        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform",
+                        enabled ? "translate-x-5" : "translate-x-0"
+                    )}
                 />
             </button>
         </div>

@@ -41,6 +41,8 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 
 ## 3. Requisitos de Diseño (UI/UX)
 - **Mobile First Extremo:** Uso de modales y drawers nativos, fondos de navegación tipo cristal y animaciones fluidas.
+- **Interfaz Liviana y Plana:** Evitar la anidación de cajas (cajas dentro de cajas) ya que afecta negativamente el diseño en dispositivos móviles. Preferir un diseño sin bordes gruesos ni sombras pronunciadas para lograr un aspecto más limpio y minimalista.
+- **Diferenciación de Secciones:** Cada sección puede contar con un degradado sutil para destacar visualmente (ej. `bg-linear-to-br`), pero este debe aplicarse directamente sobre el contenedor principal, evitando anidar otra caja visible dentro de este (cero fondos dobles).
 - **Skeleton Loaders:** Implementación de placeholders animados durante la carga de componentes asíncronos (como el switcher de perfiles) para eliminar el Layout Shift (CLS).
 - **Modos Visuales:** Soporte completo de Light/Dark Mode con persistencia.
 - **Open Graph Dinámicos:** Generación dinámica de tarjetas de vista previa para redes sociales y chats.

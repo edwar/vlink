@@ -48,7 +48,7 @@ interface CalendarHeaderProps {
 
 function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuToggle, onPrevious, onToday, onNext }: CalendarHeaderProps) {
     return (
-        <div className="flex flex-col gap-4 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 pt-2 pb-4 -mt-2">
+        <div className="flex flex-col gap-4 bg-transparent pt-2 pb-4 border-b border-dashed border-border/60 mb-2">
             <div className="flex items-center justify-between w-full">
                 <div className="flex flex-col">
                     <h2 className="text-xl sm:text-2xl font-bold font-display capitalize">
@@ -73,17 +73,17 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
             </div>
 
             <div className="hidden sm:flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center bg-muted/50 p-1 rounded-2xl border">
+                <div className="flex items-center bg-muted/30 p-1.5 rounded-full border border-border/50">
                     <Button
                         variant={view === 'day' ? "secondary" : "ghost"}
                         size="sm"
                         onClick={() => onViewChange('day')}
                         className={cn(
-                            "px-3 py-1.5 h-8 rounded-xl",
-                            view === 'day' ? "bg-background shadow-xs text-foreground" : "text-muted-foreground hover:text-foreground"
+                            "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
+                            view === 'day' ? "bg-background text-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
-                        <Clock className="h-4 w-4" />
+                        <Clock className="h-4 w-4 mr-2" />
                         Día
                     </Button>
                     <Button
@@ -91,11 +91,11 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                         size="sm"
                         onClick={() => onViewChange('week')}
                         className={cn(
-                            "px-3 py-1.5 h-8 rounded-xl",
-                            view === 'week' ? "bg-background shadow-xs text-foreground" : "text-muted-foreground hover:text-foreground"
+                            "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
+                            view === 'week' ? "bg-background text-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
-                        <CalendarIcon className="h-4 w-4" />
+                        <CalendarIcon className="h-4 w-4 mr-2" />
                         Semana
                     </Button>
                     <Button
@@ -103,21 +103,21 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                         size="sm"
                         onClick={() => onViewChange('month')}
                         className={cn(
-                            "px-3 py-1.5 h-8 rounded-xl",
-                            view === 'month' ? "bg-background shadow-xs text-foreground" : "text-muted-foreground hover:text-foreground"
+                            "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
+                            view === 'month' ? "bg-background text-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
-                        <LayoutGrid className="h-4 w-4" />
+                        <LayoutGrid className="h-4 w-4 mr-2" />
                         Mes
                     </Button>
                 </div>
 
-                <div className="flex items-center border rounded-2xl overflow-hidden shadow-xs">
+                <div className="flex items-center border border-border/50 rounded-full overflow-hidden bg-muted/10 p-1">
                     <Button
                         variant="ghost"
                         size="icon-sm"
                         onClick={onPrevious}
-                        className="rounded-none border-r border-border h-9"
+                        className="rounded-full h-8 w-8 hover:bg-background text-muted-foreground"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -125,7 +125,7 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                         variant="ghost"
                         size="sm"
                         onClick={onToday}
-                        className="rounded-none h-9 px-4 font-bold"
+                        className="rounded-full h-8 px-4 font-black uppercase text-[10px] tracking-widest hover:bg-background"
                     >
                         Hoy
                     </Button>
@@ -133,7 +133,7 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                         variant="ghost"
                         size="icon-sm"
                         onClick={onNext}
-                        className="rounded-none border-l border-border h-9"
+                        className="rounded-full h-8 w-8 hover:bg-background text-muted-foreground"
                     >
                         <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -270,16 +270,16 @@ export function CalendarView() {
         const weekDays = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
 
         return (
-            <div className="border rounded-xl bg-card overflow-hidden">
-                <div className="grid grid-cols-7 border-b bg-muted/30">
+            <div className="border border-primary/10 rounded-[2.5rem] bg-transparent overflow-hidden">
+                <div className="grid grid-cols-7 border-b border-border/50 bg-muted/10">
                     {weekDays.map(day => (
-                        <div key={day} className="p-2 sm:p-3 text-center text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        <div key={day} className="p-3 sm:p-4 text-center text-[10px] sm:text-[11px] font-black text-muted-foreground uppercase tracking-widest">
                             <span className="hidden sm:inline">{day}</span>
                             <span className="sm:hidden">{day.charAt(0)}</span>
                         </div>
                     ))}
                 </div>
-                <div className="grid grid-cols-7">
+                <div className="grid grid-cols-7 bg-background/30">
                     {days.map((day, idx) => {
                         const dayOfWeek = getDay(day)
                         const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
@@ -313,12 +313,12 @@ export function CalendarView() {
                                     }
                                 }}
                                 className={cn(
-                                    "min-h-[50px] sm:min-h-[80px] md:min-h-[100px] lg:min-h-[150px] p-1 sm:p-2 border-b border-r last:border-r-0 cursor-pointer hover:bg-accent/30 transition-colors",
-                                    isPast && "opacity-40 pointer-events-none bg-muted/20",
-                                    !isSameDay(day, monthStart) && day < monthStart && "text-muted-foreground/30 bg-muted/10",
-                                    !isSameDay(day, monthEnd) && day > monthEnd && "text-muted-foreground/30 bg-muted/10",
+                                    "min-h-[60px] sm:min-h-[100px] lg:min-h-[120px] p-2 sm:p-3 border-b border-r border-border/50 last:border-r-0 cursor-pointer hover:bg-primary/5 transition-colors",
+                                    isPast && "opacity-40 pointer-events-none bg-muted/10",
+                                    !isSameDay(day, monthStart) && day < monthStart && "text-muted-foreground/30 bg-transparent",
+                                    !isSameDay(day, monthEnd) && day > monthEnd && "text-muted-foreground/30 bg-transparent",
                                     isToday(day) && "bg-primary/5",
-                                    isBlocked && "bg-red-100"
+                                    isBlocked && "bg-red-500/5 hover:bg-red-500/10"
                                 )}
                             >
                                 <div className="flex justify-between items-start">
@@ -366,7 +366,7 @@ export function CalendarView() {
         const hours = [...Array(24)].map((_, i) => i)
 
         return (
-            <div className="flex flex-col border rounded-xl bg-card overflow-hidden h-[600px]">
+            <div className="flex flex-col border border-primary/10 rounded-[2.5rem] bg-transparent overflow-hidden h-[600px]">
                 <div className="overflow-auto scrollbar-hide flex-1">
                     <div className={cn(
                         "flex flex-col min-w-full transition-all duration-300",
@@ -374,12 +374,12 @@ export function CalendarView() {
                     )}>
                         {/* Header Grid */}
                         <div className={cn(
-                            "grid border-b sticky top-0 z-30 bg-card",
+                            "grid border-b border-border/50 sticky top-0 z-30 bg-background/95 backdrop-blur",
                             view === 'day'
-                                ? "grid-cols-[80px_1fr]"
-                                : "grid-cols-[80px_repeat(7,120px)] sm:grid-cols-[80px_repeat(7,1fr)]"
+                                ? "grid-cols-[60px_1fr] sm:grid-cols-[80px_1fr]"
+                                : "grid-cols-[60px_repeat(7,120px)] sm:grid-cols-[80px_repeat(7,1fr)]"
                         )}>
-                            <div className="sticky left-0 z-40 bg-background/95 backdrop-blur-sm border-r" />
+                            <div className="sticky left-0 z-40 bg-background/95 backdrop-blur-sm border-r border-border/50" />
                             {displayDays.map((day) => (
                                 <div
                                     key={day.toString()}
@@ -388,27 +388,29 @@ export function CalendarView() {
                                     onClick={() => setSelectedDate(day)}
                                     onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedDate(day) }}
                                     className={cn(
-                                        "p-4 text-center cursor-pointer transition-colors hover:bg-accent/50",
-                                        isSameDay(day, selectedDate) && "bg-accent",
-                                        "border-r last:border-r-0"
+                                        "p-3 sm:p-4 text-center cursor-pointer transition-colors hover:bg-primary/5",
+                                        isSameDay(day, selectedDate) && "bg-primary/5",
+                                        "border-r border-border/50 last:border-r-0"
                                     )}
                                 >
-                                    <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                    <p className="text-[10px] sm:text-[11px] font-black text-muted-foreground uppercase tracking-widest">
                                         {format(day, "eee", { locale: es })}
                                     </p>
-                                    <p className={cn(
-                                        "text-base sm:text-lg font-bold",
-                                        isToday(day) && "text-primary border-b-2 border-primary inline-block px-1"
-                                    )}>
-                                        {format(day, "d")}
-                                    </p>
+                                    <div className="mt-1 flex justify-center">
+                                        <div className={cn(
+                                            "h-8 w-8 sm:h-10 sm:w-10 rounded-full flex items-center justify-center text-sm sm:text-base font-bold",
+                                            isToday(day) ? "bg-primary text-primary-foreground" : "text-foreground"
+                                        )}>
+                                            {format(day, "d")}
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
 
                         {/* Body Grid */}
                         <div className={cn(
-                            "grid relative",
+                            "grid relative bg-background/30",
                             view === 'day'
                                 ? "grid-cols-[80px_1fr]"
                                 : "grid-cols-[80px_repeat(7,120px)] sm:grid-cols-[80px_repeat(7,1fr)]"
@@ -416,7 +418,7 @@ export function CalendarView() {
                             {/* Time labels column */}
                             <div className="flex flex-col sticky left-0 z-20">
                                 {hours.map((hour) => (
-                                    <div key={hour} className="h-20 p-4 text-[10px] sm:text-xs font-black text-muted-foreground text-right border-r border-b bg-background/95 backdrop-blur-md">
+                                    <div key={hour} className="h-20 p-2 sm:p-4 pr-3 sm:pr-5 text-[10px] sm:text-xs font-black text-muted-foreground text-right border-r border-b border-border/50 bg-background/95 backdrop-blur-md">
                                         {hour}:00
                                     </div>
                                 ))}
@@ -426,7 +428,7 @@ export function CalendarView() {
                             {displayDays.map((day) => {
                                 const dayOfWeek = getDay(day)
                                 return (
-                                    <div key={day.toString()} className="flex flex-col relative border-r last:border-r-0">
+                                    <div key={day.toString()} className="flex flex-col relative border-r border-border/50 last:border-r-0">
                                         {hours.map((hour) => {
                                             const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
                                             const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
@@ -458,8 +460,8 @@ export function CalendarView() {
                                                 <div
                                                     key={hour}
                                                     className={cn(
-                                                        "group h-20 border-b last:border-b-0 relative transition-colors",
-                                                        !isAvailable ? "bg-muted/40" : "hover:bg-accent/30"
+                                                        "group h-20 border-b border-border/50 last:border-b-0 relative transition-colors",
+                                                        !isAvailable ? "bg-muted/10 cursor-not-allowed" : "hover:bg-primary/5"
                                                     )}
                                                 >
                                                     {slotAppointments.map((appt, idx) => (
@@ -523,8 +525,8 @@ export function CalendarView() {
             {view === 'month' ? renderMonthView() : renderDayOrWeekView()}
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="sm:max-w-md p-0 overflow-hidden">
-                    <div className="bg-primary/5 border-b p-6">
+                <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-4xl">
+                    <div className="bg-primary/5 border-b border-border/50 p-6">
                         <DialogHeader>
                             <DialogTitle className="text-xl font-display font-bold">
                                 Detalles de la Cita
@@ -536,8 +538,8 @@ export function CalendarView() {
                     </div>
 
                     {selectedAppointment && (
-                        <div className="p-6 space-y-6">
-                            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/30 border">
+                        <div className="p-6 space-y-8">
+                            <div className="flex items-start gap-4 p-4 rounded-4xl bg-transparent border border-dashed border-border/50">
                                 <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                                     <CalendarIcon className="h-5 w-5" />
                                 </div>
@@ -557,11 +559,11 @@ export function CalendarView() {
                                             </span>
                                         </div>
                                         <span className="opacity-40 hidden xs:inline">•</span>
-                                        <span className="font-medium text-foreground/80 bg-muted px-1.5 py-0.5 rounded text-xs">
+                                        <span className="font-bold bg-primary/5 text-primary px-2 py-0.5 rounded-full text-[10px] tracking-widest uppercase">
                                             {format(new Date(selectedAppointment.startTime), "HH:mm")} - {format(new Date(selectedAppointment.endTime), "HH:mm")}
                                         </span>
                                     </div>
-                                    <div className="pt-2 flex items-center gap-2 text-[10px] text-muted-foreground border-t mt-2">
+                                    <div className="pt-3 flex items-center gap-2 text-[10px] text-muted-foreground border-t border-dashed border-border/50 mt-3 font-semibold uppercase tracking-widest">
                                         <CalendarIcon className="h-3 w-3" />
                                         <span>Registrada el: {format(new Date(selectedAppointment.createdAt), "dd/MM/yyyy HH:mm")}</span>
                                     </div>
@@ -569,39 +571,39 @@ export function CalendarView() {
                             </div>
 
                             <div className="space-y-4">
-                                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Información del Cliente</h4>
+                                <h4 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Información del Cliente</h4>
                                 <div className="grid gap-3">
-                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent/50 transition-colors">
+                                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-transparent border border-dashed border-border/50 hover:bg-primary/5 hover:border-primary/20 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                             <User className="h-4 w-4" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="text-[10px] text-muted-foreground leading-none mb-1">Nombre</p>
-                                            <p className="text-sm font-semibold truncate">{selectedAppointment.clientName}</p>
+                                            <p className="text-[10px] text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Nombre</p>
+                                            <p className="text-sm font-bold truncate">{selectedAppointment.clientName}</p>
                                         </div>
                                     </div>
 
                                     {selectedAppointment.clientEmail && (
-                                        <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent/50 transition-colors">
+                                        <div className="flex items-center gap-3 p-3 rounded-2xl bg-transparent border border-dashed border-border/50 hover:bg-primary/5 hover:border-primary/20 transition-colors">
                                             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                                 <Mail className="h-4 w-4" />
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <p className="text-[10px] text-muted-foreground leading-none mb-1">Correo Electrónico</p>
-                                                <a href={`mailto:${selectedAppointment.clientEmail}`} className="text-sm font-medium text-primary hover:underline break-all block leading-tight">
+                                                <p className="text-[10px] text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Correo Electrónico</p>
+                                                <a href={`mailto:${selectedAppointment.clientEmail}`} className="text-sm font-bold text-primary hover:underline break-all block leading-tight">
                                                     {selectedAppointment.clientEmail}
                                                 </a>
                                             </div>
                                         </div>
                                     )}
 
-                                    <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 hover:bg-accent/50 transition-colors">
+                                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-transparent border border-dashed border-border/50 hover:bg-green-500/5 hover:border-green-500/20 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 shrink-0">
                                             <Phone className="h-4 w-4" />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-muted-foreground leading-none mb-1">Teléfono (WhatsApp)</p>
-                                            <a href={`https://wa.me/${selectedAppointment.clientPhone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-green-600 hover:underline">
+                                            <p className="text-[10px] text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Teléfono (WhatsApp)</p>
+                                            <a href={`https://wa.me/${selectedAppointment.clientPhone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-green-600 hover:underline">
                                                 {selectedAppointment.clientPhone}
                                             </a>
                                         </div>

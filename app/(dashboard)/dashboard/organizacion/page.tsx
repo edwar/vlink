@@ -95,7 +95,7 @@ export default async function OrganizacionPage() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
-            <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+            <header className="relative p-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
                 </div>
@@ -155,18 +155,16 @@ export default async function OrganizacionPage() {
                         <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Marketing & QR</h2>
                     </div>
-                    <div className="space-y-4 flex flex-col">
-                        <p className="text-muted-foreground text-sm leading-relaxed px-2">
+                    <div className="space-y-4 flex flex-col h-full bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                        <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Descarga el QR base o compártelo al instante con tus clientes en redes.
                         </p>
-                        <div className="p-1 rounded-4xl bg-linear-to-b from-primary/10 to-transparent">
-                            <div className="bg-card/80 backdrop-blur-xl border border-primary/5 rounded-[1.8rem] p-4 sm:p-6 shadow-xl shadow-primary/5">
-                                <OrgQRCode
-                                    orgName={organization.name}
-                                    orgSlug={organization.slug}
-                                    appUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
-                                />
-                            </div>
+                        <div className="relative z-10 pt-4">
+                            <OrgQRCode
+                                orgName={organization.name}
+                                orgSlug={organization.slug}
+                                appUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
+                            />
                         </div>
 
                         <div className="px-2 pt-2">
@@ -175,14 +173,13 @@ export default async function OrganizacionPage() {
                                     <Button
                                         variant="outline"
                                         size="lg"
-                                        className="w-full text-xs overflow-hidden relative group border-none hover:bg-primary/10 text-foreground hover:text-primary shadow-xl shadow-primary/5 p-0"
+                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-sm h-14 rounded-2xl"
                                     >
-                                        <div className="absolute inset-0 border-2 border-primary/20 rounded-2xl group-hover:border-primary/40 transition-colors" />
-                                        <IdCard className="h-5 w-5 relative z-10" />
-                                        <span className="relative z-10">Tarjeta de Presentación</span>
+                                        <IdCard className="h-5 w-5 relative z-10 mr-2" />
+                                        <span className="relative z-10 uppercase tracking-widest">Tarjeta de Presentación</span>
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden bg-background/95 backdrop-blur-3xl border-2 border-primary/10 sm:rounded-4xl p-6 sm:p-10 shadow-2xl flex flex-col">
+                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden bg-card border-border/40 sm:rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col">
                                     <DialogTitle className="text-2xl md:text-3xl font-display font-black tracking-tight uppercase text-primary mb-1">
                                         Tarjeta de Presentación
                                     </DialogTitle>
@@ -207,18 +204,18 @@ export default async function OrganizacionPage() {
                         <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Crecer / Equipo</h2>
                     </div>
-                    <div className="flex-1 flex flex-col space-y-4">
-                        <p className="text-muted-foreground text-sm leading-relaxed px-2">
+                    <div className="flex-1 flex flex-col space-y-4 bg-linear-to-bl from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                        <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Invita nuevos profesionales a tu organización copiando el enlace mágico para escalar tu negocio.
                         </p>
-                        <div className="px-2">
+                        <div className="relative z-10">
                             <div className="flex items-center justify-between mb-2">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-foreground/70">
                                     Capstone ({organization.subscriptionPlan === "FREE" ? "1 Base" : organization.subscriptionPlan === "TEAM" ? "Hasta 5" : "Ilimitado"})
                                 </span>
                             </div>
                         </div>
-                        <div className="px-2 flex-1">
+                        <div className="relative z-10 flex-1">
                             <InviteMember
                                 organizationId={organization.id}
                                 disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
@@ -236,23 +233,23 @@ export default async function OrganizacionPage() {
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Mi Equipo</h2>
                     </div>
                     <div className="flex items-center gap-3">
-                        <span className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 shadow-sm shadow-primary/5">
+                        <span className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 shadow-xs">
                             {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>
                         <a
                             href="/dashboard/organizacion/agenda"
-                            className="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20 hover:bg-primary/20 transition-colors flex items-center gap-1.5"
+                            className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
                         >
-                            <CalendarRange className="h-3 w-3" />
+                            <CalendarRange className="h-3 w-3 opacity-50" />
                             Agenda de Equipo
                         </a>
                         <a
                             href={`/org/${organization.slug}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="px-4 py-1.5 bg-accent text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border hover:border-primary/30 hover:text-primary transition-colors flex items-center gap-1.5"
+                            className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
                         >
-                            <Globe className="h-3 w-3" />
+                            <Globe className="h-3 w-3 opacity-50" />
                             Ver página pública
                         </a>
                     </div>
@@ -265,123 +262,111 @@ export default async function OrganizacionPage() {
                             <div
                                 key={member.id}
                                 className={cn(
-                                    "p-1 rounded-xl bg-linear-to-r transition-colors duration-500 h-full",
-                                    isPlanActive
-                                        ? "from-primary/5 to-transparent hover:from-primary/10"
-                                        : "from-red-500/5 to-transparent hover:from-red-500/10 opacity-70 grayscale-[0.3]"
+                                    "group relative bg-card border border-border/50 rounded-[2.5rem] hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6",
+                                    !isPlanActive && "opacity-70 grayscale-[0.3] border-red-500/20"
                                 )}
                                 style={{ animationDelay: `${index * 50}ms` }}
                             >
-                                <Card className={cn(
-                                    "h-full bg-card/10 backdrop-blur-xl border border-primary/5 rounded-xl hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden flex flex-col justify-center",
-                                    !isPlanActive && "border-red-500/20"
-                                )}>
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                                    <CardContent className="p-3 sm:px-4 sm:py-3.5">
-                                        <div className="flex flex-col 2xl:flex-row 2xl:items-center gap-5 sm:gap-6 relative">
-                                            {/* Header: Avatar, Name, Email */}
-                                            <div className="flex items-center gap-3 min-w-0">
-                                                <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 group-hover:scale-105 transition-transform duration-500 relative">
-                                                    <UserAvatar
-                                                        image={member.user.image}
-                                                        name={member.user.name ?? "Usuario"}
-                                                        className="h-full w-full rounded-2xl shadow-lg border-2 border-background ring-4 ring-primary/5"
+                                {/* Header: Avatar, Name, Email */}
+                                <div className="flex items-center gap-4 min-w-0">
+                                    <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 group-hover:scale-105 transition-transform duration-500 relative">
+                                        <UserAvatar
+                                            image={member.user.image}
+                                            name={member.user.name ?? "Usuario"}
+                                            className="h-full w-full rounded-[1.2rem] shadow-sm border border-border/50"
+                                        />
+                                        {member.role === "OWNER" && (
+                                            <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-sm border-2 border-background z-10">
+                                                <Shield className="h-2.5 w-2.5" />
+                                            </div>
+                                        )}
+                                        {!isPlanActive && (
+                                            <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-sm border-2 border-background z-10" title="Suspendido por límite de plan">
+                                                <AlertTriangle className="h-2.5 w-2.5" />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="text-lg sm:text-lg font-black font-display tracking-tight truncate text-foreground/90">
+                                            {member.user.name}
+                                        </h3>
+                                        <p className="text-xs text-muted-foreground font-medium truncate flex items-center gap-1.5">
+                                            <UserCircle className="h-3.5 w-3.5 opacity-50 shrink-0" />
+                                            <span className="truncate">{member.user.email}</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Middle & Actions Section */}
+                                <div className="flex flex-col sm:flex-row xl:items-center justify-between flex-1 gap-4">
+                                    {/* Profile Link */}
+                                    <div className="flex-1 min-w-0 xl:flex xl:justify-center">
+                                        {member.user.profile?.username && (
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex items-center gap-2 bg-muted/30 px-3 py-1.5 rounded-full border border-border/50 min-w-0">
+                                                    <Briefcase className="h-3.5 w-3.5 text-foreground/60 shrink-0" />
+                                                    <span className="text-[11px] font-black text-foreground/70 truncate">
+                                                        {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
+                                                    </span>
+                                                </div>
+                                                <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Role & Visibility */}
+                                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                                        {/* Role badge / selector */}
+                                        {isOwnerOrManager && member.userId !== currentUserMember?.userId ? (
+                                            <ChangeMemberRole
+                                                organizationId={organization.id}
+                                                targetUserId={member.userId}
+                                                currentRole={member.role as "OWNER" | "MANAGER" | "PROFESSIONAL"}
+                                                memberName={member.user.name}
+                                            />
+                                        ) : (
+                                            <span className={cn(
+                                                "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                                member.role === "OWNER" ? "bg-amber-500/5 text-amber-600 border-amber-500/20" :
+                                                    member.role === "MANAGER" ? "bg-blue-500/5 text-blue-600 border-blue-500/20" :
+                                                        "bg-emerald-500/5 text-emerald-600 border-emerald-500/20"
+                                            )}>
+                                                {ROLE_LABELS[member.role]}
+                                            </span>
+                                        )}
+
+                                        {!isPlanActive && (
+                                            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border bg-red-500/5 text-red-600 border-red-500/20">
+                                                Suspendido
+                                            </span>
+                                        )}
+
+                                        {isPlanActive && (
+                                            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border bg-emerald-500/5 text-emerald-600 border-emerald-500/20 hidden md:inline-flex">
+                                                Activo
+                                            </span>
+                                        )}
+
+                                        {(isOwnerOrManager && member.user.profile) || (currentUserRole === "OWNER" && member.userId !== currentUserMember?.userId && member.role !== "OWNER") ? (
+                                            <div className="flex items-center gap-3">
+                                                {isOwnerOrManager && member.user.profile && (
+                                                    <ToggleOrgVisibility
+                                                        initialValue={member.user.profile.showOnOrgPage ?? true}
+                                                        targetUserId={member.userId}
+                                                        memberName={member.user.name}
                                                     />
-                                                    {member.role === "OWNER" && (
-                                                        <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10">
-                                                            <Shield className="h-2.5 w-2.5" />
-                                                        </div>
-                                                    )}
-                                                    {!isPlanActive && (
-                                                        <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg border-2 border-background z-10" title="Suspendido por límite de plan">
-                                                            <AlertTriangle className="h-2.5 w-2.5" />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <h3 className="text-lg sm:text-xl font-black font-display tracking-tight truncate text-foreground/90">
-                                                        {member.user.name}
-                                                    </h3>
-                                                    <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate flex items-center gap-1.5 mt-0.5">
-                                                        <UserCircle className="h-3.5 w-3.5 opacity-50 shrink-0" />
-                                                        <span className="truncate">{member.user.email}</span>
-                                                    </p>
-                                                </div>
+                                                )}
+                                                {currentUserRole === "OWNER" && member.userId !== currentUserMember?.userId && member.role !== "OWNER" && (
+                                                    <RemoveMember
+                                                        organizationId={organization.id}
+                                                        targetUserId={member.userId}
+                                                        memberName={member.user.name}
+                                                    />
+                                                )}
                                             </div>
-
-                                            {/* Middle & Actions Section */}
-                                            <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row 2xl:items-center justify-between flex-1 gap-4 pt-4 sm:pt-0 xl:pt-4 2xl:pt-0 border-t sm:border-t-0 xl:border-t 2xl:border-t-0 border-border/10">
-                                                {/* Profile Link */}
-                                                <div className="flex-1 min-w-0">
-                                                    {member.user.profile?.username && (
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="flex items-center gap-2 bg-muted/30 px-2.5 py-1 rounded-lg border border-border/50 min-w-0 hover:bg-muted/50 transition-colors">
-                                                                <Briefcase className="h-3 w-3 text-primary shrink-0" />
-                                                                <span className="text-[10px] font-black text-foreground/80 truncate">
-                                                                    {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
-                                                                </span>
-                                                            </div>
-                                                            <CopyLink url={`${process.env.NEXT_PUBLIC_APP_URL}/${member.user.profile.username}`} />
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {/* Role & Visibility */}
-                                                <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-                                                    {/* Role badge / selector */}
-                                                    {isOwnerOrManager && member.userId !== currentUserMember?.userId ? (
-                                                        <ChangeMemberRole
-                                                            organizationId={organization.id}
-                                                            targetUserId={member.userId}
-                                                            currentRole={member.role as "OWNER" | "MANAGER" | "PROFESSIONAL"}
-                                                            memberName={member.user.name}
-                                                        />
-                                                    ) : (
-                                                        <span className={cn(
-                                                            "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs",
-                                                            member.role === "OWNER" ? "bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5" :
-                                                                member.role === "MANAGER" ? "bg-blue-500/10 text-blue-600 border-blue-500/20 shadow-blue-500/5" :
-                                                                    "bg-green-500/10 text-green-600 border-green-500/20 shadow-green-500/5"
-                                                        )}>
-                                                            {ROLE_LABELS[member.role]}
-                                                        </span>
-                                                    )}
-
-                                                    {!isPlanActive && (
-                                                        <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-red-500/10 text-red-600 border-red-500/20 shadow-red-500/5">
-                                                            Suspendido (Plan)
-                                                        </span>
-                                                    )}
-
-                                                    {isPlanActive && (
-                                                        <span className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border shadow-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/20 shadow-emerald-500/5 hidden md:inline-flex">
-                                                            Activo
-                                                        </span>
-                                                    )}
-
-                                                    {(isOwnerOrManager && member.user.profile) || (currentUserRole === "OWNER" && member.userId !== currentUserMember?.userId && member.role !== "OWNER") ? (
-                                                        <div className="pl-3 border-l border-border/10 flex items-center gap-1">
-                                                            {isOwnerOrManager && member.user.profile && (
-                                                                <ToggleOrgVisibility
-                                                                    initialValue={member.user.profile.showOnOrgPage ?? true}
-                                                                    targetUserId={member.userId}
-                                                                    memberName={member.user.name}
-                                                                />
-                                                            )}
-                                                            {currentUserRole === "OWNER" && member.userId !== currentUserMember?.userId && member.role !== "OWNER" && (
-                                                                <RemoveMember
-                                                                    organizationId={organization.id}
-                                                                    targetUserId={member.userId}
-                                                                    memberName={member.user.name}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ) : null}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                        ) : null}
+                                    </div>
+                                </div>
                             </div>
                         );
                     })}
