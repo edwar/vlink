@@ -109,8 +109,8 @@ export default async function DashboardPage() {
             </header>
 
             <Tabs defaultValue="agenda" className="space-y-8">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 px-2">
-                    <TabsList className="w-full sm:w-auto bg-muted/40 p-1.5 rounded-2xl h-auto border-2 border-primary/5 backdrop-blur-sm shadow-inner">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 px-2">
+                    <TabsList className="w-fit xs:w-auto bg-muted/40 p-1.5 rounded-2xl h-auto border-2 border-primary/5 backdrop-blur-sm shadow-inner">
                         <TabsTrigger value="agenda" className="flex-1 sm:flex-none rounded-xl px-4 sm:px-10 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg active:scale-95 transition-all">
                             Mi Agenda
                         </TabsTrigger>
