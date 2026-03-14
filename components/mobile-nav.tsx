@@ -10,6 +10,7 @@ import { signOut, useSession } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import { Users } from "lucide-react"
 import { Logo } from "./logo"
+import { PlanBadge } from "./plan-badge"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -82,11 +83,14 @@ export function MobileNav() {
                 <div className="px-1 border-b">
                     <ProfileSwitcher />
                 </div>
+                <div className="px-1 py-3 border-b">
+                    <PlanBadge />
+                </div>
 
                 <nav className="flex flex-1 flex-col p-6 overflow-y-auto">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                         <li>
-                            <ul role="list" className="-mx-2 space-y-1">
+                            <ul role="list" className="space-y-1">
                                 {navigation.map((item) => (
                                     <li key={item.name}>
                                         <Link
@@ -127,7 +131,7 @@ export function MobileNav() {
                             )}
                             <button
                                 onClick={handleSignOut}
-                                className="group -mx-2 flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                className="group flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
                             >
                                 <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
                                 Cerrar sesión

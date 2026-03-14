@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
 import { signOut, useSession } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
-import Image from "next/image"
 import { Logo } from "./logo"
 import { useProfileStore } from "@/lib/store/profile-store"
+import { PlanBadge } from "./plan-badge"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -34,7 +34,7 @@ export function DashboardSidebar() {
     }
 
     return (
-        <div className="flex h-full flex-col gap-y-6 overflow-y-auto bg-card border-r border-primary/5 px-6 pb-6">
+        <div className="flex h-full flex-col gap-y-6 overflow-y-auto border-r border-primary/5 px-6 pb-6">
             <div className="flex h-20 shrink-0 items-center justify-between">
                 <div className="flex items-center gap-2 group cursor-pointer">
                     <Logo className="h-8 w-8 text-primary" />
@@ -45,10 +45,12 @@ export function DashboardSidebar() {
 
             <ProfileSwitcher />
 
+            <PlanBadge />
+
             <nav className="flex flex-1 flex-col mt-4">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
-                        <ul role="list" className="-mx-2 space-y-1.5">
+                        <ul role="list" className="space-y-1.5">
                             {navigation.map((item) => {
                                 const isActive = pathname === item.href;
                                 return (
@@ -96,7 +98,7 @@ export function DashboardSidebar() {
                         )}
                         <button
                             onClick={handleSignOut}
-                            className="group -mx-2 flex w-full gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
+                            className="group flex w-full gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
                         >
                             <LogOut className="h-6 w-6 shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                             Cerrar sesión

@@ -402,7 +402,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                     {profileData.services.length > 1 ? "2" : "1"}. Selecciona el Día
                                 </h2>
                             </div>
-                            <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-2 px-2">
+                            <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar px-2">
                                 {days.map((day) => (
                                     <button
                                         key={day.toString()}

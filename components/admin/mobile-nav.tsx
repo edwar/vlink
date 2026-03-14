@@ -86,7 +86,7 @@ export function AdminMobileNav() {
                 <nav className="flex flex-1 flex-col p-6 overflow-y-auto">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                         <li>
-                            <ul role="list" className="-mx-2 space-y-1">
+                            <ul role="list" className="space-y-1">
                                 {navItems.map((item) => {
                                     const Icon = item.icon
                                     const isActive = pathname === item.href
@@ -120,14 +120,14 @@ export function AdminMobileNav() {
                             <Link
                                 href="/dashboard"
                                 onClick={() => setIsOpen(false)}
-                                className="group -mx-2 flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-accent transition-colors"
+                                className="group flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-accent transition-colors"
                             >
                                 <ExternalLink className="h-6 w-6 shrink-0" aria-hidden="true" />
                                 Ir al Dashboard
                             </Link>
                             <button
                                 onClick={handleSignOut}
-                                className="group -mx-2 flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors"
+                                className="group flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors"
                             >
                                 <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
                                 Cerrar sesión

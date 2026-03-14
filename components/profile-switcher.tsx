@@ -56,7 +56,7 @@ export function ProfileSwitcher() {
 
     if (isLoading) {
         return (
-            <div className="px-1 py-4 bg-muted/20">
+            <div className="py-4 bg-muted/20">
                 <div className="flex items-center gap-2 mb-2 px-2">
                     <Skeleton className="h-3 w-3" />
                     <Skeleton className="h-3 w-24" />
@@ -69,7 +69,7 @@ export function ProfileSwitcher() {
     if (organizations.length === 0) return null
 
     return (
-        <div className="px-1 py-4 bg-muted/20">
+        <div className="py-4 bg-muted/20">
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">
                 <Building2 className="h-3 w-3" />
                 Viendo Agenda De:
