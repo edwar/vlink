@@ -209,8 +209,8 @@
 
 .introjs-button {
   @apply flex items-center justify-center text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer;
-  padding-inline: 1rem !important;
-  padding-block: 0.75rem !important;
+  padding-inline: 1.25rem !important;
+  padding-block: 1rem !important;
   text-shadow: none !important;
   background-image: none !important;
   border: none !important;
@@ -225,7 +225,8 @@
 }
 
 .introjs-prevbutton {
-  @apply bg-muted/50 text-muted-foreground hover:bg-muted border border-border/50;
+  @apply bg-muted/50 text-muted-foreground hover:bg-muted hover:scale-105 active:scale-95;
+  border: 1px solid oklch(var(--primary)) !important;
   background-color: oklch(var(--muted) / 0.5) !important;
   color: var(--muted-foreground) !important;
 }

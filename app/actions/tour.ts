@@ -52,6 +52,11 @@ export async function completeTour(pageKey: string, tourVersion: string) {
         if (!session?.user?.id) throw new Error("No autenticado");
 
         const tourVersionDate = new Date(tourVersion);
+        
+        if (isNaN(tourVersionDate.getTime())) {
+            console.error(`[Tour] Versión de tour inválida recibida: ${tourVersion}`);
+            return { success: false, error: "Versión de tour inválida" };
+        }
 
         await prisma.tourProgress.upsert({
             where: {

@@ -1,25 +1,40 @@
 "use client"
 
 import { PageTour } from "@/components/page-tour"
+import { useEffect, useState } from "react"
 
 export function DashboardTour() {
+    const [isMobile, setIsMobile] = useState(false)
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1024) // lg breakpoint
+        }
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
+
     const steps = [
         {
             title: "¡Bienvenido a VLink! 👋",
             intro: "Estamos emocionados de tenerte aquí. Vamos a darte un recorrido rápido por tu nuevo panel de control.",
             position: 'auto' as const
         },
-        {
+        // Skip "Modo Oscuro" step on mobile
+        ...(!isMobile ? [{
             element: "#tour-theme-toggle",
             title: "Modo Oscuro",
             intro: "¿Prefieres trabajar de noche? Cambia el tema aquí con un solo clic.",
             position: 'bottom' as const
-        },
+        }] : []),
         {
-            element: "#tour-nav",
+            element: isMobile ? "#tour-mobile-nav-trigger" : "#tour-nav",
             title: "Navegación",
-            intro: "Accede a tu agenda, equipo, perfil y configuraciones desde aquí.",
-            position: 'right' as const
+            intro: isMobile 
+                ? "Toca el menú para acceder a tu agenda, equipo, perfil y configuraciones."
+                : "Accede a tu agenda, equipo, perfil y configuraciones desde aquí.",
+            position: isMobile ? 'bottom' : 'right' as const
         },
         {
             element: "#tour-tab-agenda",
@@ -43,14 +58,14 @@ export function DashboardTour() {
             element: "#tour-export-anchor",
             title: "Tus Datos",
             intro: "Puedes exportar tu historial de citas a CSV en cualquier momento.",
-            position: 'left' as const
+            position: isMobile ? 'bottom' : 'left' as const
         }
     ]
 
     return (
         <PageTour 
             pageKey="dashboard-main" 
-            version="2026-03-14" 
+            version="2026-03-14T17:46:00Z" 
             steps={steps} 
         />
     )

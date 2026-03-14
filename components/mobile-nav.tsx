@@ -53,6 +53,7 @@ export function MobileNav() {
                 <Logo className="h-8 w-8 text-primary" />
                 <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                 <button
+                    id="tour-mobile-nav-trigger"
                     onClick={() => setIsOpen(!isOpen)}
                     className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="Toggle navigation"
