@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Building2, Users, CreditCard, Settings, LogOut, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Sidebar() {
     const pathname = usePathname()
@@ -48,6 +49,9 @@ export function Sidebar() {
             </nav>
 
             <div className="p-4 border-t space-y-2">
+                <div className="px-4 py-2">
+                    <ThemeToggle />
+                </div>
                 <Link
                     href="/dashboard"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
