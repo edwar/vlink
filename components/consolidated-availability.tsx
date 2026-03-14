@@ -37,7 +37,7 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
     }
 
     return (
-        <div className="w-full bg-card border-2 border-primary/5 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-primary/5 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="w-full bg-card border-2 border-primary/5 rounded-[2.5rem] p-6 md:p-10 shadow-none space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center space-y-2">
                 <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl mb-2 text-primary">
                     <Search className="h-6 w-6" />
@@ -60,8 +60,8 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                                 onClick={() => handleDateSelect(date)}
                                 className={`snap-start shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl border-2 font-bold transition-all active:scale-95
                                     ${isSelected
-                                        ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105"
-                                        : "bg-background border-primary/10 hover:border-primary/30"
+                                        ? "bg-primary text-primary-foreground border-primary shadow-none scale-105"
+                                        : "bg-background border-primary/10 hover:border-primary/30 shadow-none"
                                     }`}
                             >
                                 <span className="text-[10px] uppercase tracking-widest opacity-80">
@@ -107,14 +107,14 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {slotsData.map((data, i) => (
-                                <div key={i} className="group relative flex flex-col p-5 bg-background border-2 border-primary/5 hover:border-primary/20 rounded-3xl transition-all shadow-sm hover:shadow-xl hover:shadow-primary/5">
+                                <div key={i} className="group relative flex flex-col p-5 bg-background border-2 border-primary/5 hover:border-primary/20 rounded-3xl transition-all shadow-none">
                                     <div className="flex items-center gap-3 mb-4">
                                         {data.profile.image ? (
-                                            <div className="relative h-12 w-12 rounded-2xl overflow-hidden shadow-md">
+                                            <div className="relative h-12 w-12 rounded-2xl overflow-hidden shadow-none">
                                                 <Image src={data.profile.image} alt={data.profile.displayName} fill className="object-cover" />
                                             </div>
                                         ) : (
-                                            <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-xl shadow-inner">
+                                            <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-xl shadow-none">
                                                 {data.profile.displayName.charAt(0)}
                                             </div>
                                         )}

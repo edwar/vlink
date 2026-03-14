@@ -120,43 +120,43 @@ export default async function DashboardPage() {
             
             {showBillingNotice && (
                 <div className={cn(
-                    "p-4 sm:p-5 rounded-3xl border flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in duration-500",
+                    "p-3 px-4 sm:p-5 rounded-4xl border flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 animate-in fade-in duration-500",
                     billingUrgent 
-                        ? "bg-red-500/10 border-red-500/20 shadow-lg shadow-red-500/5" 
-                        : "bg-amber-500/10 border-amber-500/20"
+                        ? "bg-red-500/10 border-red-500/20 shadow-none" 
+                        : "bg-amber-500/10 border-amber-500/20 shadow-none"
                 )}>
-                    <div className="flex items-center gap-4 text-center sm:text-left">
+                    <div className="flex items-center gap-3 text-center sm:text-left">
                         <div className={cn(
-                            "h-10 w-10 rounded-full flex items-center justify-center shrink-0",
+                            "hidden sm:flex h-10 w-10 rounded-full items-center justify-center shrink-0",
                             billingUrgent ? "bg-red-500/20 text-red-600" : "bg-amber-500/20 text-amber-600"
                         )}>
                             {billingUrgent ? <CreditCard className="h-5 w-5" /> : <TrendingUp className="h-5 w-5" />}
                         </div>
                         <div>
                             <p className={cn(
-                                "text-sm font-black uppercase tracking-tight",
+                                "text-xs md:text-sm font-black uppercase tracking-tight",
                                 billingUrgent ? "text-red-700" : "text-amber-700"
                             )}>
-                                {billingUrgent ? "Acción Requerida: Facturación" : "Estás usando el plan BASIC"}
+                                {billingUrgent ? "Acción Requerida" : "Plan BASIC Activo"}
                             </p>
                             <p className={cn(
-                                "text-xs font-medium",
+                                "hidden sm:block text-xs font-medium",
                                 billingUrgent ? "text-red-600/80" : "text-amber-600/80"
                             )}>
                                 {billingUrgent 
-                                    ? "Tu periodo de gracia ha terminado. Para seguir usando VLink recurrentemente, debes agregar un método de pago." 
-                                    : "Tienes acceso limitado a las funciones del equipo. Agrega una tarjeta para desbloquear características avanzadas."}
+                                    ? "Periodo de gracia terminado. Agrega un pago." 
+                                    : "Mejora tu plan para desbloquear funciones avanzadas."}
                             </p>
                         </div>
                     </div>
                     <a 
                         href="/dashboard/organizacion/planes" 
                         className={cn(
-                            "shrink-0 px-6 py-2 text-white font-black uppercase text-[10px] tracking-widest rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95",
-                            billingUrgent ? "bg-red-500 shadow-red-500/20" : "bg-amber-500 shadow-amber-500/20"
+                            "shrink-0 px-4 py-1.5 md:px-6 md:py-2 text-white font-black uppercase text-[9px] md:text-[10px] tracking-widest rounded-lg md:rounded-xl shadow-none transition-all hover:scale-105 active:scale-95",
+                            billingUrgent ? "bg-red-500" : "bg-amber-500"
                         )}
                     >
-                        {billingUrgent ? "Configurar Pago" : "Mejorar Plan"}
+                        {billingUrgent ? "Configurar" : "Mejorar"}
                     </a>
                 </div>
             )}
@@ -234,7 +234,7 @@ export default async function DashboardPage() {
                                             <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="px-5 py-2 bg-primary/10 text-primary text-xs font-black uppercase tracking-widest rounded-xl border border-primary/10 shadow-sm shadow-primary/5">
+                                            <span className="px-5 py-2 bg-primary/10 text-primary text-xs font-black uppercase tracking-widest rounded-xl border border-primary/10 shadow-none">
                                                 {todayAppointments.length} bloqueos
                                             </span>
                                         </div>
@@ -268,7 +268,7 @@ export default async function DashboardPage() {
                                             <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="px-5 py-2 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/10 shadow-sm shadow-blue-500/5">
+                                            <span className="px-5 py-2 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/10 shadow-none">
                                                 {upcomingAppointments.length} por venir
                                             </span>
                                         </div>

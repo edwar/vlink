@@ -158,7 +158,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
                 <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
                     <div className="space-y-4">
-                        <div className="h-20 w-20 bg-primary/10 rounded-[28px] mx-auto flex items-center justify-center border-2 border-primary/20 shadow-xl shadow-primary/10">
+                        <div className="h-20 w-20 bg-primary/10 rounded-[28px] mx-auto flex items-center justify-center border-2 border-primary/20 shadow-none">
                             <Briefcase className="h-10 w-10 text-primary opacity-60" />
                         </div>
                         <div className="space-y-2">
@@ -243,7 +243,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
     return (
         <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground relative">
             {profileData.isLocked && (
-                <div className="sticky top-0 z-[100] w-full bg-amber-500 text-white py-3 px-6 shadow-lg animate-in slide-in-from-top duration-500">
+                <div className="sticky top-0 z-100 w-full bg-amber-500 text-white py-3 px-6 shadow-none animate-in slide-in-from-top duration-500">
                     <div className="max-w-md mx-auto flex items-center gap-3">
                         <AlertCircle className="h-5 w-5 shrink-0" />
                         <p className="text-xs font-bold leading-tight">
@@ -272,7 +272,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                 sizes="80px"
                                 onError={() => setImageError(true)}
                                 referrerPolicy="no-referrer"
-                                className="rounded-full object-cover border-2 border-primary/10 shadow-sm"
+                                className="rounded-full object-cover border-2 border-primary/10 shadow-none"
                             />
                         </div>
                     ) : (
@@ -289,13 +289,13 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         onMouseEnter={() => setShowExpertise(true)}
                                         onMouseLeave={() => setShowExpertise(false)}
                                         onClick={() => setShowExpertise(!showExpertise)}
-                                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-sm group"
+                                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-none group"
                                     >
                                         <Sparkles className="h-3 w-3 group-hover:animate-pulse" />
                                         <span>Experticia</span>
                                     </button>
                                     {showExpertise && (
-                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-none z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
                                             <div className="flex flex-wrap gap-2 justify-center">
                                                 {profileData.expertise.map((skill) => (
                                                     <span key={skill} className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[9px] font-black uppercase tracking-tight">
@@ -335,7 +335,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         className={cn(
                                             "w-full p-5 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
                                             selectedService?.id === service.id
-                                                ? "bg-primary/90 text-primary-foreground border-primary shadow-2xl shadow-primary/20 scale-[1.02]"
+                                                ? "bg-primary/90 text-primary-foreground border-primary shadow-none scale-[1.02]"
                                                 : "bg-card hover:border-2 hover:border-primary/30 hover:bg-primary/5"
                                         )}
                                     >
@@ -419,7 +419,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         className={cn(
                                             "flex flex-col items-center min-w-[64px] p-4 rounded-2xl border border-primary/10 transition-all",
                                             isSameDay(day, selectedDate)
-                                                ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105"
+                                                ? "bg-primary text-primary-foreground border-primary shadow-none scale-105"
                                                 : "bg-card hover:border-accent"
                                         )}
                                     >
@@ -457,7 +457,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                             className={cn(
                                                 "py-3 rounded-xl font-semibold text-sm border border-primary/10 transition-all",
                                                 selectedTime === time
-                                                    ? "bg-primary text-primary-foreground border-primary shadow-md"
+                                                    ? "bg-primary text-primary-foreground border-primary shadow-none"
                                                     : "bg-card hover:border-accent"
                                             )}
                                         >
@@ -650,7 +650,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                         size="lg"
                         onClick={handleBooking}
                         disabled={isSubmitting || name.length < 3 || email.length < 5 || phone.replace(/\D/g, '').length < 10}
-                        className="w-full text-xl hover:shadow-primary/40 hover:-translate-y-1"
+                        className="w-full text-xl hover:shadow-none hover:-translate-y-1"
                     >
                         {isSubmitting ? (
                             <Loader2 className="h-6 w-6 animate-spin" />
@@ -684,7 +684,7 @@ function SuccessView({ bookingInfo, displayName, serviceName, price }: {
                 <p className="text-muted-foreground">Tu espacio con {displayName} ha sido reservado con éxito.</p>
             </div>
 
-            <div className="bg-card border-2 rounded-3xl p-6 space-y-4 shadow-xl shadow-accent/20">
+            <div className="bg-card border-2 rounded-3xl p-6 space-y-4 shadow-none">
                 <div className="h-2 w-full bg-linear-to-r from-transparent via-primary/20 to-transparent" />
                 {serviceName && (
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">

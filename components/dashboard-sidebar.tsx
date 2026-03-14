@@ -68,7 +68,7 @@ export function DashboardSidebar() {
                                             {isActive && (
                                                 <motion.div
                                                     layoutId="sidebar-active"
-                                                    className="absolute inset-0 bg-primary/10 rounded-xl shadow-sm"
+                                                    className="absolute inset-0 bg-primary/10 rounded-xl shadow-none"
                                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                                 >
                                                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
@@ -91,7 +91,7 @@ export function DashboardSidebar() {
                                 href="/admin"
                                 className={cn(
                                     pathname.startsWith('/admin')
-                                        ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-sm'
+                                        ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-none'
                                         : 'text-muted-foreground hover:bg-amber-500/5 hover:text-amber-600',
                                     'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-all duration-300'
                                 )}

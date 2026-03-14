@@ -42,7 +42,7 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
             {/* Header / Date Picker */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 bg-card border-2 border-primary/5 rounded-3xl shadow-xl shadow-primary/5">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-3xl bg-linear-to-br from-primary/5 via-background to-background overflow-hidden">
                 <div className="flex items-center gap-4">
                     <Button
                         variant="outline"
@@ -92,7 +92,7 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                     {filteredData.map((item) => (
                         <div
                             key={item.profile.username}
-                            className="group p-4 bg-card border border-border/50 rounded-2xl hover:border-primary/20 hover:shadow-lg transition-all flex flex-col md:flex-row md:items-center gap-6"
+                            className="group p-4 rounded-2xl transition-all flex flex-col md:flex-row md:items-center gap-6 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden"
                         >
                             <div className="flex items-center gap-4 min-w-[240px]">
                                 <UserAvatar
@@ -121,7 +121,7 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                     ))}
                 </div>
             ) : (
-                <div className="p-20 bg-muted/20 border-2 border-dashed border-border rounded-[2.5rem] flex flex-col items-center justify-center text-center">
+                <div className="p-20 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden rounded-[2.5rem] flex flex-col items-center justify-center text-center">
                     <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mb-4 text-muted-foreground">
                         <User className="h-8 w-8" />
                     </div>

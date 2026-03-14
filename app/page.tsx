@@ -35,7 +35,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <AuthCTA
-              className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg shadow-2xl shadow-primary/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+              className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg shadow-none transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
               loggedInChildren={<>Ir al dashboard <ArrowRight className="h-5 w-5" /></>}
             >
               Crear mi cuenta gratis
@@ -67,7 +67,7 @@ export default function LandingPage() {
           ].map((feature) => (
             <div
               key={feature.title}
-              className="p-8 bg-card border border-primary/5 rounded-[32px] space-y-6 hover:shadow-2xl transition-all hover:-translate-y-2 group"
+              className="p-8 bg-card border border-primary/5 rounded-[32px] space-y-6 hover:shadow-none transition-all hover:-translate-y-2 group"
             >
               <div className="h-14 w-14 bg-accent rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 {feature.icon}
@@ -147,7 +147,7 @@ export default function LandingPage() {
       <footer className="py-20 px-6 border-t border-primary/5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/10">
+            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-none">
               <Logo className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-display font-black tracking-tighter">VLINK</span>

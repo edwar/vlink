@@ -31,7 +31,7 @@ export default async function ConsolidatedAgendaPage() {
                 <ArrowLeft className="h-4 w-4" /> Volver a Organización
             </Link>
 
-            <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+            <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/5 via-background to-background overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <CalendarRange className="h-24 w-24 text-primary rotate-12" />
                 </div>
@@ -60,7 +60,7 @@ export default async function ConsolidatedAgendaPage() {
                         </p>
                     </div>
                     <Link href="/dashboard/organizacion/planes">
-                        <button className="px-8 h-12 bg-amber-500 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all">
+                        <button className="px-8 h-12 bg-amber-500 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-none hover:scale-105 active:scale-95 transition-all">
                             Ver Planes
                         </button>
                     </Link>

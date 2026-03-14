@@ -19,7 +19,7 @@ export default async function DashboardLayout({
             <MobileNav />
             <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
                 {config?.announcementTitle && (
-                    <div className={`shrink-0 px-6 py-3 flex items-center justify-between border-b gap-4 animate-in slide-in-from-top duration-500 shadow-sm z-50 ${config.announcementType === 'WARNING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-700' :
+                    <div className={`shrink-0 px-4 py-2 md:px-6 md:py-3 flex items-center justify-between border-b gap-4 animate-in slide-in-from-top duration-500 shadow-none z-50 ${config.announcementType === 'WARNING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-700' :
                             config.announcementType === 'SUCCESS' ? 'bg-green-500/10 border-green-500/20 text-green-700' :
                                 'bg-blue-500/10 border-blue-500/20 text-blue-700'
                         }`}>

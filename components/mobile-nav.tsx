@@ -74,7 +74,7 @@ export function MobileNav() {
 
             {/* Side Drawer */}
             <div className={cn(
-                "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col",
+                "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r shadow-none transform transition-transform duration-300 ease-in-out flex flex-col",
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b">
@@ -110,7 +110,7 @@ export function MobileNav() {
                                                 {isActive && (
                                                     <motion.div
                                                         layoutId="mobile-nav-active"
-                                                        className="absolute inset-0 bg-primary/10 rounded-md shadow-sm"
+                                                        className="absolute inset-0 bg-primary/10 rounded-md shadow-none"
                                                         transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                                     >
                                                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
@@ -134,7 +134,7 @@ export function MobileNav() {
                                     onClick={() => setIsOpen(false)}
                                     className={cn(
                                         pathname.startsWith('/admin')
-                                            ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-sm'
+                                            ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-none'
                                             : 'text-muted-foreground hover:bg-amber-500/5 hover:text-amber-600',
                                         'group relative flex gap-x-4 rounded-md p-3 text-sm font-bold leading-6 transition-all duration-300'
                                     )}

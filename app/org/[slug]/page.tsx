@@ -40,7 +40,7 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
             {/* Avatar */}
             <div className="relative mb-5">
                 {profile.image && !imageError ? (
-                    <div className={`relative h-24 w-24 rounded-3xl overflow-hidden border-2 shadow-xl transition-transform duration-500 ${hasServices ? "border-primary/10 group-hover:scale-105" : "border-border grayscale opacity-60"}`}>
+                    <div className={`relative h-24 w-24 rounded-3xl overflow-hidden border-2 shadow-none transition-transform duration-500 ${hasServices ? "border-primary/10 group-hover:scale-105" : "border-border grayscale opacity-60"}`}>
                         <Image
                             src={profile.image}
                             alt={profile.displayName}
@@ -52,11 +52,11 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
                         />
                     </div>
                 ) : (
-                    <div className={`h-24 w-24 rounded-3xl flex items-center justify-center text-3xl font-black border-2 shadow-xl uppercase transition-transform duration-500 ${hasServices ? "bg-primary/10 text-primary border-primary/10 group-hover:scale-105" : "bg-muted text-muted-foreground border-border opacity-60"}`}>
+                    <div className={`h-24 w-24 rounded-3xl flex items-center justify-center text-3xl font-black border-2 shadow-none uppercase transition-transform duration-500 ${hasServices ? "bg-primary/10 text-primary border-primary/10 group-hover:scale-105" : "bg-muted text-muted-foreground border-border opacity-60"}`}>
                         {profile.displayName.charAt(0)}
                     </div>
                 )}
-                <div className={`absolute -bottom-2 -right-2 h-8 w-8 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 ${hasServices ? "bg-primary shadow-primary/30 group-hover:scale-110" : "bg-muted"}`}>
+                <div className={`absolute -bottom-2 -right-2 h-8 w-8 rounded-xl flex items-center justify-center shadow-none transition-transform duration-300 ${hasServices ? "bg-primary group-hover:scale-110" : "bg-muted"}`}>
                     {hasServices
                         ? <Calendar className="h-4 w-4 text-primary-foreground" />
                         : <AlertCircle className="h-4 w-4 text-muted-foreground" />
@@ -76,13 +76,13 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
                         onMouseEnter={() => setShowExpertise(true)}
                         onMouseLeave={() => setShowExpertise(false)}
                         onClick={(e) => { e.preventDefault(); setShowExpertise(!showExpertise) }}
-                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-black uppercase tracking-widest transition-all shadow-sm"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-black uppercase tracking-widest transition-all shadow-none"
                     >
                         <Sparkles className="h-3 w-3" />
                         <span>Experticia</span>
                     </button>
                     {showExpertise && (
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card border border-primary/20 rounded-2xl shadow-2xl z-50 min-w-[180px] animate-in zoom-in-90 fade-in duration-300">
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-card border border-primary/20 rounded-2xl shadow-none z-50 min-w-[180px] animate-in zoom-in-90 fade-in duration-300">
                             <div className="flex flex-wrap gap-2 justify-center">
                                 {profile.expertise.map((skill) => (
                                     <span key={skill} className="px-2 py-0.5 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[8px] font-black uppercase tracking-tight whitespace-nowrap">
@@ -139,7 +139,7 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
     return (
         <Link
             href={`/${profile.username}`}
-            className="group relative flex flex-col items-center p-8 rounded-3xl border-2 border-border bg-card hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-500 overflow-hidden"
+            className="group relative flex flex-col items-center p-8 rounded-3xl border-2 border-border bg-card hover:border-primary/30 hover:shadow-none hover:-translate-y-1 transition-all duration-500 overflow-hidden shadow-none"
         >
             {cardContent}
         </Link>
@@ -164,7 +164,7 @@ export default function OrgPublicPage({ params }: { params: Promise<{ slug: stri
     if (notFound || !orgData) {
         return (
             <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-6 gap-8 text-center">
-                <div className="h-20 w-20 bg-primary/10 rounded-[28px] flex items-center justify-center border-2 border-primary/20 rotate-3 shadow-xl">
+                <div className="h-20 w-20 bg-primary/10 rounded-[28px] flex items-center justify-center border-2 border-primary/20 rotate-3 shadow-none">
                     <UserX className="h-10 w-10 text-primary animate-pulse" />
                 </div>
                 <div className="space-y-2">
@@ -173,7 +173,7 @@ export default function OrgPublicPage({ params }: { params: Promise<{ slug: stri
                         La organización <span className="text-foreground font-bold italic">@{slug}</span> no existe o no está disponible.
                     </p>
                 </div>
-                <Link href="/" className="px-6 py-3 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
+                <Link href="/" className="px-6 py-3 bg-primary text-primary-foreground rounded-2xl font-bold shadow-none hover:scale-105 transition-transform">
                     Volver al inicio
                 </Link>
             </div>

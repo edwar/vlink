@@ -76,7 +76,7 @@ export default async function BillingPage({
                 </div>
             )}
 
-            <header className="relative p-8 px-4 sm:px-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-2xl shadow-primary/5 overflow-hidden">
+            <header className="relative p-8 px-4 sm:px-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-none overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <CreditCard className="h-24 w-24 text-primary -rotate-12" />
                 </div>

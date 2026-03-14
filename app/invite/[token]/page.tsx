@@ -98,7 +98,7 @@ export default function InvitePage() {
 
     return (
         <div className="flex h-screen w-full items-center justify-center bg-background p-4">
-            <Card className="max-w-md w-full border-2 shadow-xl animate-in fade-in zoom-in duration-300">
+            <Card className="max-w-md w-full border-2 shadow-none animate-in fade-in zoom-in duration-300">
                 <CardHeader className="text-center">
                     <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-4">
                         <CheckCircle2 className="h-8 w-8 text-primary" />

@@ -67,14 +67,14 @@ export default function LoginPage() {
                     Volver al inicio
                 </Link>
 
-                <div className="bg-card/50 backdrop-blur-sm border border-primary/10 rounded-[40px] p-8 md:p-12 shadow-2xl shadow-primary/5 space-y-10 relative overflow-hidden">
+                <div className="bg-card/50 backdrop-blur-sm border border-primary/10 rounded-[40px] p-8 md:p-12 shadow-none space-y-10 relative overflow-hidden">
                     {/* Subtle inner glow */}
                     <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-primary/20 to-transparent" />
 
                     <div className="text-center space-y-6">
                         <div className="relative inline-block">
                             <div className="absolute inset-0 bg-primary blur-2xl opacity-20 animate-pulse" />
-                            <div className="relative h-20 w-20 bg-primary rounded-[24px] mx-auto flex items-center justify-center shadow-2xl shadow-primary/30 rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <div className="relative h-20 w-20 bg-primary rounded-[24px] mx-auto flex items-center justify-center shadow-none rotate-3 hover:rotate-0 transition-transform duration-500">
                                 <Logo className="h-12 w-12 text-primary-foreground" />
                             </div>
                         </div>
@@ -97,7 +97,7 @@ export default function LoginPage() {
                         <button
                             onClick={handleGoogleLogin}
                             disabled={isLoading}
-                            className="w-full group relative flex items-center justify-center gap-4 bg-white text-black border-2 border-slate-100 hover:border-primary/20 py-5 rounded-2xl font-bold text-lg shadow-xl shadow-slate-200/50 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 overflow-hidden"
+                            className="w-full group relative flex items-center justify-center gap-4 bg-white text-black border-2 border-slate-100 hover:border-primary/20 py-5 rounded-2xl font-bold text-lg shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-linear-to-tr from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             {isLoading ? (

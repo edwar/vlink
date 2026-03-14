@@ -123,7 +123,7 @@ export default async function OrganizacionPage() {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
                         {isOwnerOrManager && (
-                            <a id="tour-org-plan" href="/dashboard/organizacion/planes" className="px-6 py-3 bg-primary/10 hover:bg-primary/20 transition-colors backdrop-blur border border-primary/20 rounded-2xl shadow-sm inline-flex flex-col gap-1 items-start justify-center group">
+                            <a id="tour-org-plan" href="/dashboard/organizacion/planes" className="px-6 py-3 bg-primary/10 hover:bg-primary/20 transition-colors backdrop-blur border border-primary/20 rounded-2xl shadow-none inline-flex flex-col gap-1 items-start justify-center group">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-primary/80 group-hover:text-primary flex items-center gap-2">
                                     <Globe className="h-3 w-3" /> Cambiar Plan
                                 </p>
@@ -134,7 +134,7 @@ export default async function OrganizacionPage() {
                             </a>
                         )}
 
-                        <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-sm inline-flex items-center gap-3">
+                        <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-none inline-flex items-center gap-3">
                             <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                 <Shield className="h-5 w-5" />
                             </div>
@@ -175,13 +175,13 @@ export default async function OrganizacionPage() {
                                     <Button
                                         variant="outline"
                                         size="lg"
-                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-sm h-14 rounded-2xl"
+                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none h-14 rounded-2xl"
                                     >
                                         <IdCard className="h-5 w-5 relative z-10 mr-2" />
                                         <span className="relative z-10 uppercase tracking-widest">Tarjeta de Presentación</span>
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden bg-card border-border/40 sm:rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col">
+                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden bg-card border-border/40 sm:rounded-3xl p-6 sm:p-10 shadow-none flex flex-col">
                                     <DialogTitle className="text-2xl md:text-3xl font-display font-black tracking-tight uppercase text-primary mb-1">
                                         Tarjeta de Presentación
                                     </DialogTitle>
@@ -236,7 +236,7 @@ export default async function OrganizacionPage() {
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Mi Equipo</h2>
                     </div>
                     <div className="flex items-center gap-3">
-                        <span className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 shadow-xs">
+                        <span className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 shadow-none">
                             {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>
                         <a
@@ -278,15 +278,15 @@ export default async function OrganizacionPage() {
                                         <UserAvatar
                                             image={member.user.image}
                                             name={member.user.name ?? "Usuario"}
-                                            className="h-full w-full rounded-[1.2rem] shadow-sm border border-border/50"
+                                            className="h-full w-full rounded-[1.2rem] shadow-none border border-border/50"
                                         />
                                         {member.role === "OWNER" && (
-                                            <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-sm border-2 border-background z-10">
+                                            <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-none border-2 border-background z-10">
                                                 <Shield className="h-2.5 w-2.5" />
                                             </div>
                                         )}
                                         {!isPlanActive && (
-                                            <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-sm border-2 border-background z-10" title="Suspendido por límite de plan">
+                                            <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-none border-2 border-background z-10" title="Suspendido por límite de plan">
                                                 <AlertTriangle className="h-2.5 w-2.5" />
                                             </div>
                                         )}
