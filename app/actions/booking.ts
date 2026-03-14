@@ -194,32 +194,44 @@ export async function createAppointment(data: {
     // Explicit end time using math
     const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
 
-    // Re-verify availability (Atomic check) - Simplified overlap logic
-    const collision = await prisma.appointment.findFirst({
-        where: {
-            profileId: profile.id,
-            status: { not: "CANCELLED" },
-            startTime: { lt: endTime },
-            endTime: { gt: startTime }
-        }
-    })
-
-    if (collision) throw new Error("Slot ya ocupado")
-
     const cancelToken = randomUUID()
 
-    const appointment = await prisma.appointment.create({
-        data: {
-            profileId: profile.id,
-            serviceId: data.serviceId || null,
-            clientName: data.clientName,
-            clientPhone: data.clientPhone,
-            clientEmail: data.clientEmail,
-            startTime,
-            endTime,
-            status: "CONFIRMED",
-            cancelToken,
-        }
+    // Atomic transaction with advisory lock to prevent race condition double-bookings
+    // The advisory lock serializes all booking attempts for the same profile
+    const appointment = await prisma.$transaction(async (tx) => {
+        // Acquire an advisory lock scoped to this profile (using a hash of the profileId)
+        // This blocks concurrent booking attempts for the same professional
+        const lockKey = Math.abs(hashCode(profile.id))
+        await tx.$queryRawUnsafe(`SELECT pg_advisory_xact_lock(${lockKey})`)
+
+        // Now safely check for collisions — no other transaction can insert while we hold the lock
+        const collision = await tx.appointment.findFirst({
+            where: {
+                profileId: profile.id,
+                status: { not: "CANCELLED" },
+                startTime: { lt: endTime },
+                endTime: { gt: startTime }
+            }
+        })
+
+        if (collision) throw new Error("Slot ya ocupado")
+
+        return tx.appointment.create({
+            data: {
+                profileId: profile.id,
+                serviceId: data.serviceId || null,
+                clientName: data.clientName,
+                clientPhone: data.clientPhone,
+                clientEmail: data.clientEmail,
+                startTime,
+                endTime,
+                status: "CONFIRMED",
+                cancelToken,
+            }
+        })
+    }, {
+        isolationLevel: 'Serializable',
+        timeout: 10000 // 10s max wait for the lock
     })
 
     // Get professional name for email
@@ -245,5 +257,18 @@ export async function createAppointment(data: {
     await createGoogleCalendarEvent(appointment.id).catch(console.error)
 
     return appointment
+}
+
+/**
+ * Simple string hash to generate a stable numeric key for advisory locks
+ */
+function hashCode(str: string): number {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i)
+        hash = ((hash << 5) - hash) + char
+        hash |= 0 // Convert to 32-bit integer
+    }
+    return hash
 }
 

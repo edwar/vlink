@@ -62,6 +62,22 @@ export async function addSpecialBlock(data: {
 }) {
     const profile = await getEffectiveProfile()
 
+    // Check for duplicate block
+    const existing = await prisma.availability.findUnique({
+        where: {
+            profileId_specificDate_startTime_endTime: {
+                profileId: profile.id,
+                specificDate: data.specificDate,
+                startTime: data.startTime,
+                endTime: data.endTime
+            }
+        }
+    })
+
+    if (existing) {
+        throw new Error("Ya existe un bloqueo para esta fecha y horario.")
+    }
+
     await prisma.availability.create({
         data: {
             profileId: profile.id,

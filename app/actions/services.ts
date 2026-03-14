@@ -73,10 +73,26 @@ export async function createService(data: { name: string, durationMinutes: numbe
         throw new Error("El nombre del servicio es requerido")
     }
 
+    const name = data.name.trim()
+
+    // Check for duplicate name for this profile
+    const existing = await prisma.service.findUnique({
+        where: {
+            profileId_name: {
+                profileId: profile.id,
+                name
+            }
+        }
+    })
+
+    if (existing) {
+        throw new Error(`Ya tienes un servicio llamado "${name}". Por favor usa un nombre diferente.`)
+    }
+
     await prisma.service.create({
         data: {
             profileId: profile.id,
-            name: data.name.trim(),
+            name,
             durationMinutes: data.durationMinutes,
             price: data.price || 0
         }
