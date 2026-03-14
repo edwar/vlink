@@ -109,7 +109,7 @@ export default async function DashboardPage() {
                 </div>
             </header>
 
-            <DashboardTabsUI 
+            <DashboardTabsUI
                 stats={{
                     totalToday: totalAppointmentsToday,
                     totalActive: allAppointments.length,
@@ -124,7 +124,7 @@ export default async function DashboardPage() {
                         title="Exportar historial a CSV"
                     >
                         <Download className="h-3.5 w-3.5" />
-                        Exportar CSV
+                        <span className="text-sm font-bold hidden md:block">Exportar CSV</span>
                     </a>
                 }
                 children_agenda={

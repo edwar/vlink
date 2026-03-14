@@ -40,7 +40,7 @@ export function PlanBadge() {
 
     if (isLoading) {
         return (
-            <div className="flex items-center gap-3 py-3 rounded-2xl border border-border/30">
+            <div className="flex items-center gap-3 px-3 py-3 rounded-2xl border border-border/30">
                 <Skeleton className="h-9 w-9 rounded-xl shrink-0" />
                 <div className="flex-1 space-y-1.5">
                     <Skeleton className="h-2.5 w-16 rounded-full" />
@@ -59,7 +59,7 @@ export function PlanBadge() {
     return (
         <Link
             href="/dashboard/organizacion/planes"
-            className="plan-badge-shiny group relative flex items-center gap-3 py-3 rounded-2xl bg-linear-to-r from-primary/5 to-transparent border border-border/30 hover:border-primary/20 hover:from-primary/10 transition-all duration-300 overflow-hidden"
+            className="plan-badge-shiny group relative flex items-center gap-3 px-3 py-3 rounded-2xl bg-linear-to-r from-primary/5 to-transparent border border-border/30 hover:border-primary/20 hover:from-primary/10 transition-all duration-300 overflow-hidden"
         >
             {/* Shiny sweep overlay */}
             <div className="pointer-events-none absolute inset-0 plan-badge-shine" aria-hidden="true" />

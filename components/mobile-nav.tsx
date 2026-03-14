@@ -11,6 +11,7 @@ import { ProfileSwitcher } from "./profile-switcher"
 import { Users } from "lucide-react"
 import { Logo } from "./logo"
 import { PlanBadge } from "./plan-badge"
+import { motion } from "framer-motion"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -87,27 +88,42 @@ export function MobileNav() {
                     <PlanBadge />
                 </div>
 
-                <nav className="flex flex-1 flex-col p-6 overflow-y-auto">
+                <nav className="flex flex-1 flex-col px-6 py-4 overflow-y-auto">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                         <li>
-                            <ul role="list" className="space-y-1">
-                                {navigation.map((item) => (
-                                    <li key={item.name}>
-                                        <Link
-                                            href={item.href}
-                                            onClick={() => setIsOpen(false)}
-                                            className={cn(
-                                                pathname === item.href
-                                                    ? 'bg-accent text-accent-foreground'
-                                                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-                                                'group flex gap-x-3 rounded-md p-3 text-base font-semibold transition-colors'
-                                            )}
-                                        >
-                                            <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                            {item.name}
-                                        </Link>
-                                    </li>
-                                ))}
+                            <ul role="list" className="space-y-1.5">
+                                {navigation.map((item) => {
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <li key={item.name}>
+                                            <Link
+                                                href={item.href}
+                                                onClick={() => setIsOpen(false)}
+                                                className={cn(
+                                                    'group relative flex gap-x-4 rounded-md p-3 text-sm font-bold leading-6 transition-colors duration-300 overflow-hidden',
+                                                    isActive
+                                                        ? 'text-primary'
+                                                        : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                                                )}
+                                            >
+                                                {isActive && (
+                                                    <motion.div
+                                                        layoutId="mobile-nav-active"
+                                                        className="absolute inset-0 bg-primary/10 rounded-md shadow-sm"
+                                                        transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                                                    >
+                                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
+                                                    </motion.div>
+                                                )}
+                                                <item.icon className={cn(
+                                                    "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110 relative z-10",
+                                                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+                                                )} aria-hidden="true" />
+                                                <span className="relative z-10">{item.name}</span>
+                                            </Link>
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </li>
                         <li className="mt-auto space-y-1">
@@ -119,21 +135,21 @@ export function MobileNav() {
                                         pathname.startsWith('/admin')
                                             ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-sm'
                                             : 'text-muted-foreground hover:bg-amber-500/5 hover:text-amber-600',
-                                        'group flex gap-x-3 rounded-md p-3 text-base font-semibold transition-colors'
+                                        'group relative flex gap-x-4 rounded-md p-3 text-sm font-bold leading-6 transition-all duration-300'
                                     )}
                                 >
                                     <ShieldCheck className={cn(
-                                        "h-6 w-6 shrink-0",
-                                        pathname.startsWith('/admin') ? "text-amber-600" : "text-muted-foreground"
+                                        "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                        pathname.startsWith('/admin') ? "text-amber-600" : "text-muted-foreground group-hover:text-amber-600"
                                     )} aria-hidden="true" />
                                     VLink Admin
                                 </Link>
                             )}
                             <button
                                 onClick={handleSignOut}
-                                className="group flex w-full gap-x-3 rounded-md p-3 text-base font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                className="group flex w-full gap-x-4 rounded-md p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
                             >
-                                <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
+                                <LogOut className="h-6 w-6 shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                                 Cerrar sesión
                             </button>
                         </li>

@@ -10,6 +10,7 @@ import { ProfileSwitcher } from "./profile-switcher"
 import { Logo } from "./logo"
 import { useProfileStore } from "@/lib/store/profile-store"
 import { PlanBadge } from "./plan-badge"
+import { motion } from "framer-motion"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -58,20 +59,26 @@ export function DashboardSidebar() {
                                         <Link
                                             href={item.href}
                                             className={cn(
+                                                'group relative flex gap-x-4 rounded-md p-3 text-sm font-bold leading-6 transition-colors duration-300 overflow-hidden',
                                                 isActive
-                                                    ? 'bg-primary/10 text-primary border-primary/20 shadow-sm'
-                                                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
-                                                'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-all duration-300'
+                                                    ? 'text-primary'
+                                                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                                             )}
                                         >
                                             {isActive && (
-                                                <div className="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-full" />
+                                                <motion.div
+                                                    layoutId="sidebar-active"
+                                                    className="absolute inset-0 bg-primary/10 rounded-xl shadow-sm"
+                                                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                                                >
+                                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
+                                                </motion.div>
                                             )}
                                             <item.icon className={cn(
-                                                "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                                "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110 relative z-10",
                                                 isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
                                             )} aria-hidden="true" />
-                                            {item.name}
+                                            <span className="relative z-10">{item.name}</span>
                                         </Link>
                                     </li>
                                 )
