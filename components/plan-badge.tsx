@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { getUserOrganizations } from "@/app/actions/organization"
-import { Sparkles, ChevronRight } from "lucide-react"
+import { CrownIcon, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -10,12 +10,6 @@ const PLAN_LABELS: Record<string, string> = {
     FREE: "Gratuito",
     TEAM: "Equipos",
     ENTERPRISE: "Corporativo"
-}
-
-const PLAN_COLORS: Record<string, string> = {
-    FREE: "text-muted-foreground",
-    TEAM: "text-blue-500",
-    ENTERPRISE: "text-amber-500"
 }
 
 export function PlanBadge() {
@@ -54,28 +48,27 @@ export function PlanBadge() {
 
     const plan = org.subscriptionPlan || "FREE"
     const label = PLAN_LABELS[plan] || plan
-    const color = PLAN_COLORS[plan] || "text-muted-foreground"
 
     return (
         <Link
             href="/dashboard/organizacion/planes"
-            className="plan-badge-shiny group relative flex items-center gap-3 px-3 py-3 rounded-2xl bg-linear-to-r from-primary/5 to-transparent border border-border/30 hover:border-primary/20 hover:from-primary/10 transition-all duration-300 overflow-hidden"
+            className="plan-badge-shiny group relative flex items-center gap-3 px-3 py-3 rounded-2xl bg-amber-500/20 border border-border/30 hover:border-amber-500/20 hover:bg-amber-500/10 transition-all duration-300 overflow-hidden"
         >
             {/* Shiny sweep overlay */}
             <div className="pointer-events-none absolute inset-0 plan-badge-shine" aria-hidden="true" />
 
-            <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0 relative z-10">
-                <Sparkles className="h-4 w-4" />
+            <div className="h-9 w-9 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors shrink-0 relative z-10">
+                <CrownIcon className="h-4 w-4" />
             </div>
             <div className="flex-1 min-w-0 relative z-10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground leading-none mb-0.5">
+                <p className="text-[10px] text-amber-500 font-black uppercase tracking-widest leading-none mb-0.5">
                     Plan Actual
                 </p>
-                <p className={`text-sm font-black ${color}`}>
+                <p className="text-sm text-amber-500 font-bold">
                     {label}
                 </p>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0 relative z-10" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all shrink-0 relative z-10" />
 
             <style>{`
                 @keyframes plan-badge-shiny {
@@ -89,14 +82,14 @@ export function PlanBadge() {
                     background: linear-gradient(
                         90deg,
                         transparent 0%,
-                        color-mix(in srgb, currentColor 4%, transparent) 25%,
-                        color-mix(in srgb, currentColor 10%, transparent) 50%,
-                        color-mix(in srgb, currentColor 4%, transparent) 75%,
+                        color-mix(in srgb, currentColor 8%, transparent) 25%,
+                        color-mix(in srgb, currentColor 20%, transparent) 50%,
+                        color-mix(in srgb, currentColor 8%, transparent) 75%,
                         transparent 100%
                     );
-                    color: var(--primary);
-                    width: 60%;
-                    animation: plan-badge-shiny 30s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                    color: #f59e0b;
+                    width: 30%;
+                    animation: plan-badge-shiny 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
                 }
             `}</style>
         </Link>
