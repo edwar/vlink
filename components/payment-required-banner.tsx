@@ -40,7 +40,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining }: PaymentRequir
                                 : `Estás usando el plan ${planName} en periodo de prueba gratuito`
                             }
                         </p>
-                        <p className="hidden sm:block text-[11px] text-muted-foreground font-medium">
+                        <p className="block text-[11px] text-muted-foreground font-medium">
                             Agrega un método de pago para desbloquear todas las características sin interrupciones.
                         </p>
                     </div>
