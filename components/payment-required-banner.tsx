@@ -2,16 +2,42 @@
 
 import { CreditCard, ArrowRight, X } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface PaymentRequiredBannerProps {
     planName: string
     daysRemaining: number | null
+    endDate: number | null
 }
 
-export function PaymentRequiredBanner({ planName, daysRemaining }: PaymentRequiredBannerProps) {
+export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: PaymentRequiredBannerProps) {
     const [dismissed, setDismissed] = useState(false)
+    const [timeLeft, setTimeLeft] = useState<{ d: number, h: number, m: number, s: number } | null>(null)
+
+    useEffect(() => {
+        if (!endDate) return
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime()
+            const distance = endDate - now
+
+            if (distance < 0) {
+                clearInterval(interval)
+                setTimeLeft({ d: 0, h: 0, m: 0, s: 0 })
+                return
+            }
+
+            setTimeLeft({
+                d: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                s: Math.floor((distance % (1000 * 60)) / 1000)
+            })
+        }, 1000)
+
+        return () => clearInterval(interval)
+    }, [endDate])
 
     if (dismissed) return null
 
@@ -34,12 +60,63 @@ export function PaymentRequiredBanner({ planName, daysRemaining }: PaymentRequir
                         <CreditCard className="h-4 w-4" />
                     </div>
                     <div className="min-w-0">
-                        <p className={`text-[10px] md:text-xs font-bold leading-tight ${isUrgent ? "text-amber-700 dark:text-amber-400" : "text-blue-700 dark:text-blue-400"}`}>
-                            {isUrgent
-                                ? `Tu periodo de prueba expira en ${daysRemaining} ${daysRemaining === 1 ? "día" : "días"}`
-                                : `Estás usando el plan ${planName} en periodo de prueba gratuito`
-                            }
-                        </p>
+                        <div className={`text-[10px] md:text-xs font-bold leading-tight ${isUrgent ? "text-amber-700 dark:text-amber-400" : "text-blue-700 dark:text-blue-400"}`}>
+                            {timeLeft ? (
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                                    <span className="opacity-80">Trial expira en:</span>
+                                    <div className="flex gap-1 items-center">
+                                        <div className="flex flex-col items-center">
+                                            <motion.span
+                                                key={`days-${timeLeft.d}`}
+                                                initial={{ opacity: 0.3 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ duration: 0.5 }}
+                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                            >
+                                                {timeLeft.d}d
+                                            </motion.span>
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <motion.span
+                                                key={`hours-${timeLeft.h}`}
+                                                initial={{ opacity: 0.3 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ duration: 0.5 }}
+                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                            >
+                                                {timeLeft.h}h
+                                            </motion.span>
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <motion.span
+                                                key={`minutes-${timeLeft.m}`}
+                                                initial={{ opacity: 0.3 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ duration: 0.5 }}
+                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                            >
+                                                {timeLeft.m}m
+                                            </motion.span>
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <motion.span
+                                                key={`seconds-${timeLeft.s}`}
+                                                initial={{ opacity: 0.3 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ duration: 0.5 }}
+                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                            >
+                                                {timeLeft.s}s
+                                            </motion.span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                isUrgent
+                                    ? `Tu periodo de prueba expira en ${daysRemaining} ${daysRemaining === 1 ? "día" : "días"}`
+                                    : `Estás usando el plan ${planName} en periodo de prueba gratuito`
+                            )}
+                        </div>
                         <p className="block text-[11px] text-muted-foreground font-medium">
                             Agrega un método de pago para desbloquear todas las características sin interrupciones.
                         </p>

@@ -9,6 +9,7 @@ export function PaymentStatusWrapper() {
         needsPaymentBanner: boolean
         planName: string
         daysRemaining: number | null
+        endDate: number | null
     } | null>(null)
 
     useEffect(() => {
@@ -25,6 +26,7 @@ export function PaymentStatusWrapper() {
         <PaymentRequiredBanner
             planName={status.planName}
             daysRemaining={status.daysRemaining}
+            endDate={status.endDate}
         />
     )
 }

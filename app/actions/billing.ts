@@ -100,6 +100,7 @@ export async function getOrgPaymentStatus() {
         trialExpired,
         needsPaymentBanner: !hasPaymentMethod && plan !== "BASIC",
         organizationId: org.id,
+        endDate: org.gracePeriodEnd?.getTime() || null,
     }
 }
 
