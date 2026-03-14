@@ -9,6 +9,7 @@ import { getEffectiveProfile } from "@/lib/permissions"
 import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
 import { Title } from "@/components/title"
+import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
 
 export default async function DashboardPage() {
     const profile = await getEffectiveProfile()
@@ -108,151 +109,139 @@ export default async function DashboardPage() {
                 </div>
             </header>
 
-            <Tabs defaultValue="agenda" className="space-y-8">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-4 px-2">
-                    <TabsList className="w-fit xs:w-auto bg-transparent border-dashed border-border/60 border-b p-0 rounded-none h-auto gap-2">
-                        <TabsTrigger value="agenda" className="flex-1 sm:flex-none rounded-t-xl rounded-b-none border-b-2 border-transparent px-4 sm:px-8 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-primary hover:bg-primary/5 transition-all shadow-none">
-                            Mi Agenda
-                        </TabsTrigger>
-                        <TabsTrigger value="analytics" className="flex-1 sm:flex-none rounded-t-xl rounded-b-none border-b-2 border-transparent px-4 sm:px-8 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-primary hover:bg-primary/5 transition-all shadow-none">
-                            Estadísticas
-                        </TabsTrigger>
-                    </TabsList>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div className="flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
-                            <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-primary" /> {totalAppointmentsToday} Hoy</span>
-                            <div className="h-3 w-px bg-border/50 shrink-0" />
-                            <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-blue-500" /> {allAppointments.length} Activas</span>
-                            <div className="h-1.5 w-1.5 rounded-full bg-border/50 shrink-0" />
-                            <a
-                                href="/api/export/appointments"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex items-center gap-2 shrink-0 text-primary hover:bg-primary/10 transition-colors cursor-pointer px-3 py-1.5 rounded-full"
-                                title="Exportar historial a CSV"
-                            >
-                                <Download className="h-3.5 w-3.5" />
-                                Exportar CSV
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <TabsContent value="agenda" className="space-y-16 mt-0 focus-visible:ring-0">
-                    {/* Bento Grid Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-6">
-                        <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-primary/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-primary/10 hover:border-primary/20 transition-colors group overflow-hidden relative">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-                            <div className="h-14 w-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                                <CalendarIcon className="h-6 w-6" />
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{totalAppointmentsToday}</p>
-                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
-                            </div>
-                        </div>
-
-                        <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tr from-blue-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-blue-500/10 hover:border-blue-500/20 transition-colors group overflow-hidden relative">
-                            <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full -ml-16 -mb-16 group-hover:scale-150 transition-transform duration-700" />
-                            <div className="h-14 w-14 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                                <CheckCircle2 className="h-6 w-6" />
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{allAppointments.length}</p>
-                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
-                            </div>
-                        </div>
-
-                        <div className="md:col-span-6 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tl from-amber-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-amber-500/10 hover:border-amber-500/20 transition-colors group overflow-hidden relative">
-                            <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-10 -mb-10 group-hover:scale-150 transition-transform duration-700" />
-                            <div className="h-14 w-14 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
-                                <Clock className="h-6 w-6" />
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{hoursOccupied}h</p>
-                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Today Context with a more distinctive separation */}
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent h-64 -mx-10 blur-3xl opacity-20 pointer-events-none" />
-
-                        <div className="space-y-12">
-                            {/* Hoy */}
-                            <section className="space-y-8 relative">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
-                                    <div className="space-y-1">
-                                        <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                            <div className="h-8 w-1.5 bg-primary rounded-full" />
-                                            Agenda de Hoy
-                                        </h2>
-                                        <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="px-5 py-2 bg-primary/10 text-primary text-xs font-black uppercase tracking-widest rounded-xl border border-primary/10 shadow-sm shadow-primary/5">
-                                            {todayAppointments.length} bloqueos
-                                        </span>
-                                    </div>
+            <DashboardTabsUI 
+                stats={{
+                    totalToday: totalAppointmentsToday,
+                    totalActive: allAppointments.length,
+                    hoursOccupied: hoursOccupied
+                }}
+                exportLink={
+                    <a
+                        href="/api/export/appointments"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 shrink-0 text-primary hover:bg-primary/10 transition-colors cursor-pointer px-3 py-1.5 rounded-full"
+                        title="Exportar historial a CSV"
+                    >
+                        <Download className="h-3.5 w-3.5" />
+                        Exportar CSV
+                    </a>
+                }
+                children_agenda={
+                    <div className="space-y-16">
+                        {/* Bento Grid Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-6">
+                            <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-primary/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-primary/10 hover:border-primary/20 transition-colors group overflow-hidden relative">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
+                                <div className="h-14 w-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                                    <CalendarIcon className="h-6 w-6" />
                                 </div>
-
-                                {todayAppointments.length > 0 ? (
-                                    <div className="grid gap-6">
-                                        {todayAppointments.map((appt) => (
-                                            <AppointmentCard key={appt.id} appt={appt} />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <EmptyState
-                                        title="Día libre"
-                                        description="No tienes citas agendadas para hoy. Un buen momento para organizar tus servicios o descansar."
-                                        actionText="Configurar Disponibilidad"
-                                        actionHref="/dashboard/disponibilidad"
-                                        icon={CalendarOff}
-                                    />
-                                )}
-                            </section>
-
-                            {/* Todas las Próximas */}
-                            <section className="space-y-8">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
-                                    <div className="space-y-1">
-                                        <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                            <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
-                                            Próximas Reservas
-                                        </h2>
-                                        <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="px-5 py-2 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/10 shadow-sm shadow-blue-500/5">
-                                            {upcomingAppointments.length} por venir
-                                        </span>
-                                    </div>
+                                <div className="space-y-1">
+                                    <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{totalAppointmentsToday}</p>
+                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
                                 </div>
+                            </div>
 
-                                {upcomingAppointments.length > 0 ? (
-                                    <div className="grid gap-6">
-                                        {upcomingAppointments.map((appt) => (
-                                            <AppointmentCard key={appt.id} appt={appt} showDate />
-                                        ))}
+                            <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tr from-blue-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-blue-500/10 hover:border-blue-500/20 transition-colors group overflow-hidden relative">
+                                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full -ml-16 -mb-16 group-hover:scale-150 transition-transform duration-700" />
+                                <div className="h-14 w-14 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                    <CheckCircle2 className="h-6 w-6" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{allAppointments.length}</p>
+                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
+                                </div>
+                            </div>
+
+                            <div className="md:col-span-6 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tl from-amber-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-amber-500/10 hover:border-amber-500/20 transition-colors group overflow-hidden relative">
+                                <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-10 -mb-10 group-hover:scale-150 transition-transform duration-700" />
+                                <div className="h-14 w-14 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                                    <Clock className="h-6 w-6" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{hoursOccupied}h</p>
+                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Today Context with a more distinctive separation */}
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent h-64 -mx-10 blur-3xl opacity-20 pointer-events-none" />
+
+                            <div className="space-y-12">
+                                {/* Hoy */}
+                                <section className="space-y-8 relative">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+                                        <div className="space-y-1">
+                                            <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
+                                                <div className="h-8 w-1.5 bg-primary rounded-full" />
+                                                Agenda de Hoy
+                                            </h2>
+                                            <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="px-5 py-2 bg-primary/10 text-primary text-xs font-black uppercase tracking-widest rounded-xl border border-primary/10 shadow-sm shadow-primary/5">
+                                                {todayAppointments.length} bloqueos
+                                            </span>
+                                        </div>
                                     </div>
-                                ) : (
-                                    <EmptyState
-                                        title="Sin futuras citas"
-                                        description="No hay reservas en el horizonte cercano. ¡Prueba compartiendo tu link público!"
-                                        actionText="Ir a mi Perfil"
-                                        actionHref="/dashboard/perfil"
-                                        icon={CalendarOff}
-                                    />
-                                )}
-                            </section>
+
+                                    {todayAppointments.length > 0 ? (
+                                        <div className="grid gap-6">
+                                            {todayAppointments.map((appt) => (
+                                                <AppointmentCard key={appt.id} appt={appt} />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <EmptyState
+                                            title="Día libre"
+                                            description="No tienes citas agendadas para hoy. Un buen momento para organizar tus servicios o descansar."
+                                            actionText="Configurar Disponibilidad"
+                                            actionHref="/dashboard/disponibilidad"
+                                            icon={CalendarOff}
+                                        />
+                                    )}
+                                </section>
+
+                                {/* Todas las Próximas */}
+                                <section className="space-y-8">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+                                        <div className="space-y-1">
+                                            <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
+                                                <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
+                                                Próximas Reservas
+                                            </h2>
+                                            <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="px-5 py-2 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/10 shadow-sm shadow-blue-500/5">
+                                                {upcomingAppointments.length} por venir
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {upcomingAppointments.length > 0 ? (
+                                        <div className="grid gap-6">
+                                            {upcomingAppointments.map((appt) => (
+                                                <AppointmentCard key={appt.id} appt={appt} showDate />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <EmptyState
+                                            title="Sin futuras citas"
+                                            description="No hay reservas en el horizonte cercano. ¡Prueba compartiendo tu link público!"
+                                            actionText="Ir a mi Perfil"
+                                            actionHref="/dashboard/perfil"
+                                            icon={CalendarOff}
+                                        />
+                                    )}
+                                </section>
+                            </div>
                         </div>
                     </div>
-                </TabsContent>
-
-                <TabsContent value="analytics" className="mt-0 focus-visible:ring-0">
+                }
+                children_analytics={
                     <div className="py-8">
                         <div className="space-y-4 mb-10 border-b border-dashed border-border/50 pb-8">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
@@ -273,8 +262,8 @@ export default async function DashboardPage() {
                             totalAppointments: allAppointments.length
                         }} />
                     </div>
-                </TabsContent>
-            </Tabs>
+                }
+            />
         </div>
     );
 }
