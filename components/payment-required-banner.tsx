@@ -4,6 +4,7 @@ import { CreditCard, ArrowRight, X } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 interface PaymentRequiredBannerProps {
     planName: string
@@ -50,17 +51,17 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 className={`relative px-4 py-3 md:px-5 md:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 border-b ${isUrgent
-                    ? "bg-amber-500/10 border-amber-500/20"
+                    ? "bg-destructive/10 border-destructive/20"
                     : "bg-blue-500/5 border-blue-500/10"
                     }`}
             >
                 <div className="flex items-center gap-3 min-w-0">
-                    <div className={`hidden sm:flex h-8 w-8 rounded-xl items-center justify-center shrink-0 ${isUrgent ? "bg-amber-500/15 text-amber-600" : "bg-blue-500/10 text-blue-600"
+                    <div className={`hidden sm:flex h-8 w-8 rounded-xl items-center justify-center shrink-0 ${isUrgent ? "bg-destructive/15 text-destructive" : "bg-blue-500/10 text-blue-600"
                         }`}>
                         <CreditCard className="h-4 w-4" />
                     </div>
                     <div className="min-w-0">
-                        <div className={`text-[10px] md:text-xs font-bold leading-tight ${isUrgent ? "text-amber-700 dark:text-amber-400" : "text-blue-700 dark:text-blue-400"}`}>
+                        <div className={`text-[10px] md:text-xs font-bold leading-tight ${isUrgent ? "text-destructive dark:text-destructive" : "text-blue-700 dark:text-blue-400"}`}>
                             {timeLeft ? (
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
                                     <span className="opacity-80">Trial expira en:</span>
@@ -71,7 +72,10 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                                                 initial={{ opacity: 0.3 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ duration: 0.5 }}
-                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                                className={cn(
+                                                    "bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10",
+                                                    isUrgent ? "bg-destructive/10 border-destructive/20" : ""
+                                                )}
                                             >
                                                 {timeLeft.d}d
                                             </motion.span>
@@ -82,7 +86,10 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                                                 initial={{ opacity: 0.3 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ duration: 0.5 }}
-                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                                className={cn(
+                                                    "bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10",
+                                                    isUrgent ? "bg-destructive/10 border-destructive/20" : ""
+                                                )}
                                             >
                                                 {timeLeft.h}h
                                             </motion.span>
@@ -93,7 +100,10 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                                                 initial={{ opacity: 0.3 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ duration: 0.5 }}
-                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                                className={cn(
+                                                    "bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10",
+                                                    isUrgent ? "bg-destructive/10 border-destructive/20" : ""
+                                                )}
                                             >
                                                 {timeLeft.m}m
                                             </motion.span>
@@ -104,7 +114,10 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                                                 initial={{ opacity: 0.3 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ duration: 0.5 }}
-                                                className="bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10"
+                                                className={cn(
+                                                    "bg-primary/10 px-1.5 py-0.5 rounded-md font-mono text-[11px] md:text-xs min-w-[28px] text-center border border-primary/10",
+                                                    isUrgent ? "bg-destructive/10 border-destructive/20" : ""
+                                                )}
                                             >
                                                 {timeLeft.s}s
                                             </motion.span>
@@ -117,7 +130,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                                     : `Estás usando el plan ${planName} en periodo de prueba gratuito`
                             )}
                         </div>
-                        <p className="block text-[11px] text-muted-foreground font-medium">
+                        <p className={cn("block text-[11px] font-display", isUrgent ? "text-destructive/50" : "text-muted-foreground")}>
                             Agrega un método de pago para desbloquear todas las características sin interrupciones.
                         </p>
                     </div>
@@ -126,7 +139,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                     <Link
                         href="/dashboard/organizacion/planes"
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${isUrgent
-                            ? "bg-amber-500 text-white hover:bg-amber-600"
+                            ? "bg-destructive text-white hover:bg-destructive/80"
                             : "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 border border-blue-500/20"
                             }`}
                     >
