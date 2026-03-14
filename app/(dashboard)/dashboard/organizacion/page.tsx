@@ -127,7 +127,7 @@ export default async function OrganizacionPage() {
                                     <Globe className="h-3 w-3" /> Cambiar Plan
                                 </p>
                                 <p className="text-sm font-black text-primary">
-                                    {organization.subscriptionPlan === "FREE" ? "Gratuito" :
+                                    {organization.subscriptionPlan === "BASIC" ? "Básico" :
                                         organization.subscriptionPlan === "TEAM" ? "Equipos" : "Corporativo"}
                                 </p>
                             </a>
@@ -211,7 +211,7 @@ export default async function OrganizacionPage() {
                         <div className="relative z-10">
                             <div className="flex items-center justify-between mb-2">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-foreground/70">
-                                    Capstone ({organization.subscriptionPlan === "FREE" ? "1 Base" : organization.subscriptionPlan === "TEAM" ? "Hasta 5" : "Ilimitado"})
+                                    Capstone ({organization.subscriptionPlan === "BASIC" ? "1 Base" : organization.subscriptionPlan === "TEAM" ? "Hasta 5" : "Ilimitado"})
                                 </span>
                             </div>
                         </div>

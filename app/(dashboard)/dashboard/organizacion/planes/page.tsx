@@ -70,7 +70,7 @@ export default async function BillingPage({
                     <div>
                         <h3 className="text-xl font-black text-amber-700">Periodo de Gracia Activo</h3>
                         <p className="text-amber-600/80 font-medium text-sm">
-                            Hemos tenido un problema con tu pago recurrente. Tienes hasta el <strong>{organization.gracePeriodEnd?.toLocaleDateString('es-CO')}</strong> para regularizar tu situación antes de que la organización sea degradada al plan FREE.
+                            Hemos tenido un problema con tu pago recurrente. Tienes hasta el <strong>{organization.gracePeriodEnd?.toLocaleDateString('es-CO')}</strong> para regularizar tu situación antes de que la organización sea degradada al plan BASIC.
                         </p>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import { createCheckoutSession, testSetPlan } from "@/app/actions/billing"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-type PlanType = "FREE" | "TEAM" | "CORPORATE"
+type PlanType = "BASIC" | "TEAM" | "CORPORATE"
 
 interface DatabasePlanConfig {
     id: string
@@ -55,22 +55,22 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
     const plansInfo = initialPlans || []
     const plans = [
         {
-            id: "FREE" as const,
+            id: "BASIC" as const,
             name: "Individual",
-            price: plansInfo.find(p => p.id === 'FREE')?.price || "Gratis",
+            price: plansInfo.find(p => p.id === 'BASIC')?.price || "Gratis",
             period: "para siempre",
             description: "Para profesionales independientes empezando.",
             icon: User,
             color: "text-zinc-500",
             bgLight: "bg-zinc-500/10",
             border: "border-zinc-500/20",
-            features: plansInfo.find(p => p.id === 'FREE')?.features || [
+            features: plansInfo.find(p => p.id === 'BASIC')?.features || [
                 "1 Perfil profesional",
                 "Link de reservas público",
                 "Agenda básica",
                 "Recordatorios por email"
             ],
-            limit: plansInfo.find(p => p.id === 'FREE')?.limit || "Máximo 1 asiento"
+            limit: plansInfo.find(p => p.id === 'BASIC')?.limit || "Máximo 1 asiento"
         },
         {
             id: "TEAM" as const,
@@ -130,7 +130,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                         </div>
                     </div>
                     <div className="flex bg-background border border-border/50 rounded-xl p-1 gap-1">
-                        <button onClick={() => handleTestChange("FREE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "FREE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Free</button>
+                        <button onClick={() => handleTestChange("BASIC")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "BASIC" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Free</button>
                         <button onClick={() => handleTestChange("TEAM")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "TEAM" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Team</button>
                         <button onClick={() => handleTestChange("CORPORATE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "CORPORATE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Corp</button>
                     </div>
@@ -171,7 +171,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                             </div>
 
                             <div className="mb-8 flex items-end gap-2 border-b border-border/50 pb-8">
-                                <span className={cn("text-5xl font-black font-display tracking-tighter leading-none", plan.id === "FREE" ? "text-foreground" : plan.color)}>
+                                <span className={cn("text-5xl font-black font-display tracking-tighter leading-none", plan.id === "BASIC" ? "text-foreground" : plan.color)}>
                                     {plan.price === "Gratis" ? "Gratis" : Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0 }).format(Number(plan.price))}
                                 </span>
                                 <span className="text-muted-foreground font-bold tracking-tight pb-1">{plan.period}</span>
@@ -197,8 +197,8 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                     size="lg"
                                     className="w-full"
                                     onClick={() => {
-                                        if (plan.id === "FREE") {
-                                            handleTestChange("FREE")
+                                        if (plan.id === "BASIC") {
+                                            handleTestChange("BASIC")
                                         } else {
                                             handleSubscribe(plan.id)
                                         }
@@ -209,7 +209,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                         <Loader2 className="h-5 w-5 animate-spin" />
                                     ) : isCurrent ? (
                                         "Activo"
-                                    ) : plan.id === "FREE" ? (
+                                    ) : plan.id === "BASIC" ? (
                                         "Degradar a Gratis"
                                     ) : (
                                         `Cambiar a ${plan.name}`

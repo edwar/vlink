@@ -83,7 +83,7 @@ export async function sendSubscriptionEmail({
 }) {
   const subjects = {
     GRACE_PERIOD: `⚠️ Problema con tu suscripción de ${organizationName}`,
-    DEGRADED: `Plan degradado a FREE - ${organizationName}`,
+    DEGRADED: `Plan degradado a BASIC - ${organizationName}`,
     PAYMENT_FAILED: `Error en el pago recurrente de ${organizationName}`,
   };
 
@@ -106,7 +106,7 @@ export async function sendSubscriptionEmail({
             ${type === 'GRACE_PERIOD'
           ? `Hemos tenido un problema al procesar el pago de tu plan <strong>${planName}</strong> para la organización <strong>${organizationName}</strong>. Tienes hasta el <strong>${gracePeriodEnd}</strong> (7 días de gracia) para actualizar tus datos de pago antes de que el plan sea degradado.`
           : type === 'DEGRADED'
-            ? `Lamentamos informarte que el periodo de gracia ha terminado y tu organización <strong>${organizationName}</strong> ha sido degradada automáticamente al plan <strong>FREE</strong>.`
+            ? `Lamentamos informarte que el periodo de gracia ha terminado y tu organización <strong>${organizationName}</strong> ha sido degradada automáticamente al plan <strong>BASIC</strong>.`
             : `No hemos podido procesar tu pago recurrente. Por favor, revisa tus medios de pago en la sección de administración.`}
           </p>
           <div style="margin-top: 30px; text-align: center;">

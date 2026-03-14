@@ -49,7 +49,7 @@ describe('billing-maintenance server actions', () => {
                 expect.objectContaining({
                     where: expect.objectContaining({
                         billingStatus: "OVERDUE",
-                        subscriptionPlan: { not: "FREE" }
+                        subscriptionPlan: { not: "BASIC" }
                     })
                 })
             )
@@ -58,7 +58,7 @@ describe('billing-maintenance server actions', () => {
             expect(prisma.organization.update).toHaveBeenCalledWith({
                 where: { id: 'org-1' },
                 data: {
-                    subscriptionPlan: "FREE",
+                    subscriptionPlan: "BASIC",
                     billingStatus: "DEGRADED",
                     gracePeriodEnd: null
                 }

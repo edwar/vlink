@@ -16,7 +16,7 @@ export async function processGracePeriods() {
             where: {
                 billingStatus: "OVERDUE",
                 gracePeriodEnd: { lte: now },
-                subscriptionPlan: { not: "FREE" }
+                subscriptionPlan: { not: "BASIC" }
             },
             include: {
                 members: {
@@ -32,7 +32,7 @@ export async function processGracePeriods() {
             await prisma.organization.update({
                 where: { id: org.id },
                 data: {
-                    subscriptionPlan: "FREE",
+                    subscriptionPlan: "BASIC",
                     billingStatus: "DEGRADED",
                     gracePeriodEnd: null
                 }
@@ -49,7 +49,7 @@ export async function processGracePeriods() {
                 });
             }
 
-            console.log(`[Billing Maintenance] Organización ${org.name} degradada a FREE.`);
+            console.log(`[Billing Maintenance] Organización ${org.name} degradada a BASIC.`);
         }
 
         return { success: true, degradedCount: toDegrade.length };

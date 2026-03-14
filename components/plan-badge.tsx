@@ -7,7 +7,7 @@ import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 
 const PLAN_LABELS: Record<string, string> = {
-    FREE: "Gratuito",
+    BASIC: "Básico",
     TEAM: "Equipos",
     ENTERPRISE: "Corporativo"
 }
@@ -46,7 +46,7 @@ export function PlanBadge() {
 
     if (!org) return null
 
-    const plan = org.subscriptionPlan || "FREE"
+    const plan = org.subscriptionPlan || "BASIC"
     const label = PLAN_LABELS[plan] || plan
 
     return (

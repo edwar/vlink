@@ -50,7 +50,7 @@ export async function createCheckoutSession(organizationId: string, planType: "T
 /**
  * Solo por propósitos de prueba de UI, para poder cambiar de plan sin tarjeta
  */
-export async function testSetPlan(organizationId: string, plan: "FREE" | "TEAM" | "CORPORATE") {
+export async function testSetPlan(organizationId: string, plan: "BASIC" | "TEAM" | "CORPORATE") {
     await prisma.organization.update({
         where: { id: organizationId },
         data: { subscriptionPlan: plan }
@@ -59,3 +59,47 @@ export async function testSetPlan(organizationId: string, plan: "FREE" | "TEAM" 
     revalidatePath("/dashboard/organizacion/planes")
     return { success: true }
 }
+
+/**
+ * Returns the payment/trial status for the user's primary organization.
+ * Used to show upgrade banners and gate premium features.
+ */
+export async function getOrgPaymentStatus() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) return null
+
+    const membership = await prisma.member.findFirst({
+        where: { userId: session.user.id },
+        include: { organization: true },
+        orderBy: { createdAt: "asc" }
+    })
+
+    if (!membership) return null
+
+    const org = membership.organization
+    const hasPaymentMethod = !!org.mpCustomerId
+    const plan = org.subscriptionPlan
+
+    let daysRemaining: number | null = null
+    if (org.gracePeriodEnd) {
+        const now = new Date()
+        const diff = org.gracePeriodEnd.getTime() - now.getTime()
+        daysRemaining = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
+    }
+
+    const trialExpired = daysRemaining !== null && daysRemaining <= 0
+
+    return {
+        hasPaymentMethod,
+        plan,
+        planName: plan === "BASIC" ? "Básico" : plan === "TEAM" ? "Equipos" : "Corporativo",
+        daysRemaining,
+        trialExpired,
+        needsPaymentBanner: !hasPaymentMethod && plan !== "BASIC",
+        organizationId: org.id,
+    }
+}
+

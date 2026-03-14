@@ -75,7 +75,7 @@ model Organization {
   updatedAt        DateTime         @updatedAt
   mpCustomerId     String?          @unique
   mpSubscriptionId String?          @unique
-  subscriptionPlan SubscriptionPlan @default(FREE)
+  subscriptionPlan SubscriptionPlan @default(BASIC)
   billingStatus    BillingStatus    @default(ACTIVE)
   gracePeriodEnd   DateTime?
   lastPaymentDate  DateTime?
@@ -225,7 +225,7 @@ enum UserRole {
 }
 
 enum SubscriptionPlan {
-  FREE
+  BASIC
   TEAM
   CORPORATE
 }

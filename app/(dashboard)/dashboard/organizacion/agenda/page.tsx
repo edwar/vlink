@@ -48,7 +48,7 @@ export default async function ConsolidatedAgendaPage() {
                 </div>
             </header>
 
-            {organization.subscriptionPlan === "FREE" ? (
+            {organization.subscriptionPlan === "BASIC" ? (
                 <div className="p-12 bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-[2.5rem] flex flex-col items-center text-center gap-6">
                     <div className="h-20 w-20 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-600">
                         <CalendarRange className="h-10 w-10" />

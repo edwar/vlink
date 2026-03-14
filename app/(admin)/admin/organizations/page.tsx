@@ -40,7 +40,7 @@ export default async function AdminOrganizations() {
                                             <h3 className="text-xl font-black font-display tracking-tight text-foreground group-hover:text-primary transition-colors">{org.name}</h3>
                                             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">slug: {org.slug}</p>
                                             <div className="flex items-center gap-3 mt-2">
-                                                <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${org.subscriptionPlan === "FREE" ? "bg-zinc-500/10 text-zinc-600 border-zinc-500/20" :
+                                                <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${org.subscriptionPlan === "BASIC" ? "bg-zinc-500/10 text-zinc-600 border-zinc-500/20" :
                                                     org.subscriptionPlan === "TEAM" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
                                                         "bg-primary/10 text-primary border-primary/20"
                                                     }`}>

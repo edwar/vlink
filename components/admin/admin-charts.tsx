@@ -27,7 +27,7 @@ interface AdminChartsProps {
 export function AdminCharts({ planStats, appointmentsByStatus, topServices, monthlyGrowth }: AdminChartsProps) {
     // 1. Distribución por Plan (Ahora LineChart)
     const planColors: Record<string, string> = {
-        FREE: "hsl(215 20% 65%)",       // Slate
+        BASIC: "hsl(215 20% 65%)",       // Slate
         TEAM: "hsl(217 91% 60%)",       // Blue
         CORPORATE: "hsl(142 76% 45%)",  // Emerald
     }

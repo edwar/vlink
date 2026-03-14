@@ -10,7 +10,7 @@ import { includes } from "better-auth"
 /**
  * Creates a new organization and assigns the current user as OWNER
  */
-export async function createOrganization(name: string) {
+export async function createOrganization(name: string, plan: "BASIC" | "TEAM" | "CORPORATE" = "BASIC") {
     const session = await auth.api.getSession({
         headers: await headers()
     })
@@ -26,10 +26,19 @@ export async function createOrganization(name: string) {
     if (existing) throw new Error(`Ya existe una organización con el nombre "${name}". Por favor elige otro nombre.`)
 
     const organization = await prisma.$transaction(async (tx) => {
+        // First month is free logic
+        const now = new Date()
+        const gracePeriodEnd = new Date(now)
+        gracePeriodEnd.setMonth(now.getMonth() + 1) // 30 days free
+
         const org = await tx.organization.create({
             data: {
                 name,
                 slug,
+                subscriptionPlan: plan,
+                billingStatus: "ACTIVE",
+                lastPaymentDate: now,
+                gracePeriodEnd: gracePeriodEnd,
                 members: {
                     create: {
                         userId: session.user.id,
