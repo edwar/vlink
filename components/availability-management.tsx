@@ -204,7 +204,8 @@ export function AvailabilityManagement() {
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <section className="space-y-6">
+            <section id="tour-weekly-schedule" className="relative space-y-6">
+                <div id="tour-weekly-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                 <div>
                     <h3 className="text-xl font-bold font-display">Horario Semanal</h3>
                     <p className="text-sm text-muted-foreground mt-1">Define tus horas de trabajo recurrentes para que tus clientes puedan agendar.</p>
@@ -348,7 +349,8 @@ export function AvailabilityManagement() {
                 </div>
             </section>
 
-            <section className="space-y-6 pb-20">
+            <section id="tour-special-blocks" className="relative space-y-6 pb-20">
+                <div id="tour-special-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                 <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
                     <div>
                         <h3 className="text-xl font-bold font-display">Bloqueos Especiales</h3>
@@ -459,6 +461,7 @@ export function AvailabilityManagement() {
                 <Button
                     onClick={handleSave}
                     disabled={saving}
+                    id="tour-save-availability"
                     className={cn(
                         "pointer-events-auto w-full md:w-auto h-14 px-10 rounded-full font-black text-[11px] uppercase tracking-widest duration-500 hover:scale-[1.02] transition-all active:scale-95 overflow-hidden shadow-2xl shadow-primary/10",
                         success

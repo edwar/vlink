@@ -14,6 +14,7 @@ import { ToggleOrgVisibility } from "@/components/toggle-org-visibility"
 import { RenameOrganization } from "@/components/rename-organization"
 import { OrgQRCode } from "@/components/org-qr-code"
 import { OrgBusinessCard } from "@/components/org-business-card"
+import { OrganizacionTour } from "@/components/tours/organizacion-tour"
 import { LeaveOrganization } from "@/components/leave-organization"
 import { CloseOrganization } from "@/components/close-organization"
 import { TransferOwnership } from "@/components/transfer-ownership"
@@ -122,7 +123,7 @@ export default async function OrganizacionPage() {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
                         {isOwnerOrManager && (
-                            <a href="/dashboard/organizacion/planes" className="px-6 py-3 bg-primary/10 hover:bg-primary/20 transition-colors backdrop-blur border border-primary/20 rounded-2xl shadow-sm inline-flex flex-col gap-1 items-start justify-center group">
+                            <a id="tour-org-plan" href="/dashboard/organizacion/planes" className="px-6 py-3 bg-primary/10 hover:bg-primary/20 transition-colors backdrop-blur border border-primary/20 rounded-2xl shadow-sm inline-flex flex-col gap-1 items-start justify-center group">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-primary/80 group-hover:text-primary flex items-center gap-2">
                                     <Globe className="h-3 w-3" /> Cambiar Plan
                                 </p>
@@ -155,7 +156,8 @@ export default async function OrganizacionPage() {
                         <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Marketing & QR</h2>
                     </div>
-                    <div className="space-y-4 flex flex-col h-full bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                    <div id="tour-org-qr" className="relative space-y-4 flex flex-col h-full bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                        <div id="tour-org-qr-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Descarga el QR base o compártelo al instante con tus clientes en redes.
                         </p>
@@ -204,7 +206,8 @@ export default async function OrganizacionPage() {
                         <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Crecer / Equipo</h2>
                     </div>
-                    <div className="flex-1 flex flex-col space-y-4 bg-linear-to-bl from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div id="tour-org-invite" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-bl from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                        <div id="tour-org-invite-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Invita nuevos profesionales a tu organización copiando el enlace mágico para escalar tu negocio.
                         </p>
@@ -237,6 +240,7 @@ export default async function OrganizacionPage() {
                             {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>
                         <a
+                            id="tour-team-agenda"
                             href="/dashboard/organizacion/agenda"
                             className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
                         >
@@ -255,7 +259,8 @@ export default async function OrganizacionPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6">
+                <div id="tour-team-members" className="relative grid grid-cols-1 gap-6">
+                    <div id="tour-team-members-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     {sortedMembers.map((member, index) => {
                         const isPlanActive = maxSeats === 0 || index < maxSeats;
                         return (
@@ -407,6 +412,7 @@ export default async function OrganizacionPage() {
                     </div>
                 </div>
             </div>
+            <OrganizacionTour />
         </div>
     )
 }

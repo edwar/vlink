@@ -2,6 +2,7 @@ import { ProfileSettings } from "@/components/profile-settings";
 import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { UserCircle } from "lucide-react";
+import { PerfilTour } from "@/components/tours/perfil-tour";
 
 export default async function PerfilPage() {
     const profile = await getEffectiveProfile();
@@ -28,6 +29,7 @@ export default async function PerfilPage() {
             </header>
 
             <ProfileSettings />
+            <PerfilTour />
         </div>
     );
 }

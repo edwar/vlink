@@ -2,6 +2,7 @@ import { CalendarView } from "@/components/calendar-view";
 import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { CalendarIcon } from "lucide-react";
+import { AgendaTour } from "@/components/tours/agenda-tour";
 
 export default async function AgendaPage() {
     const profile = await getEffectiveProfile();
@@ -29,6 +30,7 @@ export default async function AgendaPage() {
 
             <div className="w-full">
                 <CalendarView />
+                <AgendaTour />
             </div>
         </div>
     );

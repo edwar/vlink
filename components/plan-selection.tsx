@@ -117,7 +117,7 @@ export function PlanSelection({ plans, selectedPlan, onSelect }: PlanSelectionPr
                                             {plan.name}
                                         </h3>
                                         <span className="text-sm font-bold text-muted-foreground">
-                                            {plan.price}
+                                            {Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0 }).format(Number(plan.price))}
                                             <span className="text-[10px] font-medium">/mes</span>
                                         </span>
                                     </div>
@@ -125,7 +125,7 @@ export function PlanSelection({ plans, selectedPlan, onSelect }: PlanSelectionPr
                                         {plan.limit}
                                     </p>
                                     <div className="flex flex-wrap gap-2 pt-1">
-                                        {plan.features.slice(0, 3).map((feature) => (
+                                        {plan.features.map((feature) => (
                                             <span
                                                 key={feature}
                                                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-muted/50 text-[10px] font-bold text-muted-foreground"

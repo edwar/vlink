@@ -29,6 +29,7 @@ export function DashboardTabsUI({
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4 px-2">
                 <TabsList className="relative w-fit xs:w-auto bg-surface/50 border border-border/20 p-1.5 rounded-full h-auto gap-1">
                     <TabsTrigger 
+                        id="tour-tab-agenda"
                         value="agenda" 
                         className={cn(
                             "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
@@ -46,6 +47,7 @@ export function DashboardTabsUI({
                     </TabsTrigger>
                     
                     <TabsTrigger 
+                        id="tour-tab-analytics"
                         value="analytics" 
                         className={cn(
                             "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
@@ -64,7 +66,8 @@ export function DashboardTabsUI({
                 </TabsList>
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                    <div className="flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
+                    <div id="tour-export-csv" className="relative flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
+                        <div id="tour-export-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-primary" /> {stats.totalToday} Hoy</span>
                         <div className="h-3 w-px bg-border/50 shrink-0" />
                         <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-blue-500" /> {stats.totalActive} Activas</span>

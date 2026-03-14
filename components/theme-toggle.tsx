@@ -19,6 +19,7 @@ export function ThemeToggle() {
 
     return (
         <button
+            id="tour-theme-toggle"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="rounded-xl p-2.5 hover:bg-accent hover:text-accent-foreground transition-all active:scale-95 border border-primary/5 bg-background/50 shadow-sm"
             aria-label="Toggle theme"

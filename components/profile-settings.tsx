@@ -155,7 +155,7 @@ export function ProfileSettings() {
     }
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-700">
+        <div className="space-y-6 animate-in fade-in duration-700 pb-32">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Column 1: Profile Info (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
@@ -177,7 +177,8 @@ export function ProfileSettings() {
                                     Identidad VLink (Username)
                                 </Label>
                                 <div className="group transition-all">
-                                    <InputGroup className="h-14 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/40 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                    <InputGroup id="tour-username" className="relative h-14 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/40 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                        <div id="tour-username-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                                         <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-14 flex items-center justify-center">
                                             <InputGroupText className="text-primary font-black text-[13px] tracking-tighter">
                                                 {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
@@ -203,7 +204,8 @@ export function ProfileSettings() {
                                 <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">
                                     Biografía Profesional
                                 </Label>
-                                <div className="relative group transition-all">
+                                <div id="tour-bio" className="relative group transition-all">
+                                    <div id="tour-bio-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                                     <Textarea
                                         value={bio}
                                         onChange={(e) => setBio(e.target.value)}
@@ -216,11 +218,13 @@ export function ProfileSettings() {
                                 </div>
                             </div>
                             <div className="flex justify-end pt-4">
-                                <Button
-                                    onClick={handleSave}
-                                    disabled={saving}
-                                    className={cn(
-                                        "w-fit h-14 px-6 rounded-2xl font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
+                                <div className="relative w-fit group/save">
+                                    <div id="tour-save-anchor" className="absolute -inset-2 pointer-events-none rounded-3xl" />
+                                    <Button
+                                        onClick={handleSave}
+                                        disabled={saving}
+                                        className={cn(
+                                            "w-fit h-14 px-6 rounded-2xl font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
                                         success
                                             ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
                                             : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
@@ -241,13 +245,15 @@ export function ProfileSettings() {
                                 </Button>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
                 </div>
 
                 {/* Column 2: Link and Google (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-6 xl:space-y-16">
                     {/* Section: Public Link */}
-                    <section className="bg-linear-to-b from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8 h-full">
+                    <section id="tour-profile-url" className="relative bg-linear-to-b from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8 h-full">
+                        <div id="tour-profile-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
                             <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Enlace de Agenda</h3>
                             <p className="text-sm text-muted-foreground font-medium">Comparte este link para recibir reservas.</p>
@@ -268,7 +274,8 @@ export function ProfileSettings() {
                     </section>
 
                     {/* Section: Google Calendar */}
-                    <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
+                    <section id="tour-google-sync" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
+                        <div id="tour-google-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="flex items-start justify-between gap-4">
                             <div className="space-y-2">
                                 <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Sincronización</h3>

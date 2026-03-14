@@ -2,6 +2,7 @@ import { ConfigurationSettings } from "@/components/configuration-settings";
 import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { Hammer } from "lucide-react";
+import { ConfiguracionTour } from "@/components/tours/configuracion-tour";
 
 export default async function ConfiguracionPage() {
     const profile = await getEffectiveProfile();
@@ -28,6 +29,7 @@ export default async function ConfiguracionPage() {
             </header>
 
             <ConfigurationSettings />
+            <ConfiguracionTour />
         </div>
     );
 }

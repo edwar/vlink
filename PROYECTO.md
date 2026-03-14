@@ -65,10 +65,10 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Dashboard Multicuenta:** Switcher de perfiles para que administradores gestionen múltiples agendas fluidamente.
 
 ### B. Políticas de Facturación y Límites (Nueva Política)
-- **Límites de Miembros:** Restricción automática de visibilidad y acceso basado en el plan contratado (FREE, TEAM, CORPORATE).
+- **Límites de Miembros:** Restricción automática de visibilidad y acceso basado en el plan contratado (BASIC, TEAM, CORPORATE).
 - **Degradación con Periodo de Gracia:**
   - En caso de fallo en el pago recurrente, el sistema otorga una **semana de gracia** (7 días) antes de aplicar restricciones.
-  - Al cumplirse el plazo, la organización se degrada automáticamente al plan **FREE**.
+  - Al cumplirse el plazo, la organización se degrada automáticamente al plan **BASIC**.
   - **Notificación:** Envío automático de correo al propietario informando sobre la degradación y los pasos para reactivar el servicio.
 - **Soft-Lock de Miembros:** Al degradar a un plan inferior, los miembros excedentes se ocultan automáticamente de la página pública y se inhabilitan para recibir citas nuevas, protegiendo sus datos históricos.
 

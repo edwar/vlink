@@ -19,6 +19,7 @@ model User {
   memberships   Member[]
   profile       Profile?
   sessions      Session[]
+  tourProgress  TourProgress[]
 
   @@map("user")
 }
@@ -217,6 +218,18 @@ model PlanConfig {
   id        SubscriptionPlan @id
 
   @@map("plan_config")
+}
+
+model TourProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  pageKey     String
+  completedAt DateTime @default(now())
+  tourVersion DateTime // version date of the tour; if a new version is set after completedAt, re-show
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pageKey])
+  @@map("tour_progress")
 }
 
 enum UserRole {

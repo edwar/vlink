@@ -56,7 +56,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
     const plans = [
         {
             id: "BASIC" as const,
-            name: "Individual",
+            name: "BASIC",
             price: plansInfo.find(p => p.id === 'BASIC')?.price || "Gratis",
             period: "para siempre",
             description: "Para profesionales independientes empezando.",
@@ -130,7 +130,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                         </div>
                     </div>
                     <div className="flex bg-background border border-border/50 rounded-xl p-1 gap-1">
-                        <button onClick={() => handleTestChange("BASIC")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "BASIC" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Free</button>
+                        <button onClick={() => handleTestChange("BASIC")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "BASIC" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Basic</button>
                         <button onClick={() => handleTestChange("TEAM")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "TEAM" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Team</button>
                         <button onClick={() => handleTestChange("CORPORATE")} className={cn("px-3 py-1.5 text-[10px] font-black uppercase rounded-lg transition-colors", currentPlan === "CORPORATE" ? "bg-amber-500 text-white" : "hover:bg-muted")}>Corp</button>
                     </div>

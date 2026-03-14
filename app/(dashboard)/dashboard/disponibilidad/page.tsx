@@ -2,6 +2,7 @@ import { AvailabilityManagement } from "@/components/availability-management";
 import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { Clock } from "lucide-react";
+import { DisponibilidadTour } from "@/components/tours/disponibilidad-tour";
 
 export default async function DisponibilidadPage() {
     const profile = await getEffectiveProfile();
@@ -29,6 +30,7 @@ export default async function DisponibilidadPage() {
 
             <div className="w-full">
                 <AvailabilityManagement />
+                <DisponibilidadTour />
             </div>
         </div>
     );

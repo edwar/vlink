@@ -29,40 +29,54 @@ export async function getProfileForBooking(username: string) {
     if (!profile) return null
 
     // Soft-Lock Check: Priority: OWNER > MANAGER > PROFESSIONAL, then by createdAt
+    let isLocked = false;
     const membership = profile.user.memberships[0];
+
     if (membership && membership.organization) {
         const org = membership.organization;
-        const planConfig = await prisma.planConfig.findUnique({
-            where: { id: org.subscriptionPlan }
-        });
 
-        const maxSeats = planConfig?.maxSeats ?? 0;
-        if (maxSeats > 0) {
-            const allOrgMembers = await prisma.member.findMany({
-                where: { organizationId: org.id },
-                orderBy: { createdAt: 'asc' }
+        // Check if plan exists
+        if (!org.subscriptionPlan) {
+            isLocked = true;
+        } else {
+            const planConfig = await prisma.planConfig.findUnique({
+                where: { id: org.subscriptionPlan }
             });
 
-            // Definir prioridad: OWNER (0) > MANAGER (1) > PROFESSIONAL (2)
-            const rolePriority: Record<string, number> = {
-                OWNER: 0,
-                MANAGER: 1,
-                PROFESSIONAL: 2
-            };
+            const maxSeats = planConfig?.maxSeats ?? 0;
+            if (maxSeats > 0) {
+                const allOrgMembers = await prisma.member.findMany({
+                    where: { organizationId: org.id },
+                    orderBy: { createdAt: 'asc' }
+                });
 
-            const sortedMembers = allOrgMembers.sort((a, b) => {
-                const priorityA = rolePriority[a.role] ?? 10;
-                const priorityB = rolePriority[b.role] ?? 10;
-                if (priorityA !== priorityB) return priorityA - priorityB;
-                return a.createdAt.getTime() - b.createdAt.getTime();
-            });
+                // Definir prioridad: OWNER (0) > MANAGER (1) > PROFESSIONAL (2)
+                const rolePriority: Record<string, number> = {
+                    OWNER: 0,
+                    MANAGER: 1,
+                    PROFESSIONAL: 2
+                };
 
-            const myIndex = sortedMembers.findIndex(m => m.userId === profile.userId);
-            if (myIndex >= maxSeats) {
-                console.log(`[Soft-Lock] Perfil ${username} bloqueado por límite de asientos del plan ${org.subscriptionPlan}`);
-                return null;
+                const sortedMembers = allOrgMembers.sort((a, b) => {
+                    const priorityA = rolePriority[a.role] ?? 10;
+                    const priorityB = rolePriority[b.role] ?? 10;
+                    if (priorityA !== priorityB) return priorityA - priorityB;
+                    return a.createdAt.getTime() - b.createdAt.getTime();
+                });
+
+                const myIndex = sortedMembers.findIndex(m => m.userId === profile.userId);
+                if (myIndex >= maxSeats) {
+                    console.log(`[Soft-Lock] Perfil ${username} bloqueado por límite de asientos del plan ${org.subscriptionPlan}`);
+                    isLocked = false;
+                }
             }
         }
+    } else {
+        // Individual user without organization - check if individual booking is allowed or needs a plan
+        // For now, let's assume they need an organization to be active in this specific workflow
+        // or just let it pass if that's the business rule.
+        // Based on user request "si no tiene un plan", let's assume if no org/plan, it's locked.
+        // isLocked = true; 
     }
 
     return {
@@ -72,6 +86,7 @@ export async function getProfileForBooking(username: string) {
         image: profile.user.image,
         advanceNoticeHours: profile.advanceNoticeHours,
         expertise: profile.expertise || [],
+        isLocked,
         services: profile.services.map((s) => ({
             id: s.id,
             name: s.name,

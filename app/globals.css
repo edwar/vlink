@@ -176,3 +176,102 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Intro.js Styles */
+.custom-tour-tooltip {
+  @apply bg-card/95 backdrop-blur-xl text-card-foreground border border-border/40 p-6 max-w-[320px];
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid oklch(var(--border) / 0.4) !important;
+  border-radius: 2.5rem !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
+}
+
+.introjs-tooltip-title {
+  @apply text-xl font-black font-display tracking-tight mb-2 text-foreground;
+  color: var(--foreground) !important;
+}
+
+.introjs-tooltiptext {
+  @apply text-sm text-muted-foreground font-medium mb-4 leading-relaxed;
+  color: var(--muted-foreground) !important;
+}
+
+.introjs-tooltip-header {
+  @apply border-none mb-0 pb-0 flex items-center justify-between;
+}
+
+.introjs-tooltipbuttons {
+  @apply border-none p-0 mt-6 flex items-center justify-end gap-3;
+  border-top: none !important;
+  display: flex !important;
+}
+
+.introjs-button {
+  @apply px-6 h-11 flex items-center justify-center text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer;
+  text-shadow: none !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+
+.introjs-nextbutton {
+  @apply bg-primary text-primary-foreground hover:scale-105 active:scale-95;
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+.introjs-prevbutton {
+  @apply bg-muted/50 text-muted-foreground hover:bg-muted border border-border/50;
+  background-color: oklch(var(--muted) / 0.5) !important;
+  color: var(--muted-foreground) !important;
+}
+
+.introjs-skipbutton {
+  @apply text-muted-foreground/40 hover:text-foreground transition-colors p-2;
+  box-shadow: none !important;
+}
+
+.introjs-bullets {
+  @apply p-0 mb-6 flex justify-center;
+}
+
+.introjs-bullets ul li a {
+  @apply bg-muted-foreground/10 w-2 h-2 rounded-full transition-all;
+  background-color: oklch(var(--muted-foreground) / 0.1) !important;
+}
+
+.introjs-bullets ul li a.active {
+  @apply bg-primary w-6;
+  background-color: var(--primary) !important;
+}
+
+.introjs-progress {
+  @apply bg-muted/20 rounded-full h-1 overflow-hidden mb-6 p-0;
+  background-color: oklch(var(--muted) / 0.2) !important;
+  height: 4px !important;
+}
+
+.introjs-progressbar {
+  @apply bg-primary;
+  background-color: var(--primary) !important;
+  height: 4px !important;
+}
+
+.introjs-arrow {
+  display: none !important;
+}
+
+.custom-tour-highlight {
+  @apply rounded-[inherit] border-2 border-primary ring-[6px] ring-primary/10;
+  outline: none !important;
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Fix for default introjs-button styles that might bleed through */
+.introjs-tooltip .introjs-button:focus,
+.introjs-tooltip .introjs-button:active {
+  @apply outline-none;
+  box-shadow: none !important;
+}

@@ -73,7 +73,8 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
             </div>
 
             <div className="hidden sm:flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center bg-muted/30 p-1.5 rounded-full border border-border/50">
+                <div id="tour-calendar-view-switcher" className="relative flex items-center bg-muted/30 p-1.5 rounded-full border border-border/50">
+                    <div id="tour-calendar-switcher-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     <Button
                         variant={view === 'day' ? "secondary" : "ghost"}
                         size="sm"
@@ -112,7 +113,8 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                     </Button>
                 </div>
 
-                <div className="flex items-center border border-border/50 rounded-full overflow-hidden bg-muted/10 p-1">
+                <div id="tour-calendar-nav" className="relative flex items-center border border-border/50 rounded-full overflow-hidden bg-muted/10 p-1">
+                    <div id="tour-calendar-nav-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     <Button
                         variant="ghost"
                         size="icon-sm"
@@ -522,7 +524,10 @@ export function CalendarView() {
                 onToday={handleToday}
                 onNext={handleNext}
             />
-            {view === 'month' ? renderMonthView() : renderDayOrWeekView()}
+            <div id="tour-calendar-content" className="relative">
+                <div id="tour-calendar-content-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                {view === 'month' ? renderMonthView() : renderDayOrWeekView()}
+            </div>
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
                 <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-4xl">

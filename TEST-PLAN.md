@@ -55,7 +55,7 @@ Para blindar la plataforma y asegurar que las refactorizaciones o nuevas caracte
   - **Transferencia de propiedad:** Verificar el intercambio atómico de roles al transferir el ownership.
 
 - **Procesos en Segundo Plano (Cron Jobs)**
-  - **Mantenimiento de Facturación (`billing-maintenance.ts`):** Validar que las organizaciones cuyo `gracePeriodEnd` haya expirado sean degradadas correctamente al plan `FREE` y se envíe el correo correspondiente.
+  - **Mantenimiento de Facturación (`billing-maintenance.ts`):** Validar que las organizaciones cuyo `gracePeriodEnd` haya expirado sean degradadas correctamente al plan `BASIC` y se envíe el correo correspondiente.
 
 - **Autenticación y Sesiones**
   - Verificar que las rutas protegidas expulsen correctamente a usuarios sin sesión válida.

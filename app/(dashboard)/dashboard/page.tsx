@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma"
 import { startOfDay, endOfDay, format, isAfter } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, TrendingUp, Users, Download } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, TrendingUp, Users, Download, CreditCard } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { subDays, eachDayOfInterval, format as formatDateFns } from "date-fns"
@@ -10,10 +11,18 @@ import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
 import { Title } from "@/components/title"
 import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
+import { DashboardTour } from "@/components/tours/dashboard-tour"
 
 export default async function DashboardPage() {
     const profile = await getEffectiveProfile()
     const today = new Date()
+
+    const isOldAccount = profile.organization?.createdAt
+        ? (new Date().getTime() - new Date(profile.organization.createdAt).getTime()) > 30 * 24 * 60 * 60 * 1000
+        : false;
+
+    const showBillingNotice = profile.organization?.subscriptionPlan === "BASIC";
+    const billingUrgent = showBillingNotice && isOldAccount && !profile.organization?.mpSubscriptionId;
 
     // Get all appointments for this profile (including cancelled for conversion rate)
     const allAppointmentsWithCancelled = await prisma.appointment.findMany({
@@ -108,6 +117,49 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </header>
+            
+            {showBillingNotice && (
+                <div className={cn(
+                    "p-4 sm:p-5 rounded-3xl border flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in duration-500",
+                    billingUrgent 
+                        ? "bg-red-500/10 border-red-500/20 shadow-lg shadow-red-500/5" 
+                        : "bg-amber-500/10 border-amber-500/20"
+                )}>
+                    <div className="flex items-center gap-4 text-center sm:text-left">
+                        <div className={cn(
+                            "h-10 w-10 rounded-full flex items-center justify-center shrink-0",
+                            billingUrgent ? "bg-red-500/20 text-red-600" : "bg-amber-500/20 text-amber-600"
+                        )}>
+                            {billingUrgent ? <CreditCard className="h-5 w-5" /> : <TrendingUp className="h-5 w-5" />}
+                        </div>
+                        <div>
+                            <p className={cn(
+                                "text-sm font-black uppercase tracking-tight",
+                                billingUrgent ? "text-red-700" : "text-amber-700"
+                            )}>
+                                {billingUrgent ? "Acción Requerida: Facturación" : "Estás usando el plan BASIC"}
+                            </p>
+                            <p className={cn(
+                                "text-xs font-medium",
+                                billingUrgent ? "text-red-600/80" : "text-amber-600/80"
+                            )}>
+                                {billingUrgent 
+                                    ? "Tu periodo de gracia ha terminado. Para seguir usando VLink recurrentemente, debes agregar un método de pago." 
+                                    : "Tienes acceso limitado a las funciones del equipo. Agrega una tarjeta para desbloquear características avanzadas."}
+                            </p>
+                        </div>
+                    </div>
+                    <a 
+                        href="/dashboard/organizacion/planes" 
+                        className={cn(
+                            "shrink-0 px-6 py-2 text-white font-black uppercase text-[10px] tracking-widest rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95",
+                            billingUrgent ? "bg-red-500 shadow-red-500/20" : "bg-amber-500 shadow-amber-500/20"
+                        )}
+                    >
+                        {billingUrgent ? "Configurar Pago" : "Mejorar Plan"}
+                    </a>
+                </div>
+            )}
 
             <DashboardTabsUI
                 stats={{
@@ -132,6 +184,7 @@ export default async function DashboardPage() {
                         {/* Bento Grid Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-6">
                             <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-primary/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-primary/10 hover:border-primary/20 transition-colors group overflow-hidden relative">
+                                <div id="tour-today-summary" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="h-14 w-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     <CalendarIcon className="h-6 w-6" />
@@ -142,7 +195,7 @@ export default async function DashboardPage() {
                                 </div>
                             </div>
 
-                            <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tr from-blue-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-blue-500/10 hover:border-blue-500/20 transition-colors group overflow-hidden relative">
+                            <div id="tour-stat-total" className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tr from-blue-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-blue-500/10 hover:border-blue-500/20 transition-colors group overflow-hidden relative">
                                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full -ml-16 -mb-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="h-14 w-14 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
                                     <CheckCircle2 className="h-6 w-6" />
@@ -173,7 +226,7 @@ export default async function DashboardPage() {
                                 {/* Hoy */}
                                 <section className="space-y-8 relative">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
-                                        <div className="space-y-1">
+                                        <div id="tour-agenda-today" className="space-y-1">
                                             <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
                                                 <div className="h-8 w-1.5 bg-primary rounded-full" />
                                                 Agenda de Hoy
@@ -264,6 +317,7 @@ export default async function DashboardPage() {
                     </div>
                 }
             />
+            <DashboardTour />
         </div>
     );
 }

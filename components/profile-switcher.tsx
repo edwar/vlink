@@ -66,7 +66,24 @@ export function ProfileSwitcher() {
         )
     }
 
-    if (organizations.length === 0) return null
+    if (organizations.length === 0) {
+        return (
+            <div className="py-4 bg-muted/20">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">
+                    <Building2 className="h-3 w-3" />
+                    Viendo Agenda De:
+                </p>
+                <div className="flex items-center gap-2 h-12 bg-background border-2 border-primary/5 rounded-xl px-2 shadow-sm">
+                    <UserAvatar
+                        image={activeProfile?.image}
+                        name={activeProfile?.displayName || "Mi Agenda"}
+                        className="h-8 w-8 rounded-lg shrink-0"
+                    />
+                    <span className="truncate font-bold text-sm">Mi Agenda Personal</span>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="py-4 bg-muted/20">

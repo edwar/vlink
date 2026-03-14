@@ -44,7 +44,53 @@ export function PlanBadge() {
         )
     }
 
-    if (!org) return null
+    if (!org) {
+        return (
+            <Link
+                href="/dashboard/organizacion/planes"
+                className="plan-badge-shiny group relative flex items-center gap-3 px-3 py-3 rounded-2xl bg-amber-500/20 border border-border/30 hover:border-amber-500/20 hover:bg-amber-500/10 transition-all duration-300 overflow-hidden"
+            >
+                {/* Shiny sweep overlay */}
+                <div className="pointer-events-none absolute inset-0 plan-badge-shine" aria-hidden="true" />
+
+                <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-amber-500 shrink-0 transition-transform group-hover:scale-110">
+                    <CrownIcon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                    <p className="text-[10px] text-amber-500 font-black uppercase tracking-widest leading-none mb-1">
+                        Upgrade
+                    </p>
+                    <p className="text-sm text-amber-500 font-bold leading-tight">
+                        Mejorar Plan
+                    </p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-amber-500/50 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all shrink-0 relative z-10" />
+
+                <style>{`
+                @keyframes plan-badge-shiny {
+                    0% { transform: translateX(-120%) skewX(-12deg); opacity: 0; }
+                    5% { opacity: 1; }
+                    20% { transform: translateX(320%) skewX(-12deg); opacity: 1; }
+                    25% { opacity: 0; }
+                    100% { opacity: 0; transform: translateX(320%) skewX(-12deg); }
+                }
+                .plan-badge-shine {
+                    background: linear-gradient(
+                        90deg,
+                        transparent 0%,
+                        color-mix(in srgb, currentColor 8%, transparent) 25%,
+                        color-mix(in srgb, currentColor 20%, transparent) 50%,
+                        color-mix(in srgb, currentColor 8%, transparent) 75%,
+                        transparent 100%
+                    );
+                    color: #f59e0b;
+                    width: 30%;
+                    animation: plan-badge-shiny 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                }
+            `}</style>
+            </Link>
+        )
+    }
 
     const plan = org.subscriptionPlan || "BASIC"
     const label = PLAN_LABELS[plan] || plan
@@ -68,7 +114,7 @@ export function PlanBadge() {
                     {label}
                 </p>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all shrink-0 relative z-10" />
+            <ChevronRight className="h-4 w-4 text-amber-500/50 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all shrink-0 relative z-10" />
 
             <style>{`
                 @keyframes plan-badge-shiny {

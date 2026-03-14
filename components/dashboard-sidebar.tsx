@@ -37,7 +37,7 @@ export function DashboardSidebar() {
     return (
         <div className="flex h-full flex-col gap-y-6 overflow-y-auto border-r border-primary/5 px-6 pb-6">
             <div className="flex h-20 shrink-0 items-center justify-between">
-                <div className="flex items-center gap-2 group cursor-pointer">
+                <div id="tour-logo" className="flex items-center gap-2 group cursor-pointer">
                     <Logo className="h-8 w-8 text-primary" />
                     <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                 </div>
@@ -48,7 +48,7 @@ export function DashboardSidebar() {
 
             <PlanBadge />
 
-            <nav className="flex flex-1 flex-col mt-4">
+            <nav id="tour-nav" className="flex flex-1 flex-col mt-4">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
                         <ul role="list" className="space-y-1.5">
