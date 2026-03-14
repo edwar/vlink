@@ -25,7 +25,7 @@ export default async function AdminUsers() {
                     />
                 ) : (
                     users.map((user) => (
-                        <Card key={user.id} className="border-none shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-shadow bg-card overflow-hidden group">
+                        <Card key={user.id} className="border border-border/40 shadow-none bg-card rounded-2xl overflow-hidden group hover:border-primary/30 transition-colors">
                             <CardContent className="p-6">
                                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                                     <div className="flex items-center gap-5 flex-1 min-w-0">
@@ -71,7 +71,7 @@ export default async function AdminUsers() {
                                             </p>
                                         </div>
 
-                                        <button className="h-12 w-12 bg-muted/40 text-muted-foreground rounded-2xl flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all shadow-sm">
+                                        <button className="h-12 w-12 border border-border/30 bg-muted/20 text-muted-foreground rounded-2xl flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-colors">
                                             <ShieldCheck className="h-5 w-5" />
                                         </button>
                                     </div>

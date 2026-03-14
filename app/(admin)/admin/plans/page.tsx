@@ -28,7 +28,7 @@ export default async function AdminPlans() {
                     </div>
                 ) : (
                     plansInfo.map((p) => (
-                        <Card key={p.id} className="border-none shadow-xl shadow-primary/5 bg-card flex flex-col pt-4">
+                        <Card key={p.id} className="border border-border/40 shadow-none bg-card rounded-3xl overflow-hidden flex flex-col pt-4">
                             <CardHeader className="text-center pb-2">
                                 <div className={`h-16 w-16 mx-auto rounded-3xl flex items-center justify-center mb-4 ${p.id === 'FREE' ? 'bg-zinc-100 text-zinc-500' :
                                     p.id === 'TEAM' ? 'bg-blue-100 text-blue-500' : 'bg-primary/10 text-primary'

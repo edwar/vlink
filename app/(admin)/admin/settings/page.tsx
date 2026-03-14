@@ -17,7 +17,7 @@ export default async function AdminSettings() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Modo Mantenimiento */}
-                <Card className="border-none shadow-xl shadow-primary/5 bg-card">
+                <Card className="border border-border/40 shadow-none bg-card rounded-2xl">
                     <CardHeader className="p-6">
                         <div className="flex items-center gap-4">
                             <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
@@ -56,7 +56,7 @@ export default async function AdminSettings() {
                 </Card>
 
                 {/* Comunicaciones Globales (Banners) */}
-                <Card className="border-none shadow-xl shadow-primary/5 bg-card">
+                <Card className="border border-border/40 shadow-none bg-card rounded-2xl">
                     <CardHeader className="p-6">
                         <div className="flex items-center gap-4">
                             <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500">
