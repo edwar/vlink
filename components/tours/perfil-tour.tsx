@@ -3,7 +3,6 @@
 import { PageTour } from "@/components/page-tour"
 
 export function PerfilTour() {
-    const tourVersion = "2026-03-14-v5" // Update this to trigger the tour again for testing
     const steps = [
         {
             title: "Tu Perfil Profesional",
@@ -45,7 +44,7 @@ export function PerfilTour() {
     return (
         <PageTour
             pageKey="perfil"
-            version="2024-03-14-v1"
+            version="2026-03-14T17:46:00Z"
             steps={steps}
         />
     )

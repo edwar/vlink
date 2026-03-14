@@ -44,7 +44,7 @@ export function OrganizacionTour() {
     return (
         <PageTour
             pageKey="organizacion"
-            version="2024-03-14-v1"
+            version="2026-03-14T17:46:00Z"
             steps={steps}
         />
     )
