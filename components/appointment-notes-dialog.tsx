@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { updateAppointmentNotesAction } from "@/app/actions/appointment-notes"
 import { sileo } from "sileo"
+import { Textarea } from "./ui/textarea"
 
 interface AppointmentNotesDialogProps {
     apptId: string
@@ -42,21 +43,17 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <button
-                    className={`h-12 w-12 rounded-2xl flex items-center justify-center transition-all shrink-0 border 
-                        ${initialNotes
-                            ? "bg-amber-500/10 text-amber-600 border-amber-500/20 hover:bg-amber-500 hover:text-white"
-                            : "bg-muted text-muted-foreground border-border hover:bg-amber-500/10 hover:text-amber-600 hover:border-amber-500/20"
-                        }`}
+                <Button
+                    className="h-12 w-12 rounded-2xl flex items-center justify-center transition-all shrink-0 border bg-amber-500/5 text-amber-600 border-amber-500/20 hover:bg-amber-500 hover:text-white"
                     title="Notas internas"
                 >
                     <StickyNote className="h-4 w-4" />
-                </button>
+                </Button>
             </DialogTrigger>
 
-            <DialogContent className="rounded-[2.5rem] max-w-md">
+            <DialogContent className="rounded-lg max-w-md">
                 <DialogHeader className="pt-4">
-                    <div className="h-16 w-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4 mx-auto">
+                    <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                         <StickyNote className="h-8 w-8" />
                     </div>
                     <DialogTitle className="text-2xl font-display font-black tracking-tight text-center">
@@ -68,7 +65,7 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
                 </DialogHeader>
 
                 <div className="space-y-4 pb-2">
-                    <textarea
+                    <Textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Escribe detalles importantes del cliente, preferencias, historial..."
@@ -78,7 +75,7 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
                     <Button
                         onClick={handleSave}
                         disabled={saving}
-                        className="w-full h-12 rounded-2xl font-bold text-sm bg-amber-500 hover:bg-amber-600 shadow-lg shadow-amber-500/20 text-white"
+                        className="w-full h-12 rounded-2xl font-bold text-sm bg-primary hover:bg-primary/80 shadow-lg shadow-primary/20 text-primary-foreground"
                     >
                         {saving ? (
                             <span className="flex items-center gap-2">

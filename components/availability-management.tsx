@@ -369,7 +369,7 @@ export function AvailabilityManagement() {
                     </div>
                     <Button
                         onClick={() => setShowBlockModal(true)}
-                        className="w-full md:w-auto px-8 rounded-full font-black active:scale-95 text-[11px] uppercase tracking-widest border border-border/40 hover:bg-muted/10 transition-all shadow-none"
+                        className="w-full md:w-auto px-8 rounded-full font-black active:scale-95 text-[11px] uppercase tracking-widest border border-border/40 hover:bg-primary/90 transition-all shadow-none"
                     >
                         <Plus className="h-5 w-5 mr-2" />
                         Añadir Bloqueo Especial
@@ -414,7 +414,7 @@ export function AvailabilityManagement() {
             </section>
 
             <Dialog open={showBlockModal} onOpenChange={setShowBlockModal}>
-                <DialogContent className="bg-primary-foreground border-2 border-border sm:max-w-md rounded-[2.5rem] p-8 overflow-hidden">
+                <DialogContent className="bg-muted border-2 border-border sm:max-w-md rounded-lg p-8 overflow-hidden">
                     <DialogHeader className="mb-6">
                         <DialogTitle className="text-3xl font-black font-display tracking-tighter">Nuevo Bloqueo</DialogTitle>
                         <p className="text-muted-foreground font-medium">Define una fecha y hora específica para tu descanso.</p>

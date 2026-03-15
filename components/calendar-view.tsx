@@ -530,8 +530,8 @@ export function CalendarView() {
             </div>
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-4xl">
-                    <div className="bg-primary/5 border-b border-border/50 p-6">
+                <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-lg">
+                    <div className="border-b border-border/50 p-6">
                         <DialogHeader>
                             <DialogTitle className="text-xl font-display font-bold">
                                 Detalles de la Cita

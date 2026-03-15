@@ -129,16 +129,16 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
 
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
-                        <button
+                        <Button
                             className="h-12 w-12 bg-red-500/5 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
                             title="Cancelar cita"
                         >
                             <XCircle className="h-5 w-5" />
-                        </button>
+                        </Button>
                     </DialogTrigger>
-                    <DialogContent className="rounded-[2.5rem]">
+                    <DialogContent className="rounded-lg max-w-md">
                         <DialogHeader className="pt-4">
-                            <div className="h-16 w-16 bg-red-100 rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto sm:mx-0">
+                            <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto">
                                 <AlertTriangle className="h-8 w-8" />
                             </div>
                             <DialogTitle className="text-2xl font-display font-black tracking-tight text-center sm:text-left">
@@ -152,7 +152,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                             <Button
                                 variant="outline"
                                 onClick={() => setIsOpen(false)}
-                                className="flex-1 rounded-full border-border/50 font-bold h-12"
+                                className="flex-1 rounded-2xl border-border/50 font-bold h-12"
                                 disabled={isPending}
                             >
                                 Mantener cita
@@ -160,7 +160,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                             <Button
                                 variant="destructive"
                                 onClick={handleCancel}
-                                className="flex-1 rounded-full font-bold h-12 shadow-[none]"
+                                className="flex-1 rounded-2xl font-bold h-12 shadow-[none]"
                                 disabled={isPending}
                             >
                                 {isPending ? "Cancelando..." : "Sí, cancelar cita"}
