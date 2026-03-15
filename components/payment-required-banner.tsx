@@ -50,7 +50,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className={`relative px-4 py-3 md:px-5 md:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 border-b ${isUrgent
+                className={`relative px-4 py-3 mt-16 lg:mt-0 md:px-5 md:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 border-b ${isUrgent
                     ? "bg-destructive/10 border-destructive/20"
                     : "bg-blue-500/5 border-blue-500/10"
                     }`}
