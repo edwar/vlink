@@ -232,7 +232,7 @@ export function ConfigurationSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Services (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-10">
                             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
@@ -249,7 +249,7 @@ export function ConfigurationSettings() {
                                     <Button
                                         onClick={() => setShowNewForm(true)}
                                         id="tour-new-service"
-                                        className="shrink-0 h-12 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
+                                        className="shrink-0 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
                                     >
                                         <Plus className="h-5 w-5 mr-2" />
                                         Nuevo Servicio
@@ -373,7 +373,7 @@ export function ConfigurationSettings() {
                                                 !service.isActive
                                                     ? "bg-muted/10 border-border/40 opacity-60 grayscale"
                                                     : "bg-card border-border/40 hover:border-border/80 hover:shadow-sm",
-                                                editingId === service.id && "bg-linear-to-br from-primary/5 to-transparent border-primary/20 shadow-sm"
+                                                editingId === service.id && "bg-linear-to-br from-primary/5 via-transparent to-transparent border-primary/20 shadow-sm"
                                             )}
                                         >
                                             <div className="relative z-10">
@@ -541,7 +541,7 @@ export function ConfigurationSettings() {
 
                 {/* Column 2: Commercial Name (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-10">
-                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-12 relative overflow-hidden">
+                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-12 relative overflow-hidden">
                         <div className="relative z-10 space-y-12">
                             <div className="space-y-6">
                                 <div className="space-y-2">
@@ -602,7 +602,7 @@ export function ConfigurationSettings() {
                                         onClick={handleSaveConfig}
                                         disabled={savingConfig}
                                         id="tour-save-config"
-                                        className="w-full h-12 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
+                                        className="w-full rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
                                     >
                                         {savingConfig ? (
                                             <Loader2 className="h-6 w-6 animate-spin mr-3" />

@@ -17,7 +17,7 @@ export default async function AdminSettings() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Modo Mantenimiento */}
-                <Card className="border border-border/40 shadow-none bg-card rounded-2xl">
+                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-2xl">
                     <CardHeader className="p-6">
                         <div className="flex items-center gap-4">
                             <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
@@ -43,7 +43,7 @@ export default async function AdminSettings() {
                             }}>
                                 <Button
                                     variant={config.maintenanceMode ? "default" : "destructive"}
-                                    className="rounded-xl font-black uppercase tracking-widest text-[10px] h-10 px-6"
+                                    className="rounded-xl font-black uppercase tracking-widest text-[10px] px-6"
                                 >
                                     {config.maintenanceMode ? 'Desactivar' : 'Activar'}
                                 </Button>
@@ -56,7 +56,7 @@ export default async function AdminSettings() {
                 </Card>
 
                 {/* Comunicaciones Globales (Banners) */}
-                <Card className="border border-border/40 shadow-none bg-card rounded-2xl">
+                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-2xl">
                     <CardHeader className="p-6">
                         <div className="flex items-center gap-4">
                             <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500">
@@ -112,8 +112,8 @@ export default async function AdminSettings() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="pt-6">
-                                    <Button className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 flex items-center gap-2">
+                                <div className="pt-4">
+                                    <Button className="font-black uppercase tracking-widest text-[10px] px-8 flex items-center gap-2">
                                         <Save className="h-4 w-4" /> Guardar
                                     </Button>
                                 </div>

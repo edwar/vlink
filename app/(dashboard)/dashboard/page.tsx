@@ -183,7 +183,7 @@ export default async function DashboardPage() {
                     <div className="space-y-16">
                         {/* Bento Grid Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-6">
-                            <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-primary/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-primary/10 hover:border-primary/20 transition-colors group overflow-hidden relative">
+                            <div className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-primary/5 to-transparent border border-border/10 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-primary/10 hover:border-primary/15 transition-colors group overflow-hidden relative">
                                 <div id="tour-today-summary" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="h-14 w-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -195,8 +195,8 @@ export default async function DashboardPage() {
                                 </div>
                             </div>
 
-                            <div id="tour-stat-total" className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tr from-blue-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-blue-500/10 hover:border-blue-500/20 transition-colors group overflow-hidden relative">
-                                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full -ml-16 -mb-16 group-hover:scale-150 transition-transform duration-700" />
+                            <div id="tour-stat-total" className="md:col-span-3 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-blue-500/5 to-transparent border border-border/10 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-blue-500/10 hover:border-blue-500/15 transition-colors group overflow-hidden relative">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="h-14 w-14 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
                                     <CheckCircle2 className="h-6 w-6" />
                                 </div>
@@ -206,8 +206,8 @@ export default async function DashboardPage() {
                                 </div>
                             </div>
 
-                            <div className="md:col-span-6 xl:col-span-4 p-6 sm:p-8 bg-linear-to-tl from-amber-500/10 to-transparent border border-dashed border-border/60 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-amber-500/10 hover:border-amber-500/20 transition-colors group overflow-hidden relative">
-                                <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-10 -mb-10 group-hover:scale-150 transition-transform duration-700" />
+                            <div className="md:col-span-6 xl:col-span-4 p-6 sm:p-8 bg-linear-to-bl from-amber-500/5 to-transparent border border-border/10 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-amber-500/10 hover:border-amber-500/15 transition-colors group overflow-hidden relative">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="h-14 w-14 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
                                     <Clock className="h-6 w-6" />
                                 </div>
@@ -220,7 +220,7 @@ export default async function DashboardPage() {
 
                         {/* Today Context with a more distinctive separation */}
                         <div className="relative">
-                            <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent h-64 -mx-10 blur-3xl opacity-20 pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-br from-primary/30 via-transparent to-transparent h-64 -mx-10 blur-3xl opacity-20 pointer-events-none" />
 
                             <div className="space-y-12">
                                 {/* Hoy */}

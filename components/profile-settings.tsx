@@ -159,7 +159,7 @@ export function ProfileSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Column 1: Profile Info (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section className="bg-linear-to-br from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-2">
                             <div className="flex items-center gap-3">
@@ -224,35 +224,35 @@ export function ProfileSettings() {
                                         onClick={handleSave}
                                         disabled={saving}
                                         className={cn(
-                                            "w-fit h-14 px-6 rounded-2xl font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
-                                        success
-                                            ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
-                                            : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
-                                    )}
-                                >
-                                    <div className="flex items-center gap-4">
-                                        {saving ? (
-                                            <Loader2 className="h-7 w-7 animate-spin" />
-                                        ) : success ? (
-                                            <Check className="h-7 w-7 animate-in zoom-in duration-500" />
-                                        ) : (
-                                            <Save className="h-7 w-7 group-hover/btn:rotate-12 transition-transform" />
+                                            "w-fit px-6 rounded-2xl font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
+                                            success
+                                                ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
+                                                : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
                                         )}
-                                        <span className="uppercase tracking-widest text-sm">
-                                            {saving ? "Procesando..." : success ? "Éxito total" : "Guardar perfil"}
-                                        </span>
-                                    </div>
-                                </Button>
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            {saving ? (
+                                                <Loader2 className="h-7 w-7 animate-spin" />
+                                            ) : success ? (
+                                                <Check className="h-7 w-7 animate-in zoom-in duration-500" />
+                                            ) : (
+                                                <Save className="h-7 w-7 group-hover/btn:rotate-12 transition-transform" />
+                                            )}
+                                            <span className="uppercase tracking-widest text-sm">
+                                                {saving ? "Procesando..." : success ? "Éxito total" : "Guardar perfil"}
+                                            </span>
+                                        </div>
+                                    </Button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
                 </div>
 
                 {/* Column 2: Link and Google (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-6 xl:space-y-16">
                     {/* Section: Public Link */}
-                    <section id="tour-profile-url" className="relative bg-linear-to-b from-primary/5 to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8 h-full">
+                    <section id="tour-profile-url" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8 h-full">
                         <div id="tour-profile-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
                             <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Enlace de Agenda</h3>

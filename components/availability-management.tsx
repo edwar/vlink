@@ -223,7 +223,7 @@ export function AvailabilityManagement() {
                             <div
                                 key={day.id}
                                 className={cn(
-                                    "bg-linear-to-br from-primary/5 to-transparent group relative flex flex-col xl:flex-row xl:items-center justify-between w-full px-2 py-6 sm:py-7 rounded-4xl transition-all duration-300 gap-6 xl:gap-8 overflow-hidden",
+                                    "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative flex flex-col xl:flex-row xl:items-center justify-between w-full px-2 py-6 sm:py-7 rounded-4xl transition-all duration-300 gap-6 xl:gap-8 overflow-hidden",
                                     active
                                         ? "border border-border/40 shadow-none"
                                         : "border border-dashed border-border/30 opacity-60 hover:opacity-100"

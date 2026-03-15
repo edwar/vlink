@@ -35,7 +35,7 @@ function ProfileCard({ profile }: { profile: OrgProfile }) {
     const cardContent = (
         <>
             {/* Glow on hover */}
-            <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
             {/* Avatar */}
             <div className="relative mb-5">

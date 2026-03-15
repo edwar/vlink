@@ -28,7 +28,7 @@ export default async function AdminPlans() {
                     </div>
                 ) : (
                     plansInfo.map((p) => (
-                        <Card key={p.id} className="border border-border/40 shadow-none bg-card rounded-3xl overflow-hidden flex flex-col pt-4">
+                        <Card key={p.id} className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-3xl overflow-hidden flex flex-col pt-4">
                             <CardHeader className="text-center pb-2">
                                 <div className={`h-16 w-16 mx-auto rounded-3xl flex items-center justify-center mb-4 ${p.id === 'BASIC' ? 'bg-zinc-100 text-zinc-500' :
                                     p.id === 'TEAM' ? 'bg-blue-100 text-blue-500' : 'bg-primary/10 text-primary'
@@ -81,7 +81,7 @@ export default async function AdminPlans() {
                                     <PlanFeaturesEditor initialFeatures={p.features} />
 
                                     <div className="pt-6 border-t border-border/50">
-                                        <Button variant="vlink" className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">
+                                        <Button variant="vlink" className="w-full rounded-xl font-black uppercase tracking-widest text-xs flex items-center gap-2">
                                             <Save className="h-4 w-4" /> Guardar Plan
                                         </Button>
                                     </div>
