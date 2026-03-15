@@ -25,13 +25,13 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-1000">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/50 rounded-full border border-primary/10 text-xs font-bold uppercase tracking-widest text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Novedad: Soporte para Organizaciones
+            Potencia tu negocio con Organizaciones
           </div>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter leading-[0.9]">
-            Agendamiento <span className="text-primary italic">profesional</span>, para equipos.
+            Agendamiento <span className="text-primary italic">profesional</span> para individuos y equipos.
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Conecta tu Google Calendar, gestiona múltiples agendas y permite que tus clientes reserven en segundos con una experiencia premium.
+            Automatiza tus citas, coordina a tu equipo y ofrece una experiencia de reserva premium en segundos.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <AuthCTA
@@ -51,23 +51,23 @@ export default function LandingPage() {
           {[
             {
               icon: <Users className="h-6 w-6" />,
-              title: "Gestión de Equipos",
-              desc: "Crea organizaciones y asigna roles. Managers pueden coordinar múltiples agendas desde un solo lugar."
+              title: "Organizaciones Escalables",
+              desc: "Centraliza tu operación. Coordina múltiples profesionales y agendas desde un solo centro de control intuitivo."
             },
             {
               icon: <Calendar className="h-6 w-6" />,
-              title: "Agenda Inteligente",
-              desc: "Sincronización total con Google Calendar. Bloqueos recurrentes y preventivos para evitar empalmes."
+              title: "Control Total del Tiempo",
+              desc: "Sincronización bidireccional con Google Calendar. Define bloqueos especiales y horarios recurrentes con precisión."
             },
             {
               icon: <Briefcase className="h-6 w-6" />,
               title: "Catálogo de Servicios",
-              desc: "Define múltiples servicios con duraciones y precios personalizados. Tus clientes eligen lo que necesitan."
+              desc: "Ofrece un menú claro de tus servicios con precios y duraciones exactas. Facilita la decisión de reserva para tus clientes."
             }
           ].map((feature) => (
             <div
               key={feature.title}
-              className="p-8 bg-card border border-primary/5 rounded-[32px] space-y-6 hover:shadow-none transition-all hover:-translate-y-2 group"
+              className="p-8 bg-linear-to-br from-primary/6 to-transparent rounded-[32px] space-y-6 hover:shadow-none transition-all hover:-translate-y-2 group"
             >
               <div className="h-14 w-14 bg-accent rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 {feature.icon}
@@ -81,17 +81,17 @@ export default function LandingPage() {
 
       {/* Value Proposition */}
       <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="bg-card/50 border border-primary/10 rounded-[48px] p-8 md:p-16 grid md:grid-cols-2 gap-16 items-center">
+        <div className="bg-linear-to-br from-primary/5 via-transparent to-transparent rounded-[48px] p-8 md:p-16 grid md:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter leading-tight">
               Diseñado para el <span className="text-primary">flujo de trabajo</span> moderno.
             </h2>
             <div className="space-y-6">
               {[
-                { title: "Mobile First Extremo", desc: "Tus clientes pueden agendar desde cualquier lugar con una interfaz de tipo nativa." },
-                { title: "Privacidad Delegada", desc: "Los profesionales mantienen el control de su Google Calendar personal." },
-                { title: "Captura Inteligente", desc: "Formateo automático de WhatsApp y validación de datos para evitar errores en las citas." },
-                { title: "Link Único Premium", desc: "Tu propia URL vlink.cognilab.dev/nombre para compartir en redes y perfiles." }
+                { title: "Experiencia Mobile Fluida", desc: "Tus clientes pueden agendar desde cualquier lugar con una interfaz optimizada y rápida." },
+                { title: "Privacidad Garantizada", desc: "Los profesionales mantienen el control total de sus eventos personales en Google Calendar." },
+                { title: "Marketing Directo & QR", desc: "Descarga códigos QR personalizados y comparte tu enlace profesional en redes sociales al instante." },
+                { title: "Dashboards & Estadísticas", desc: "Visualiza tus ingresos, citas completadas y rendimiento del equipo con datos en tiempo real." }
               ].map((item) => (
                 <div key={item.title} className="flex gap-4">
                   <div className="mt-1 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -105,7 +105,7 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-          <div className="relative aspect-square bg-accent/20 rounded-3xl overflow-hidden border border-primary/5 group">
+          <div className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent aspect-square rounded-3xl overflow-hidden group">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="space-y-4 text-center p-8">
                 <Activity className="h-12 w-12 text-primary mx-auto opacity-50 group-hover:scale-110 transition-transform duration-500" />
@@ -113,9 +113,6 @@ export default function LandingPage() {
                 <p className="text-muted-foreground font-medium">Monitorea tus citas, ingresos y próximos clientes en tiempo real.</p>
               </div>
             </div>
-            {/* Decorative Elements */}
-            <div className="absolute top-4 right-4 h-24 w-24 bg-primary/10 rounded-2xl blur-2xl" />
-            <div className="absolute bottom-4 left-4 h-32 w-32 bg-accent/30 rounded-full blur-3xl opacity-50" />
           </div>
         </div>
       </section>
@@ -129,9 +126,9 @@ export default function LandingPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-12 text-center">
             {[
-              { step: "01", title: "Conecta", desc: "Sincroniza Google Calendar y configura tu organización." },
-              { step: "02", title: "Organiza", desc: "Agrega servicios, precios y define tu disponibilidad." },
-              { step: "03", title: "Comparte", desc: "Envía el link y recibe citas sincronizadas al instante." }
+              { step: "01", title: "Configura", desc: "Sincroniza tus calendarios y personaliza tu perfil profesional u organización." },
+              { step: "02", title: "Personaliza", desc: "Define tus servicios, establece tus reglas de horario y crea bloqueos especiales." },
+              { step: "03", title: "Automatiza", desc: "Comparte tu enlace, recibe citas confirmadas y deja que VLink gestione el resto." }
             ].map((step) => (
               <div key={step.step} className="space-y-4">
                 <span className="text-7xl font-display font-black text-primary/10 block leading-none">{step.step}</span>
