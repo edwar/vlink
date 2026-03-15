@@ -49,7 +49,7 @@ export function MobileNav() {
     return (
         <div className="lg:hidden">
             {/* Header with Hamburger */}
-            <header className="flex h-16 items-center justify-between border-b bg-card px-4 sticky top-0 z-50">
+            <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-primary/5 flex h-16 items-center justify-between">
                 <Logo className="h-8 w-8 text-primary" />
                 <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                 <button
@@ -63,14 +63,16 @@ export function MobileNav() {
             </header>
 
             {/* Menu Overlay */}
-            {isOpen && (
-                <div
-                    role="presentation"
-                    className="fixed inset-0 z-50 bg-background/30 backdrop-blur-xs animate-in fade-in duration-200"
-                    onClick={() => setIsOpen(false)}
-                    onKeyDown={() => setIsOpen(false)}
-                />
-            )}
+            {
+                isOpen && (
+                    <div
+                        role="presentation"
+                        className="fixed inset-0 z-50 bg-background/30 backdrop-blur-xs animate-in fade-in duration-200"
+                        onClick={() => setIsOpen(false)}
+                        onKeyDown={() => setIsOpen(false)}
+                    />
+                )
+            }
 
             {/* Side Drawer */}
             <div className={cn(
@@ -157,6 +159,6 @@ export function MobileNav() {
                     </ul>
                 </nav>
             </div>
-        </div>
+        </div >
     )
 }

@@ -20,8 +20,8 @@ export default async function DashboardLayout({
             <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
                 {config?.announcementTitle && (
                     <div className={`shrink-0 px-4 py-2 md:px-6 md:py-3 flex items-center justify-between border-b gap-4 animate-in slide-in-from-top duration-500 shadow-none z-50 ${config.announcementType === 'WARNING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-700' :
-                            config.announcementType === 'SUCCESS' ? 'bg-green-500/10 border-green-500/20 text-green-700' :
-                                'bg-blue-500/10 border-blue-500/20 text-blue-700'
+                        config.announcementType === 'SUCCESS' ? 'bg-green-500/10 border-green-500/20 text-green-700' :
+                            'bg-blue-500/10 border-blue-500/20 text-blue-700'
                         }`}>
                         <div className="flex items-center gap-3">
                             <div className="hidden sm:block">
@@ -37,7 +37,7 @@ export default async function DashboardLayout({
                     </div>
                 )}
                 <PaymentStatusWrapper />
-                <main className="flex-1 overflow-y-auto px-4 py-8 md:px-8">
+                <main className="flex-1 overflow-y-auto px-4 py-8 pt-24 lg:pt-0 md:px-8">
                     <div className="max-w-7xl mx-auto w-full">
                         {children}
                     </div>
