@@ -99,7 +99,7 @@ export default async function DashboardPage() {
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
             {/* Header section with profile overview */}
-            <header className="relative p-6 sm:p-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
+            <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
                     <CalendarIcon className="h-24 w-24 text-primary rotate-12" />
                 </div>
@@ -117,12 +117,12 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </header>
-            
+
             {showBillingNotice && (
                 <div className={cn(
                     "p-3 px-4 sm:p-5 rounded-4xl border flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 animate-in fade-in duration-500",
-                    billingUrgent 
-                        ? "bg-red-500/10 border-red-500/20 shadow-none" 
+                    billingUrgent
+                        ? "bg-red-500/10 border-red-500/20 shadow-none"
                         : "bg-amber-500/10 border-amber-500/20 shadow-none"
                 )}>
                     <div className="flex items-center gap-3 text-center sm:text-left">
@@ -143,14 +143,14 @@ export default async function DashboardPage() {
                                 "hidden sm:block text-xs font-medium",
                                 billingUrgent ? "text-red-600/80" : "text-amber-600/80"
                             )}>
-                                {billingUrgent 
-                                    ? "Periodo de gracia terminado. Agrega un pago." 
+                                {billingUrgent
+                                    ? "Periodo de gracia terminado. Agrega un pago."
                                     : "Mejora tu plan para desbloquear funciones avanzadas."}
                             </p>
                         </div>
                     </div>
-                    <a 
-                        href="/dashboard/organizacion/planes" 
+                    <a
+                        href="/dashboard/organizacion/planes"
                         className={cn(
                             "shrink-0 px-4 py-1.5 md:px-6 md:py-2 text-white font-black uppercase text-[9px] md:text-[10px] tracking-widest rounded-lg md:rounded-xl shadow-none transition-all hover:scale-105 active:scale-95",
                             billingUrgent ? "bg-red-500" : "bg-amber-500"

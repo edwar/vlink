@@ -96,7 +96,7 @@ export default async function OrganizacionPage() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
-            <header className="relative p-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
+            <header className="relative py-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
                 </div>
@@ -230,7 +230,7 @@ export default async function OrganizacionPage() {
 
             {/* Row 2: Mi Equipo */}
             <div className="pt-8 mt-8 border-t border-border/50 space-y-6">
-                <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between px-2">
+                <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-primary rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Mi Equipo</h2>
@@ -267,7 +267,7 @@ export default async function OrganizacionPage() {
                             <div
                                 key={member.id}
                                 className={cn(
-                                    "group relative bg-card border border-border/50 rounded-[2.5rem] hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6",
+                                    "bg-linear-to-br from-primary/5 to-transparent group relative bg-card border border-border/50 rounded-[2.5rem] hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6",
                                     !isPlanActive && "opacity-70 grayscale-[0.3] border-red-500/20"
                                 )}
                                 style={{ animationDelay: `${index * 50}ms` }}

@@ -204,10 +204,10 @@ export function AvailabilityManagement() {
     }
 
     return (
-        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <section id="tour-weekly-schedule" className="relative space-y-8">
                 <div id="tour-weekly-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                <div className="px-2">
+                <div className="flex flex-col w-full">
                     <h3 className="text-2xl font-black font-display tracking-tight">Horario Semanal</h3>
                     <p className="text-muted-foreground font-medium mt-1">Define tus horas de trabajo recurrentes para que tus clientes puedan agendar.</p>
                 </div>
@@ -223,10 +223,10 @@ export function AvailabilityManagement() {
                             <div
                                 key={day.id}
                                 className={cn(
-                                    "group relative flex flex-col xl:flex-row xl:items-center justify-between w-full p-6 sm:p-7 rounded-4xl transition-all duration-300 gap-6 xl:gap-8 overflow-hidden",
+                                    "bg-linear-to-br from-primary/5 to-transparent group relative flex flex-col xl:flex-row xl:items-center justify-between w-full px-2 py-6 sm:py-7 rounded-4xl transition-all duration-300 gap-6 xl:gap-8 overflow-hidden",
                                     active
-                                        ? "bg-surface border border-border/40 shadow-none"
-                                        : "bg-muted/5 border border-dashed border-border/30 opacity-60 hover:opacity-100"
+                                        ? "border border-border/40 shadow-none"
+                                        : "border border-dashed border-border/30 opacity-60 hover:opacity-100"
                                 )}
                             >
                                 {/* Day Selector Section */}
@@ -237,8 +237,8 @@ export function AvailabilityManagement() {
                                     >
                                         <div className={cn(
                                             "h-14 w-14 flex items-center justify-center transition-all duration-500 ring-offset-background",
-                                            active 
-                                                ? "bg-primary text-primary-foreground rounded-2xl shadow-none scale-100" 
+                                            active
+                                                ? "bg-primary text-primary-foreground rounded-2xl shadow-none scale-100"
                                                 : "bg-muted/40 text-muted-foreground/30 rounded-2xl grayscale scale-95 hover:scale-100"
                                         )}>
                                             {active ? <CheckCircle2 className="h-7 w-7 animate-in zoom-in duration-300" /> : <Clock className="h-7 w-7 opacity-40" />}
@@ -360,7 +360,7 @@ export function AvailabilityManagement() {
                 </div>
             </section>
 
-            <section id="tour-special-blocks" className="relative space-y-8 pb-32">
+            <section id="tour-special-blocks" className="relative space-y-4">
                 <div id="tour-special-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                 <div className="flex flex-col md:flex-row gap-6 items-center justify-between px-2">
                     <div>
@@ -368,9 +368,8 @@ export function AvailabilityManagement() {
                         <p className="text-muted-foreground font-medium mt-1">Días específicos que no estarás disponible (vacaciones, citas, etc.)</p>
                     </div>
                     <Button
-                        variant="secondary"
                         onClick={() => setShowBlockModal(true)}
-                        className="w-full md:w-auto h-14 px-8 rounded-full font-black active:scale-95 text-[11px] uppercase tracking-widest bg-surface border border-border/40 hover:bg-muted/10 transition-all shadow-none"
+                        className="w-full md:w-auto px-8 rounded-full font-black active:scale-95 text-[11px] uppercase tracking-widest border border-border/40 hover:bg-muted/10 transition-all shadow-none"
                     >
                         <Plus className="h-5 w-5 mr-2" />
                         Añadir Bloqueo Especial
@@ -380,7 +379,7 @@ export function AvailabilityManagement() {
                 {specialBlocks.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {specialBlocks.map((block) => (
-                            <div key={block.id} className="group relative flex items-center justify-between p-6 bg-surface border border-border/40 rounded-4xl animate-in zoom-in-95 duration-300 hover:border-primary/30 transition-all">
+                            <div key={block.id} className="group relative flex items-center justify-between p-6 border border-border/40 rounded-4xl animate-in zoom-in-95 duration-300 hover:border-primary/30 transition-all">
                                 <div className="flex items-center gap-5">
                                     <div className="bg-red-500/10 text-red-500 rounded-2xl h-14 w-14 flex items-center justify-center shrink-0">
                                         <CalendarIcon className="h-6 w-6" />
@@ -404,7 +403,7 @@ export function AvailabilityManagement() {
                         ))}
                     </div>
                 ) : (
-                    <div className="p-12 rounded-[3rem] border border-dashed border-border/40 bg-muted/5">
+                    <div className="py-4 rounded-[3rem] border border-dashed border-border/40 bg-muted/5">
                         <EmptyState
                             title="Sin bloqueos especiales"
                             description="Tus vacaciones y descansos específicos aparecerán en este lugar."
@@ -415,7 +414,7 @@ export function AvailabilityManagement() {
             </section>
 
             <Dialog open={showBlockModal} onOpenChange={setShowBlockModal}>
-                <DialogContent className="sm:max-w-md rounded-[2.5rem] p-8 border-none overflow-hidden">
+                <DialogContent className="bg-primary-foreground border-2 border-border sm:max-w-md rounded-[2.5rem] p-8 overflow-hidden">
                     <DialogHeader className="mb-6">
                         <DialogTitle className="text-3xl font-black font-display tracking-tighter">Nuevo Bloqueo</DialogTitle>
                         <p className="text-muted-foreground font-medium">Define una fecha y hora específica para tu descanso.</p>
@@ -454,18 +453,18 @@ export function AvailabilityManagement() {
                             </div>
                         </div>
                     </div>
-                    <DialogFooter className="mt-10 flex flex-row gap-4">
+                    <DialogFooter className="mt-10 flex md:flex-row-reverse md:flex-row gap-4">
                         <Button
                             variant="ghost"
                             onClick={() => setShowBlockModal(false)}
-                            className="flex-1 rounded-2xl font-black uppercase text-[11px] tracking-widest h-14 border border-border/40"
+                            className="flex-1 rounded-2xl font-black uppercase text-[11px] tracking-widest border border-border/40"
                         >
                             Cancelar
                         </Button>
                         <Button
                             onClick={handleAddBlock}
                             disabled={!newBlock.date || saving}
-                            className="flex-1 rounded-2xl font-black uppercase text-[11px] tracking-widest h-14 shadow-none brightness-110 active:scale-95 transition-all"
+                            className="flex-1 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-none brightness-110 active:scale-95 transition-all"
                         >
                             {saving ? <Loader2 className="animate-spin h-5 w-5" /> : "Registrar Bloqueo"}
                         </Button>
@@ -479,7 +478,7 @@ export function AvailabilityManagement() {
                     disabled={saving}
                     id="tour-save-availability"
                     className={cn(
-                        "pointer-events-auto w-full md:w-auto h-16 px-12 rounded-full font-black text-[11px] uppercase tracking-widest duration-500 hover:scale-[1.05] transition-all active:scale-95 overflow-hidden shadow-none",
+                        "pointer-events-auto w-full md:w-auto px-12 rounded-full font-black text-[11px] uppercase tracking-widest duration-500 hover:scale-[1.05] transition-all active:scale-95 overflow-hidden shadow-none",
                         success
                             ? "bg-secondary text-secondary-foreground"
                             : "bg-primary text-primary-foreground"

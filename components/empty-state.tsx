@@ -17,7 +17,7 @@ export function EmptyState({
     actionHref
 }: EmptyStateProps) {
     return (
-        <div className="p-12 bg-card border-2 border-dashed border-primary/10 rounded-xl text-center space-y-4">
+        <div className="p-4 bg-card border-2 border-dashed border-primary/10 rounded-xl text-center space-y-4">
             <div className="h-32 w-32 bg-primary/5 rounded-full mx-auto flex items-center justify-center text-primary/30">
                 <Icon className="h-24 w-24 text-muted-foreground" />
             </div>
