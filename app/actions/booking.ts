@@ -218,7 +218,7 @@ export async function createAppointment(data: {
         // Acquire an advisory lock scoped to this profile (using a hash of the profileId)
         // This blocks concurrent booking attempts for the same professional
         const lockKey = Math.abs(hashCode(profile.id))
-        await tx.$queryRawUnsafe(`SELECT pg_advisory_xact_lock(${lockKey})`)
+        await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(${lockKey})`)
 
         // Now safely check for collisions — no other transaction can insert while we hold the lock
         const collision = await tx.appointment.findFirst({
