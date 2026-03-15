@@ -103,6 +103,7 @@ export default async function BillingPage({
                     currentPlan={organization.subscriptionPlan}
                     isAdmin={organization.profiles.find(m => m.userId === session.user.id)?.user.role === "ADMIN"}
                     initialPlans={planInfo}
+                    mpSubscriptionId={organization.mpSubscriptionId}
                 />
             </section>
         </div>

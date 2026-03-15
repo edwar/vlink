@@ -5,6 +5,7 @@ import { CheckCircle2, ShieldCheck, Building, User, Info, Loader2 } from "lucide
 import { createCheckoutSession, testSetPlan } from "@/app/actions/billing"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { ExternalLink, CreditCard } from "lucide-react"
 
 type PlanType = "BASIC" | "TEAM" | "CORPORATE"
 
@@ -20,9 +21,10 @@ interface PricingPlansProps {
     currentPlan: PlanType
     isAdmin?: boolean
     initialPlans?: DatabasePlanConfig[]
+    mpSubscriptionId?: string | null
 }
 
-export function PricingPlans({ organizationId, currentPlan, isAdmin = false, initialPlans }: PricingPlansProps) {
+export function PricingPlans({ organizationId, currentPlan, isAdmin = false, initialPlans, mpSubscriptionId }: PricingPlansProps) {
     const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null)
     const [error, setError] = useState<string | null>(null)
 
@@ -226,6 +228,32 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                     Los pagos se procesan de manera local y 100% segura a través de la infraestructura de <strong className="text-foreground">Mercado Pago Colombia</strong>. VLink no almacena la información de tus tarjetas ni métodos de pago directos.
                 </p>
             </div>
+
+            {mpSubscriptionId && (
+                <div className="p-8 bg-linear-to-br from-primary/5 via-background to-background border-2 border-primary/10 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500 shadow-sm">
+                    <div className="flex items-center gap-5">
+                        <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                            <CreditCard className="h-7 w-7" />
+                        </div>
+                        <div className="space-y-1">
+                            <h3 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Gestionar Suscripción</h3>
+                            <p className="text-muted-foreground font-medium text-sm max-w-md">
+                                Tu plan actual se renueva automáticamente. Para cambiar el método de pago o <span className="text-foreground font-bold italic">cancelar la suscripción</span>, debes hacerlo directamente en el portal de Mercado Pago.
+                            </p>
+                        </div>
+                    </div>
+                    <Button
+                        variant="vlink"
+                        size="lg"
+                        className="w-full md:w-auto font-black uppercase tracking-widest text-[10px] px-8"
+                        asChild
+                    >
+                        <a href="https://www.mercadopago.com.co/subscriptions" target="_blank" rel="noopener noreferrer">
+                            Ir a Mercado Pago <ExternalLink className="h-4 w-4 ml-2" />
+                        </a>
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }
