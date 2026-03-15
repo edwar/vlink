@@ -5,6 +5,7 @@ import { format } from "date-fns"
 import { sendAppointmentEmail } from "@/lib/resend"
 import { es } from "date-fns/locale"
 import { randomUUID } from "crypto"
+import { getBogotaDay, getBogotaISO } from "@/lib/utils"
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -104,7 +105,7 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
 
     if (!profile) throw new Error("Perfil no encontrado")
 
-    const dayOfWeek = date.getDay()
+    const dayOfWeek = getBogotaDay(date)
 
     // 1. Obtener disponibilidad recurrente para este día de la semana
     const recurring = profile.availabilities.find(a => a.dayOfWeek === dayOfWeek && !a.isBlocked)
@@ -112,14 +113,14 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
     if (!recurring) return []
 
     // Timezone safe boundaries (Colombia -05:00)
-    const isoDate = date.toISOString().split("T")[0];
+    const isoDate = getBogotaISO(date);
     const dayStart = new Date(`${isoDate}T00:00:00-05:00`);
     const dayEnd = new Date(`${isoDate}T23:59:59-05:00`);
 
     // 2. Obtener bloqueos específicos para esta fecha
     const blocks = profile.availabilities.filter(a => {
         if (!a.isBlocked || !a.specificDate) return false;
-        return a.specificDate.toISOString().split("T")[0] === isoDate;
+        return getBogotaISO(a.specificDate) === isoDate;
     })
 
     // 3. Obtener citas existentes para esta fecha
@@ -203,7 +204,7 @@ export async function createAppointment(data: {
         }
     }
 
-    const isoDate = data.date.toISOString().split("T")[0]; // "2026-02-28"
+    const isoDate = getBogotaISO(data.date); // "2026-02-28"
     const startTime = new Date(`${isoDate}T${data.time.padStart(5, '0')}:00-05:00`);
 
     // Explicit end time using math

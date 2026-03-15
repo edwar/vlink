@@ -6,7 +6,7 @@ import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { Checkbox } from "./ui/checkbox"
 import { getAvailability, updateAvailability } from "@/app/actions/availability"
-import { cn } from "@/lib/utils"
+import { cn, getBogotaISO } from "@/lib/utils"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { sileo } from "sileo"
@@ -146,8 +146,9 @@ export function AvailabilityManagement() {
         setSaving(true)
         try {
             const { addSpecialBlock } = await import("@/app/actions/availability")
+            // Forzamos la fecha a ser medianoche en Colombia para evitar desfases de UTC
             await addSpecialBlock({
-                specificDate: new Date(newBlock.date),
+                specificDate: new Date(`${newBlock.date}T00:00:00-05:00`),
                 startTime: newBlock.start,
                 endTime: newBlock.end,
                 isBlocked: true
@@ -385,7 +386,9 @@ export function AvailabilityManagement() {
                                         <CalendarIcon className="h-6 w-6" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <p className="font-black text-lg tracking-tighter leading-none capitalize">{format(new Date(block.specificDate), "EEEE, d 'de' MMMM", { locale: es })}</p>
+                                        <p className="font-black text-lg tracking-tighter leading-none capitalize">
+                                            {format(new Date(`${getBogotaISO(new Date(block.specificDate))}T12:00:00`), "EEEE, d 'de' MMMM", { locale: es })}
+                                        </p>
                                         <p className="text-[11px] font-black text-muted-foreground/60 uppercase tracking-widest mt-2 bg-muted/20 w-fit px-2 py-0.5 rounded-md">{block.startTime} — {block.endTime}</p>
                                     </div>
                                 </div>
