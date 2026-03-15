@@ -83,10 +83,10 @@ export function MobileNav() {
                     <ThemeToggle />
                 </div>
                 <div className="px-1 border-b">
-                    <ProfileSwitcher />
+                    <ProfileSwitcher onClick={() => setIsOpen(false)} />
                 </div>
                 <div className="px-1 py-3 border-b">
-                    <PlanBadge />
+                    <PlanBadge onClick={() => setIsOpen(false)} />
                 </div>
 
                 <nav className="flex flex-1 flex-col px-6 py-4 overflow-y-auto">

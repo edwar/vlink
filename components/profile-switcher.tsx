@@ -10,7 +10,7 @@ import { UserAvatar } from "./user-avatar"
 import { useProfileStore } from "@/lib/store/profile-store"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export function ProfileSwitcher() {
+export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
     const [organizations, setOrganizations] = useState<any[]>([])
     const [managedProfiles, setManagedProfiles] = useState<Record<string, any[]>>({})
     const [activeProfile, setActiveProfile] = useState<any>(null)
@@ -46,6 +46,7 @@ export function ProfileSwitcher() {
     }, [])
 
     const handleSwitch = (profileId: string) => {
+        onClick?.()
         setViewAsProfileId(profileId)
 
         // Reload to apply changes in server actions/components
@@ -66,7 +67,7 @@ export function ProfileSwitcher() {
         )
     }
 
-    if (organizations.length === 0) {
+    if (organizations.length === 0 || organizations.reduce((acc, org) => acc + (managedProfiles[org.id]?.length || 0), 0) === 0) {
         return (
             <div className="py-4 bg-muted/20">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">

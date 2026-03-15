@@ -12,7 +12,7 @@ const PLAN_LABELS: Record<string, string> = {
     ENTERPRISE: "Corporativo"
 }
 
-export function PlanBadge() {
+export function PlanBadge({ onClick }: { onClick?: () => void }) {
     const [org, setOrg] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
 
@@ -47,6 +47,7 @@ export function PlanBadge() {
     if (!org) {
         return (
             <Link
+                onClick={onClick}
                 href="/dashboard/organizacion/planes"
                 className="plan-badge-shiny group relative flex items-center gap-3 px-3 py-3 rounded-2xl bg-amber-500/20 border border-border/30 hover:border-amber-500/20 hover:bg-amber-500/10 transition-all duration-300 overflow-hidden"
             >
@@ -97,6 +98,7 @@ export function PlanBadge() {
 
     return (
         <Link
+            onClick={onClick}
             href="/dashboard/organizacion/planes"
             className="plan-badge-shiny group relative flex items-center gap-3 px-3 py-3 rounded-2xl bg-amber-500/20 border border-border/30 hover:border-amber-500/20 hover:bg-amber-500/10 transition-all duration-300 overflow-hidden"
         >
