@@ -215,7 +215,7 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
 }
 
 export function CalendarView() {
-    const [view, setView] = useState<ViewType>('week')
+    const [view, setView] = useState<ViewType>('month')
     const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [availability, setAvailability] = useState<any[]>([])
