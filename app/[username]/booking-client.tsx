@@ -272,6 +272,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                 sizes="80px"
                                 onError={() => setImageError(true)}
                                 referrerPolicy="no-referrer"
+                                priority
                                 className="rounded-full object-cover border-2 border-primary/10 shadow-none"
                             />
                         </div>
