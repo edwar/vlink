@@ -94,8 +94,9 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                 <Button
                     className="h-12 w-12 bg-blue-500/5 text-blue-500 rounded-2xl flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all shrink-0 border border-blue-500/10"
                     title="Reprogramar cita"
+                    aria-label="Reprogramar cita"
                 >
-                    <RotateCcw className="h-4 w-4" />
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
                 </Button>
             </DialogTrigger>
 

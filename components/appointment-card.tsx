@@ -132,8 +132,9 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                         <Button
                             className="h-12 w-12 bg-red-500/5 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
                             title="Cancelar cita"
+                            aria-label="Cancelar cita"
                         >
-                            <XCircle className="h-5 w-5" />
+                            <XCircle className="h-5 w-5" aria-hidden="true" />
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="rounded-lg max-w-md">

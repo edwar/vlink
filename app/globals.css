@@ -4,6 +4,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer base {
+  :root {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      scroll-behavior: auto;
+    }
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.1450 0 0);

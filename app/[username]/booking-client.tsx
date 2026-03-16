@@ -257,10 +257,10 @@ export function BookingClient({ params }: { params: { username: string } }) {
                 <ThemeToggle />
             </div>
 
-            <main className={cn(
-                "max-w-md mx-auto px-6 py-12 md:py-20 space-y-10 transition-all duration-700",
+            <main id="main-content" className={cn(
+                "max-w-md mx-auto px-6 py-12 md:py-20 space-y-10 transition-all duration-700 outline-none",
                 profileData.isLocked && "opacity-40 pointer-events-none grayscale-[0.5]"
-            )}>
+            )} tabIndex={-1}>
 
                 <header className="text-center space-y-4">
                     {profileData.image && !imageError ? (
@@ -323,10 +323,11 @@ export function BookingClient({ params }: { params: { username: string } }) {
                 {step === 0 && profileData.services.length > 1 && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <section className="space-y-4">
-                            <div className="flex items-center gap-2 text-primary">
+                            <div className="flex items-center gap-2 text-primary" aria-hidden="true">
                                 <Briefcase className="h-4 w-4" />
                                 <h2 className="text-sm font-bold uppercase tracking-wider">1. Selecciona el Servicio</h2>
                             </div>
+                            <h2 className="sr-only">Selecciona el Servicio</h2>
                             <div className="space-y-3">
                                 {profileData.services.map((service) => (
                                     <button
@@ -417,17 +418,19 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         key={day.toString()}
                                         onClick={() => setSelectedDate(day)}
                                         disabled={profileData.isLocked}
+                                        aria-pressed={isSameDay(day, selectedDate)}
+                                        aria-label={`Seleccionar ${format(day, "EEEE d 'de' MMMM", { locale: es })}`}
                                         className={cn(
-                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl border border-primary/10 transition-all",
+                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl border border-primary/10 transition-all focus-visible:ring-2 focus-visible:ring-primary",
                                             isSameDay(day, selectedDate)
                                                 ? "bg-primary text-primary-foreground border-primary shadow-none scale-105"
                                                 : "bg-card hover:border-accent"
                                         )}
                                     >
-                                        <span className="text-[10px] uppercase font-bold opacity-70">
+                                        <span className="text-[10px] uppercase font-bold opacity-70" aria-hidden="true">
                                             {format(day, "eee", { locale: es })}
                                         </span>
-                                        <span className="text-lg font-bold">
+                                        <span className="text-lg font-bold" aria-hidden="true">
                                             {format(day, "d")}
                                         </span>
                                     </button>
