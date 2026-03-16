@@ -121,49 +121,66 @@ export async function getGlobalStats() {
     }
 }
 
-export async function getAllOrganizations() {
+export async function getAllOrganizations(page: number = 1, limit: number = 10) {
     await ensureAdmin()
+    const skip = (page - 1) * limit
 
-    return await prisma.organization.findMany({
-        where: {
-            members: {
-                none: {
-                    user: {
-                        role: "ADMIN"
+    const where = {
+        members: {
+            none: {
+                user: {
+                    role: "ADMIN" as const
+                }
+            }
+        }
+    }
+
+    const [organizations, total] = await Promise.all([
+        prisma.organization.findMany({
+            where,
+            include: {
+                members: {
+                    include: { user: true }
+                },
+                _count: {
+                    select: {
+                        members: true,
+                        profiles: true
                     }
                 }
-            }
-        },
-        include: {
-            members: {
-                include: { user: true }
             },
-            _count: {
-                select: {
-                    members: true,
-                    profiles: true
-                }
-            }
-        },
-        orderBy: { createdAt: 'desc' }
-    })
+            orderBy: { createdAt: 'desc' },
+            skip,
+            take: limit
+        }),
+        prisma.organization.count({ where })
+    ])
+
+    return { organizations, total, totalPages: Math.ceil(total / limit) }
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(page: number = 1, limit: number = 10) {
     await ensureAdmin()
+    const skip = (page - 1) * limit
+    const where = { role: "USER" as const }
 
-    return await prisma.user.findMany({
-        where: {
-            role: "USER"
-        },
-        include: {
-            profile: true,
-            memberships: {
-                include: { organization: true }
-            }
-        },
-        orderBy: { createdAt: 'desc' }
-    })
+    const [users, total] = await Promise.all([
+        prisma.user.findMany({
+            where,
+            include: {
+                profile: true,
+                memberships: {
+                    include: { organization: true }
+                }
+            },
+            orderBy: { createdAt: 'desc' },
+            skip,
+            take: limit
+        }),
+        prisma.user.count({ where })
+    ])
+
+    return { users, total, totalPages: Math.ceil(total / limit) }
 }
 
 export async function updateUserRole(userId: string, role: "USER" | "ADMIN") {

@@ -13,7 +13,15 @@ import { Title } from "@/components/title"
 import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
 import { DashboardTour } from "@/components/tours/dashboard-tour"
 
-export default async function DashboardPage() {
+import { PaginationControls } from "@/components/pagination-controls"
+
+export default async function DashboardPage(props: {
+    searchParams: Promise<{ page?: string }>
+}) {
+    const searchParams = await props.searchParams
+    const page = Number(searchParams.page) || 1
+    const limit = 5
+    const skip = (page - 1) * limit
     const profile = await getEffectiveProfile()
     const today = new Date()
 
@@ -37,13 +45,19 @@ export default async function DashboardPage() {
 
     const allAppointments = allAppointmentsWithCancelled.filter(a => a.status !== "CANCELLED")
 
+    // Separate today's appointments from upcoming ones
     const todayAppointments = allAppointments.filter(appt =>
         appt.startTime >= startOfDay(today) && appt.startTime <= endOfDay(today)
     )
 
-    const upcomingAppointments = allAppointments.filter(appt =>
-        isAfter(appt.startTime, today) && !todayAppointments.includes(appt)
+    // Paginated upcoming appointments (EXCLUDING today)
+    const upcomingAppointmentsAll = allAppointments.filter(appt =>
+        isAfter(appt.startTime, today) && !todayAppointments.find(t => t.id === appt.id)
     )
+    
+    const totalUpcoming = upcomingAppointmentsAll.length
+    const totalPagesUpcoming = Math.ceil(totalUpcoming / limit)
+    const upcomingAppointments = upcomingAppointmentsAll.slice(skip, skip + limit)
 
     // ANALYTICS DATA GENERATION
     // 1. Weekly Stats (Last 7 days)
@@ -275,10 +289,16 @@ export default async function DashboardPage() {
                                     </div>
 
                                     {upcomingAppointments.length > 0 ? (
-                                        <div className="grid gap-6">
-                                            {upcomingAppointments.map((appt) => (
-                                                <AppointmentCard key={appt.id} appt={appt} showDate />
-                                            ))}
+                                        <div className="space-y-6">
+                                            <div className="grid gap-6">
+                                                {upcomingAppointments.map((appt) => (
+                                                    <AppointmentCard key={appt.id} appt={appt} showDate />
+                                                ))}
+                                            </div>
+                                            <PaginationControls 
+                                                totalPages={totalPagesUpcoming} 
+                                                currentPage={page} 
+                                            />
                                         </div>
                                     ) : (
                                         <EmptyState

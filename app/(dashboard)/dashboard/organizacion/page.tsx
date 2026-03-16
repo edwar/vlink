@@ -22,7 +22,15 @@ import { ChangeMemberRole } from "@/components/change-member-role"
 import { RemoveMember } from "@/components/remove-member"
 import { Button } from "@/components/ui/button"
 
-export default async function OrganizacionPage() {
+import { PaginationControls } from "@/components/pagination-controls"
+
+export default async function OrganizacionPage(props: {
+    searchParams: Promise<{ page?: string }>
+}) {
+    const searchParams = await props.searchParams
+    const page = Number(searchParams.page) || 1
+    const limit = 5
+    const skip = (page - 1) * limit
     const session = await auth.api.getSession({
         headers: await headers()
     })
@@ -55,7 +63,18 @@ export default async function OrganizacionPage() {
     })
     const maxSeats = planConfig?.maxSeats ?? 0;
 
-    // Fetch members of the organization
+    // Fetch members of the organization with pagination
+    const totalMembers = await prisma.member.count({
+        where: {
+            organizationId: organization.id,
+            OR: [
+                { user: { role: { not: "ADMIN" } } },
+                { role: "OWNER" }
+            ]
+        }
+    })
+    const totalPagesMembers = Math.ceil(totalMembers / limit)
+
     const members = await prisma.member.findMany({
         where: {
             organizationId: organization.id,
@@ -74,15 +93,11 @@ export default async function OrganizacionPage() {
         orderBy: [
             { role: 'asc' },
             { createdAt: 'asc' }
-        ]
+        ],
+        skip,
+        take: limit
     })
-    const sortedMembers = [...members].sort((a, b) => {
-        const roleOrder = { "OWNER": 0, "MANAGER": 1, "PROFESSIONAL": 2 };
-        const aVal = roleOrder[a.role as keyof typeof roleOrder] ?? 99;
-        const bVal = roleOrder[b.role as keyof typeof roleOrder] ?? 99;
-        if (aVal !== bVal) return aVal - bVal;
-        return a.createdAt.getTime() - b.createdAt.getTime();
-    });
+    const sortedMembers = members; // Already sorted by database
 
     const currentUserMember = members.find(m => m.userId === session.user.id)
     const currentUserRole = currentUserMember?.role
@@ -262,7 +277,11 @@ export default async function OrganizacionPage() {
                 <div id="tour-team-members" className="relative grid grid-cols-1 gap-6">
                     <div id="tour-team-members-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     {sortedMembers.map((member, index) => {
-                        const isPlanActive = maxSeats === 0 || index < maxSeats;
+                        // For seat calculation, we would ideally need the absolute index across pages,
+                        // but let's stick to simple active display if you're in the list.
+                        // Ideally, we'd check if (skip + index) < maxSeats.
+                        const absoluteIndex = skip + index;
+                        const isPlanActive = maxSeats === 0 || absoluteIndex < maxSeats;
                         return (
                             <div
                                 key={member.id}
@@ -376,6 +395,8 @@ export default async function OrganizacionPage() {
                         );
                     })}
                 </div>
+
+                <PaginationControls totalPages={totalPagesMembers} currentPage={page} />
 
                 {/* Row 3: Zona de Peligro */}
                 <div className="pt-12 border-t border-red-500/10 flex flex-col items-center gap-4">
