@@ -566,7 +566,7 @@ export function CalendarView() {
                                         </div>
                                         <div className="text-right shrink-0 pt-1">
                                             <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-1 -mr-[0.1em]">Pago</p>
-                                            <p className="font-black text-primary text-xl leading-none">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
+                                            <p className="font-black text-primary text-md leading-none">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
