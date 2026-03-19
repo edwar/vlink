@@ -241,9 +241,16 @@ export default async function OrganizacionPage(props: {
                             />
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 px-2 pb-6 mt-8">
+                </div>
+            </div>
+
+            {/* Row 1.5: Cobros y Pagos (Centrado) */}
+            <div className="flex flex-col items-center mt-12 mb-4">
+                <div className="w-full max-w-3xl">
+                    <div className="flex items-center justify-center gap-3 px-2 pb-6">
                         <div className="h-6 w-1 bg-green-500/40 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Pagos & Cobros</h2>
+                        <div className="h-6 w-1 bg-green-500/40 rounded-full" />
                     </div>
                     <div className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
                         <WompiIntegration
