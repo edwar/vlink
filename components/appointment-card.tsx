@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { XCircle, Clock, Briefcase, AlertTriangle } from "lucide-react"
+import { XCircle, Clock, Briefcase, AlertTriangle, CheckCircle2 } from "lucide-react"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import Link from "next/link"
@@ -69,7 +69,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                     {appt.clientName.charAt(0)}
                 </div>
                 <div className="space-y-1.5 flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center flex-wrap gap-2">
                         <h3 className="text-base sm:text-lg font-black tracking-tight leading-none truncate pr-16 md:pr-0">
                             {appt.clientName}
                         </h3>
@@ -78,6 +78,17 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                                 {format(new Date(appt.startTime), "d MMM", { locale: es })}
                             </span>
                         )}
+                        {appt.status === "PAGADA" ? (
+                            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-2 py-0.5 rounded-full border border-green-500/20 ml-2">
+                                <CheckCircle2 className="h-3 w-3" />
+                                Pagada
+                            </span>
+                        ) : appt.status === "PENDING" ? (
+                            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 px-2 py-0.5 rounded-full border border-yellow-500/20 ml-2">
+                                <Clock className="h-3 w-3" />
+                                Pago Pendiente
+                            </span>
+                        ) : null}
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground/80">
                         <div className="flex items-center gap-1.5 font-bold">

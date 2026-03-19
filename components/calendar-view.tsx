@@ -21,7 +21,7 @@ import {
     startOfDay,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3 } from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
 import {
@@ -530,7 +530,7 @@ export function CalendarView() {
             </div>
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-lg">
+                <DialogContent className="sm:max-w-lg p-0 overflow-hidden border-border/50 rounded-lg">
                     <div className="border-b border-border/50 p-6">
                         <DialogHeader>
                             <DialogTitle className="text-xl font-display font-bold">
@@ -549,11 +549,24 @@ export function CalendarView() {
                                     <CalendarIcon className="h-5 w-5" />
                                 </div>
                                 <div className="space-y-1.5 w-full overflow-hidden">
-                                    <div className="flex items-center justify-between gap-4">
-                                        <p className="font-bold text-lg leading-tight truncate">{selectedAppointment.service?.name || "Servicio General"}</p>
-                                        <div className="text-right shrink-0">
-                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Inversión</p>
-                                            <p className="font-black text-primary">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex flex-col gap-2 items-start">
+                                            <p className="font-bold text-lg leading-tight md:truncate max-w-[200px] md:max-w-none">{selectedAppointment.service?.name || "Servicio General"}</p>
+                                            {selectedAppointment.status === "PAGADA" ? (
+                                                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-3 py-1 rounded-full border border-green-500/20">
+                                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                                    Servicio Pagado
+                                                </span>
+                                            ) : selectedAppointment.status === "PENDING" ? (
+                                                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 px-3 py-1 rounded-full border border-yellow-500/20">
+                                                    <Clock className="h-3.5 w-3.5" />
+                                                    Pago Pendiente
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                        <div className="text-right shrink-0 pt-1">
+                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-1">Inversión</p>
+                                            <p className="font-black text-primary text-xl leading-none">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
