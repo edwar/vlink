@@ -21,7 +21,7 @@ import {
     startOfDay,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
 import {
@@ -530,7 +530,7 @@ export function CalendarView() {
             </div>
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="sm:max-w-lg p-0 overflow-hidden border-border/50 rounded-lg">
+                <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-lg">
                     <div className="border-b border-border/50 p-6">
                         <DialogHeader>
                             <DialogTitle className="text-xl font-display font-bold">
@@ -548,7 +548,7 @@ export function CalendarView() {
                                 <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                                     <CalendarIcon className="h-5 w-5" />
                                 </div>
-                                <div className="space-y-1.5 w-full overflow-hidden">
+                                <div className="space-y-1.5 flex-1 min-w-0">
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex flex-col gap-2 items-start">
                                             <p className="font-bold text-lg leading-tight md:truncate max-w-[200px] md:max-w-none">{selectedAppointment.service?.name || "Servicio General"}</p>
@@ -565,7 +565,7 @@ export function CalendarView() {
                                             ) : null}
                                         </div>
                                         <div className="text-right shrink-0 pt-1">
-                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-1">Inversión</p>
+                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-1 -mr-[0.1em]">Pago</p>
                                             <p className="font-black text-primary text-xl leading-none">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
                                         </div>
                                     </div>
