@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, Variants } from "framer-motion"
 import { format, addDays, startOfTomorrow, isSameDay, isValid } from "date-fns"
 import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles, AlertCircle } from "lucide-react"
@@ -258,7 +259,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
             </div>
 
             <main id="main-content" className={cn(
-                "max-w-md mx-auto px-6 py-12 md:py-20 space-y-10 transition-all duration-700 outline-none",
+                "max-w-xl mx-auto px-6 py-12 md:py-20 space-y-10 transition-all duration-700 outline-none",
                 profileData.isLocked && "opacity-40 pointer-events-none grayscale-[0.5]"
             )} tabIndex={-1}>
 
@@ -677,70 +678,154 @@ function SuccessView({ bookingInfo, displayName, serviceName, price }: {
     serviceName?: string,
     price?: number | null
 }) {
+    const itemMotion: Variants = {
+        hidden: { opacity: 0, y: 15 },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    };
+
     return (
-        <div className="text-center space-y-8 animate-in zoom-in-95 duration-500">
-            <div className="h-24 w-24 bg-primary/10 rounded-full mx-auto flex items-center justify-center border-2 border-primary/20">
-                <Check className="h-12 w-12 text-primary" />
+        <div className="text-center space-y-10 py-6 overflow-visible perspective-[1000px]">
+            {/* Checkmark Section */}
+            <div className="relative mx-auto w-28 h-28 flex items-center justify-center">
+                {/* Continuous Pulse Rings */}
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: [0.8, 1.8], opacity: [0, 0.4, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+                    className="absolute inset-0 bg-primary/30 rounded-full"
+                />
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: [0.8, 1.8], opacity: [0, 0.4, 0] }}
+                    transition={{ duration: 2.5, delay: 1.25, repeat: Infinity, ease: "easeOut" }}
+                    className="absolute inset-0 bg-primary/30 rounded-full"
+                />
+
+                {/* Main Checkmark Bubble */}
+                <motion.div
+                    initial={{ scale: 0, opacity: 0, rotate: -45 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 250, damping: 20, delay: 0.1 }}
+                    className="relative z-10 w-full h-full bg-primary/10 rounded-full flex items-center justify-center border-[4px] border-background shadow-xl shadow-primary/20 backdrop-blur-sm"
+                >
+                    <motion.svg
+                        width="56"
+                        height="56"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-primary drop-shadow-md"
+                    >
+                        <motion.path
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ duration: 0.7, delay: 0.4, ease: "easeInOut" }}
+                            d="M20 6 9 17l-5-5"
+                        />
+                    </motion.svg>
+                </motion.div>
             </div>
 
-            <div className="space-y-2">
-                <h2 className="text-3xl font-display font-bold">¡Cita Confirmada!</h2>
-                <p className="text-muted-foreground">Tu espacio con {displayName} ha sido reservado con éxito.</p>
-            </div>
-
-            <div className="bg-card border-2 rounded-3xl p-6 space-y-4 shadow-none">
-                <div className="h-2 w-full bg-linear-to-r from-transparent via-primary/20 to-transparent" />
-                {serviceName && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
-                        <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 bg-accent rounded-lg flex items-center justify-center">
-                                <Briefcase className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Servicio</p>
-                                <p className="font-bold text-lg leading-tight">{serviceName}</p>
-                            </div>
-                        </div>
-                        {price !== undefined && price !== null && (
-                            <div className="sm:text-right pl-14 sm:pl-0">
-                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Inversión</p>
-                                <p className="font-black text-xl text-primary">$ {price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
-                            </div>
-                        )}
-                    </div>
-                )}
-                <div className={cn("flex items-center gap-4 text-left", serviceName && "border-t pt-4")}>
-                    <div className="h-10 w-10 bg-accent rounded-lg flex items-center justify-center">
-                        <CalendarIcon className="h-5 w-5" />
-                    </div>
-                    <div>
-                        <p className="text-xs font-bold uppercase text-muted-foreground tracking-widest">Fecha</p>
-                        <p className="font-bold">{format(bookingInfo.date, "EEEE, d 'de' MMMM", { locale: es })}</p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-4 text-left border-t pt-4">
-                    <div className="h-10 w-10 bg-accent rounded-lg flex items-center justify-center">
-                        <Clock className="h-5 w-5" />
-                    </div>
-                    <div>
-                        <p className="text-xs font-bold uppercase text-muted-foreground tracking-widest">Hora</p>
-                        <p className="font-bold">{bookingInfo.time}</p>
-                    </div>
-                </div>
-            </div>
-
-            <p className="text-xs text-muted-foreground italic px-8">
-                Recibirás los recordatorios en tu correo de Gmail según lo configurado.
-            </p>
-
-            <Button
-                variant="outline"
-                size="lg"
-                onClick={() => window.location.reload()}
-                className="w-full"
+            {/* Title Section */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                className="space-y-3"
             >
-                Agendar otra cita
-            </Button>
+                <h2 className="text-4xl font-display font-black tracking-tighter text-foreground drop-shadow-sm">¡Cita Confirmada!</h2>
+                <p className="text-muted-foreground font-medium text-base">Tu espacio con <span className="text-foreground font-bold">{displayName}</span> ha sido reservado con éxito.</p>
+            </motion.div>
+
+            {/* Ticket Card Section with 3D Flip */}
+            <motion.div
+                initial={{ opacity: 0, rotateX: 45, y: 40, scale: 0.9 }}
+                animate={{ opacity: 1, rotateX: 0, y: 0, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.5, type: "spring", damping: 22, stiffness: 120 }}
+                style={{ transformStyle: "preserve-3d" }}
+            >
+                <div className="bg-card border border-primary/5 rounded-[32px] p-2 flex flex-col shadow-[0_20px_40px_-15px_rgba(var(--primary),0.15)] relative overflow-hidden">
+                    {/* Decorative flares */}
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/5 blur-[50px] rounded-full translate-y-1/2 -translate-x-1/2" />
+
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.8 } }
+                        }}
+                        className="p-6 pb-8 space-y-6 relative z-10 w-full text-left"
+                    >
+                        {serviceName && (
+                            <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full relative">
+                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Servicio</p>
+                                <p className="font-bold text-lg leading-tight md:truncate pr-2">{serviceName}</p>
+                            </motion.div>
+                        )}
+
+                        {price !== undefined && price !== null && (
+                            <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full border-t border-dashed border-border/60 pt-5 relative">
+                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Inversión / Pago</p>
+                                <p className="font-black text-3xl tracking-tight text-primary mt-1">$ {price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
+                            </motion.div>
+                        )}
+
+                        <motion.div variants={itemMotion} className="h-px w-full border-t-[2.5px] border-dashed border-border/70 my-4 relative">
+                            {/* Ticket notches */}
+                            <div className="absolute -left-9 -top-3 w-6 h-6 bg-background rounded-full border-r-[2.5px] border-border/70 shadow-[inset_-2px_0_4px_rgba(0,0,0,0.02)]" />
+                            <div className="absolute -right-9 -top-3 w-6 h-6 bg-background rounded-full border-l-[2.5px] border-border/70 shadow-[inset_2px_0_4px_rgba(0,0,0,0.02)]" />
+                        </motion.div>
+
+                        <motion.div variants={itemMotion} className="flex items-start gap-8 px-1 relative">
+                            <div className="space-y-1 w-full">
+                                <div className="flex items-center gap-2">
+                                    <div className="h-6 w-6 rounded-md bg-primary/10 flex items-center justify-center">
+                                        <CalendarIcon className="h-3 w-3 text-primary" />
+                                    </div>
+                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Fecha</p>
+                                </div>
+                                <p className="font-bold text-[15px] capitalize leading-tight pl-1">{format(bookingInfo.date, "EEEE, d 'de' MMMM", { locale: es })}</p>
+                            </div>
+                            <div className="space-y-1 shrink-0 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Hora</p>
+                                    <div className="h-6 w-6 rounded-md bg-primary/10 flex items-center justify-center">
+                                        <Clock className="h-3 w-3 text-primary" />
+                                    </div>
+                                </div>
+                                <p className="font-bold text-[17px] leading-tight pr-1">{bookingInfo.time}</p>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                </div>
+            </motion.div>
+
+            {/* Footer Section */}
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+                className="space-y-6 pt-4"
+            >
+                <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-widest px-8 max-w-[300px] mx-auto leading-relaxed">
+                    Hemos enviado los detalles a tu correo electrónico.
+                </p>
+
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => window.location.reload()}
+                        className="w-full font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all border-2 rounded-2xl h-14"
+                    >
+                        Agendar otra cita
+                    </Button>
+                </motion.div>
+            </motion.div>
         </div>
     )
 }
