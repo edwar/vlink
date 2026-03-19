@@ -121,3 +121,47 @@ export function validateWompiEventSignature(eventData: any, signature: string, t
     
     return expectedHash === signature;
 }
+
+export async function createWompiSubaccount(data: {
+    name: string;
+    email: string;
+    phone: string;
+    documentType: 'CC' | 'CE' | 'NIT' | 'PP';
+    documentNumber: string;
+    accountType: 'SAVINGS' | 'CHECKING';
+    accountNumber: string;
+    bankCode: string;
+}) {
+    const payload = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        document: {
+            type: data.documentType,
+            number: data.documentNumber
+        },
+        settlement: {
+            type: "BANK_ACCOUNT",
+            account_type: data.accountType,
+            account_number: data.accountNumber,
+            bank_code: data.bankCode
+        }
+    };
+
+    const response = await fetch(`${WOMPI_API_URL}/sub_accounts`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${WOMPI_PRIV}`, // Needs private key
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    if (!response.ok) {
+        console.error("Wompi Subaccount Error:", JSON.stringify(result, null, 2));
+        throw new Error(result.error?.reason || "Failed to create Wompi subaccount");
+    }
+
+    return result.data.id; // Returns the subaccount ID (e.g. "123")
+}

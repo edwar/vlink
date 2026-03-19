@@ -5,8 +5,9 @@ import { updateWompiSubaccount } from "@/app/actions/organization"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, CreditCard, Info, Check, Save } from "lucide-react"
+import { Loader2, CreditCard, Info, Check, Save, Landmark } from "lucide-react"
 import { sileo } from "sileo"
+import { WompiSubaccountForm } from "./wompi-subaccount-form"
 
 interface WompiIntegrationProps {
     organizationId: string
@@ -100,6 +101,17 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                         )}
                     </div>
                 </Button>
+
+                <div className="relative py-4">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-dashed border-border/50" />
+                    </div>
+                    <div className="relative flex justify-center text-[10px] uppercase font-black tracking-widest text-muted-foreground">
+                        <span className="bg-background px-4">O configura una nueva</span>
+                    </div>
+                </div>
+
+                <WompiSubaccountForm organizationId={organizationId} onCreated={(id) => setSubaccountId(id)} />
             </div>
         </div>
     )

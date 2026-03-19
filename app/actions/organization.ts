@@ -5,7 +5,66 @@ import { headers, cookies } from "next/headers"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { randomUUID } from "crypto"
-import { includes } from "better-auth"
+import { createWompiSubaccount } from "@/lib/wompi"
+
+/**
+ * Configures a Wompi subaccount for the organization.
+ * Only allowed if the global Wompi Marketplace feature is enabled by Admin.
+ */
+export async function setupWompiSubaccount(organizationId: string, data: {
+    name: string;
+    email: string;
+    phone: string;
+    documentType: 'CC' | 'CE' | 'NIT' | 'PP';
+    documentNumber: string;
+    accountType: 'SAVINGS' | 'CHECKING';
+    accountNumber: string;
+    bankCode: string;
+}) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) {
+        throw new Error("Unauthorized")
+    }
+
+    // 1. Check if Wompi Marketplace features are enabled by Admin
+    const config = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
+    if (!config?.wompiMarketplaceEnabled) {
+        throw new Error("La creación de subcuentas Wompi está temporalmente deshabilitada por el administrador hasta completar la activación del rol Marketplace.")
+    }
+
+    // 2. Verify user is OWNER of the organization
+    const membership = await prisma.member.findFirst({
+        where: { 
+            userId: session.user.id, 
+            organizationId, 
+            role: "OWNER" 
+        }
+    })
+
+    if (!membership) {
+        throw new Error("Solo el dueño de la organización puede configurar los datos de pago.")
+    }
+
+    // 3. Create subaccount in Wompi
+    try {
+        const subaccountId = await createWompiSubaccount(data);
+
+        // 4. Update organization in DB
+        await prisma.organization.update({
+            where: { id: organizationId },
+            data: { wompiSubaccountId: subaccountId.toString() }
+        })
+
+        revalidatePath("/dashboard/organizacion")
+        return { success: true, subaccountId }
+    } catch (error: any) {
+        console.error("Setup Wompi Error:", error);
+        throw new Error(error.message || "Error al crear la subcuenta en Wompi.")
+    }
+}
 
 /**
  * Creates a new organization and assigns the current user as OWNER
