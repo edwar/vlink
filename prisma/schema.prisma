@@ -7,14 +7,14 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String         @id
   name          String
-  email         String    @unique
+  email         String         @unique
   emailVerified Boolean
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  role          UserRole  @default(USER)
+  role          UserRole       @default(USER)
   accounts      Account[]
   memberships   Member[]
   profile       Profile?
@@ -69,21 +69,21 @@ model Verification {
 }
 
 model Organization {
-  id               String           @id @default(cuid())
-  name             String           @unique
-  slug             String           @unique
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  mpCustomerId     String?          @unique
-  mpSubscriptionId String?          @unique
-  subscriptionPlan SubscriptionPlan @default(BASIC)
-  billingStatus    BillingStatus    @default(ACTIVE)
-  gracePeriodEnd   DateTime?
-  lastPaymentDate  DateTime?
+  id                String           @id @default(cuid())
+  name              String           @unique
+  slug              String           @unique
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  billingStatus     BillingStatus    @default(ACTIVE)
+  gracePeriodEnd    DateTime?
+  lastPaymentDate   DateTime?
+  mpCustomerId      String?          @unique
+  mpSubscriptionId  String?          @unique
+  subscriptionPlan  SubscriptionPlan @default(BASIC)
   wompiSubaccountId String?
-  invitations      Invitation[]
-  members          Member[]
-  profiles         Profile[]
+  invitations       Invitation[]
+  members           Member[]
+  profiles          Profile[]
 
   @@map("organization")
 }
@@ -188,9 +188,9 @@ model Appointment {
   serviceId         String?
   cancelToken       String?   @unique
   notes             String?
-  paymentReference  String?   @unique
   reminder24hSentAt DateTime?
   reminder2hSentAt  DateTime?
+  paymentReference  String?   @unique
   profile           Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   service           Service?  @relation(fields: [serviceId], references: [id])
 
@@ -199,13 +199,13 @@ model Appointment {
 }
 
 model SystemConfig {
-  id                String   @id @default("global")
-  maintenanceMode   Boolean  @default(false)
-  announcementTitle String?
-  announcementBody  String?
-  announcementType  String   @default("INFO")
-  updatedAt         DateTime @updatedAt
-  wompiMarketplaceEnabled Boolean @default(false)
+  id                      String   @id @default("global")
+  maintenanceMode         Boolean  @default(false)
+  announcementTitle       String?
+  announcementBody        String?
+  announcementType        String   @default("INFO")
+  updatedAt               DateTime @updatedAt
+  wompiMarketplaceEnabled Boolean  @default(false)
 
   @@map("system_config")
 }
@@ -228,7 +228,7 @@ model TourProgress {
   userId      String
   pageKey     String
   completedAt DateTime @default(now())
-  tourVersion DateTime // version date of the tour; if a new version is set after completedAt, re-show
+  tourVersion DateTime
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, pageKey])

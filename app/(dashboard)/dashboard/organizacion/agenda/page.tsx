@@ -23,7 +23,7 @@ export default async function ConsolidatedAgendaPage() {
     // Pero permitimos verlo si es dueño para invitar a subir de plan si fuera necesario
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
+        <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 pt-10">
             <Link
                 href="/dashboard/organizacion"
                 className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
