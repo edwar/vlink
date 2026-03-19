@@ -768,3 +768,34 @@ export async function removeMember(organizationId: string, targetUserId: string)
     revalidatePath("/dashboard/organizacion")
     return { success: true, removedName: targetMembership.user.name }
 }
+
+/**
+ * Updates the Wompi subaccount ID for the organization to receive direct payments.
+ */
+export async function updateWompiSubaccount(organizationId: string, subaccountId: string | null) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("No autorizado")
+
+    // Verify caller is OWNER or MANAGER
+    const membership = await prisma.member.findFirst({
+        where: {
+            organizationId,
+            userId: session.user.id,
+            role: { in: ["OWNER", "MANAGER"] }
+        }
+    })
+
+    if (!membership) throw new Error("No tienes permisos para configurar los pagos de la organización")
+
+    await prisma.organization.update({
+        where: { id: organizationId },
+        data: { wompiSubaccountId: subaccountId?.trim() || null }
+    })
+
+    revalidatePath("/dashboard")
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
+}

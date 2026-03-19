@@ -80,6 +80,7 @@ model Organization {
   billingStatus    BillingStatus    @default(ACTIVE)
   gracePeriodEnd   DateTime?
   lastPaymentDate  DateTime?
+  wompiSubaccountId String?
   invitations      Invitation[]
   members          Member[]
   profiles         Profile[]
@@ -187,6 +188,7 @@ model Appointment {
   serviceId         String?
   cancelToken       String?   @unique
   notes             String?
+  paymentReference  String?   @unique
   reminder24hSentAt DateTime?
   reminder2hSentAt  DateTime?
   profile           Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)

@@ -2,10 +2,11 @@
 
 import prisma from "@/lib/prisma"
 import { format } from "date-fns"
-import { sendAppointmentEmail } from "@/lib/resend"
+import { sendAppointmentEmail, sendPaymentEmail } from "@/lib/resend"
 import { es } from "date-fns/locale"
 import { randomUUID } from "crypto"
 import { getBogotaDay, getBogotaISO } from "@/lib/utils"
+import { createWompiTransaction } from "@/lib/wompi"
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -187,8 +188,21 @@ export async function createAppointment(data: {
     clientEmail: string,
     serviceId?: string
 }) {
-    const profile = await prisma.profile.findUnique({ where: { username: data.username } })
+    const profile = await prisma.profile.findUnique({ 
+        where: { username: data.username },
+        include: {
+            user: {
+                include: {
+                    memberships: {
+                        include: { organization: true }
+                    }
+                }
+            }
+        }
+    })
     if (!profile) throw new Error("Perfil no encontrado")
+
+    const wompiSubaccountId = profile.user.memberships[0]?.organization?.wompiSubaccountId;
 
     // Get duration and service info if provided
     let durationMinutes = 30
@@ -211,6 +225,11 @@ export async function createAppointment(data: {
     const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
 
     const cancelToken = randomUUID()
+
+    const isPaidService = servicePrice !== undefined && servicePrice !== null && servicePrice > 0;
+    const requiresPayment = isPaidService && !!wompiSubaccountId;
+
+    const paymentReference = requiresPayment ? randomUUID() : null;
 
     // Atomic transaction with advisory lock to prevent race condition double-bookings
     // The advisory lock serializes all booking attempts for the same profile
@@ -241,8 +260,9 @@ export async function createAppointment(data: {
                 clientEmail: data.clientEmail,
                 startTime,
                 endTime,
-                status: "CONFIRMED",
+                status: requiresPayment ? "PENDING" : "CONFIRMED",
                 cancelToken,
+                paymentReference,
             }
         })
     }, {
@@ -250,10 +270,42 @@ export async function createAppointment(data: {
         timeout: 10000 // 10s max wait for the lock
     })
 
-    // Get professional name for email
-    const user = await prisma.user.findUnique({ where: { id: profile.userId } })
-
     const cancelLink = `${process.env.NEXT_PUBLIC_APP_URL}/cancelar/${cancelToken}`
+    const professionalName = profile.user?.name || data.username
+
+    if (requiresPayment && paymentReference && servicePrice) {
+        // Generate Wompi transaction
+        try {
+            const wompiTx = await createWompiTransaction({
+                amountInCents: servicePrice * 100,
+                reference: paymentReference,
+                customerEmail: data.clientEmail,
+                subaccountId: wompiSubaccountId
+            });
+
+            await sendPaymentEmail({
+                to: data.clientEmail,
+                clientName: data.clientName,
+                professionalName,
+                serviceName,
+                price: servicePrice,
+                date: format(startTime, "EEEE, d 'de' MMMM", { locale: es }),
+                time: data.time,
+                qrImage: wompiTx.qrImage,
+                paymentUrl: wompiTx.paymentUrl,
+            });
+
+            return appointment; // Early return, do not create Google Calendar event yet
+        } catch (error) {
+            console.error("Failed to generate Wompi transaction", error);
+            // Optionally, delete the pending appointment if we couldn't generate the QR
+            await prisma.appointment.delete({ where: { id: appointment.id } });
+            throw new Error("No se pudo generar el cobro para la cita.");
+        }
+    }
+
+    // Get professional name for email
+    const user = profile.user // Ya lo tenemos eagerly loaded
 
     // Send confirmation email
     await sendAppointmentEmail({

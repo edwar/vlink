@@ -119,3 +119,60 @@ export async function sendSubscriptionEmail({
     console.error('Error sending subscription email:', error);
   }
 }
+
+export async function sendPaymentEmail({
+  to,
+  clientName,
+  professionalName,
+  serviceName,
+  price,
+  date,
+  time,
+  qrImage,
+  paymentUrl,
+}: {
+  to: string;
+  clientName: string;
+  professionalName: string;
+  serviceName?: string;
+  price?: number | null;
+  date: string;
+  time: string;
+  qrImage?: string | null;
+  paymentUrl?: string | null;
+}) {
+  const formattedPrice = price !== undefined && price !== null
+    ? `$ ${price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
+    : null;
+
+  try {
+    await resend.emails.send({
+      from: 'VLink <hola@cognilab.dev>',
+      to,
+      subject: `Pago requerido para confirmar tu cita con ${professionalName}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+          <h1 style="color: #0f172a; font-size: 24px; font-weight: bold; margin-bottom: 20px;">VLink - Pago Pendiente</h1>
+          <p style="color: #475569; font-size: 16px;">Hola ${clientName},</p>
+          <p style="color: #475569; font-size: 16px;">Para confirmar tu cita con <strong>${professionalName}</strong> es necesario realizar el pago.</p>
+          
+          <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            ${serviceName ? `<p style="margin: 0; color: #0f172a;"><strong>Servicio:</strong> ${serviceName}</p>` : ''}
+            ${formattedPrice ? `<p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Precio a Pagar:</strong> ${formattedPrice}</p>` : ''}
+            <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Fecha:</strong> ${date}</p>
+            <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Hora:</strong> ${time}</p>
+          </div>
+
+          <div style="margin-top: 30px; text-align: center;">
+            ${qrImage ? `<p style="color: #475569; font-size: 14px; margin-bottom: 10px;">Escanea este QR con Bancolombia o Nequi:</p><img src="${qrImage}" alt="QR de Pago Wompi" style="max-width: 250px; border-radius: 12px; border: 1px solid #e2e8f0; display: block; margin: 0 auto 20px auto;" />` : ''}
+            ${paymentUrl ? `<a href="${paymentUrl}" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; text-decoration: none;">Ir a pagar</a>` : ''}
+          </div>
+
+          <p style="color: #475569; font-size: 14px; margin-top: 30px;">Una vez que el pago sea detectado, recibirás el correo de confirmación de tu cita.</p>
+        </div>
+      `,
+    });
+  } catch (error) {
+    console.error('Error sending payment email:', error);
+  }
+}

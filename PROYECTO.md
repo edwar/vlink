@@ -98,5 +98,38 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **Logs de Auditoría:** Registro detallado de cambios críticos realizados por los administradores en el sistema.
 - **Alertas de Errores:** Panel de errores recientes reportados por la infraestructura para detección temprana de fallos.
 
+## 8. Integración de Pagos (Wompi QR Dinámico)
+
+**Objetivo:** Implementar un flujo de backend que genere un QR Dinámico de Nequi/Wompi por cita, lo envíe por email y procese la confirmación automática vía Webhook.
+
+### 1. Configuración y Seguridad (Variables de Entorno)
+- Usa las llaves maestras globales: `WOMPI_PUBLIC_KEY`, `WOMPI_PRIVATE_KEY`, `WOMPI_INTEGRITY_SECRET` y `WOMPI_EVENTS_SECRET`.
+- Asume que cada `Organization` en la BD tiene un `wompi_subaccount_id` para dirigir el dinero al dueño del negocio.
+
+### 2. Lógica de Generación (Endpoint/Función)
+- **Firma de Integridad:** Antes de cada petición, genera el `integrity_signature` (SHA256) combinando: referencia, monto, moneda y el `INTEGRITY_SECRET`.
+- **Petición a Wompi:** Crea una "Presolicitud de pago" que incluya el monto, la `subaccount_id` de la organización y una `referencia_unica` vinculada al ID de la cita.
+- **QR Dinámico:** Extrae de la respuesta el string/imagen del QR Dinámico generado.
+
+### 3. Comunicación (Email Service)
+- Crea una función que dispare un correo al cliente con el QR Dinámico visible y un botón de "Ir a pagar".
+- Indica que el pago es necesario para confirmar la reserva en el calendario del empleado.
+
+### 4. Validación Automática (Webhook)
+- Crea el endpoint `POST /api/webhooks/wompi` (ajustado de `/webhooks/wompi` para entorno App Router si aplica, o equivalente).
+- **Validación de Origen:** Verifica el checksum del evento usando el `WOMPI_EVENTS_SECRET` para asegurar que la petición es de Wompi.
+- **Actualización de Estado:** Si el evento es `transaction.updated` y el estado es `APPROVED`, busca la cita por su referencia y cámbiala a estado "PAGADA" en la base de datos.
+
+### Restricciones Técnicas
+- NO uses QRs estáticos ni validación manual de imágenes.
+- La lógica debe ser agnóstica al empleado; el pago valida la Cita (Appointment).
+- Código limpio y modular en Node.js (Next.js App Router).
+
+### Lo que necesitas tener a mano para que esto funcione
+Para que la implementación sea exitosa, asegúrate de registrarte en el Portal de Comercios de Wompi y obtener estos datos:
+- **Credenciales de Prueba (Sandbox):** Usa estas primero para poder simular pagos sin dinero real.
+- **Habilitar el Rol de Marketplace:** Debes solicitar a Wompi que tu cuenta sea "Maestra" para poder crear subcuentas a tus profesionales.
+- **URL de Notificación:** Debes entrar al dashboard de Wompi y pegar la URL de tu webhook (ej. `https://tu-api.com/api/webhooks/wompi`) para que ellos sepan a dónde enviar los avisos de pago.
+
 ---
 *Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*
