@@ -243,8 +243,9 @@ export async function createAppointment(data: {
 
     const cancelToken = randomUUID()
 
+    const systemConfig = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
     const isPaidService = servicePrice !== undefined && servicePrice !== null && servicePrice > 0;
-    const requiresPayment = isPaidService && !!wompiSubaccountId;
+    const requiresPayment = isPaidService && !!wompiSubaccountId && !!systemConfig?.wompiMarketplaceEnabled;
 
     const paymentReference = requiresPayment ? randomUUID() : null;
 
