@@ -101,7 +101,7 @@ export default async function OrganizacionPage(props: {
     })
     const sortedMembers = members; // Already sorted by database
 
-    const currentUserMember = members.find(m => m.userId === session.user.id)
+    const currentUserMember = members.find((m: typeof members[0]) => m.userId === session.user.id)
     const currentUserRole = currentUserMember?.role
     const isOwnerOrManager = currentUserRole === "OWNER" || currentUserRole === "MANAGER"
 
@@ -312,7 +312,7 @@ export default async function OrganizacionPage(props: {
 
                 <div id="tour-team-members" className="relative grid grid-cols-1 gap-6">
                     <div id="tour-team-members-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                    {sortedMembers.map((member, index) => {
+                    {sortedMembers.map((member: typeof members[0], index: number) => {
                         // For seat calculation, we would ideally need the absolute index across pages,
                         // but let's stick to simple active display if you're in the list.
                         // Ideally, we'd check if (skip + index) < maxSeats.
@@ -449,7 +449,7 @@ export default async function OrganizacionPage(props: {
                                 <TransferOwnership
                                     organizationId={organization.id}
                                     organizationName={organization.name}
-                                    members={members.map(m => ({
+                                    members={members.map((m: typeof members[0]) => ({
                                         id: m.id,
                                         userId: m.userId,
                                         role: m.role,
