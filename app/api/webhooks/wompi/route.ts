@@ -32,7 +32,15 @@ export async function POST(req: NextRequest) {
                     where: { paymentReference: tx.reference },
                     include: {
                         profile: {
-                            include: { user: true }
+                            include: { 
+                                user: {
+                                    include: {
+                                        memberships: {
+                                            include: { organization: true }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         service: true
                     }
@@ -54,6 +62,10 @@ export async function POST(req: NextRequest) {
                     const cancelLink = `${process.env.NEXT_PUBLIC_APP_URL}/cancelar/${appointment.cancelToken}`;
                     const professionalName = appointment.profile.user.name || appointment.profile.username;
 
+                    const organization = (appointment.profile.user as any).memberships[0]?.organization;
+                    const orgPhone = organization?.phone;
+                    const orgWhatsapp = organization?.whatsapp;
+
                     // Send Confirmation email
                     await sendAppointmentEmail({
                         to: appointment.clientEmail || "",
@@ -65,6 +77,8 @@ export async function POST(req: NextRequest) {
                         date: format(appointment.startTime, "EEEE, d 'de' MMMM", { locale: es }),
                         time: format(appointment.startTime, "HH:mm"),
                         cancelLink,
+                        phone: orgPhone,
+                        whatsapp: orgWhatsapp
                     }).catch(console.error);
 
                     // Sync with Google Calendar

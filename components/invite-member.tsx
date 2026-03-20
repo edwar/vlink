@@ -58,7 +58,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
     }
 
     return (
-        <div className="h-full flex flex-col justify-between space-y-6 relative overflow-hidden group/invite">
+        <div className="h-full flex flex-col justify-between space-y-6 relative group/invite">
             <div className="flex flex-col justify-center items-center gap-4 relative z-10 w-full">
                 <div className="h-28 w-28 bg-primary/10 rounded-4xl flex items-center justify-center text-primary shrink-0 transition-transform duration-500 group-hover/invite:scale-105">
                     <UserPlus className="h-12 w-12" />
@@ -74,10 +74,10 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     <div className="space-y-2 w-full">
                         <Label htmlFor="role" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Rol del invitado</Label>
                         <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
-                            <SelectTrigger id="role" className="h-14 rounded-2xl border border-border/50 bg-background/40 hover:bg-background/80 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
+                            <SelectTrigger id="role" className="h-14 rounded-2xl border bg-background/40 hover:bg-background/80 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
                                 <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
-                            <SelectContent position="popper" className="rounded-2xl border border-border/50 shadow-xl overflow-hidden">
+                            <SelectContent position="popper" className="rounded-2xl border shadow-xl overflow-hidden">
                                 <SelectItem value="PROFESSIONAL" className="rounded-lg m-1 focus:bg-primary/5 focus:text-primary">
                                     <div className="flex flex-col gap-0.5">
                                         <span className="font-bold">Profesional</span>
@@ -94,7 +94,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                         </Select>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-2xl border border-border/50">
+                    <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-2xl border">
                         <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
                         <p className="text-[11px] text-muted-foreground font-medium leading-relaxed">
                             {disabled
@@ -113,7 +113,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                             <Input
                                 readOnly
                                 value={invitationUrl}
-                                className="h-14 bg-background border-dashed border-2 border-border/50 rounded-l-2xl rounded-r-none font-medium truncate focus-visible:ring-0 text-sm"
+                                className="h-14 bg-background border-dashed border-2 rounded-l-2xl rounded-r-none font-medium truncate focus-visible:ring-0 text-sm"
                             />
                             <Button
                                 size="icon"

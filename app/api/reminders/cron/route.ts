@@ -28,15 +28,29 @@ export async function GET(request: NextRequest) {
             reminder24hSentAt: null,
         } as any,
         include: {
-            profile: { include: { user: true } },
+            profile: { 
+                include: { 
+                    user: {
+                        include: {
+                            memberships: {
+                                include: { organization: true }
+                            }
+                        }
+                    }
+                } 
+            },
             service: true,
         },
     })
 
-    const results = { sent24h: 0, sent2h: 0, errors: 0 }
+    const results = { sent24h: 0, errors: 0 }
 
     for (const appt of appts24h as any[]) {
         try {
+            const organization = (appt.profile.user as any).memberships[0]?.organization;
+            const orgPhone = organization?.phone;
+            const orgWhatsapp = organization?.whatsapp;
+
             await sendAppointmentEmail({
                 to: appt.clientEmail!,
                 type: 'REMINDER_24H',
@@ -46,6 +60,8 @@ export async function GET(request: NextRequest) {
                 price: appt.service?.price,
                 date: format(appt.startTime, "EEEE, d 'de' MMMM", { locale: es }),
                 time: format(appt.startTime, 'HH:mm'),
+                phone: orgPhone,
+                whatsapp: orgWhatsapp
             })
             await prisma.appointment.update({
                 where: { id: appt.id },
@@ -54,46 +70,6 @@ export async function GET(request: NextRequest) {
             results.sent24h++
         } catch (error) {
             console.error(`[reminders/cron] Error sending 24h reminder for appt ${appt.id}:`, error)
-            results.errors++
-        }
-    }
-
-    // 2. 2h Reminders pass
-    const window2hStart = new Date(now.getTime() + 1.5 * 60 * 60 * 1000)
-    const window2hEnd = new Date(now.getTime() + 2.5 * 60 * 60 * 1000)
-
-    const appts2h = await prisma.appointment.findMany({
-        where: {
-            status: 'CONFIRMED',
-            clientEmail: { not: null },
-            startTime: { gte: window2hStart, lte: window2hEnd },
-            reminder2hSentAt: null,
-        } as any,
-        include: {
-            profile: { include: { user: true } },
-            service: true,
-        },
-    })
-
-    for (const appt of appts2h as any[]) {
-        try {
-            await sendAppointmentEmail({
-                to: appt.clientEmail!,
-                type: 'REMINDER_2H',
-                clientName: appt.clientName,
-                professionalName: appt.profile.displayName || appt.profile.user.name,
-                serviceName: appt.service?.name,
-                price: appt.service?.price,
-                date: 'Hoy',
-                time: format(appt.startTime, 'HH:mm'),
-            })
-            await prisma.appointment.update({
-                where: { id: appt.id },
-                data: { reminder2hSentAt: now } as any,
-            })
-            results.sent2h++
-        } catch (error) {
-            console.error(`[reminders/cron] Error sending 2h reminder for appt ${appt.id}:`, error)
             results.errors++
         }
     }

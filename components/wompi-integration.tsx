@@ -43,13 +43,13 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
     const isConfigured = !!subaccountId
 
     return (
-        <div className="h-full flex flex-col space-y-6 relative overflow-hidden group/wompi">
+        <div className="h-full flex flex-col space-y-6 relative group/wompi">
             <div className="flex flex-col gap-4 relative z-10 w-full mb-2">
                 <div className="flex w-full flex-col">
                     <p className="text-[10px] font-black uppercase tracking-widest text-primary/70 mb-2">Pasarela de Pagos</p>
                     <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Cuenta Wompi</h3>
                     <p className="text-sm text-muted-foreground font-medium leading-tight mt-1">
-                        {isConfigured 
+                        {isConfigured
                             ? "Tu organización está lista para recibir pagos directamente en tu cuenta digital Wompi."
                             : "Vincula tu Subcuenta de Wompi para poder cobrar automáticamente en el agendamiento."}
                     </p>
@@ -69,10 +69,10 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                                     <p className="text-sm font-black text-foreground font-mono">{subaccountId}</p>
                                 </div>
                             </div>
-                            
+
                             {!disabled && (
-                                <Button 
-                                    variant="ghost" 
+                                <Button
+                                    variant="ghost"
                                     size="sm"
                                     onClick={() => setSubaccountId("")}
                                     className="text-muted-foreground hover:text-red-500 text-[10px] font-black uppercase tracking-widest"
@@ -88,15 +88,15 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        <WompiSubaccountForm 
-                            organizationId={organizationId} 
+                        <WompiSubaccountForm
+                            organizationId={organizationId}
                             onCreated={(id) => {
                                 setSubaccountId(id)
                                 sileo.success({
                                     title: "Subcuenta configurada",
                                     description: "La subcuenta ha sido creada y vinculada automáticamente."
                                 })
-                            }} 
+                            }}
                         />
                     </div>
                 )}

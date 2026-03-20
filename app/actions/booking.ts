@@ -219,7 +219,10 @@ export async function createAppointment(data: {
     })
     if (!profile) throw new Error("Perfil no encontrado")
 
-    const wompiSubaccountId = profile.user.memberships[0]?.organization?.wompiSubaccountId;
+    const organization = profile.user.memberships[0]?.organization as any;
+    const wompiSubaccountId = organization?.wompiSubaccountId;
+    const orgPhone = organization?.phone;
+    const orgWhatsapp = organization?.whatsapp;
 
     // Get duration and service info if provided
     let durationMinutes = 30
@@ -311,6 +314,9 @@ export async function createAppointment(data: {
                 time: data.time,
                 qrImage: wompiTx.qrImage,
                 paymentUrl: wompiTx.paymentUrl,
+                cancelLink,
+                phone: orgPhone,
+                whatsapp: orgWhatsapp
             });
 
             return appointment; // Early return, do not create Google Calendar event yet

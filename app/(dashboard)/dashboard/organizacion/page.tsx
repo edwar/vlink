@@ -22,6 +22,7 @@ import { ChangeMemberRole } from "@/components/change-member-role"
 import { RemoveMember } from "@/components/remove-member"
 import { Button } from "@/components/ui/button"
 import { WompiIntegration } from "@/components/wompi-integration"
+import { OrganizationContact } from "@/components/organization-contact"
 
 import { PaginationControls } from "@/components/pagination-controls"
 
@@ -244,18 +245,34 @@ export default async function OrganizacionPage(props: {
                 </div>
             </div>
 
-            {/* Row 1.5: Cobros y Pagos (Centrado) */}
-            <div className="flex flex-col items-center mt-12 mb-4">
-                <div className="w-full max-w-3xl">
-                    <div className="flex items-center justify-center gap-3 px-2 pb-6">
-                        <div className="h-6 w-1 bg-green-500/40 rounded-full" />
-                        <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Pagos & Cobros</h2>
-                        <div className="h-6 w-1 bg-green-500/40 rounded-full" />
+            {/* Row 1.5: Pagos y Comunicación (Side by Side) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16 max-w-6xl mx-auto w-full px-4 md:px-0">
+                {/* Cobros y Pagos */}
+                <div className="flex flex-col h-full">
+                    <div className="flex items-center gap-3 px-2 pb-6">
+                        <div className="h-6 w-1 bg-emerald-500/40 rounded-full" />
+                        <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
                     </div>
-                    <div className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div className="relative flex-1 flex flex-col bg-linear-to-br from-emerald-500/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
                         <WompiIntegration
                             organizationId={organization.id}
-                            initialSubaccountId={organization.wompiSubaccountId}
+                            initialSubaccountId={(organization as any).wompiSubaccountId}
+                            disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
+                        />
+                    </div>
+                </div>
+
+                {/* Comunicación & Soporte */}
+                <div className="flex flex-col h-full">
+                    <div className="flex items-center gap-3 px-2 pb-6">
+                        <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
+                        <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Comunicación & Soporte</h2>
+                    </div>
+                    <div className="relative flex-1 flex flex-col bg-linear-to-br from-orange-500/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                        <OrganizationContact
+                            organizationId={organization.id}
+                            initialPhone={(organization as any).phone}
+                            initialWhatsapp={(organization as any).whatsapp}
                             disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
                         />
                     </div>

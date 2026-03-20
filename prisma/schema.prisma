@@ -81,6 +81,8 @@ model Organization {
   mpSubscriptionId  String?          @unique
   subscriptionPlan  SubscriptionPlan @default(BASIC)
   wompiSubaccountId String?
+  phone             String?
+  whatsapp          String?
   invitations       Invitation[]
   members           Member[]
   profiles          Profile[]

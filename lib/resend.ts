@@ -12,6 +12,8 @@ export async function sendAppointmentEmail({
   date,
   time,
   cancelLink,
+  phone,
+  whatsapp,
 }: {
   to: string;
   type: 'CONFIRMATION' | 'CANCELLATION' | 'RESCHEDULE' | 'REMINDER_24H' | 'REMINDER_2H';
@@ -22,6 +24,8 @@ export async function sendAppointmentEmail({
   date: string;
   time: string;
   cancelLink?: string;
+  phone?: string | null;
+  whatsapp?: string | null;
 }) {
   const subjects = {
     CONFIRMATION: `Cita confirmada con ${professionalName}`,
@@ -33,6 +37,7 @@ export async function sendAppointmentEmail({
 
   const isCancellation = type === 'CANCELLATION'
   const isReschedule = type === 'RESCHEDULE'
+  const isConfirmation = type === 'CONFIRMATION'
 
   const formattedPrice = price !== undefined && price !== null
     ? `$ ${price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
@@ -54,8 +59,19 @@ export async function sendAppointmentEmail({
             <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Fecha:</strong> ${date}</p>
             <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Hora:</strong> ${time}</p>
           </div>
+          
+          ${(phone || whatsapp) && !isCancellation ? `
+          <div style="margin: 20px 0; padding: 15px; background-color: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd;">
+            <p style="margin: 0 0 10px 0; color: #0369a1; font-size: 14px; font-weight: bold;">¿Necesitas cambiar el horario?</p>
+            <p style="margin: 0 0 10px 0; color: #0369a1; font-size: 13px;">Para reprogramar tu cita, por favor contacta directamente a la organización:</p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+              ${phone ? `<p style="margin: 0; font-size: 13px; color: #0c4a6e;">📞 <strong>Tel:</strong> ${phone}</p>` : ''}
+              ${whatsapp ? `<p style="margin: 0; font-size: 13px; color: #0c4a6e;">💬 <strong>WhatsApp:</strong> ${whatsapp}</p>` : ''}
+            </div>
+          </div>` : ''}
+
           <p style="color: #475569; font-size: 14px; margin-top: 30px;">${isCancellation ? 'Si tienes alguna pregunta o deseas agendar una nueva cita, por favor contacta al profesional directamente.' : 'Si necesitas cancelar o reprogramar, por favor contacta al profesional directamente.'}</p>
-          ${cancelLink && type === 'CONFIRMATION' ? `
+          ${cancelLink && isConfirmation ? `
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
             <p style="color: #94a3b8; font-size: 12px; margin: 0 0 12px 0;">¿Necesitas cancelar? Tienes hasta 2 horas antes de tu cita.</p>
             <a href="${cancelLink}" style="display: inline-block; background-color: #fee2e2; color: #dc2626; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: bold; text-decoration: none;">Cancelar mi cita</a>
@@ -130,6 +146,9 @@ export async function sendPaymentEmail({
   time,
   qrImage,
   paymentUrl,
+  cancelLink,
+  phone,
+  whatsapp,
 }: {
   to: string;
   clientName: string;
@@ -140,6 +159,9 @@ export async function sendPaymentEmail({
   time: string;
   qrImage?: string | null;
   paymentUrl?: string | null;
+  cancelLink?: string;
+  phone?: string | null;
+  whatsapp?: string | null;
 }) {
   const formattedPrice = price !== undefined && price !== null
     ? `$ ${price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
@@ -149,7 +171,7 @@ export async function sendPaymentEmail({
     await resend.emails.send({
       from: 'VLink <hola@cognilab.dev>',
       to,
-      subject: `Pago requerido para confirmar tu cita con ${professionalName}`,
+      subject: `Pago requerido para tu cita con ${professionalName}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
           <h1 style="color: #0f172a; font-size: 24px; font-weight: bold; margin-bottom: 20px;">VLink - Pago Pendiente</h1>
@@ -163,12 +185,28 @@ export async function sendPaymentEmail({
             <p style="margin: 5px 0 0 0; color: #0f172a;"><strong>Hora:</strong> ${time}</p>
           </div>
 
+          ${(phone || whatsapp) ? `
+          <div style="margin: 20px 0; padding: 15px; background-color: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd;">
+            <p style="margin: 0 0 10px 0; color: #0369a1; font-size: 14px; font-weight: bold;">¿Necesitas cambiar el horario?</p>
+            <p style="margin: 0 0 10px 0; color: #0369a1; font-size: 13px;">Para reprogramar tu cita, por favor contacta directamente a la organización:</p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+              ${phone ? `<p style="margin: 0; font-size: 13px; color: #0c4a6e;">📞 <strong>Tel:</strong> ${phone}</p>` : ''}
+              ${whatsapp ? `<p style="margin: 0; font-size: 13px; color: #0c4a6e;">💬 <strong>WhatsApp:</strong> ${whatsapp}</p>` : ''}
+            </div>
+          </div>` : ''}
+
           <div style="margin-top: 30px; text-align: center;">
             ${qrImage ? `<p style="color: #475569; font-size: 14px; margin-bottom: 10px;">Escanea este QR con Bancolombia o Nequi:</p><img src="${qrImage}" alt="QR de Pago Wompi" style="max-width: 250px; border-radius: 12px; border: 1px solid #e2e8f0; display: block; margin: 0 auto 20px auto;" />` : ''}
             ${paymentUrl ? `<a href="${paymentUrl}" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; text-decoration: none;">Ir a pagar</a>` : ''}
           </div>
 
-          <p style="color: #475569; font-size: 14px; margin-top: 30px;">Una vez que el pago sea detectado, recibirás el correo de confirmación de tu cita.</p>
+          <p style="color: #475569; font-size: 14px; margin-top: 30px;">Una vez que el pago sea detectado, recibirás el correo de confirmación final.</p>
+          
+          ${cancelLink ? `
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+            <p style="color: #94a3b8; font-size: 12px; margin: 0 0 12px 0;">¿Deseas cancelar esta solicitud?</p>
+            <a href="${cancelLink}" style="display: inline-block; background-color: #fee2e2; color: #dc2626; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: bold; text-decoration: none;">Cancelar solicitud</a>
+          </div>` : ''}
         </div>
       `,
     });

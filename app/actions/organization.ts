@@ -67,6 +67,42 @@ export async function setupWompiSubaccount(organizationId: string, data: {
 }
 
 /**
+ * Updates organization contact information (Phone and WhatsApp)
+ */
+export async function updateOrganizationContact(organizationId: string, data: {
+    phone?: string | null;
+    whatsapp?: string | null;
+}) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("Unauthorized")
+
+    // Verify caller is OWNER or MANAGER
+    const membership = await prisma.member.findFirst({
+        where: {
+            organizationId,
+            userId: session.user.id,
+            role: { in: ["OWNER", "MANAGER"] }
+        }
+    })
+
+    if (!membership) throw new Error("No tienes permisos para modificar los datos de contacto")
+
+    await prisma.organization.update({
+        where: { id: organizationId },
+        data: {
+            phone: data.phone,
+            whatsapp: data.whatsapp
+        }
+    })
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
+}
+
+/**
  * Creates a new organization and assigns the current user as OWNER
  */
 export async function createOrganization(name: string, plan: "BASIC" | "TEAM" | "CORPORATE" = "BASIC") {
