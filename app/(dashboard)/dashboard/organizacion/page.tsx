@@ -169,7 +169,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* QR Code Column */}
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="flex items-center gap-3 px-2">
+                    <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Marketing & QR</h2>
                     </div>
@@ -219,7 +219,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* Lateral: Invitaciones */}
                 <div className="lg:col-span-7 flex flex-col h-full">
-                    <div className="flex items-center gap-3 px-2 pb-6">
+                    <div className="flex items-center gap-3 pb-6">
                         <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Crecer / Equipo</h2>
                     </div>
@@ -246,14 +246,14 @@ export default async function OrganizacionPage(props: {
             </div>
 
             {/* Row 1.5: Pagos y Comunicación (Side by Side) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16 max-w-6xl mx-auto w-full px-4 md:px-0">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative mt-8">
                 {/* Cobros y Pagos */}
-                <div className="flex flex-col h-full">
-                    <div className="flex items-center gap-3 px-2 pb-6">
+                <div className="lg:col-span-6 space-y-6">
+                    <div className="flex items-center gap-3 pb-6">
                         <div className="h-6 w-1 bg-emerald-500/40 rounded-full" />
                         <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
                     </div>
-                    <div className="relative flex-1 flex flex-col bg-linear-to-br from-emerald-500/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
                         <WompiIntegration
                             organizationId={organization.id}
                             initialSubaccountId={(organization as any).wompiSubaccountId}
@@ -263,12 +263,12 @@ export default async function OrganizacionPage(props: {
                 </div>
 
                 {/* Comunicación & Soporte */}
-                <div className="flex flex-col h-full">
-                    <div className="flex items-center gap-3 px-2 pb-6">
+                <div className="lg:col-span-6 space-y-6">
+                    <div className="flex items-center gap-3 pb-6">
                         <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
                         <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Comunicación & Soporte</h2>
                     </div>
-                    <div className="relative flex-1 flex flex-col bg-linear-to-br from-orange-500/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
                         <OrganizationContact
                             organizationId={organization.id}
                             initialPhone={(organization as any).phone}
@@ -280,7 +280,7 @@ export default async function OrganizacionPage(props: {
             </div>
 
             {/* Row 2: Mi Equipo */}
-            <div className="pt-8 mt-8 border-t border-border/50 space-y-6">
+            <div className="pt-20 mt-20 border-t border-border/50 space-y-6">
                 <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-primary rounded-full" />
