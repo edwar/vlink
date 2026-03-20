@@ -128,9 +128,9 @@ export async function createWompiSubaccount(data: {
     phone: string;
     documentType: 'CC' | 'CE' | 'NIT' | 'PP';
     documentNumber: string;
-    accountType: 'SAVINGS' | 'CHECKING';
-    accountNumber: string;
-    bankCode: string;
+    accountType?: 'SAVINGS' | 'CHECKING';
+    accountNumber?: string;
+    bankCode?: string;
 }) {
     const payload = {
         name: data.name,
@@ -140,11 +140,8 @@ export async function createWompiSubaccount(data: {
             type: data.documentType,
             number: data.documentNumber
         },
-        settlement: {
-            type: "BANK_ACCOUNT",
-            account_type: data.accountType,
-            account_number: data.accountNumber,
-            bank_code: data.bankCode
+        settlement: { 
+            type: "WOMPI_ACCOUNT" 
         }
     };
 

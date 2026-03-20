@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog"
 
 const COLOMBIAN_BANKS = [
+    { code: "WOMPI", name: "Wompi Cuenta (Cuenta Digital)" },
     { code: "1507", name: "Nequi" },
     { code: "1551", name: "Daviplata" },
     { code: "007", name: "Bancolombia" },
@@ -31,9 +32,10 @@ const COLOMBIAN_BANKS = [
 export function WompiSubaccountForm({ organizationId, onCreated }: { organizationId: string, onCreated: (id: string) => void }) {
     const [open, setOpen] = useState(false)
     const [isPending, setIsPending] = useState(false)
-    const [selectedBank, setSelectedBank] = useState<string>("")
+    const [selectedBank, setSelectedBank] = useState<string>("WOMPI")
 
     const isDigitalWallet = selectedBank === "1507" || selectedBank === "1551"
+    const isWompiAccount = selectedBank === "WOMPI"
 
     async function handleSubmit(formData: FormData) {
         setIsPending(true)
@@ -82,10 +84,10 @@ export function WompiSubaccountForm({ organizationId, onCreated }: { organizatio
                         <div className="p-2 bg-primary/10 rounded-xl text-primary">
                             <Landmark className="h-6 w-6" />
                         </div>
-                        Datos Bancarios
+                        Wompi Cuenta
                     </DialogTitle>
                     <DialogDescription className="font-medium text-muted-foreground pt-2">
-                        Configura la cuenta para recibir pagos directos a través de Wompi.
+                        Vincula una cuenta digital de Wompi para recibir tus pagos de forma inmediata.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -131,50 +133,33 @@ export function WompiSubaccountForm({ organizationId, onCreated }: { organizatio
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Banco</Label>
-                        <Select name="bankCode" required onValueChange={setSelectedBank}>
-                            <SelectTrigger className="h-12 rounded-xl text-sm font-bold bg-muted/20 border-none shadow-none">
-                                <SelectValue placeholder="Selecciona tu banco" />
-                            </SelectTrigger>
-                            <SelectContent className="rounded-xl max-h-60">
-                                {COLOMBIAN_BANKS.map(bank => (
-                                    <SelectItem key={bank.code} value={bank.code}>{bank.name}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                    <input type="hidden" name="bankCode" value="WOMPI" />
+
+                    <div className="p-5 bg-primary/5 rounded-3xl border border-primary/10 space-y-3">
+                        <div className="flex items-center gap-3">
+                            <div className="p-1.5 bg-primary/20 rounded-lg text-primary">
+                                <Landmark className="h-4 w-4" />
+                            </div>
+                            <p className="text-[12px] font-black uppercase tracking-widest text-primary">
+                                Beneficios Wompi Cuenta
+                            </p>
+                        </div>
+                        <ul className="space-y-2">
+                            <li className="text-[11px] text-muted-foreground flex items-center gap-2">
+                                • Disposición inmediata de tus saldos.
+                            </li>
+                            <li className="text-[11px] text-muted-foreground flex items-center gap-2 font-bold">
+                                • Tarifa por transferencia: $1.849 + 0.4% + IVA.
+                            </li>
+                            <li className="text-[11px] text-muted-foreground flex items-center gap-2">
+                                • Sin costos fijos de mantenimiento.
+                            </li>
+                            <li className="text-[11px] text-muted-foreground">
+                                • El dinero se mantiene en tu ecosistema digital Wompi.
+                            </li>
+                        </ul>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {!isDigitalWallet ? (
-                            <div className="space-y-2">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Tipo de Cuenta</Label>
-                                <Select name="accountType" defaultValue="SAVINGS">
-                                    <SelectTrigger className="h-12 rounded-xl text-sm font-bold bg-muted/20 border-none shadow-none">
-                                        <SelectValue placeholder="Selecciona" />
-                                    </SelectTrigger>
-                                    <SelectContent className="rounded-xl">
-                                        <SelectItem value="SAVINGS">Ahorros</SelectItem>
-                                        <SelectItem value="CHECKING">Corriente</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        ) : (
-                            <input type="hidden" name="accountType" value="SAVINGS" />
-                        )}
-                        <div className={cn("space-y-2", isDigitalWallet && "md:col-span-2")}>
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
-                                {isDigitalWallet ? "Número de Celular" : "Número de Cuenta"}
-                            </Label>
-                            <Input
-                                name="accountNumber"
-                                required
-                                type={isDigitalWallet ? "tel" : "text"}
-                                placeholder={isDigitalWallet ? "3000000000" : "Número de cuenta bancaria"}
-                                className="h-12 rounded-xl text-sm font-bold"
-                            />
-                        </div>
-                    </div>
 
                     <div className="space-y-2">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Celular de Contacto</Label>
