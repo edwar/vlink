@@ -7,6 +7,7 @@ import { es } from "date-fns/locale"
 import { randomUUID } from "crypto"
 import { getBogotaDay, getBogotaISO } from "@/lib/utils"
 import { createWompiTransaction } from "@/lib/wompi"
+import { pusherServer } from "@/lib/pusher"
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -347,6 +348,11 @@ export async function createAppointment(data: {
     // Sync with Google Calendar (Awaiting execution to prevent serverless suspension/timeouts on Prisma)
     const { createGoogleCalendarEvent } = await import("@/lib/google-calendar")
     await createGoogleCalendarEvent(appointment.id).catch(console.error)
+
+    // Trigger Realtime Dashboard Update
+    await pusherServer.trigger(`profile-${profile.id}`, "appointments-updated", {
+        appointmentId: appointment.id
+    }).catch(console.error)
 
     return appointment
 }

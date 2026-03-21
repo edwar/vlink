@@ -6,6 +6,7 @@ import { deleteGoogleCalendarEvent } from "@/lib/google-calendar"
 import { sendAppointmentEmail } from "@/lib/resend"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
+import { pusherServer } from "@/lib/pusher"
 
 export async function cancelAppointmentAction(id: string) {
     if (!id) return { success: false, error: "No ID provided" }
@@ -42,6 +43,12 @@ export async function cancelAppointmentAction(id: string) {
                 time: format(appointment.startTime, "HH:mm"),
             }).catch(console.error)
         }
+
+        // Trigger Realtime Dashboard Update
+        await pusherServer.trigger(`profile-${appointment.profileId}`, "appointments-updated", {
+            appointmentId: id,
+            status: "CANCELLED"
+        }).catch(console.error)
 
         revalidatePath("/dashboard")
         return { success: true }

@@ -24,6 +24,8 @@ import { es } from "date-fns/locale"
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
+import { pusherClient } from "@/lib/pusher-client"
+import { useRouter } from "next/navigation"
 import {
     Dialog,
     DialogContent,
@@ -214,7 +216,8 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
     )
 }
 
-export function CalendarView() {
+export function CalendarView({ profileId }: { profileId: string }) {
+    const router = useRouter()
     const [view, setView] = useState<ViewType>('month')
     const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -240,6 +243,20 @@ export function CalendarView() {
             }
         }
         fetchData()
+
+        const channel = pusherClient.subscribe(`profile-${profileId}`)
+        channel.bind("appointments-updated", () => {
+            fetchData()
+            router.refresh()
+        })
+
+        return () => {
+            pusherClient.unsubscribe(`profile-${profileId}`)
+        }
+        // Listen for real-time updates
+        // We'll trust the profile the user is currently seeing
+        // For simplicity, we can get the profile ID from the appointments or availability if needed, 
+        // but since this is for the professional's dashboard, we can use a generic approach or wait for prop
     }, [])
 
     // Navigation logic based on view

@@ -6,6 +6,7 @@ import { updateGoogleCalendarEvent } from "@/lib/google-calendar"
 import { sendAppointmentEmail } from "@/lib/resend"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
+import { pusherServer } from "@/lib/pusher"
 
 export async function rescheduleAppointmentAction(
     id: string,
@@ -78,6 +79,12 @@ export async function rescheduleAppointmentAction(
                 time: newTime,
             }).catch(console.error)
         }
+
+        // Trigger Realtime Dashboard Update
+        await pusherServer.trigger(`profile-${appointment.profileId}`, "appointments-updated", {
+            appointmentId: id,
+            status: "RESCHEDULED"
+        }).catch(console.error)
 
         revalidatePath("/dashboard")
         return { success: true }

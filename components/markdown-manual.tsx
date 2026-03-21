@@ -40,7 +40,7 @@ export function MarkdownManual({ content }: { content: string }) {
             {/* Markdown Container */}
             <div className="prose prose-zinc dark:prose-invert max-w-none 
                 prose-headings:font-display prose-headings:font-black prose-headings:tracking-tight prose-headings:uppercase prose-headings:text-primary
-                prose-img:rounded-[2rem] prose-img:border prose-img:border-border/40 prose-img:shadow-2xl prose-img:my-10
+                prose-img:rounded-4xl prose-img:border prose-img:border-border/40 prose-img:shadow-2xl prose-img:my-10
                 prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:text-lg
                 prose-strong:text-foreground prose-strong:font-black
                 prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:rounded-r-2xl prose-blockquote:p-6 prose-blockquote:not-italic

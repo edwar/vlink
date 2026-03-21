@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/empty-state"
 import { Title } from "@/components/title"
 import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
 import { DashboardTour } from "@/components/tours/dashboard-tour"
+import { DashboardRealtimeUpdater } from "@/components/dashboard-realtime-updater"
 
 import { PaginationControls } from "@/components/pagination-controls"
 
@@ -337,8 +338,8 @@ export default async function DashboardPage(props: {
                     </div>
                 }
             />
+            <DashboardRealtimeUpdater profileId={profile.id} />
             <DashboardTour />
         </div>
     );
 }
-

@@ -3,6 +3,7 @@ import { Title } from "@/components/title";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { CalendarIcon } from "lucide-react";
 import { AgendaTour } from "@/components/tours/agenda-tour";
+import { DashboardRealtimeUpdater } from "@/components/dashboard-realtime-updater"
 
 export default async function AgendaPage() {
     const profile = await getEffectiveProfile();
@@ -29,8 +30,9 @@ export default async function AgendaPage() {
             </header>
 
             <div className="w-full">
-                <CalendarView />
+                <CalendarView profileId={profile.id} />
                 <AgendaTour />
+                <DashboardRealtimeUpdater profileId={profile.id} />
             </div>
         </div>
     );
