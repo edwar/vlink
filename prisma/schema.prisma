@@ -129,6 +129,7 @@ model Profile {
   organizationId     String?
   showOnOrgPage      Boolean        @default(true)
   advanceNoticeHours Int            @default(24)
+  bufferTime         Int            @default(0)
   expertise          String[]       @default([])
   syncToken          String?
   webhookChannelId   String?        @unique

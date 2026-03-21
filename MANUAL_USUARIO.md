@@ -69,12 +69,15 @@ Haz que sea ridículamente fácil para tus clientes encontrarte.
 
 ---
 
-## 🛠 6. Configuración Avanzada de Disponibilidad
+## 🛠 6. Configuración Avanzada y Políticas de Reserva
 No dejes que el trabajo controle tu vida. Tú controlas el trabajo.
 
+### 🛡️ Políticas de Reserva Personalizadas
+Configura tus reglas de juego desde la sección de *Perfil*:
+*   **⏳ Tiempo de Descanso (Buffer Time):** Define un margen de descanso obligatorio (ej. 15 o 20 min) que se aplicará automáticamente **después de cada cita**. Esto asegura que tengas tiempo para prepararte, limpiar o simplemente tomar un respiro sin que las citas se solapen.
+*   **⏰ Antelación Mínima:** Evita sorpresas de último minuto. Establece cuántas horas de aviso necesitas (1h, 12h, 24h, etc.) antes de que un cliente pueda agendar en un espacio vacío.
 *   **☀️ Horarios Flexibles:** Define bloques de mañana, tarde o noche con descansos específicos.
 *   **🚫 Bloqueos de Emergencia:** ¿Salió algo imprevisto? Bloquea el tiempo en tu agenda y VLink cerrará esos espacios instantáneamente para nuevos clientes.
-*   **⌛️ Tiempos de Preparación:** Añade márgenes entre citas para asegurar que siempre estés listo para el siguiente cliente.
  
 ---
  

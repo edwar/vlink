@@ -38,11 +38,13 @@ export async function getProfile() {
         email: email,
         isGoogleConnected: isGoogleConnected,
         hasCalendarScope: !!hasCalendarScope,
-        isSyncEnabled: !!fullProfile.webhookChannelId && !!fullProfile.webhookExpiresAt && fullProfile.webhookExpiresAt > new Date()
+        isSyncEnabled: !!fullProfile.webhookChannelId && !!fullProfile.webhookExpiresAt && fullProfile.webhookExpiresAt > new Date(),
+        bufferTime: fullProfile.bufferTime,
+        advanceNoticeHours: fullProfile.advanceNoticeHours
     }
 }
 
-export async function updateProfile(data: { username: string, bio: string }) {
+export async function updateProfile(data: { username: string, bio: string, bufferTime?: number, advanceNoticeHours?: number }) {
     const profile = await getEffectiveProfile()
 
     const rawUsername = data.username.trim().toLowerCase()
@@ -71,7 +73,9 @@ export async function updateProfile(data: { username: string, bio: string }) {
         where: { id: profile.id },
         data: {
             username: rawUsername,
-            bio: bio.trim()
+            bio: bio.trim(),
+            bufferTime: data.bufferTime,
+            advanceNoticeHours: data.advanceNoticeHours
         }
     })
 

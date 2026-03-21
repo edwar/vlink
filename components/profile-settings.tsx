@@ -31,6 +31,8 @@ export function ProfileSettings() {
     const [isGoogleConnected, setIsGoogleConnected] = useState(false)
     const [hasCalendarScope, setHasCalendarScope] = useState(false)
     const [isSyncEnabled, setIsSyncEnabled] = useState(false)
+    const [bufferTime, setBufferTime] = useState(0)
+    const [advanceNoticeHours, setAdvanceNoticeHours] = useState(24)
     const [isDisconnecting, setIsDisconnecting] = useState(false)
     const [enablingSync, setEnablingSync] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
@@ -47,6 +49,8 @@ export function ProfileSettings() {
                 setIsGoogleConnected(data.isGoogleConnected)
                 setHasCalendarScope(data.hasCalendarScope)
                 setIsSyncEnabled(data.isSyncEnabled)
+                setBufferTime(data.bufferTime || 0)
+                setAdvanceNoticeHours(data.advanceNoticeHours || 24)
             } catch (err) {
                 console.error("Error fetching profile:", err)
                 setError("No se pudo cargar el perfil")
@@ -74,7 +78,7 @@ export function ProfileSettings() {
         setError(null)
         setSuccess(false)
         try {
-            await updateProfile({ username, bio })
+            await updateProfile({ username, bio, bufferTime, advanceNoticeHours })
             sileo.success({
                 title: "Perfil actualizado",
                 description: "Tus cambios se han guardado correctamente.",
@@ -157,8 +161,8 @@ export function ProfileSettings() {
     return (
         <div className="space-y-6 animate-in fade-in duration-700 pb-32">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                {/* Column 1: Profile Info (Left) */}
-                <div className="lg:col-span-12 xl:col-span-7 space-y-10">
+                {/* Column 1: Public Identity (Left) */}
+                <div className="lg:col-span-12 xl:col-span-6 space-y-6">
                     <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-2">
@@ -217,42 +221,11 @@ export function ProfileSettings() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex justify-end pt-4">
-                                <div className="relative w-fit group/save">
-                                    <div id="tour-save-anchor" className="absolute -inset-2 pointer-events-none rounded-3xl" />
-                                    <Button
-                                        onClick={handleSave}
-                                        disabled={saving}
-                                        className={cn(
-                                            "w-fit px-6 rounded-2xl font-black text-xl shadow-2xl transition-all duration-500 overflow-hidden group/btn",
-                                            success
-                                                ? "bg-secondary text-secondary-foreground shadow-primary/30 ring-8 ring-secondary/20"
-                                                : "bg-primary text-primary-foreground shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-95"
-                                        )}
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            {saving ? (
-                                                <Loader2 className="h-7 w-7 animate-spin" />
-                                            ) : success ? (
-                                                <Check className="h-7 w-7 animate-in zoom-in duration-500" />
-                                            ) : (
-                                                <Save className="h-7 w-7 group-hover/btn:rotate-12 transition-transform" />
-                                            )}
-                                            <span className="uppercase tracking-widest text-sm">
-                                                {saving ? "Procesando..." : success ? "Éxito total" : "Guardar perfil"}
-                                            </span>
-                                        </div>
-                                    </Button>
-                                </div>
-                            </div>
                         </div>
                     </section>
-                </div>
 
-                {/* Column 2: Link and Google (Right) */}
-                <div className="lg:col-span-12 xl:col-span-5 space-y-6 xl:space-y-16">
-                    {/* Section: Public Link */}
-                    <section id="tour-profile-url" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8 h-full">
+                    {/* Moved Section: Public Link */}
+                    <section id="tour-profile-url" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
                         <div id="tour-profile-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
                             <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Enlace de Agenda</h3>
@@ -270,6 +243,70 @@ export function ProfileSettings() {
                             >
                                 {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                             </Button>
+                        </div>
+                    </section>
+                </div>
+
+                {/* Column 2: Policies and Sync (Right) */}
+                <div className="lg:col-span-12 xl:col-span-6 space-y-6">
+                    {/* Section: Reservation Policies */}
+                    <section id="tour-policies" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
+                        <div id="tour-policies-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                        <div className="space-y-2">
+                            <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Políticas de Reserva</h3>
+                            <p className="text-sm text-muted-foreground font-medium">Define descansos y antelación mínima.</p>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div className="space-y-3">
+                                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">
+                                    Tiempo de Descanso (Buffer)
+                                </Label>
+                                <div className="flex items-center gap-4">
+                                    <input 
+                                        type="range" 
+                                        min="0" 
+                                        max="60" 
+                                        step="5"
+                                        value={bufferTime}
+                                        onChange={(e) => setBufferTime(parseInt(e.target.value))}
+                                        className="flex-1 accent-primary"
+                                    />
+                                    <div className="min-w-[70px] px-3 py-2 bg-primary/10 rounded-xl text-center">
+                                        <span className="text-sm font-black text-primary">{bufferTime} min</span>
+                                    </div>
+                                </div>
+                                <p className="text-[10px] text-muted-foreground/50 font-medium">Espacio libre obligatorio después de cada cita.</p>
+                            </div>
+
+                            <div className="h-px bg-border/50" />
+
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">
+                                        Antelación Mínima
+                                    </Label>
+                                    <span className="text-xs font-black text-primary">{advanceNoticeHours} horas</span>
+                                </div>
+                                <div className="grid grid-cols-4 gap-2">
+                                    {[1, 12, 24, 48].map((hours) => (
+                                        <button
+                                            key={hours}
+                                            type="button"
+                                            onClick={() => setAdvanceNoticeHours(hours)}
+                                            className={cn(
+                                                "py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all",
+                                                advanceNoticeHours === hours 
+                                                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                                                    : "bg-surface/50 text-muted-foreground border-border/50 hover:border-primary/30"
+                                            )}
+                                        >
+                                            {hours}h
+                                        </button>
+                                    ))}
+                                </div>
+                                <p className="text-[10px] text-muted-foreground/50 font-medium">Los clientes solo pueden reservar con este tiempo de aviso.</p>
+                            </div>
                         </div>
                     </section>
 
@@ -366,6 +403,51 @@ export function ProfileSettings() {
                         </div>
                     </section>
                 </div>
+            </div>
+
+            {/* Global Save Button - Centered at the bottom */}
+            <div className="flex flex-col items-center justify-center pt-10 sticky bottom-10 z-50 pointer-events-none">
+                <div className="relative w-fit group/save pointer-events-auto">
+                    <div id="tour-save-anchor" className="absolute -inset-4 pointer-events-none rounded-[3rem] bg-primary/10 blur-xl opacity-0 group-hover/save:opacity-100 transition-opacity" />
+                    <Button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className={cn(
+                            "group/btn relative px-12 h-20 rounded-[2rem] font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
+                            success
+                                ? "bg-secondary text-secondary-foreground border-secondary/20 scale-105 shadow-secondary/40"
+                                : "bg-primary text-primary-foreground border-primary/20 hover:scale-110 active:scale-95 hover:shadow-primary/40"
+                        )}
+                    >
+                        {/* Background animation for saving state */}
+                        {saving && (
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite] pointer-events-none" />
+                        )}
+                        
+                        <div className="relative z-10 flex items-center gap-6">
+                            <div className="p-3 bg-white/10 rounded-2xl">
+                                {saving ? (
+                                    <Loader2 className="h-8 w-8 animate-spin" />
+                                ) : success ? (
+                                    <Check className="h-8 w-8 animate-in zoom-in duration-500" />
+                                ) : (
+                                    <Save className="h-8 w-8 group-hover/btn:rotate-12 transition-transform duration-500" />
+                                )}
+                            </div>
+                            <div className="flex flex-col items-start gap-0.5">
+                                <span className="uppercase tracking-[0.2em] text-[10px] font-black opacity-60">
+                                    {saving ? "Sincronizando..." : success ? "Guardado" : "Control Maestro"}
+                                </span>
+                                <span className="text-xl">
+                                    {saving ? "Escribiendo cambios..." : success ? "Perfil Actualizado" : "Guardar Configuración"}
+                                </span>
+                            </div>
+                        </div>
+                    </Button>
+                </div>
+                <p className="mt-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 animate-pulse">
+                    Pulsa para aplicar cambios en tiempo real
+                </p>
             </div>
 
             {/* Confirmation Modal */}

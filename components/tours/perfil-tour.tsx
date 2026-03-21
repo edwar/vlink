@@ -34,6 +34,12 @@ export function PerfilTour() {
             position: "auto"
         },
         {
+            element: "#tour-policies-anchor",
+            title: "Tus Reglas de Agenda",
+            intro: "Define tiempos de descanso (Buffer) entre citas y cuánto tiempo de aviso mínimo necesitas para una reserva.",
+            position: "auto"
+        },
+        {
             element: "#tour-save-anchor",
             title: "Actualizar Perfil",
             intro: "Haz clic aquí para publicar todos tus cambios de identidad.",
@@ -44,7 +50,7 @@ export function PerfilTour() {
     return (
         <PageTour
             pageKey="perfil"
-            version="2026-03-14T17:46:00Z"
+            version="2026-03-21T01:25:00Z"
             steps={steps}
         />
     )

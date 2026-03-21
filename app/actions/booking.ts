@@ -180,10 +180,11 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         // Verificar si el slot está bloqueado por un bloqueo específico
         const isBlocked = blocks.some(b => timeStr < b.endTime && slotEndStr > b.startTime)
 
-        // Verificar si el slot solapa con una cita existente
+        // Verificar si el slot solapa con una cita existente y su buffer time
         const isOccupied = appointments.some(appt => {
             const apptStartMins = (appt.startTime.getTime() - dayStart.getTime()) / 60000;
-            const apptEndMins = (appt.endTime.getTime() - dayStart.getTime()) / 60000;
+            // Sumamos el bufferTime al final de la cita para reservar el espacio de descanso
+            const apptEndMins = (appt.endTime.getTime() - dayStart.getTime()) / 60000 + (profile.bufferTime || 0);
             return currentMinutes < apptEndMins && slotEndMinutes > apptStartMins;
         })
 
@@ -262,12 +263,13 @@ export async function createAppointment(data: {
         await tx.$executeRawUnsafe(`SELECT pg_advisory_xact_lock(${lockKey})`)
 
         // Now safely check for collisions — no other transaction can insert while we hold the lock
+        // Verificación con Buffer Time: El intervalo ocupado es [start, end + buffer]
         const collision = await tx.appointment.findFirst({
             where: {
                 profileId: profile.id,
                 status: { not: "CANCELLED" },
-                startTime: { lt: endTime },
-                endTime: { gt: startTime }
+                startTime: { lt: new Date(endTime.getTime() + (profile.bufferTime || 0) * 60000) },
+                endTime: { gt: new Date(startTime.getTime() - (profile.bufferTime || 0) * 60000) }
             }
         })
 
