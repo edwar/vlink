@@ -21,7 +21,7 @@ import {
     startOfDay,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
 import { pusherClient } from "@/lib/pusher-client"
@@ -226,18 +226,21 @@ export function CalendarView({ profileId }: { profileId: string }) {
     const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null)
     const [loading, setLoading] = useState(true)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [now, setNow] = useState(new Date())
+    const [isMounted, setIsMounted] = useState(false)
+    const [now, setNow] = useState(new Date(0)) // Neutral date for SSR
     const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-    // Update 'now' every minute
+    // Setup mounted state and timer
     useEffect(() => {
+        setIsMounted(true)
+        setNow(new Date())
         const timer = setInterval(() => setNow(new Date()), 60000)
         return () => clearInterval(timer)
     }, [])
 
     // Auto-scroll to current time on day/week view switch
     useEffect(() => {
-        if ((view === 'day' || view === 'week') && scrollContainerRef.current) {
+        if (isMounted && (view === 'day' || view === 'week') && scrollContainerRef.current) {
             const hour = now.getHours()
             const minutes = now.getMinutes()
             const scrollPos = (hour + minutes / 60) * 80 - 150 // 80px per hour, offset 150px
@@ -467,20 +470,19 @@ export function CalendarView({ profileId }: { profileId: string }) {
                             {/* Days columns */}
                             {displayDays.map((day) => {
                                 const dayOfWeek = getDay(day)
-                                const isDayToday = isToday(day)
+                                const now = new Date() // Define now here for consistent client-side rendering
                                 return (
                                     <div key={day.toString()} className="flex flex-col relative border-r border-border/50 last:border-r-0">
                                         {/* Current Time Line (Only for today) */}
-                                        {isDayToday && (
+                                        {isMounted && isSameDay(day, now) && (
                                             <div 
                                                 className="absolute left-0 right-0 z-20 pointer-events-none"
-                                                style={{
+                                                style={{ 
                                                     top: `${(now.getHours() + now.getMinutes() / 60) * 80}px`,
                                                 }}
                                             >
-                                                <div className="flex items-center -ml-[4px]">
-                                                    <div className="h-3 w-3 rounded-full bg-primary shadow-[0_0_10px_var(--color-primary)]" />
-                                                    <div className="flex-1 h-0.5 bg-primary/60" />
+                                                <div className="relative w-full h-0.5 bg-primary shadow-[0_0_8px_rgba(var(--primary),0.5)]">
+                                                    <div className="absolute left-0 -top-1 w-2.5 h-2.5 rounded-full bg-primary shadow-sm" />
                                                 </div>
                                             </div>
                                         )}
@@ -560,6 +562,17 @@ export function CalendarView({ profileId }: { profileId: string }) {
                             })}
                         </div>
                     </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (!isMounted) {
+        return (
+            <div className="w-full h-[800px] rounded-[2.5rem] bg-surface/50 border border-border/40 animate-pulse flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary/40" />
+                    <p className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Sincronizando Agenda...</p>
                 </div>
             </div>
         )
