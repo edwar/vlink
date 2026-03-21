@@ -253,7 +253,8 @@ export default async function OrganizacionPage(props: {
                         <div className="h-6 w-1 bg-emerald-500/40 rounded-full" />
                         <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
                     </div>
-                    <div className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div id="tour-org-payments" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                        <div id="tour-org-payments-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <WompiIntegration
                             organizationId={organization.id}
                             initialSubaccountId={(organization as any).wompiSubaccountId}
@@ -268,7 +269,8 @@ export default async function OrganizacionPage(props: {
                         <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
                         <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Comunicación & Soporte</h2>
                     </div>
-                    <div className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div id="tour-org-contact" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                        <div id="tour-org-contact-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <OrganizationContact
                             organizationId={organization.id}
                             initialPhone={(organization as any).phone}
@@ -299,6 +301,7 @@ export default async function OrganizacionPage(props: {
                             Agenda de Equipo
                         </a>
                         <a
+                            id="tour-org-public-page"
                             href={`/org/${organization.slug}`}
                             target="_blank"
                             rel="noreferrer"

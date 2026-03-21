@@ -22,6 +22,18 @@ export function OrganizacionTour() {
             position: "auto"
         },
         {
+            element: "#tour-org-payments-anchor",
+            title: "Pagos y Cobros",
+            intro: "Configura tu cuenta de Wompi para automatizar los cobros de tu organización y gestionar tus ingresos.",
+            position: "auto"
+        },
+        {
+            element: "#tour-org-contact-anchor",
+            title: "Comunicación y Soporte",
+            intro: "Mantén actualizados tus canales de contacto (WhatsApp y teléfono) para que tus clientes puedan comunicarse contigo fácilmente.",
+            position: "auto"
+        },
+        {
             element: "#tour-team-members-anchor",
             title: "Tus Profesionales",
             intro: "Aquí verás a todos los miembros de tu equipo, sus roles y estados actuales.",
@@ -31,6 +43,12 @@ export function OrganizacionTour() {
             element: "#tour-team-agenda",
             title: "Vista de Equipo",
             intro: "Accede a la agenda consolidada de toda la organización para una mejor coordinación.",
+            position: "auto"
+        },
+        {
+            element: "#tour-org-public-page",
+            title: "Página Pública",
+            intro: "Visualiza cómo tus clientes ven el perfil de tu organización y agendan citas directamente con tus profesionales.",
             position: "auto"
         },
         {
@@ -44,7 +62,7 @@ export function OrganizacionTour() {
     return (
         <PageTour
             pageKey="organizacion"
-            version="2026-03-14T17:46:00Z"
+            version="2026-03-20T23:40:00Z"
             steps={steps}
         />
     )
