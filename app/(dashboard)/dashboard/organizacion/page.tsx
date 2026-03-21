@@ -58,6 +58,9 @@ export default async function OrganizacionPage(props: {
         )
     }
 
+    const config = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
+    const isWompiMarketplaceEnabled = config?.wompiMarketplaceEnabled ?? false;
+ 
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/org/${organization.slug}`
 
     const planConfig = await prisma.planConfig.findUnique({
@@ -259,6 +262,7 @@ export default async function OrganizacionPage(props: {
                             organizationId={organization.id}
                             initialSubaccountId={(organization as any).wompiSubaccountId}
                             disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
+                            isMarketplaceEnabled={isWompiMarketplaceEnabled}
                         />
                     </div>
                 </div>

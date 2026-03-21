@@ -29,7 +29,7 @@ const COLOMBIAN_BANKS = [
     { code: "058", name: "Banco Procrédito" },
 ]
 
-export function WompiSubaccountForm({ organizationId, onCreated }: { organizationId: string, onCreated: (id: string) => void }) {
+export function WompiSubaccountForm({ organizationId, onCreated, disabled }: { organizationId: string, onCreated: (id: string) => void, disabled?: boolean }) {
     const [open, setOpen] = useState(false)
     const [isPending, setIsPending] = useState(false)
     const [selectedBank, setSelectedBank] = useState<string>("WOMPI")
@@ -74,7 +74,11 @@ export function WompiSubaccountForm({ organizationId, onCreated }: { organizatio
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-full h-12 rounded-2xl border-dashed border-primary/40 text-primary hover:bg-primary/5 font-black uppercase tracking-widest text-[10px] gap-2">
+                <Button 
+                    variant="outline" 
+                    disabled={disabled}
+                    className="w-full h-12 rounded-2xl border-dashed border-primary/40 text-primary hover:bg-primary/5 font-black uppercase tracking-widest text-[10px] gap-2"
+                >
                     <PlusCircle className="h-4 w-4" /> Crear Nueva Subcuenta
                 </Button>
             </DialogTrigger>

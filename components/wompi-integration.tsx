@@ -5,7 +5,7 @@ import { updateWompiSubaccount } from "@/app/actions/organization"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, CreditCard, Info, Check, Save, Landmark } from "lucide-react"
+import { Loader2, CreditCard, Info, Check, Save, Landmark, AlertTriangle } from "lucide-react"
 import { sileo } from "sileo"
 import { WompiSubaccountForm } from "./wompi-subaccount-form"
 
@@ -13,9 +13,10 @@ interface WompiIntegrationProps {
     organizationId: string
     initialSubaccountId: string | null
     disabled?: boolean
+    isMarketplaceEnabled?: boolean
 }
 
-export function WompiIntegration({ organizationId, initialSubaccountId, disabled }: WompiIntegrationProps) {
+export function WompiIntegration({ organizationId, initialSubaccountId, disabled, isMarketplaceEnabled }: WompiIntegrationProps) {
     const [subaccountId, setSubaccountId] = useState(initialSubaccountId || "")
     const [isPending, setIsPending] = useState(false)
 
@@ -69,7 +70,7 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                                     <p className="text-sm font-black text-foreground font-mono">{subaccountId}</p>
                                 </div>
                             </div>
-
+ 
                             {!disabled && (
                                 <Button
                                     variant="ghost"
@@ -81,15 +82,29 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                                 </Button>
                             )}
                         </div>
-
+ 
                         <div className="text-[11px] text-muted-foreground bg-muted/30 p-4 rounded-2xl border border-border/40 text-center font-medium">
                             Los pagos de tus servicios con costo caerán directamente en esta cuenta digital con la disposición inmediata de fondos.
                         </div>
                     </div>
                 ) : (
                     <div className="space-y-6">
+                        {!isMarketplaceEnabled && (
+                            <div className="p-5 bg-amber-500/10 border border-amber-500/20 rounded-3xl flex items-start gap-4">
+                                <div className="h-10 w-10 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-600 shrink-0">
+                                    <AlertTriangle className="h-5 w-5" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[11px] font-black uppercase tracking-widest text-amber-600">Activación Pendiente</p>
+                                    <p className="text-[12px] text-amber-900/70 font-bold leading-tight">
+                                        El administrador global está activando el Rol Marketplace. Por ahora, no se pueden crear nuevas subcuentas.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                         <WompiSubaccountForm
                             organizationId={organizationId}
+                            disabled={disabled || !isMarketplaceEnabled}
                             onCreated={(id) => {
                                 setSubaccountId(id)
                                 sileo.success({
