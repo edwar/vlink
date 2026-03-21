@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -293,4 +294,14 @@
 .introjs-tooltip .introjs-button:active {
   @apply outline-none;
   box-shadow: none !important;
+}
+
+/* Manual Print Styles */
+@media print {
+  @page { margin: 2cm; }
+  body { background: white !important; color: black !important; }
+  .print-hidden { display: none !important; }
+  img { max-width: 100% !important; height: auto !important; break-inside: avoid; }
+  h2, h3, h4 { break-after: avoid; }
+  p, blockquote, ul { break-inside: avoid; }
 }

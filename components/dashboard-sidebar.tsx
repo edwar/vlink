@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard, Users, ShieldCheck } from "lucide-react"
+import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard, Users, ShieldCheck, BookOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
 import { signOut, useSession } from "@/lib/auth-client"
@@ -18,6 +18,7 @@ const navigation = [
     { name: 'Disponibilidad', href: '/dashboard/disponibilidad', icon: Clock },
     { name: 'Equipo', href: '/dashboard/organizacion', icon: Users },
     { name: 'Perfil', href: '/dashboard/perfil', icon: User },
+    { name: 'Manual', href: '/manual', icon: BookOpen },
     { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
 ]
 

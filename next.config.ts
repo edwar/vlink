@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  transpilePackages: ["react-markdown", "remark-gfm", "property-information", "space-separated-tokens", "comma-separated-tokens"],
 };
 
 export default nextConfig;
