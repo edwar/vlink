@@ -5,9 +5,12 @@ import remarkGfm from "remark-gfm"
 import { Printer, ArrowLeft, Download } from "lucide-react"
 import { Button } from "./ui/button"
 import Link from "next/link"
+import { useSession } from "@/lib/auth-client"
 
 
 export function MarkdownManual({ content }: { content: string }) {
+    const { data: session } = useSession()
+
     const handleDownloadPdf = () => {
         window.print()
     }
@@ -17,11 +20,11 @@ export function MarkdownManual({ content }: { content: string }) {
             {/* Action Bar (Hid on print) */}
             <div className="print:hidden flex items-center justify-between mb-12 border-b border-border/40 pb-6">
                 <Link
-                    href="/dashboard"
+                    href={session ? "/dashboard" : "/"}
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
                 >
                     <ArrowLeft className="h-4 w-4" />
-                    Volver al Dashboard
+                    {session ? "Volver al Dashboard" : "Volver al Inicio"}
                 </Link>
 
                 <div className="flex items-center gap-3">

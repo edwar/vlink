@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic"
 
-const MarkdownManual = dynamic(() => import("./markdown-manual").then(mod => mod.MarkdownManual), { 
+const MarkdownManual = dynamic(() => import("./markdown-manual").then(mod => mod.MarkdownManual), {
     ssr: false,
     loading: () => (
         <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center justify-center min-h-[50vh] space-y-4">
