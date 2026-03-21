@@ -21,7 +21,8 @@ El Dashboard es tu tablero de mandos táctico.
 
 ![Dashboard Illustration](/images/manual/vlink_dashboard.png)
 
-*   **⚡️ Métricas en Tiempo Real:** Controla de un vistazo tus ingresos proyectados, horas ocupadas y volumen de citas.
+*   **⚡️ Sincronización en Tiempo Real (Push):** Olvídate de refrescar la página. Gracias a nuestra tecnología de eventos activos, el Dashboard se actualiza **instantáneamente** cuando alguien agenda, cancela o reprograma una cita.
+*   **📊 Métricas Vivas:** Controla de un vistazo tus ingresos proyectados, horas ocupadas y volumen de citas. Todo fluye en tiempo real.
 *   **📈 Insights de Rendimiento:** Utiliza la sección de analíticas para descubrir qué días son más productivos y qué servicios tienen mayor demanda.
 *   **📑 Gestión de Datos:** Exporta tu historial a CSV con un solo clic para contabilidad o análisis externo.
 
@@ -85,6 +86,15 @@ No permitas que las citas de trabajo interfieran con tu vida personal.
 *   **🛡️ Privacidad Garantizada:** VLink solo lee los bloques de tiempo ocupados para evitar cruces, manteniendo los detalles de tus eventos privados.
  
 > **✨ PRO TIP:** Mantener tu calendario de Google actualizado es la mejor forma de asegurar una agenda 100% precisa sin esfuerzo manual.
+
+---
+
+## 🕒 8. Agenda Interactiva de Alta Velocidad
+Tu agenda profesional no es estática; es un ecosistema vivo.
+
+*   **⚡️ Refresco Instantáneo:** Tanto la vista semanal como mensual reaccionan al segundo. Si un cliente cancela su cita desde su correo o tú bloqueas un espacio, verás el cambio reflejado en tu pantalla sin mover un dedo.
+*   **🖱️ Gestión Visual:** Arrastra, visualiza y detalla cada compromiso con una interfaz fluida diseñada para la velocidad.
+*   **📱 Omnicanalidad Real:** No importa si la acción ocurre en el móvil del cliente o en tu computadora; VLink sincroniza todos los estados para que nunca haya conflictos de horario.
 
 
 ---

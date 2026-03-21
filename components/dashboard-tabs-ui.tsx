@@ -68,6 +68,11 @@ export function DashboardTabsUI({
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                     <div id="tour-export-csv" className="relative flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
                         <div id="tour-export-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                        <span className="flex items-center gap-2 shrink-0">
+                            <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                            {new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        </span>
+                        <div className="h-3 w-px bg-border/50 shrink-0" />
                         <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-primary" /> {stats.totalToday} Hoy</span>
                         <div className="h-3 w-px bg-border/50 shrink-0" />
                         <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-blue-500" /> {stats.totalActive} Activas</span>

@@ -123,11 +123,11 @@ export default async function DashboardPage(props: {
                     <div className="space-y-2">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
                             <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                            Sistema Activo
+                            Sincronización en Tiempo Real
                         </div>
                         <Title title="Panel de Control" />
                         <p className="text-muted-foreground font-medium text-lg max-w-xl">
-                            Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Hoy es <span className="text-primary font-bold italic decoration-primary/30">{format(today, "EEEE, d 'de' MMMM", { locale: es })}</span>.
+                            Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.
                         </p>
                     </div>
                 </div>

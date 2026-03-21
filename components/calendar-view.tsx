@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import {
     format,
     startOfWeek,
@@ -226,6 +226,27 @@ export function CalendarView({ profileId }: { profileId: string }) {
     const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null)
     const [loading, setLoading] = useState(true)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [now, setNow] = useState(new Date())
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+    // Update 'now' every minute
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 60000)
+        return () => clearInterval(timer)
+    }, [])
+
+    // Auto-scroll to current time on day/week view switch
+    useEffect(() => {
+        if ((view === 'day' || view === 'week') && scrollContainerRef.current) {
+            const hour = now.getHours()
+            const minutes = now.getMinutes()
+            const scrollPos = (hour + minutes / 60) * 80 - 150 // 80px per hour, offset 150px
+            scrollContainerRef.current.scrollTo({
+                top: Math.max(0, scrollPos),
+                behavior: 'smooth'
+            })
+        }
+    }, [view])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -386,7 +407,7 @@ export function CalendarView({ profileId }: { profileId: string }) {
 
         return (
             <div className="flex flex-col border border-primary/10 rounded-[2.5rem] bg-transparent overflow-hidden h-[600px]">
-                <div className="overflow-auto scrollbar-hide flex-1">
+                <div ref={scrollContainerRef} className="overflow-auto scrollbar-hide flex-1">
                     <div className={cn(
                         "flex flex-col min-w-full transition-all duration-300",
                         view === 'week' ? "w-max sm:w-full" : "w-full"
@@ -446,8 +467,23 @@ export function CalendarView({ profileId }: { profileId: string }) {
                             {/* Days columns */}
                             {displayDays.map((day) => {
                                 const dayOfWeek = getDay(day)
+                                const isDayToday = isToday(day)
                                 return (
                                     <div key={day.toString()} className="flex flex-col relative border-r border-border/50 last:border-r-0">
+                                        {/* Current Time Line (Only for today) */}
+                                        {isDayToday && (
+                                            <div 
+                                                className="absolute left-0 right-0 z-20 pointer-events-none"
+                                                style={{
+                                                    top: `${(now.getHours() + now.getMinutes() / 60) * 80}px`,
+                                                }}
+                                            >
+                                                <div className="flex items-center -ml-[4px]">
+                                                    <div className="h-3 w-3 rounded-full bg-primary shadow-[0_0_10px_var(--color-primary)]" />
+                                                    <div className="flex-1 h-0.5 bg-primary/60" />
+                                                </div>
+                                            </div>
+                                        )}
                                         {hours.map((hour) => {
                                             const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
                                             const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
