@@ -16,16 +16,16 @@ export function MarkdownManual({ content }: { content: string }) {
         <div className="max-w-4xl mx-auto px-6 py-12 sm:py-20 animate-in fade-in duration-1000">
             {/* Action Bar (Hid on print) */}
             <div className="print:hidden flex items-center justify-between mb-12 border-b border-border/40 pb-6">
-                <Link 
+                <Link
                     href="/dashboard"
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Volver al Dashboard
                 </Link>
-                
+
                 <div className="flex items-center gap-3">
-                    <Button 
+                    <Button
                         onClick={handleDownloadPdf}
                         variant="default"
                         size="sm"
@@ -59,8 +59,9 @@ export function MarkdownManual({ content }: { content: string }) {
                     © {new Date().getFullYear()} VLink - Todos los derechos reservados.
                 </p>
                 <div className="mt-4 flex justify-center gap-8">
-                    <Link href="/manual" className="text-primary text-xs font-black uppercase tracking-widest hover:underline">Políticas</Link>
-                    <Link href="/manual" className="text-primary text-xs font-black uppercase tracking-widest hover:underline">Soporte</Link>
+                    <Link href="/terminos" className="text-primary text-xs font-black uppercase tracking-widest hover:underline">Términos</Link>
+                    <Link href="/privacidad" className="text-primary text-xs font-black uppercase tracking-widest hover:underline">Politicas de Privacidad</Link>
+                    <Link href="/soporte" className="text-primary text-xs font-black uppercase tracking-widest hover:underline">Soporte</Link>
                 </div>
             </footer>
         </div>

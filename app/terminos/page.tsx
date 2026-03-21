@@ -17,7 +17,7 @@ export default function TermsPage() {
                         <div className="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
                             <ArrowLeft className="h-5 w-5" />
                         </div>
-                        <span className="font-display font-black tracking-tighter text-xl">VLINK</span>
+                        <span className="font-display font-black tracking-tighter text-xl text-primary">VLINK</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-4 text-xs font-black uppercase tracking-widest text-muted-foreground/60">
                         <Scale className="h-4 w-4 text-primary" />

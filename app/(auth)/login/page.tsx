@@ -142,7 +142,7 @@ export default function LoginPage() {
 
                 {/* Footer text in login */}
                 <p className="text-center text-sm font-bold text-muted-foreground/60">
-                    ¿Necesitas ayuda? <span className="text-primary/60">Soporte técnico</span>
+                    ¿Necesitas ayuda? <Link href="/soporte" className="text-primary hover:underline underline-offset-4">Centro de Soporte</Link>
                 </p>
             </div>
         </div>

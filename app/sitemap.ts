@@ -17,16 +17,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
-            url: `${baseUrl}/terminos`,
+            url: `${baseUrl}/politicas`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.3,
         },
         {
-            url: `${baseUrl}/privacidad`,
+            url: `${baseUrl}/soporte`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.3,
+        },
+        {
+            url: `${baseUrl}/manual`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.5,
         },
     ]
 }

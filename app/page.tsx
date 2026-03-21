@@ -152,7 +152,9 @@ export default function LandingPage() {
           <p className="text-sm text-muted-foreground font-medium">© 2026 VLink. Hecho para profesionales modernos.</p>
           <div className="flex items-center gap-6 text-sm font-bold text-muted-foreground">
             <Link href="/terminos" className="hover:text-primary transition-colors">Términos</Link>
-            <Link href="/privacidad" className="hover:text-primary transition-colors">Privacidad</Link>
+            <Link href="/privacidad" className="hover:text-primary transition-colors">Politicas de Privacidad</Link>
+            <Link href="/soporte" className="hover:text-primary transition-colors">Soporte</Link>
+            <Link href="/manual" className="hover:text-primary transition-colors underline decoration-primary/20">Manual</Link>
           </div>
         </div>
       </footer>
