@@ -70,13 +70,13 @@ export function AvailabilityManagement() {
                 if (data && data.length > 0) {
                     const recurringData = data.filter((d: any) => d.specificDate === null)
 
-                    // Group data by locationId
-                    const locIds = Array.from(new Set(recurringData.map((d: any) => d.locationId || ""))) as string[]
+                    // Group data by locationId (only valid locations)
+                    const locIds = Array.from(new Set(recurringData.map((d: any) => d.locationId).filter(Boolean))) as string[]
 
                     locIds.forEach(locId => {
                         const dayData = DAYS.map(day => {
-                            const workingRecord = recurringData.find((d: any) => d.dayOfWeek === day.id && d.locationId === (locId || null) && !d.isBlocked)
-                            const lunchRecord = recurringData.find((d: any) => d.dayOfWeek === day.id && d.locationId === (locId || null) && d.isBlocked)
+                            const workingRecord = recurringData.find((d: any) => d.dayOfWeek === day.id && d.locationId === locId && !d.isBlocked)
+                            const lunchRecord = recurringData.find((d: any) => d.dayOfWeek === day.id && d.locationId === locId && d.isBlocked)
 
                             return {
                                 dayId: day.id,
@@ -95,7 +95,7 @@ export function AvailabilityManagement() {
                     setAllRecurringData(dataMap)
 
                     // Determine which location to show first
-                    const firstLocId = locations[0]?.id || (locIds.length > 0 ? locIds[0] : "")
+                    const firstLocId = locations[0]?.id || ""
                     setSelectedLocationId(firstLocId)
 
                     const currentDays = dataMap.get(firstLocId)
@@ -326,15 +326,13 @@ export function AvailabilityManagement() {
                     </div>
                     <div className="w-full md:w-80">
                         <Select
-                            value={selectedLocationId || "none"}
-                            onValueChange={(value) => switchLocation(value === "none" ? "" : value)}
+                            value={selectedLocationId || ""}
+                            onValueChange={(value) => switchLocation(value)}
                         >
                             <SelectTrigger className="w-full h-14 rounded-2xl bg-background border-border/40 px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
                                 <SelectValue placeholder="Seleccionar Sede" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-2xl">
-                                <SelectItem value="none" className="font-black py-3 rounded-xl">Sin Sede (Ubicación General)</SelectItem>
-
                                 {locations.map(loc => (
                                     <SelectItem key={loc.id} value={loc.id} className="font-black py-3 rounded-xl">
                                         {loc.name}
@@ -360,6 +358,7 @@ export function AvailabilityManagement() {
                     DAYS.forEach(day => {
                         const slots: { locId: string, start: number, end: number }[] = []
                         allSchedules.forEach((schedule, locId) => {
+                            if (!locId) return // Ensure no unassigned location is parsed
                             const d = schedule.find(s => s.dayId === day.id)
                             if (d?.active) {
                                 slots.push({ locId, start: parseTimeToMinutes(d.start), end: parseTimeToMinutes(d.end) })
