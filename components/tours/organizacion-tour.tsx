@@ -10,13 +10,7 @@ export function OrganizacionTour() {
             position: "bottom"
         },
         {
-            element: "#tour-org-sedes",
-            title: "Gestión de Sedes",
-            intro: "Ahora puedes crear múltiples sedes para tu negocio. Configura la dirección y datos de contacto de cada una.",
-            position: "auto"
-        },
-        {
-            element: "#tour-org-sedes",
+            element: "#tour-org-sedes-anchor",
             title: "Gestión de Sedes",
             intro: "Ahora puedes crear múltiples sedes para tu negocio. Configura la dirección y datos de contacto de cada una.",
             position: "auto"

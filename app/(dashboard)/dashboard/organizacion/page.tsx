@@ -5,7 +5,7 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, AlertTriangle, MapPin } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, AlertTriangle, MapPin, Store } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -60,7 +60,7 @@ export default async function OrganizacionPage(props: {
 
     const config = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
     const isWompiMarketplaceEnabled = config?.wompiMarketplaceEnabled ?? false;
- 
+
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/org/${organization.slug}`
 
     const planConfig = await prisma.planConfig.findUnique({
@@ -116,17 +116,13 @@ export default async function OrganizacionPage(props: {
 
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
-            <header className="relative py-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
+            <header className="relative py-8 rounded-3xl bg-surface/50 overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
                 </div>
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div className="space-y-2">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
-                            <Building2 className="h-3 w-3" />
-                            Gestión Corporativa
-                        </div>
                         {isOwnerOrManager ? (
                             <RenameOrganization
                                 organizationId={organization.id}
@@ -171,13 +167,13 @@ export default async function OrganizacionPage(props: {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative mt-8">
 
                 {/* QR Code Column */}
-                <div className="lg:col-span-5 space-y-6">
-                    <div className="flex items-center gap-3">
-                        <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
-                        <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Marketing & QR</h2>
-                    </div>
-                    <div id="tour-org-qr" className="relative space-y-4 flex flex-col h-full bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                <div className="lg:col-span-5 flex flex-col h-full">
+                    <div id="tour-org-qr" className="relative flex-1 space-y-4 flex flex-col bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
                         <div id="tour-org-qr-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                        <div className="flex items-center gap-3 relative z-10">
+                            <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
+                            <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Marketing & QR</h2>
+                        </div>
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Descarga el QR base o compártelo al instante con tus clientes en redes.
                         </p>
@@ -222,12 +218,12 @@ export default async function OrganizacionPage(props: {
 
                 {/* Lateral: Invitaciones */}
                 <div className="lg:col-span-7 flex flex-col h-full">
-                    <div className="flex items-center gap-3 pb-6">
-                        <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
-                        <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Crecer / Equipo</h2>
-                    </div>
                     <div id="tour-org-invite" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
                         <div id="tour-org-invite-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                        <div className="flex items-center gap-3 relative z-10">
+                            <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
+                            <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Crecer / Equipo</h2>
+                        </div>
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Invita nuevos profesionales a tu organización copiando el enlace mágico para escalar tu negocio.
                         </p>
@@ -266,20 +262,48 @@ export default async function OrganizacionPage(props: {
                 </div>
 
                 {/* Infraestructura & Sedes */}
-                <div className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
-                    <div className="flex items-center gap-3">
+                <div id="tour-org-sedes" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden group">
+                    <div id="tour-org-sedes-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+
+                    {/* Background Decorative Icon */}
+                    <div className="absolute -right-8 -bottom-8 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-700 pointer-events-none group-hover:scale-110">
+                        <Store className="w-64 h-64 text-purple-500" />
+                    </div>
+
+                    <div className="flex items-center gap-3 relative z-10">
                         <div className="h-6 w-1 bg-purple-500/40 rounded-full" />
                         <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Infraestructura</h2>
                     </div>
-                    <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10 flex-1">
-                        Gestiona tus sedes físicas y asocia disponibilidad a cada ubicación.
-                    </p>
-                    <Button asChild variant="vlink" size="lg" className="w-full mt-auto h-14 rounded-2xl">
-                        <a href="/dashboard/organizacion/sedes">
-                            <MapPin className="h-5 w-5 mr-2" />
-                            <span className="uppercase tracking-widest text-xs font-black">Gestionar Sedes</span>
-                        </a>
-                    </Button>
+
+                    <div className="flex-1 flex flex-col space-y-6 relative z-10">
+                        <p className="text-muted-foreground text-sm font-medium leading-relaxed">
+                            Organiza tu presencia física. Añade tus sedes y configura qué profesionales y servicios operan en cada lugar.
+                        </p>
+
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-4 text-sm font-medium text-foreground/80">
+                                <div className="h-10 w-10 shrink-0 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-600 border border-purple-500/20">
+                                    <MapPin className="h-5 w-5" />
+                                </div>
+                                <span className="leading-snug text-xs sm:text-sm">Configuración de múltiples sucursales u oficinas</span>
+                            </div>
+                            <div className="flex items-center gap-4 text-sm font-medium text-foreground/80">
+                                <div className="h-10 w-10 shrink-0 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 border border-blue-500/20">
+                                    <Briefcase className="h-5 w-5" />
+                                </div>
+                                <span className="leading-snug text-xs sm:text-sm">Asignación de disponibilidad por profesional</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="relative z-10 pt-2 mt-auto">
+                        <Button asChild variant="vlink" size="lg" className="w-full h-14 rounded-2xl group/btn border-2 border-border shadow-none">
+                            <a href="/dashboard/organizacion/sedes">
+                                <Store className="h-5 w-5 mr-2 group-hover/btn:-translate-y-0.5 transition-transform" />
+                                <span className="uppercase tracking-widest text-xs font-black">Gestionar Sedes</span>
+                            </a>
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Comunicación & Soporte */}
@@ -299,7 +323,7 @@ export default async function OrganizacionPage(props: {
             </div>
 
             {/* Row 2: Mi Equipo */}
-            <div className="pt-20 mt-20 border-t border-border/50 space-y-6">
+            <div className="pt-12 mt-12 border-t border-border/50 space-y-6">
                 <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-primary rounded-full" />

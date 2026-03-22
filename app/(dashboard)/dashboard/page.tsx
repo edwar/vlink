@@ -55,7 +55,7 @@ export default async function DashboardPage(props: {
     const upcomingAppointmentsAll = allAppointments.filter(appt =>
         isAfter(appt.startTime, today) && !todayAppointments.find(t => t.id === appt.id)
     )
-    
+
     const totalUpcoming = upcomingAppointmentsAll.length
     const totalPagesUpcoming = Math.ceil(totalUpcoming / limit)
     const upcomingAppointments = upcomingAppointmentsAll.slice(skip, skip + limit)
@@ -114,17 +114,13 @@ export default async function DashboardPage(props: {
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
             {/* Header section with profile overview */}
-            <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 border border-border/40 overflow-hidden">
+            <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
                     <CalendarIcon className="h-24 w-24 text-primary rotate-12" />
                 </div>
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8">
                     <div className="space-y-2">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                            Sincronización en Tiempo Real
-                        </div>
                         <Title title="Panel de Control" />
                         <p className="text-muted-foreground font-medium text-lg max-w-xl">
                             Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.
@@ -296,9 +292,9 @@ export default async function DashboardPage(props: {
                                                     <AppointmentCard key={appt.id} appt={appt} showDate />
                                                 ))}
                                             </div>
-                                            <PaginationControls 
-                                                totalPages={totalPagesUpcoming} 
-                                                currentPage={page} 
+                                            <PaginationControls
+                                                totalPages={totalPagesUpcoming}
+                                                currentPage={page}
                                             />
                                         </div>
                                     ) : (

@@ -345,8 +345,8 @@ export function ConfigurationSettings() {
 
                             {/* Service List */}
                             {services.length === 0 && !showNewForm ? (
-                                <div className="py-24 text-center border-2 border-dashed rounded-[2rem] bg-muted/5 border-primary/10 space-y-6">
-                                    <div className="h-20 w-20 rounded-[1.5rem] bg-primary/5 flex items-center justify-center mx-auto ring-1 ring-primary/10">
+                                <div className="text-center rounded-4xl bg-muted/5 border-primary/10 space-y-6">
+                                    <div className="h-20 w-20 rounded-4xl bg-primary/5 flex items-center justify-center mx-auto ring-1 ring-primary/10">
                                         <Briefcase className="h-10 w-10 text-primary/30" />
                                     </div>
                                     <div className="space-y-2">
