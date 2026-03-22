@@ -4,14 +4,14 @@ import { redirect } from "next/navigation"
 import prisma from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { 
-    MapPin, 
-    Plus, 
-    Settings2, 
-    Trash2, 
-    Building2, 
-    Phone, 
-    Users, 
+import {
+    MapPin,
+    Plus,
+    Settings2,
+    Trash2,
+    Building2,
+    Phone,
+    Users,
     ArrowRight,
     MapPinned,
     AlertCircle
@@ -77,7 +77,7 @@ export default async function SedesPage() {
     })
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-700 pb-20">
+        <div className="space-y-8 animate-in fade-in duration-700 py-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-display font-black tracking-tight text-foreground uppercase">Sedes y Sucursales</h1>
@@ -86,9 +86,9 @@ export default async function SedesPage() {
 
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button 
+                        <Button
                             disabled={!canAddLocation}
-                            variant="vlink" 
+                            variant="vlink"
                             className="rounded-2xl h-12 px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
                         >
                             <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
@@ -116,7 +116,7 @@ export default async function SedesPage() {
                     <div className="space-y-1">
                         <p className="text-sm font-black text-amber-900 uppercase tracking-tight">Límite de Sedes Alcanzado</p>
                         <p className="text-sm text-amber-800/80 font-medium">
-                            Tu plan actual ({organization.subscriptionPlan}) permite un máximo de {maxLocations} sedes. 
+                            Tu plan actual ({organization.subscriptionPlan}) permite un máximo de {maxLocations} sedes.
                             Considera mejorar tu plan para agregar más ubicaciones.
                         </p>
                     </div>
@@ -156,8 +156,8 @@ export default async function SedesPage() {
                                                     <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
                                                 </DialogHeader>
                                                 <div className="p-8">
-                                                    <LocationForm 
-                                                        organizationId={organization.id} 
+                                                    <LocationForm
+                                                        organizationId={organization.id}
                                                         initialData={{
                                                             id: loc.id,
                                                             name: loc.name,
@@ -201,13 +201,13 @@ export default async function SedesPage() {
 
                                 <div className="pt-2 border-t border-border/40">
                                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Configuración de Equipo</h4>
-                                    
+
                                     <div className="space-y-2">
                                         {(organization as any).members.map((member: any) => (
                                             <Dialog key={member.id}>
                                                 <DialogTrigger asChild>
-                                                    <Button 
-                                                        variant="ghost" 
+                                                    <Button
+                                                        variant="ghost"
                                                         className="w-full h-14 bg-muted/10 hover:bg-primary/5 border border-border/30 hover:border-primary/20 rounded-2xl flex items-center justify-between px-4 group/btn"
                                                     >
                                                         <div className="flex items-center gap-3">
@@ -230,7 +230,7 @@ export default async function SedesPage() {
                                                         </DialogDescription>
                                                     </DialogHeader>
                                                     <div className="p-8">
-                                                        <MemberConfigWrapper 
+                                                        <MemberConfigWrapper
                                                             memberId={member.id}
                                                             memberName={member.user.name || "Miembro"}
                                                             locationId={loc.id}
@@ -253,24 +253,24 @@ export default async function SedesPage() {
 }
 
 // Wrapper to fetch current services for a member in a location
-async function MemberConfigWrapper({ 
-    memberId, 
-    memberName, 
-    locationId, 
-    locationName, 
-    allServices 
-}: { 
-    memberId: string, 
-    memberName: string, 
-    locationId: string, 
-    locationName: string, 
-    allServices: { id: string, name: string }[] 
+async function MemberConfigWrapper({
+    memberId,
+    memberName,
+    locationId,
+    locationName,
+    allServices
+}: {
+    memberId: string,
+    memberName: string,
+    locationId: string,
+    locationName: string,
+    allServices: { id: string, name: string }[]
 }) {
     const currentServices = await getMemberServicesByLocation(memberId, locationId)
     const currentServiceIds = currentServices.map((s: any) => s.id)
-    
+
     return (
-        <LocationMembersConfig 
+        <LocationMembersConfig
             memberId={memberId}
             memberName={memberName}
             locationId={locationId}
