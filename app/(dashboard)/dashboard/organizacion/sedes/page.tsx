@@ -222,7 +222,7 @@ export default async function SedesPage() {
                                                         <ArrowRight className="h-4 w-4 text-muted-foreground group-hover/btn:text-primary group-hover/btn:translate-x-1 transition-all" />
                                                     </Button>
                                                 </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[550px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-white shadow-2xl">
+                                                <DialogContent className="sm:max-w-[550px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card shadow-2xl">
                                                     <DialogHeader className="p-8 pb-0">
                                                         <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Configurar Profesional</DialogTitle>
                                                         <DialogDescription className="text-muted-foreground font-medium pt-2">

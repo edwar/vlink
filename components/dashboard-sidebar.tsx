@@ -60,7 +60,7 @@ export function DashboardSidebar() {
                                         <Link
                                             href={item.href}
                                             className={cn(
-                                                'group relative flex gap-x-4 rounded-md p-3 text-sm font-bold leading-6 transition-colors duration-300 overflow-hidden',
+                                                'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-colors duration-300 overflow-hidden',
                                                 isActive
                                                     ? 'text-primary'
                                                     : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
@@ -69,10 +69,10 @@ export function DashboardSidebar() {
                                             {isActive && (
                                                 <motion.div
                                                     layoutId="sidebar-active"
-                                                    className="absolute inset-0 bg-primary/10 rounded-xl shadow-none"
+                                                    className="absolute inset-0 bg-primary/10 rounded-xl overflow-hidden shadow-none"
                                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                                 >
-                                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
+                                                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-primary" />
                                                 </motion.div>
                                             )}
                                             <item.icon className={cn(
