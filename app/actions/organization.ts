@@ -333,6 +333,7 @@ export async function getUserOrganizations() {
         },
         include: {
             members: true,
+            locations: { where: { isActive: true } } as any,
             profiles: {
                 include: {
                     user: true
@@ -342,9 +343,9 @@ export async function getUserOrganizations() {
     })
 
     // Sort by when the current user joined, descending (newest memberships first)
-    return orgs.sort((a, b) => {
-        const joinA = a.members.find(m => m.userId === session.user.id)?.createdAt.getTime() || 0;
-        const joinB = b.members.find(m => m.userId === session.user.id)?.createdAt.getTime() || 0;
+    return orgs.sort((a: any, b: any) => {
+        const joinA = a.members.find((m: any) => m.userId === session.user.id)?.createdAt.getTime() || 0;
+        const joinB = b.members.find((m: any) => m.userId === session.user.id)?.createdAt.getTime() || 0;
         return joinB - joinA;
     });
 }
@@ -432,36 +433,43 @@ export async function getOrganizationPublicProfiles(slug: string) {
 
     if (!organization) return null
 
-    // Query through Member - the source of truth for org membership
-    const members = await prisma.member.findMany({
-        where: {
-            organizationId: organization.id,
-            user: { role: { not: "ADMIN" } }
-        },
+    const orgData = await prisma.organization.findUnique({
+        where: { id: organization.id },
         include: {
-            user: {
+            locations: { where: { isActive: true } } as any,
+            members: {
+                where: {
+                    user: { role: { not: "ADMIN" } }
+                },
                 include: {
-                    profile: {
+                    user: {
                         include: {
-                            services: { where: { isActive: true }, select: { id: true } }
+                            profile: {
+                                include: {
+                                    services: { where: { isActive: true }, select: { id: true } }
+                                }
+                            }
                         }
                     }
-                }
+                },
+                orderBy: [
+                    { role: 'asc' },
+                    { createdAt: 'asc' }
+                ]
             }
-        },
-        orderBy: [
-            { role: 'asc' },
-            { createdAt: 'asc' }
-        ]
+        }
     })
+
+    if (!orgData) return null
+    const members = (orgData as any).members
 
     // Keep only members who have a profile with showOnOrgPage = true
     const maxSeats = planConfig?.maxSeats ?? 0;
 
     // Filter by plan limits and visibility
     const visibleProfiles = members
-        .filter(m => m.user.profile !== null && m.user.profile.showOnOrgPage)
-        .map((m, index) => ({
+        .filter((m: any) => m.user.profile !== null && m.user.profile.showOnOrgPage)
+        .map((m: any, index: number) => ({
             username: m.user.profile!.username,
             displayName: m.user.profile!.displayName || m.user.name || m.user.profile!.username,
             bio: m.user.profile!.bio,
@@ -470,13 +478,16 @@ export async function getOrganizationPublicProfiles(slug: string) {
             serviceCount: m.user.profile!.services.length,
             isPlanActive: maxSeats === 0 || index < maxSeats
         }))
-        .filter(p => p.isPlanActive) // Only return profiles active in the plan
-        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+        .filter((p: any) => p.isPlanActive) // Only return profiles active in the plan
+        .sort((a: any, b: any) => a.displayName.localeCompare(b.displayName))
 
     return {
         id: organization.id,
         name: organization.name,
         slug: organization.slug,
+        phone: orgData.phone,
+        whatsapp: orgData.whatsapp,
+        locations: (orgData as any).locations,
         profiles: visibleProfiles
     }
 }

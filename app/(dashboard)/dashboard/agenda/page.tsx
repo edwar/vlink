@@ -30,7 +30,7 @@ export default async function AgendaPage() {
             </header>
 
             <div className="w-full">
-                <CalendarView profileId={profile.id} />
+                <CalendarView profileId={profile.id} organizationId={profile.organizationId || ""} />
                 <AgendaTour />
                 <DashboardRealtimeUpdater profileId={profile.id} />
             </div>

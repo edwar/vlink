@@ -43,6 +43,7 @@ export default async function AdminPlans() {
                                     const price = formData.get("price") as string
                                     const limit = formData.get("limit") as string
                                     const maxSeats = Number(formData.get("maxSeats"))
+                                    const maxLocations = Number(formData.get("maxLocations"))
                                     const featuresString = formData.get("features") as string
                                     const features = featuresString.split(',').map(f => f.trim()).filter(Boolean)
 
@@ -50,6 +51,7 @@ export default async function AdminPlans() {
                                         price,
                                         limit,
                                         maxSeats,
+                                        maxLocations,
                                         features
                                     })
                                 }} className="space-y-4">
@@ -75,6 +77,15 @@ export default async function AdminPlans() {
                                             name="maxSeats"
                                             type="number"
                                             defaultValue={p.maxSeats}
+                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Límite Sedes (Max Sedes, 0 = Ilimitado)</label>
+                                        <input
+                                            name="maxLocations"
+                                            type="number"
+                                            defaultValue={(p as any).maxLocations}
                                             className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
                                         />
                                     </div>

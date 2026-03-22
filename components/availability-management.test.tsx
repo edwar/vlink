@@ -40,8 +40,9 @@ describe('AvailabilityManagement', () => {
                 specificDate: null,
                 isBlocked: false,
                 startTime: "08:00",
-                endTime: "16:00"
-            },
+                endTime: "16:00",
+                location: null
+            } as any,
         ])
 
         render(<AvailabilityManagement />)

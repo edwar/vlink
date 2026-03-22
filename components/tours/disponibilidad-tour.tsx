@@ -12,7 +12,7 @@ export function DisponibilidadTour() {
         {
             element: "#tour-weekly-anchor",
             title: "Horario Semanal",
-            intro: "Configura tus horas de trabajo recurrentes. Activa los días que laboras y define tus franjas horarias.",
+            intro: "Configura tus horas de trabajo recurrentes. Ahora también puedes elegir en qué sede estarás cada día.",
             position: "auto"
         },
         {
@@ -32,7 +32,7 @@ export function DisponibilidadTour() {
     return (
         <PageTour
             pageKey="disponibilidad"
-            version="2026-03-14T17:46:00Z"
+            version="2026-03-21T22:30:00Z"
             steps={steps}
         />
     )

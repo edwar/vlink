@@ -10,6 +10,18 @@ export function OrganizacionTour() {
             position: "bottom"
         },
         {
+            element: "#tour-org-sedes",
+            title: "Gestión de Sedes",
+            intro: "Ahora puedes crear múltiples sedes para tu negocio. Configura la dirección y datos de contacto de cada una.",
+            position: "auto"
+        },
+        {
+            element: "#tour-org-sedes",
+            title: "Gestión de Sedes",
+            intro: "Ahora puedes crear múltiples sedes para tu negocio. Configura la dirección y datos de contacto de cada una.",
+            position: "auto"
+        },
+        {
             element: "#tour-org-qr-anchor",
             title: "Marketing y QR",
             intro: "Descarga el QR de tu organización para tu local o publicidad impresa. ¡Facilita el agendamiento!",
@@ -62,7 +74,7 @@ export function OrganizacionTour() {
     return (
         <PageTour
             pageKey="organizacion"
-            version="2026-03-20T23:40:00Z"
+            version="2026-03-21T22:30:00Z"
             steps={steps}
         />
     )

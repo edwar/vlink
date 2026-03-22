@@ -9,11 +9,12 @@ import { format, addDays, startOfTomorrow, isSameDay, isValid } from "date-fns"
 import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getProfileForBooking, getAvailableSlots, createAppointment } from "@/app/actions/booking"
+import { getProfileForBooking, getAvailableSlots, createAppointment, getLocationsByOrgId } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LoadingState } from "@/components/loading-state"
 import { Logo } from "@/components/logo"
 import { sileo } from "sileo"
+import { MapPin, Navigation, Phone } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/empty-state"
@@ -25,6 +26,14 @@ interface ServiceOption {
     price: number | null
 }
 
+interface LocationInfo {
+    id: string
+    name: string
+    address: string
+    city: string
+    phone: string | null
+}
+
 interface ProfileData {
     displayName: string
     bio: string
@@ -34,17 +43,21 @@ interface ProfileData {
     expertise: string[]
     services: ServiceOption[]
     isLocked: boolean
+    organizationId: string
 }
 
 export function BookingClient({ params }: { params: { username: string } }) {
     const { username } = params
     const searchParams = useSearchParams()
     const queryDate = searchParams.get("date")
+    const queryLocationId = searchParams.get("locationId")
 
     const [profileData, setProfileData] = useState<ProfileData | null>(null)
     const [loadingProfile, setLoadingProfile] = useState(true)
     const [profileError, setProfileError] = useState(false)
 
+    const [selectedLocation, setSelectedLocation] = useState<LocationInfo | null>(null)
+    const [locations, setLocations] = useState<LocationInfo[]>([])
     const [selectedService, setSelectedService] = useState<ServiceOption | null>(null)
     const [selectedDate, setSelectedDate] = useState<Date>(() => {
         if (queryDate) {
@@ -55,7 +68,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
         return startOfTomorrow()
     })
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
-    const [step, setStep] = useState(0) // 0: Select service, 1: Select date/time, 2: Client details, 3: Success
+    const [step, setStep] = useState(-1) // -1: Select location (if many), 0: Select service, 1: Select date/time, 2: Client details, 3: Success
     const [slots, setSlots] = useState<string[]>([])
     const [loadingSlots, setLoadingSlots] = useState(false)
     const [imageError, setImageError] = useState(false)
@@ -65,23 +78,55 @@ export function BookingClient({ params }: { params: { username: string } }) {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const data = await getProfileForBooking(username)
+                const data = await getProfileForBooking(username) as any
                 if (!data) {
                     setProfileError(true)
                     return
                 }
                 setProfileData(data)
 
-                // If profile is locked, we don't auto-select service
-                if (data.isLocked) return
+                // Fetch locations for organization
+                const orgLocs = data.organizationId ? await getLocationsByOrgId(data.organizationId) : []
+                setLocations(orgLocs)
 
-                // If only one service, auto-select it and skip service-selection step
-                if (data.services.length === 1) {
-                    setSelectedService(data.services[0])
-                    setStep(1)
-                } else if (data.services.length === 0) {
-                    // No services configured — show informative empty state
+                if (queryLocationId) {
+                    const loc = orgLocs.find((l: any) => l.id === queryLocationId)
+                    if (loc) {
+                        setSelectedLocation(loc)
+                        if (data.services.length === 1) {
+                            setSelectedService(data.services[0])
+                            setStep(1)
+                        } else if (data.services.length === 0) {
+                            setNoServices(true)
+                        } else {
+                            setStep(0)
+                        }
+                        return
+                    }
+                }
+
+                if (orgLocs.length === 1) {
+                    setSelectedLocation(orgLocs[0])
+                }
+
+                // Service selection logic
+                if (data.services.length === 0) {
                     setNoServices(true)
+                } else if (data.services.length === 1) {
+                    setSelectedService(data.services[0])
+                    // Only go to step 1 if we have a location selected or if no locations exist
+                    if (orgLocs.length <= 1) {
+                        setStep(1)
+                    } else {
+                        setStep(-1) // Need to pick location first
+                    }
+                } else {
+                    // Multiple services - pick location first if many
+                    if (orgLocs.length > 1 && !queryLocationId) {
+                        setStep(-1)
+                    } else {
+                        setStep(0)
+                    }
                 }
             } catch (error) {
                 console.error(error)
@@ -91,7 +136,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
             }
         }
         fetchProfile()
-    }, [username])
+    }, [username, queryLocationId])
 
     // Fetch slots when date or service changes
     useEffect(() => {
@@ -99,7 +144,12 @@ export function BookingClient({ params }: { params: { username: string } }) {
         const fetchSlots = async () => {
             setLoadingSlots(true)
             try {
-                const available = await getAvailableSlots(username, selectedDate, selectedService.durationMinutes)
+                const available = await getAvailableSlots(
+                    username, 
+                    selectedDate, 
+                    selectedService.durationMinutes,
+                    selectedLocation?.id
+                )
                 setSlots(available)
             } catch (error) {
                 console.error(error)
@@ -108,7 +158,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
             }
         }
         fetchSlots()
-    }, [selectedDate, username, selectedService, step, profileData?.isLocked])
+    }, [selectedDate, username, selectedService, step, profileData?.isLocked, selectedLocation?.id])
 
     // Calculate the first selectable day based on advanceNoticeHours
     const firstEligibleDate = profileData
@@ -139,6 +189,16 @@ export function BookingClient({ params }: { params: { username: string } }) {
             }
         }
     }, [profileData, queryDate])
+
+    const handleSelectLocation = (location: LocationInfo) => {
+        setSelectedLocation(location)
+        if (profileData?.services.length === 1) {
+            setSelectedService(profileData.services[0])
+            setStep(1)
+        } else {
+            setStep(0)
+        }
+    }
 
     const handleSelectService = (service: ServiceOption) => {
         if (profileData?.isLocked) return
@@ -321,12 +381,57 @@ export function BookingClient({ params }: { params: { username: string } }) {
                     </div>
                 </header>
 
+                {step === -1 && locations.length > 1 && (
+                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <section className="space-y-4">
+                            <div className="flex items-center gap-2 text-primary">
+                                <MapPin className="h-4 w-4" />
+                                <h2 className="text-sm font-bold uppercase tracking-wider">Selecciona la Sede</h2>
+                            </div>
+                            <div className="grid gap-4">
+                                {locations.map((loc) => (
+                                    <button
+                                        key={loc.id}
+                                        onClick={() => handleSelectLocation(loc)}
+                                        className="w-full p-6 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all hover:border-primary/40 hover:bg-primary/5 flex items-start gap-4 group/loc"
+                                    >
+                                        <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover/loc:scale-110 transition-transform">
+                                            <Navigation className="h-6 w-6 text-primary" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="font-black text-xl tracking-tight">{loc.name}</h3>
+                                            <p className="text-sm text-muted-foreground font-medium mt-1">{loc.address}, {loc.city}</p>
+                                            {loc.phone && (
+                                                <div className="flex items-center gap-2 mt-2 text-primary/60">
+                                                    <Phone className="h-3 w-3" />
+                                                    <span className="text-xs font-bold">{loc.phone}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+                )}
+
                 {step === 0 && profileData.services.length > 1 && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        {locations.length > 1 && (
+                            <button
+                                onClick={() => setStep(-1)}
+                                className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors mb-6"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                                Cambiar sede
+                            </button>
+                        )}
                         <section className="space-y-4">
                             <div className="flex items-center gap-2 text-primary" aria-hidden="true">
                                 <Briefcase className="h-4 w-4" />
-                                <h2 className="text-sm font-bold uppercase tracking-wider">1. Selecciona el Servicio</h2>
+                                <h2 className="text-sm font-bold uppercase tracking-wider">
+                                    {locations.length > 1 ? "2" : "1"}. Selecciona el Servicio
+                                </h2>
                             </div>
                             <h2 className="sr-only">Selecciona el Servicio</h2>
                             <div className="space-y-3">
@@ -387,6 +492,16 @@ export function BookingClient({ params }: { params: { username: string } }) {
                             </button>
                         )}
 
+                        {selectedLocation && locations.length > 1 && (
+                            <div className="flex items-center gap-3 p-3 bg-muted/20 border border-border/40 rounded-xl mb-4">
+                                <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-bold truncate">{selectedLocation.name}</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{selectedLocation.city}</p>
+                                </div>
+                            </div>
+                        )}
+
                         {selectedService && (
                             <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded-xl">
                                 <Briefcase className="h-4 w-4 text-primary shrink-0" />
@@ -410,7 +525,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                             <div className="flex items-center gap-2 text-primary">
                                 <CalendarIcon className="h-4 w-4" />
                                 <h2 className="text-sm font-bold uppercase tracking-wider">
-                                    {profileData.services.length > 1 ? "2" : "1"}. Selecciona el Día
+                                    {(profileData.services.length > 1 ? 1 : 0) + (locations.length > 1 ? 1 : 0) + 1}. Selecciona el Día
                                 </h2>
                             </div>
                             <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar px-2">
@@ -443,7 +558,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                             <div className="flex items-center gap-2 text-primary">
                                 <Clock className="h-4 w-4" />
                                 <h2 className="text-sm font-bold uppercase tracking-wider">
-                                    {profileData.services.length > 1 ? "3" : "2"}. Selecciona la Hora
+                                    {(profileData.services.length > 1 ? 1 : 0) + (locations.length > 1 ? 1 : 0) + 2}. Selecciona la Hora
                                 </h2>
                             </div>
 
@@ -486,13 +601,14 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         serviceId={selectedService?.id || undefined}
                         onBack={() => setStep(1)}
                         onSuccess={() => setStep(3)}
-                        bookingInfo={{ date: selectedDate, time: selectedTime! }}
+                        bookingInfo={{ date: selectedDate, time: selectedTime!, locationId: selectedLocation?.id }}
                     />
                 ) : step === 3 ? (
                     <SuccessView
                         displayName={displayName}
                         serviceName={selectedService?.name}
                         price={selectedService?.price}
+                        locationInfo={selectedLocation}
                         bookingInfo={{ date: selectedDate, time: selectedTime! }}
                     />
                 ) : null}
@@ -526,7 +642,7 @@ function ChevronRight({ className }: { className?: string }) {
 function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceId }: {
     onBack: () => void,
     onSuccess: () => void,
-    bookingInfo: { date: Date, time: string },
+    bookingInfo: { date: Date, time: string, locationId?: string },
     username: string,
     serviceId?: string
 }) {
@@ -565,7 +681,8 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                 clientName: name,
                 clientPhone: phone,
                 clientEmail: email,
-                serviceId
+                serviceId,
+                locationId: bookingInfo.locationId
             });
             sileo.success({
                 title: "¡Cita agendada!",
@@ -672,11 +789,12 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
     )
 }
 
-function SuccessView({ bookingInfo, displayName, serviceName, price }: {
+function SuccessView({ bookingInfo, displayName, serviceName, price, locationInfo }: {
     bookingInfo: { date: Date, time: string },
     displayName: string,
     serviceName?: string,
-    price?: number | null
+    price?: number | null,
+    locationInfo?: LocationInfo | null
 }) {
     const itemMotion: Variants = {
         hidden: { opacity: 0, y: 15 },
@@ -764,6 +882,14 @@ function SuccessView({ bookingInfo, displayName, serviceName, price }: {
                             <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full relative">
                                 <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Servicio</p>
                                 <p className="font-bold text-lg leading-tight md:truncate pr-2">{serviceName}</p>
+                            </motion.div>
+                        )}
+
+                        {locationInfo && (
+                            <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full border-t border-dashed border-border/60 pt-5 relative">
+                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Ubicación</p>
+                                <p className="font-bold text-[15px] leading-tight pr-2">{locationInfo.name}</p>
+                                <p className="text-xs text-muted-foreground">{locationInfo.address}, {locationInfo.city}</p>
                             </motion.div>
                         )}
 

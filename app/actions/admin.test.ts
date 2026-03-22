@@ -58,8 +58,8 @@ describe('admin server actions', () => {
                 vi.mocked(prisma.user.findMany).mockResolvedValue([{ id: 'usr1', name: 'John' }] as any)
 
                 const users = await getAllUsers()
-                expect(users).toHaveLength(1)
-                expect(users[0].name).toBe('John')
+                expect(users.users).toHaveLength(1)
+                expect(users.users[0].name).toBe('John')
                 expect(prisma.user.findMany).toHaveBeenCalledWith(expect.objectContaining({
                     where: { role: "USER" }
                 }))

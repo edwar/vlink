@@ -21,9 +21,11 @@ import {
     startOfDay,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2, Loader2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock, Lock, Menu, X, User, Mail, Phone, Clock3, CheckCircle2, Loader2, MapPinned } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
+import { getOrganizationLocations } from "@/app/actions/locations"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { pusherClient } from "@/lib/pusher-client"
 import { useRouter } from "next/navigation"
 import {
@@ -46,9 +48,24 @@ interface CalendarHeaderProps {
     onPrevious: () => void
     onToday: () => void
     onNext: () => void
+    locations: any[]
+    selectedLocationId: string | null
+    onLocationChange: (id: string | null) => void
 }
 
-function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuToggle, onPrevious, onToday, onNext }: CalendarHeaderProps) {
+function CalendarHeader({
+    view,
+    currentDate,
+    isMenuOpen,
+    onViewChange,
+    onMenuToggle,
+    onPrevious,
+    onToday,
+    onNext,
+    locations,
+    selectedLocationId,
+    onLocationChange
+}: CalendarHeaderProps) {
     return (
         <div className="flex flex-col gap-4 bg-transparent pt-2 pb-4 border-b border-dashed border-border/60 mb-2">
             <div className="flex items-center justify-between w-full">
@@ -63,15 +80,37 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                     </p>
                 </div>
 
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onMenuToggle}
-                    className="sm:hidden"
-                    aria-label="Toggle menu"
-                >
-                    {isMenuOpen ? <X className="h-6 w-6" /> : <CalendarIcon className="h-6 w-6" />}
-                </Button>
+                <div className="flex flex-col lg:flex-row items-end lg:items-center gap-4">
+                    <Select
+                        value={selectedLocationId || "all"}
+                        onValueChange={(value) => onLocationChange(value === "all" ? null : value)}
+                    >
+                        <SelectTrigger className="flex w-[220px] h-10 bg-muted/30 px-3 rounded-full border border-border/50 text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <MapPinned className="h-4 w-4 text-primary shrink-0" />
+                                <SelectValue placeholder="Todas las Sedes" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
+                            <SelectItem value="all" className="text-xs font-bold py-2 rounded-xl">Todas las Sedes</SelectItem>
+                            {locations.map(loc => (
+                                <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
+                                    {loc.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onMenuToggle}
+                        className="sm:hidden"
+                        aria-label="Toggle menu"
+                    >
+                        {isMenuOpen ? <X className="h-6 w-6" /> : <CalendarIcon className="h-6 w-6" />}
+                    </Button>
+                </div>
             </div>
 
             <div className="hidden sm:flex items-center justify-between gap-4 w-full">
@@ -180,6 +219,29 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
                     </div>
 
                     <div className="flex flex-col gap-2">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1 px-1 flex items-center gap-2">
+                            <MapPinned className="h-3 w-3 text-primary" />
+                            Sede
+                        </p>
+                        <Select
+                            value={selectedLocationId || "all"}
+                            onValueChange={(value) => { onLocationChange(value === "all" ? null : value); onMenuToggle(); }}
+                        >
+                            <SelectTrigger className="w-full h-10 rounded-xl bg-muted/20 border-border/40 px-4 text-xs font-bold transition-all text-foreground">
+                                <SelectValue placeholder="Todas las Sedes" />
+                            </SelectTrigger>
+                            <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
+                                <SelectItem value="all" className="text-xs font-bold py-2 rounded-xl">Todas las Sedes</SelectItem>
+                                {locations.map(loc => (
+                                    <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
+                                        {loc.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Navegación</p>
                         <div className="flex items-center gap-2">
                             <Button
@@ -216,12 +278,14 @@ function CalendarHeader({ view, currentDate, isMenuOpen, onViewChange, onMenuTog
     )
 }
 
-export function CalendarView({ profileId }: { profileId: string }) {
+export function CalendarView({ profileId, organizationId }: { profileId: string, organizationId: string }) {
     const router = useRouter()
     const [view, setView] = useState<ViewType>('month')
     const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [availability, setAvailability] = useState<any[]>([])
+    const [locations, setLocations] = useState<any[]>([])
+    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null)
     const [appointments, setAppointments] = useState<any[]>([])
     const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null)
     const [loading, setLoading] = useState(true)
@@ -254,12 +318,14 @@ export function CalendarView({ profileId }: { profileId: string }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [availData, apptsData] = await Promise.all([
+                const [availData, apptsData, locsData] = await Promise.all([
                     getAvailability(),
-                    getAppointmentsForDashboard()
+                    getAppointmentsForDashboard(),
+                    getOrganizationLocations(organizationId)
                 ])
                 setAvailability(availData)
                 setAppointments(apptsData)
+                setLocations(locsData)
             } catch (err) {
                 console.error("Error fetching data for calendar:", err)
             } finally {
@@ -325,14 +391,26 @@ export function CalendarView({ profileId }: { profileId: string }) {
                 <div className="grid grid-cols-7 bg-background/30">
                     {days.map((day, idx) => {
                         const dayOfWeek = getDay(day)
-                        const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
-                        const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
+
+                        // Filter availability by selected location
+                        const filteredAvail = selectedLocationId
+                            ? availability.filter(a => a.locationId === selectedLocationId)
+                            : availability;
+
+                        const daySlots = filteredAvail.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
+                        const specificDateSlots = filteredAvail.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
 
                         const mainAvailability = daySlots.find(s => !s.isBlocked)
                         const isBlocked = specificDateSlots.some(s => s.isBlocked)
                         const isPast = isBefore(day, startOfDay(new Date()))
                         const isFullyUnavailable = !mainAvailability || isPast
-                        const dayAppointments = appointments.filter(a => isSameDay(new Date(a.startTime), day))
+
+                        // Filter appointments by selected location
+                        const filteredAppts = selectedLocationId
+                            ? appointments.filter(a => a.locationId === selectedLocationId)
+                            : appointments;
+
+                        const dayAppointments = filteredAppts.filter(a => isSameDay(new Date(a.startTime), day))
 
                         return (
                             <div
@@ -475,9 +553,9 @@ export function CalendarView({ profileId }: { profileId: string }) {
                                     <div key={day.toString()} className="flex flex-col relative border-r border-border/50 last:border-r-0">
                                         {/* Current Time Line (Only for today) */}
                                         {isMounted && isSameDay(day, now) && (
-                                            <div 
+                                            <div
                                                 className="absolute left-0 right-0 z-20 pointer-events-none"
-                                                style={{ 
+                                                style={{
                                                     top: `${(now.getHours() + now.getMinutes() / 60) * 80}px`,
                                                 }}
                                             >
@@ -487,8 +565,13 @@ export function CalendarView({ profileId }: { profileId: string }) {
                                             </div>
                                         )}
                                         {hours.map((hour) => {
-                                            const daySlots = availability.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
-                                            const specificDateSlots = availability.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
+                                            // Filter availability by selected location
+                                            const filteredAvail = selectedLocationId
+                                                ? availability.filter(a => a.locationId === selectedLocationId)
+                                                : availability;
+
+                                            const daySlots = filteredAvail.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
+                                            const specificDateSlots = filteredAvail.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
                                             const mainAvailability = daySlots.find(s => !s.isBlocked)
                                             const blockedSlots = [...daySlots.filter(s => s.isBlocked), ...specificDateSlots]
                                             const now = new Date()
@@ -508,7 +591,12 @@ export function CalendarView({ profileId }: { profileId: string }) {
                                                 })
                                             }
 
-                                            const slotAppointments = appointments.filter(a => {
+                                            // Filter appointments by selected location
+                                            const filteredAppts = selectedLocationId
+                                                ? appointments.filter(a => a.locationId === selectedLocationId)
+                                                : appointments;
+
+                                            const slotAppointments = filteredAppts.filter(a => {
                                                 const aStart = new Date(a.startTime);
                                                 return isSameDay(aStart, day) && aStart.getHours() === hour;
                                             });
@@ -589,6 +677,9 @@ export function CalendarView({ profileId }: { profileId: string }) {
                 onPrevious={handlePrevious}
                 onToday={handleToday}
                 onNext={handleNext}
+                locations={locations}
+                selectedLocationId={selectedLocationId}
+                onLocationChange={setSelectedLocationId}
             />
             <div id="tour-calendar-content" className="relative">
                 <div id="tour-calendar-content-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
@@ -651,6 +742,12 @@ export function CalendarView({ profileId }: { profileId: string }) {
                                         <CalendarIcon className="h-3 w-3" />
                                         <span>Registrada el: {format(new Date(selectedAppointment.createdAt), "dd/MM/yyyy HH:mm")}</span>
                                     </div>
+                                    {selectedAppointment.location && (
+                                        <div className="pt-2 flex items-center gap-2 text-[10px] text-primary/60 font-semibold uppercase tracking-widest">
+                                            <MapPinned className="h-3 w-3" />
+                                            <span>Sede: {selectedAppointment.location.name}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

@@ -245,9 +245,9 @@ export async function getPlanConfigs() {
     // If no plans exist yet, seed them with defaults
     if (plans.length === 0) {
         const defaults = [
-            { id: 'BASIC' as const, name: 'BASIC', price: '$0', limit: '1 Miembro', maxSeats: 1, features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
-            { id: 'TEAM' as const, name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', maxSeats: 5, features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager'], active: true },
-            { id: 'CORPORATE' as const, name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', maxSeats: 0, features: ['Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
+            { id: 'BASIC' as const, name: 'BASIC', price: '$0', limit: '1 Miembro', maxSeats: 1, maxLocations: 1, features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
+            { id: 'TEAM' as const, name: 'TEAM', price: '$49.000 COP', limit: '5 Miembros', maxSeats: 5, maxLocations: 3, features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager', 'Sedes (hasta 3)'], active: true },
+            { id: 'CORPORATE' as const, name: 'CORPORATE', price: '$99.000 COP', limit: 'Ilimitado', maxSeats: 0, maxLocations: 0, features: ['Sedes Ilimitadas', 'Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
         ]
 
         for (const plan of defaults) {
@@ -263,6 +263,7 @@ export async function updatePlanConfig(id: string, data: {
     price?: string,
     limit?: string,
     maxSeats?: number,
+    maxLocations?: number,
     features?: string[],
     active?: boolean
 }) {

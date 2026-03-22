@@ -5,7 +5,7 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, AlertTriangle } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, AlertTriangle, MapPin } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -248,40 +248,53 @@ export default async function OrganizacionPage(props: {
                 </div>
             </div>
 
-            {/* Row 1.5: Pagos y Comunicación (Side by Side) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative mt-8">
+            {/* Row 1.5: Pagos, Comunicación & Sedes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative mt-8">
                 {/* Cobros y Pagos */}
-                <div className="lg:col-span-6 space-y-6">
-                    <div className="flex items-center gap-3 pb-6">
+                <div id="tour-org-payments" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                    <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-emerald-500/40 rounded-full" />
-                        <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
+                        <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
                     </div>
-                    <div id="tour-org-payments" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
-                        <div id="tour-org-payments-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                        <WompiIntegration
-                            organizationId={organization.id}
-                            initialSubaccountId={(organization as any).wompiSubaccountId}
-                            disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
-                            isMarketplaceEnabled={isWompiMarketplaceEnabled}
-                        />
+                    <div id="tour-org-payments-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                    <WompiIntegration
+                        organizationId={organization.id}
+                        initialSubaccountId={(organization as any).wompiSubaccountId}
+                        disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
+                        isMarketplaceEnabled={isWompiMarketplaceEnabled}
+                    />
+                </div>
+
+                {/* Infraestructura & Sedes */}
+                <div className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                    <div className="flex items-center gap-3">
+                        <div className="h-6 w-1 bg-purple-500/40 rounded-full" />
+                        <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Infraestructura</h2>
                     </div>
+                    <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10 flex-1">
+                        Gestiona tus sedes físicas y asocia disponibilidad a cada ubicación.
+                    </p>
+                    <Button asChild variant="vlink" size="lg" className="w-full mt-auto h-14 rounded-2xl">
+                        <a href="/dashboard/organizacion/sedes">
+                            <MapPin className="h-5 w-5 mr-2" />
+                            <span className="uppercase tracking-widest text-xs font-black">Gestionar Sedes</span>
+                        </a>
+                    </Button>
                 </div>
 
                 {/* Comunicación & Soporte */}
-                <div className="lg:col-span-6 space-y-6">
-                    <div className="flex items-center gap-3 pb-6">
+                <div id="tour-org-contact" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden md:col-span-2 lg:col-span-1">
+                    <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
-                        <h2 className="text-xl md:text-2xl font-display font-black tracking-tight text-foreground uppercase">Comunicación & Soporte</h2>
+                        <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Soporte</h2>
                     </div>
-                    <div id="tour-org-contact" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
-                        <div id="tour-org-contact-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                        <OrganizationContact
-                            organizationId={organization.id}
-                            initialPhone={(organization as any).phone}
-                            initialWhatsapp={(organization as any).whatsapp}
-                            disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
-                        />
-                    </div>
+                    <div id="tour-org-contact-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
+                    <OrganizationContact
+                        organizationId={organization.id}
+                        initialPhone={(organization as any).phone}
+                        initialWhatsapp={(organization as any).whatsapp}
+                        disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
+                    />
                 </div>
             </div>
 

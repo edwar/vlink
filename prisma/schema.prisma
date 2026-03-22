@@ -86,8 +86,28 @@ model Organization {
   invitations       Invitation[]
   members           Member[]
   profiles          Profile[]
+  locations         Location[]
 
   @@map("organization")
+}
+
+model Location {
+  id               String                  @id @default(cuid())
+  organizationId   String
+  name             String
+  address          String?
+  city             String?
+  phone            String?
+  isActive         Boolean                 @default(true)
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  organization     Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  availabilities   Availability[]
+  appointments     Appointment[]
+  memberServices   MemberLocationService[]
+
+  @@unique([organizationId, name])
+  @@map("location")
 }
 
 model Member {
@@ -99,6 +119,7 @@ model Member {
   updatedAt      DateTime     @updatedAt
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  locationServices MemberLocationService[]
 
   @@unique([userId, organizationId])
   @@map("member")
@@ -144,6 +165,21 @@ model Profile {
   @@map("profile")
 }
 
+model MemberLocationService {
+  id         String   @id @default(cuid())
+  memberId   String
+  locationId String
+  serviceId  String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  service    Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, locationId, serviceId])
+  @@map("member_location_service")
+}
+
 model Service {
   id              String        @id @default(cuid())
   profileId       String
@@ -155,6 +191,7 @@ model Service {
   price           Float?        @default(0)
   appointments    Appointment[]
   profile         Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  locationServices MemberLocationService[]
 
   @@unique([profileId, name])
   @@map("service")
@@ -171,6 +208,8 @@ model Availability {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   profile      Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  locationId   String?
+  location     Location? @relation(fields: [locationId], references: [id])
 
   @@unique([profileId, specificDate, startTime, endTime])
   @@map("availability")
@@ -196,6 +235,8 @@ model Appointment {
   paymentReference  String?   @unique
   profile           Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   service           Service?  @relation(fields: [serviceId], references: [id])
+  locationId        String?
+  location          Location? @relation(fields: [locationId], references: [id])
 
   @@index([profileId, startTime, endTime])
   @@map("appointment")
@@ -221,6 +262,7 @@ model PlanConfig {
   active    Boolean          @default(true)
   updatedAt DateTime         @updatedAt
   maxSeats  Int              @default(0)
+  maxLocations Int           @default(1)
   id        SubscriptionPlan @id
 
   @@map("plan_config")

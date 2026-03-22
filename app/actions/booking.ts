@@ -100,6 +100,7 @@ export async function getProfileForBooking(username: string) {
     }
 
     return {
+        id: profile.id,
         displayName: profile.displayName || profile.user.name || username,
         bio: profile.bio || "",
         username: profile.username,
@@ -107,7 +108,9 @@ export async function getProfileForBooking(username: string) {
         advanceNoticeHours: profile.advanceNoticeHours,
         expertise: profile.expertise || [],
         isLocked,
-        services: profile.services.map((s) => ({
+        organizationId: profile.organizationId || "",
+        organizationSlug: membership?.organization?.slug || "",
+        services: profile.services.map((s: any) => ({
             id: s.id,
             name: s.name,
             durationMinutes: s.durationMinutes,
@@ -116,7 +119,73 @@ export async function getProfileForBooking(username: string) {
     }
 }
 
-export async function getAvailableSlots(username: string, date: Date, durationMinutes: number = 30) {
+/**
+ * Gets active locations for an organization by slug.
+ */
+export async function getLocationsByOrgSlug(slug: string) {
+    const org = await prisma.organization.findUnique({
+        where: { slug },
+        include: { locations: { where: { isActive: true } } } as any
+    }) as any
+    return org?.locations || []
+}
+
+/**
+ * Gets active locations for an organization by ID.
+ */
+export async function getLocationsByOrgId(organizationId: string) {
+    const org = await prisma.organization.findUnique({
+        where: { id: organizationId },
+        include: { locations: { where: { isActive: true } } } as any
+    }) as any
+    return org?.locations || []
+}
+
+/**
+ * Gets professionals available at a specific location, optionally filtered by date and service.
+ */
+export async function getProfessionalsByLocation(locationId: string, date?: Date, serviceId?: string) {
+    const whereClause: any = {
+        organization: {
+            locations: { some: { id: locationId } }
+        },
+        showOnOrgPage: true
+    }
+
+    // If serviceId is provided, only show professionals who offer that service at that location
+    if (serviceId) {
+        whereClause.member = {
+            locationServices: {
+                some: {
+                    locationId,
+                    serviceId,
+                    isActive: true
+                }
+            }
+        }
+    }
+
+    const profiles = await prisma.profile.findMany({
+        where: whereClause,
+        include: {
+            user: true,
+            services: true,
+            availabilities: {
+                where: { locationId, specificDate: null } as any
+            }
+        }
+    })
+
+    return profiles.map((p: any) => ({
+        id: p.id,
+        username: p.username,
+        displayName: p.displayName || p.user.name || p.username,
+        image: p.user.image,
+        expertise: p.expertise
+    }))
+}
+
+export async function getAvailableSlots(username: string, date: Date, durationMinutes: number = 30, locationId?: string) {
     const profile = await prisma.profile.findUnique({
         where: { username },
         include: { availabilities: true }
@@ -125,24 +194,38 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
     if (!profile) throw new Error("Perfil no encontrado")
 
     const dayOfWeek = getBogotaDay(date)
-
     // 1. Obtener disponibilidad recurrente para este día de la semana
-    const recurring = profile.availabilities.find(a => a.dayOfWeek === dayOfWeek && !a.isBlocked)
+    // Si locationId está presente, solo buscar disponibilidad en esa sede
+    const recurringPeriods = profile.availabilities.filter((a: any) => 
+        a.dayOfWeek === dayOfWeek && 
+        !a.isBlocked && 
+        !a.specificDate &&
+        (!locationId || !a.locationId || a.locationId === locationId)
+    ) as any[]
 
-    if (!recurring) return []
+    if (recurringPeriods.length === 0) return []
 
     // Timezone safe boundaries (Colombia -05:00)
     const isoDate = getBogotaISO(date);
-    const dayStart = new Date(`${isoDate}T00:00:00-05:00`);
-    const dayEnd = new Date(`${isoDate}T23:59:59-05:00`);
 
-    // 2. Obtener bloqueos específicos para esta fecha
-    const blocks = profile.availabilities.filter(a => {
+    // 2. Obtener bloqueos específicos (isBlocked=true) para esta fecha
+    const specialBlocks = profile.availabilities.filter((a: any) => {
         if (!a.isBlocked || !a.specificDate) return false;
         return getBogotaISO(a.specificDate) === isoDate;
     })
 
-    // 3. Obtener citas existentes para esta fecha
+    // 3. Obtener horarios especiales (isBlocked=false) si existen
+    const specialHours = profile.availabilities.filter((a: any) => {
+        if (a.isBlocked || !a.specificDate) return false;
+        return getBogotaISO(a.specificDate) === isoDate && (!locationId || !a.locationId || a.locationId === locationId);
+    })
+
+    // Si hay horarios especiales para hoy, usamos ESOS en lugar de los recurrentes
+    const activePeriods = specialHours.length > 0 ? specialHours : recurringPeriods;
+
+    // 4. Obtener citas existentes para esta fecha
+    const dayStart = new Date(`${isoDate}T00:00:00-05:00`);
+    const dayEnd = new Date(`${isoDate}T23:59:59-05:00`);
     const appointments = await prisma.appointment.findMany({
         where: {
             profileId: profile.id,
@@ -152,50 +235,55 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         }
     })
 
-    // 4. Generar slots basados en las horas recurrentes
+    // 5. Generar slots basados en los periodos activos
     const slots: string[] = []
+    const now = new Date()
+    const requiredAdvanceNoticeMs = (profile.advanceNoticeHours ?? 24) * 60 * 60 * 1000
 
-    const [startHour, startMin] = recurring.startTime.split(":").map(Number)
-    const [endHour, endMin] = recurring.endTime.split(":").map(Number)
+    for (const period of activePeriods) {
+        const [startHour, startMin] = period.startTime.split(":").map(Number)
+        const [endHour, endMin] = period.endTime.split(":").map(Number)
 
-    let currentMinutes = startHour * 60 + startMin;
-    const endMinutes = endHour * 60 + endMin;
+        let currentMinutes = startHour * 60 + startMin;
+        const endMinutes = endHour * 60 + endMin;
 
-    while (currentMinutes + durationMinutes <= endMinutes) {
-        const slotEndMinutes = currentMinutes + durationMinutes;
+        while (currentMinutes + durationMinutes <= endMinutes) {
+            const slotEndMinutes = currentMinutes + durationMinutes;
 
-        const h = Math.floor(currentMinutes / 60);
-        const m = currentMinutes % 60;
-        const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            const h = Math.floor(currentMinutes / 60);
+            const m = currentMinutes % 60;
+            const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 
-        const eh = Math.floor(slotEndMinutes / 60);
-        const em = slotEndMinutes % 60;
-        const slotEndStr = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
+            const eh = Math.floor(slotEndMinutes / 60);
+            const em = slotEndMinutes % 60;
+            const slotEndStr = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
 
-        const slotStartDateTime = new Date(`${isoDate}T${timeStr}:00-05:00`)
-        const now = new Date()
-        const requiredAdvanceNoticeMs = (profile.advanceNoticeHours ?? 24) * 60 * 60 * 1000
-        const isTooSoon = (slotStartDateTime.getTime() - now.getTime()) < requiredAdvanceNoticeMs
+            const slotStartDateTime = new Date(`${isoDate}T${timeStr}:00-05:00`)
+            const isTooSoon = (slotStartDateTime.getTime() - now.getTime()) < requiredAdvanceNoticeMs
 
-        // Verificar si el slot está bloqueado por un bloqueo específico
-        const isBlocked = blocks.some(b => timeStr < b.endTime && slotEndStr > b.startTime)
+            if (slotStartDateTime > now && !isTooSoon) {
+                // Verificar si el slot está bloqueado por un bloqueo específico
+                const isBlocked = specialBlocks.some(b => timeStr < b.endTime && slotEndStr > b.startTime)
 
-        // Verificar si el slot solapa con una cita existente y su buffer time
-        const isOccupied = appointments.some(appt => {
-            const apptStartMins = (appt.startTime.getTime() - dayStart.getTime()) / 60000;
-            // Sumamos el bufferTime al final de la cita para reservar el espacio de descanso
-            const apptEndMins = (appt.endTime.getTime() - dayStart.getTime()) / 60000 + (profile.bufferTime || 0);
-            return currentMinutes < apptEndMins && slotEndMinutes > apptStartMins;
-        })
+                if (!isBlocked) {
+                    // Verificar si el slot solapa con una cita existente y su buffer time
+                    const isOccupied = appointments.some(appt => {
+                        const apptStartMins = (appt.startTime.getTime() - dayStart.getTime()) / 60000;
+                        const apptEndMins = (appt.endTime.getTime() - dayStart.getTime()) / 60000 + (profile.bufferTime || 0);
+                        return currentMinutes < apptEndMins && slotEndMinutes > apptStartMins;
+                    })
 
-        if (!isBlocked && !isOccupied && !isTooSoon) {
-            slots.push(timeStr)
+                    if (!isOccupied) {
+                        slots.push(timeStr)
+                    }
+                }
+            }
+            // Mover al siguiente slot
+            currentMinutes += durationMinutes;
         }
-
-        currentMinutes += durationMinutes;
     }
 
-    return slots
+    return [...new Set(slots)].sort();
 }
 
 export async function createAppointment(data: {
@@ -205,7 +293,8 @@ export async function createAppointment(data: {
     clientName: string,
     clientPhone: string,
     clientEmail: string,
-    serviceId?: string
+    serviceId?: string,
+    locationId?: string
 }) {
     const profile = await prisma.profile.findUnique({ 
         where: { username: data.username },
@@ -216,7 +305,9 @@ export async function createAppointment(data: {
                         include: { organization: true }
                     }
                 }
-            }
+            },
+            availabilities: true,
+            services: true
         }
     })
     if (!profile) throw new Error("Perfil no encontrado")
@@ -230,6 +321,21 @@ export async function createAppointment(data: {
     let durationMinutes = 30
     let serviceName = undefined
     let servicePrice = undefined
+
+    // Determine locationId: 
+    // 1. If explicitly provided in data
+    // 2. If not, try to infer from availability for that day/time
+    let finalLocationId = data.locationId;
+    
+    if (!finalLocationId) {
+        const dayOfWeek = getBogotaDay(data.date);
+        const availability = profile.availabilities.find((a: any) => 
+            a.dayOfWeek === dayOfWeek && 
+            !a.isBlocked && 
+            data.time >= a.startTime && data.time < a.endTime
+        );
+        finalLocationId = (availability as any)?.locationId || null;
+    }
 
     if (data.serviceId) {
         const service = await prisma.service.findUnique({ where: { id: data.serviceId } })
@@ -287,7 +393,8 @@ export async function createAppointment(data: {
                 status: requiresPayment ? "PENDING" : "CONFIRMED",
                 cancelToken,
                 paymentReference,
-            }
+                locationId: finalLocationId || null
+            } as any
         })
     }, {
         isolationLevel: 'Serializable',
@@ -370,5 +477,25 @@ function hashCode(str: string): number {
         hash |= 0 // Convert to 32-bit integer
     }
     return hash
+}
+
+/**
+ * Gets available slots for a professional at a specific location.
+ */
+export async function getAvailableSlotsForLocation(profileId: string, locationId: string, date: Date, serviceId?: string) {
+    const profile = await prisma.profile.findUnique({
+        where: { id: profileId },
+        include: { availabilities: true }
+    })
+    if (!profile) throw new Error("Perfil no encontrado")
+
+    // Get service duration if provided
+    let durationMinutes = 30
+    if (serviceId) {
+        const service = await prisma.service.findUnique({ where: { id: serviceId } })
+        if (service) durationMinutes = service.durationMinutes
+    }
+
+    return await getAvailableSlots(profile.username, date, durationMinutes, locationId)
 }
 
