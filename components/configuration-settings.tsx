@@ -48,7 +48,6 @@ interface ServiceItem {
 export function ConfigurationSettings() {
     const [loading, setLoading] = useState(true)
     const [displayName, setDisplayName] = useState("")
-    const [advanceNoticeHours, setAdvanceNoticeHours] = useState(24)
     const [expertise, setExpertise] = useState<string[]>([])
     const [savingConfig, setSavingConfig] = useState(false)
     const [services, setServices] = useState<ServiceItem[]>([])
@@ -76,7 +75,6 @@ export function ConfigurationSettings() {
             try {
                 const data = await getConfiguration()
                 setDisplayName(data.displayName)
-                setAdvanceNoticeHours(data.advanceNoticeHours ?? 24)
                 setExpertise(data.expertise || [])
                 setServices(data.services)
             } catch (err) {
@@ -95,7 +93,7 @@ export function ConfigurationSettings() {
     const handleSaveConfig = async () => {
         setSavingConfig(true)
         try {
-            await updateConfiguration({ displayName, advanceNoticeHours, expertise })
+            await updateConfiguration({ displayName, expertise })
             sileo.success({
                 title: "Configuración guardada",
                 description: "Marca y logística actualizadas correctamente.",
@@ -569,33 +567,6 @@ export function ConfigurationSettings() {
                                             placeholder="Ej: Estrategia, Marketing, etc"
                                             className="px-8" // Match spacing of other inputs
                                         />
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Horas de Antelación Mínima</Label>
-                                        <p className="text-[11px] text-muted-foreground font-medium mb-3 ml-1 leading-tight">
-                                            Tiempo mínimo para aceptar citas. <span className="text-primary font-bold">0 = mismo día</span>.
-                                        </p>
-                                        <div className="group transition-all">
-                                            <InputGroup className="h-12 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
-                                                <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-12 flex items-center justify-center">
-                                                    <Clock className="h-6 w-6 text-primary" />
-                                                </InputGroupAddon>
-                                                <InputGroupInput
-                                                    type="number"
-                                                    min={0}
-                                                    value={advanceNoticeHours}
-                                                    onChange={(e) => {
-                                                        const val = parseInt(e.target.value, 10);
-                                                        const cleanValue = isNaN(val) ? 0 : val;
-                                                        setAdvanceNoticeHours(cleanValue);
-                                                        // This forces the input to sync visually if the browser is holding a leading zero string like "04"
-                                                        e.target.value = cleanValue.toString();
-                                                    }}
-                                                    className="font-black text-xl px-6 h-12 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                />
-                                            </InputGroup>
-                                        </div>
                                     </div>
 
                                     <Button
