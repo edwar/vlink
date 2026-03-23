@@ -9,6 +9,7 @@ import { getOrgConsolidatedSlots } from "@/app/actions/consolidated-availability
 import { UserAvatar } from "@/components/user-avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { isHolidayColombia } from "@/lib/holidays"
+import { Skeleton } from "./ui/skeleton"
 
 interface ConsolidatedAgendaProps {
     orgSlug: string
@@ -19,7 +20,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<any[]>([])
-    const [selectedLocationId, setSelectedLocationId] = useState<string>("all")
+    const [selectedLocationId, setSelectedLocationId] = useState<string>(locations[0].id)
     const holidayInfo = isHolidayColombia(selectedDate)
 
     useEffect(() => {
@@ -76,18 +77,22 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                     <div className="hidden md:flex h-10 w-10 items-center justify-center bg-primary/5 rounded-xl border border-primary/10">
                         <Building2 className="h-5 w-5 text-primary" />
                     </div>
-                    <Select value={selectedLocationId} onValueChange={setSelectedLocationId}>
-                        <SelectTrigger className="w-full md:w-[220px] h-12 rounded-xl bg-background border-border/40 font-bold">
-                            <SelectValue defaultValue={locations[0].id} />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-xl border-border/40 font-medium">
-                            {locations.map((loc) => (
-                                <SelectItem key={loc.id} value={loc.id}>
-                                    {loc.name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    {locations.length > 0 ? (
+                        <Select value={selectedLocationId} onValueChange={setSelectedLocationId}>
+                            <SelectTrigger className="w-full md:w-[220px] h-12 rounded-xl bg-background border-border/40 font-bold">
+                                <SelectValue placeholder="Seleccionar Ubicación" />
+                            </SelectTrigger>
+                            <SelectContent position="popper" className="rounded-xl border-border/40 font-medium">
+                                {locations.map((loc) => (
+                                    <SelectItem key={loc.id} value={loc.id}>
+                                        {loc.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    ) : (
+                        <Skeleton className="w-[220px] h-12 rounded-xl" />
+                    )}
                 </div>
             </div>
 

@@ -36,6 +36,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "./ui/skeleton"
 
 type ViewType = 'day' | 'week' | 'month'
 
@@ -66,6 +67,11 @@ function CalendarHeader({
     selectedLocationId,
     onLocationChange
 }: CalendarHeaderProps) {
+    useEffect(() => {
+        if (locations.length > 0) {
+            onLocationChange(locations[0].id)
+        }
+    }, [locations])
     return (
         <div className="flex flex-col gap-4 bg-transparent pt-2 pb-4 border-b border-dashed border-border/60 mb-2">
             <div className="flex items-center justify-between w-full">
@@ -81,24 +87,28 @@ function CalendarHeader({
                 </div>
 
                 <div className="flex flex-col lg:flex-row items-end lg:items-center gap-4">
-                    <Select
-                        value={selectedLocationId || "all"}
-                        onValueChange={(value) => onLocationChange(value === "all" ? null : value)}
-                    >
-                        <SelectTrigger className="flex w-[220px] h-10 bg-muted/30 px-3 rounded-full border border-border/50 text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
-                            <div className="flex items-center gap-3">
-                                <MapPinned className="h-4 w-4 text-primary shrink-0" />
-                                <SelectValue defaultValue={locations[0].id} />
-                            </div>
-                        </SelectTrigger>
-                        <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
-                            {locations.map(loc => (
-                                <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
-                                    {loc.name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    {locations.length > 0 ? (
+                        <Select
+                            value={selectedLocationId || ''}
+                            onValueChange={(value) => onLocationChange(value)}
+                        >
+                            <SelectTrigger className="flex w-[220px] h-10 bg-muted/30 px-3 rounded-full border border-border/50 text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <MapPinned className="h-4 w-4 text-primary shrink-0" />
+                                    <SelectValue placeholder="Seleccionar Ubicación" />
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
+                                {locations.map(loc => (
+                                    <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
+                                        {loc.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    ) : (
+                        <Skeleton className="w-[220px] h-10 rounded-full" />
+                    )}
 
                     <Button
                         variant="ghost"
@@ -227,9 +237,10 @@ function CalendarHeader({
                             onValueChange={(value) => { onLocationChange(value === "all" ? null : value); onMenuToggle(); }}
                         >
                             <SelectTrigger className="w-full h-10 rounded-xl bg-muted/20 border-border/40 px-4 text-xs font-bold transition-all text-foreground">
-                                <SelectValue defaultValue={locations[0].id} />
+                                <SelectValue placeholder="Todas las Sedes" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
+                                <SelectItem value="all" className="text-xs font-bold py-2 rounded-xl">Todas las Sedes</SelectItem>
                                 {locations.map(loc => (
                                     <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
                                         {loc.name}
