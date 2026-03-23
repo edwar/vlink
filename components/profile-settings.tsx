@@ -412,7 +412,7 @@ export function ProfileSettings() {
                         onClick={handleSave}
                         disabled={saving}
                         className={cn(
-                            "group/btn relative px-12 h-20 rounded-[2rem] font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
+                            "group/btn relative px-12 h-20 rounded-4xl font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
                             success
                                 ? "bg-secondary text-secondary-foreground border-secondary/20 scale-105 shadow-secondary/40"
                                 : "bg-primary text-primary-foreground border-primary/20 hover:scale-110 active:scale-95 hover:shadow-primary/40"

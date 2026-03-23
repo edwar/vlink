@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog"
 import { LocationForm } from "@/components/location-form"
 import { LocationMembersConfig } from "@/components/location-members-config"
+import { LocationTeamList } from "@/components/location-team-list"
 import { revalidatePath } from "next/cache"
 import { deleteLocation, getMemberServicesByLocation } from "@/app/actions/locations"
 import { sileo } from "sileo"
@@ -218,56 +219,11 @@ export default async function SedesPage() {
                                 <div className="pt-2 border-t border-border/40">
                                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Configuración de Equipo</h4>
 
-                                    <div className="space-y-2">
-                                        {(organization as any).members
-                                            .filter((m: any) => canManageAll || m.userId === session.user.id)
-                                            .map((member: any) => {
-                                            const configuredServicesCount = member.locationServices?.filter((ls: any) => ls.locationId === loc.id).length || 0;
-                                            
-                                            return (
-                                            <Dialog key={member.id}>
-                                                <DialogTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        className="w-full h-14 bg-muted/10 hover:bg-primary/5 border border-border/30 hover:border-primary/20 rounded-2xl flex items-center justify-between px-4 group/btn"
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-black text-primary">
-                                                                {member.user.name?.charAt(0)}
-                                                            </div>
-                                                            <div className="text-left">
-                                                                <p className="text-xs font-black uppercase tracking-tight text-foreground">{member.user.name}</p>
-                                                                <p className="text-[10px] font-medium text-muted-foreground italic">
-                                                                    {configuredServicesCount === 0 
-                                                                        ? "Sin servicios asignados" 
-                                                                        : `${configuredServicesCount} servicio${configuredServicesCount === 1 ? '' : 's'} asignado${configuredServicesCount === 1 ? '' : 's'}`
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover/btn:text-primary group-hover/btn:translate-x-1 transition-all" />
-                                                    </Button>
-                                                </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[550px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card shadow-2xl">
-                                                    <DialogHeader className="p-8 pb-0">
-                                                        <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Configurar Profesional</DialogTitle>
-                                                        <DialogDescription className="text-muted-foreground font-medium pt-2">
-                                                            Asigna los servicios que {member.user.name} podrá realizar en {loc.name}.
-                                                        </DialogDescription>
-                                                    </DialogHeader>
-                                                    <div className="p-8">
-                                                        <MemberConfigWrapper
-                                                            memberId={member.id}
-                                                            memberName={member.user.name || "Miembro"}
-                                                            locationId={loc.id}
-                                                            locationName={loc.name}
-                                                            allServices={member.user.profile?.services || []}
-                                                        />
-                                                    </div>
-                                                </DialogContent>
-                                            </Dialog>
-                                        )})}
-                                    </div>
+                                    <LocationTeamList 
+                                        members={(organization as any).members.filter((m: any) => canManageAll || m.userId === session.user.id)}
+                                        locationId={loc.id}
+                                        locationName={loc.name}
+                                    />
                                 </div>
                             </CardContent>
                         </Card>
@@ -278,31 +234,4 @@ export default async function SedesPage() {
     )
 }
 
-// Wrapper to fetch current services for a member in a location
-async function MemberConfigWrapper({
-    memberId,
-    memberName,
-    locationId,
-    locationName,
-    allServices
-}: {
-    memberId: string,
-    memberName: string,
-    locationId: string,
-    locationName: string,
-    allServices: { id: string, name: string }[]
-}) {
-    const currentServices = await getMemberServicesByLocation(memberId, locationId)
-    const currentServiceIds = currentServices.map((s: any) => s.id)
 
-    return (
-        <LocationMembersConfig
-            memberId={memberId}
-            memberName={memberName}
-            locationId={locationId}
-            locationName={locationName}
-            allServices={allServices}
-            currentServiceIds={currentServiceIds}
-        />
-    )
-}
