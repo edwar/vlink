@@ -30,7 +30,7 @@ export async function getProfileForBooking(username: string) {
                 orderBy: { createdAt: 'asc' }
             }
         }
-    })
+    }) as any
 
     if (!profile) return null
 
@@ -49,15 +49,15 @@ export async function getProfileForBooking(username: string) {
         // Check for Billing Hard-Lock
         const isDegraded = org.billingStatus === "DEGRADED";
         const isOverdueGraceEnded = org.billingStatus === "OVERDUE" && org.gracePeriodEnd && org.gracePeriodEnd < now;
-        
+
         // Treat as expired trial if: ACTIVE + Trial Date Passed + No active Mercado Pago subscription
         // and its either not a free plan or we want to enforce card for all.
         // Assuming planConfig.price starts with '$0' for free plans.
-        const trialExpired = org.billingStatus === "ACTIVE" && 
-                             org.gracePeriodEnd && 
-                             org.gracePeriodEnd < now && 
-                             !org.mpSubscriptionId && 
-                             (planConfig?.price !== "$0");
+        const trialExpired = org.billingStatus === "ACTIVE" &&
+            org.gracePeriodEnd &&
+            org.gracePeriodEnd < now &&
+            !org.mpSubscriptionId &&
+            (planConfig?.price !== "$0");
 
         if (isDegraded || isOverdueGraceEnded || trialExpired || !org.subscriptionPlan) {
             console.log(`[Hard-Lock] Agenda bloqueada para ${username}. Status: ${org.billingStatus}, Plan: ${org.subscriptionPlan}`);
@@ -203,9 +203,9 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
     const dayOfWeek = getBogotaDay(date)
     // 1. Obtener disponibilidad recurrente para este día de la semana
     // Si locationId está presente, solo buscar disponibilidad en esa sede
-    const recurringPeriods = profile.availabilities.filter((a: any) => 
-        a.dayOfWeek === dayOfWeek && 
-        !a.isBlocked && 
+    const recurringPeriods = profile.availabilities.filter((a: any) =>
+        a.dayOfWeek === dayOfWeek &&
+        !a.isBlocked &&
         !a.specificDate &&
         (!locationId || !a.locationId || a.locationId === locationId)
     ) as any[]
@@ -222,7 +222,7 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         if (a.specificDate && getBogotaISO(a.specificDate) === isoDate) return true;
         // Bloqueo recurrente para este día y sede
         if (!a.specificDate && a.dayOfWeek === dayOfWeek && (!locationId || !a.locationId || a.locationId === locationId)) return true;
-        
+
         return false;
     })
 
@@ -290,8 +290,9 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
                     }
                 }
             }
-            // Mover al siguiente slot
-            currentMinutes += durationMinutes;
+            // Mover al siguiente slot (usan una granularidad de 30 minutos para mayor flexibilidad)
+            const increment = Math.min(30, durationMinutes);
+            currentMinutes += increment;
         }
     }
 
@@ -308,7 +309,7 @@ export async function createAppointment(data: {
     serviceId?: string,
     locationId?: string
 }) {
-    const profile = await prisma.profile.findUnique({ 
+    const profile = await prisma.profile.findUnique({
         where: { username: data.username },
         include: {
             user: {
@@ -338,12 +339,12 @@ export async function createAppointment(data: {
     // 1. If explicitly provided in data
     // 2. If not, try to infer from availability for that day/time
     let finalLocationId = data.locationId;
-    
+
     if (!finalLocationId) {
         const dayOfWeek = getBogotaDay(data.date);
-        const availability = profile.availabilities.find((a: any) => 
-            a.dayOfWeek === dayOfWeek && 
-            !a.isBlocked && 
+        const availability = profile.availabilities.find((a: any) =>
+            a.dayOfWeek === dayOfWeek &&
+            !a.isBlocked &&
             data.time >= a.startTime && data.time < a.endTime
         );
         finalLocationId = (availability as any)?.locationId || null;
@@ -391,7 +392,7 @@ export async function createAppointment(data: {
             }
         })
 
-        if (collision) throw new Error("Slot ya ocupado")
+        if (collision) throw new Error("Alguien ya reservó en este horario, por favor intenta con otra fecha u hora.")
 
         return tx.appointment.create({
             data: {
