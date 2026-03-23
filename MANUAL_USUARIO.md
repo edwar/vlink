@@ -35,6 +35,11 @@ VLink escala contigo. Gestiona múltiples profesionales bajo una misma identidad
 
 ![Team Illustration](/images/manual/vlink_team.png)
 
+### 📍 Gestión Multi-Sede
+Expande tu alcance operando en múltiples ubicaciones físicas o virtuales.
+*   **Disponibilidad por Sede:** Los individuales pueden definir horarios de trabajo independientes para cada sede a la que pertenecen.
+*   **Filtro Inteligente:** En el dashboard consolidado, filtra agendas y recursos por sede para una administración más clara y enfocada.
+
 ### 👥 Gestión de Talento
 *   **Invitación Mágica:** Envía enlaces de invitación para que otros profesionales se unan a tu organización instantáneamente.
 *   **Jerarquía de Roles:**
@@ -78,6 +83,7 @@ Configura tus reglas de juego desde la sección de *Perfil*:
 *   **⏰ Antelación Mínima:** Evita sorpresas de último minuto. Establece cuántas horas de aviso necesitas (1h, 12h, 24h, etc.) antes de que un cliente pueda agendar en un espacio vacío.
 *   **☀️ Horarios Flexibles:** Define bloques de mañana, tarde o noche con descansos específicos.
 *   **🚫 Bloqueos de Emergencia:** ¿Salió algo imprevisto? Bloquea el tiempo en tu agenda y VLink cerrará esos espacios instantáneamente para nuevos clientes.
+*   **🎉 Inteligencia de Festivos:** VLink detecta automáticamente los días festivos (ej. Festivos oficiales de Colombia). Controla fácilmente si tu equipo atiende o descansa activando o desactivando la opción `Trabajar en festivos`.
  
 ---
  
@@ -99,6 +105,15 @@ Tu agenda profesional no es estática; es un ecosistema vivo.
 *   **🖱️ Gestión Visual:** Arrastra, visualiza y detalla cada compromiso con una interfaz fluida diseñada para la velocidad.
 *   **📱 Omnicanalidad Real:** No importa si la acción ocurre en el móvil del cliente o en tu computadora; VLink sincroniza todos los estados para que nunca haya conflictos de horario.
 
+
+---
+
+## 🏎️ 9. La Experiencia del Cliente (Flujo de Reservas)
+Hemos optimizado al máximo la experiencia de reserva desde la perspectiva del cliente final, asegurando conversiones exitosas.
+
+*   **Redirecciones Inteligentes (Cero Fricción):** Si tu organización ofrece un solo servicio, o solo atiende en una sede en particular, VLink lo selecciona automáticamente para tu cliente. ¡Menos clics significa más agendamientos!
+*   **Asignación Inteligente Servicio-Sede:** El proceso de reserva de tus clientes ahora filtra dinámicamente: solo mostrará las ubicaciones exactas donde el profesional seleccionado atiende determinados servicios. 
+*   **Confianza con Soporte y Políticas:** En la página de reservas y la organización pública, tus clientes encuentran accesos rápidos a secciones de **Políticas** y **Soporte**. Esta transparencia responde a sus inquietudes antes de completar la cita.
 
 ---
 
