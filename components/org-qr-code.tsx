@@ -87,14 +87,21 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
     }
 
     const shareLink = async () => {
-        if (navigator.share) {
-            await navigator.share({
-                title: `Agenda con ${orgName}`,
-                text: `Agenda tu cita con los profesionales de ${orgName}`,
-                url: publicUrl
-            })
-        } else {
-            copyLink()
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: `Agenda con ${orgName}`,
+                    text: `Agenda tu cita con los profesionales de ${orgName}`,
+                    url: publicUrl
+                })
+            } else {
+                copyLink()
+            }
+        } catch (error: any) {
+            // Ignorar el error si el usuario cierra la hojita de compartir nativa
+            if (error.name !== 'AbortError') {
+                console.error("Error al compartir:", error)
+            }
         }
     }
 
