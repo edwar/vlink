@@ -31,7 +31,7 @@ export function DashboardTabsUI({
 
     return (
         <Tabs defaultValue="agenda" onValueChange={setActiveTab} className="space-y-8">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-4 px-2">
+            <div className="flex flex-col xl:flex-row items-center xl:justify-between gap-4 px-2 w-full">
                 <TabsList className="relative w-fit xs:w-auto bg-surface/50 border border-border/20 p-1.5 rounded-full h-auto gap-1">
                     <TabsTrigger 
                         id="tour-tab-agenda"
@@ -70,8 +70,8 @@ export function DashboardTabsUI({
                     </TabsTrigger>
                 </TabsList>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                    <div id="tour-export-csv" className="relative flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-full">
+                    <div id="tour-export-csv" className="relative flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-full xl:w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
                         <div id="tour-export-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <span className="flex items-center gap-2 shrink-0">
                             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />

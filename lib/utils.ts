@@ -6,8 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(val: string | number) {
-  const num = typeof val === 'number' ? val.toString() : val.replace(/\D/g, "")
+  let num = typeof val === 'number' ? val.toString() : val.replace(/\D/g, "")
   if (!num) return ""
+  num = num.replace(/^0+(?=\d)/, "")
   return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 }
 

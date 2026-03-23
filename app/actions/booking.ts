@@ -208,10 +208,15 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
     // Timezone safe boundaries (Colombia -05:00)
     const isoDate = getBogotaISO(date);
 
-    // 2. Obtener bloqueos específicos (isBlocked=true) para esta fecha
+    // 2. Obtener bloqueos específicos y recurrentes (isBlocked=true)
     const specialBlocks = profile.availabilities.filter((a: any) => {
-        if (!a.isBlocked || !a.specificDate) return false;
-        return getBogotaISO(a.specificDate) === isoDate;
+        if (!a.isBlocked) return false;
+        // Bloqueo específico para est fecha
+        if (a.specificDate && getBogotaISO(a.specificDate) === isoDate) return true;
+        // Bloqueo recurrente para este día y sede
+        if (!a.specificDate && a.dayOfWeek === dayOfWeek && (!locationId || !a.locationId || a.locationId === locationId)) return true;
+        
+        return false;
     })
 
     // 3. Obtener horarios especiales (isBlocked=false) si existen

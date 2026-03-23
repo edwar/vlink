@@ -152,4 +152,5 @@ export {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 }

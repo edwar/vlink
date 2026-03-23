@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input"
 import { Loader2 } from "lucide-react"
 import { createLocation, updateLocation } from "@/app/actions/locations"
 import { sileo } from "sileo"
+import { useRouter } from "next/navigation"
+import { DialogClose } from "@/components/ui/dialog"
 
 const locationSchema = z.object({
     name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -41,6 +43,7 @@ interface LocationFormProps {
 
 export function LocationForm({ organizationId, initialData, onSuccess }: LocationFormProps) {
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     const form = useForm<LocationFormValues>({
         resolver: zodResolver(locationSchema),
@@ -64,6 +67,8 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
             }
             onSuccess?.()
             if (!initialData) form.reset()
+            document.getElementById('close-dialog-btn')?.click()
+            router.refresh()
         } catch (error: any) {
             sileo.error({ title: "Error", description: error.message || "Ocurrió un error al guardar la sede" })
         } finally {
@@ -108,7 +113,19 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                             <FormItem>
                                 <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Teléfono</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Opcional" {...field} className="h-12 bg-muted/30 border-border/40 rounded-xl" />
+                                    <Input
+                                        placeholder="Opcional (Ej. 300 000 0000)"
+                                        {...field}
+                                        onChange={(e) => {
+                                            const x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                                            if (x) {
+                                                field.onChange(!x[2] ? x[1] : `${x[1]} ${x[2]}` + (x[3] ? ` ${x[3]}` : ''));
+                                            } else {
+                                                field.onChange(e.target.value);
+                                            }
+                                        }}
+                                        className="h-12 bg-muted/30 border-border/40 rounded-xl"
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -130,8 +147,11 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                 />
                 <Button type="submit" disabled={loading} className="w-full h-12 rounded-xl font-black uppercase tracking-widest mt-4">
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {initialData ? "Actualizar Sede" : "Crear Sede"}
+                    {initialData ? "Actualizar Sede" : loading ? "Creando Sede..." : "Crear Sede"}
                 </Button>
+                <DialogClose asChild>
+                    <button type="button" id="close-dialog-btn" className="hidden" aria-hidden="true" />
+                </DialogClose>
             </form>
         </Form>
     )

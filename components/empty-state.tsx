@@ -7,6 +7,7 @@ interface EmptyStateProps {
     icon?: LucideIcon
     actionText?: string
     actionHref?: string
+    className?: string
 }
 
 export function EmptyState({
@@ -14,10 +15,11 @@ export function EmptyState({
     description,
     icon: Icon = CalendarIcon,
     actionText,
-    actionHref
+    actionHref,
+    className
 }: EmptyStateProps) {
     return (
-        <div className="p-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none rounded-2xl text-center space-y-4">
+        <div className={`p-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none rounded-2xl text-center space-y-4 ${className}`}>
             <div className="h-32 w-32 bg-primary/5 rounded-full mx-auto flex items-center justify-center text-primary/30">
                 <Icon className="h-24 w-24 text-muted-foreground" />
             </div>

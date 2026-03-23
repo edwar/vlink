@@ -5,8 +5,10 @@ import { setMemberServicesForLocation } from "@/app/actions/locations"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Loader2, Check } from "lucide-react"
+import { Loader2, Check, Wrench } from "lucide-react"
 import { sileo } from "sileo"
+import { EmptyState } from "./empty-state"
+import { cn } from "@/lib/utils"
 
 interface LocationMembersConfigProps {
     memberId: string
@@ -55,26 +57,32 @@ export function LocationMembersConfig({
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className={cn("gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar", allServices.length === 0 ? "w-full" : "grid grid-cols-1 sm:grid-cols-2")}>
                 {allServices.length === 0 ? (
-                    <p className="text-xs text-muted-foreground italic col-span-2">No hay servicios configurados.</p>
+                    <EmptyState
+                        title="Servicios"
+                        description="No hay servicios configurados para este profesional"
+                        icon={Wrench}
+                        actionText="Agregar servicio"
+                        actionHref="/dashboard/configuracion"
+                        className="w-full"
+                    />
                 ) : (
                     allServices.map(service => (
                         <div
                             key={service.id}
-                            className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${
-                                selectedIds.includes(service.id) 
-                                ? "bg-primary/5 border-primary/30" 
+                            className={`flex items-center space-x-3 p-3 rounded-xl border transition-all cursor-pointer ${selectedIds.includes(service.id)
+                                ? "bg-primary/5 border-primary/30"
                                 : "bg-muted/10 border-border/40 hover:border-border/80"
-                            }`}
+                                }`}
                             onClick={() => toggleService(service.id)}
                         >
-                            <Checkbox 
-                                id={service.id} 
+                            <Checkbox
+                                id={service.id}
                                 checked={selectedIds.includes(service.id)}
                                 onCheckedChange={() => toggleService(service.id)}
                             />
-                            <Label 
+                            <Label
                                 htmlFor={service.id}
                                 className="text-xs font-bold leading-none cursor-pointer flex-1"
                             >
@@ -84,15 +92,16 @@ export function LocationMembersConfig({
                     ))
                 )}
             </div>
-
-            <Button
-                onClick={handleSave}
-                disabled={loading}
-                className="w-full h-11 rounded-xl font-black uppercase tracking-widest"
-            >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Check className="h-4 w-4 mr-2" />}
-                Guardar Configuración
-            </Button>
+            {allServices.length > 0 && (
+                <Button
+                    onClick={handleSave}
+                    disabled={loading}
+                    className="w-full h-11 rounded-xl font-black uppercase tracking-widest"
+                >
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Check className="h-4 w-4 mr-2" />}
+                    Guardar Configuración
+                </Button>
+            )}
         </div>
     )
 }

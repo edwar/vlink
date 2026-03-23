@@ -128,7 +128,10 @@ export function AvailabilityManagement() {
             const allSchedules = new Map(allRecurringData)
             allSchedules.set(selectedLocationId, recurringDays)
 
-            Array.from(allSchedules.values()).forEach(schedule => {
+            Array.from(allSchedules.entries()).forEach(([locId, schedule]) => {
+                // Ensure we only save configurations for valid, existing locations.
+                if (!locations.find(l => l.id === locId) && locId !== selectedLocationId) return;
+
                 schedule.forEach(d => {
                     if (d.active) {
                         payload.push({
@@ -136,7 +139,7 @@ export function AvailabilityManagement() {
                             startTime: d.start,
                             endTime: d.end,
                             isBlocked: false,
-                            locationId: d.locationId || null
+                            locationId: locId || null
                         })
 
                         if (d.lunchActive) {
@@ -145,7 +148,7 @@ export function AvailabilityManagement() {
                                 startTime: d.lunchStart,
                                 endTime: d.lunchEnd,
                                 isBlocked: true,
-                                locationId: d.locationId || null
+                                locationId: locId || null
                             })
                         }
                     }
@@ -707,7 +710,7 @@ export function AvailabilityManagement() {
                         disabled={saving}
                         id="tour-save-availability"
                         className={cn(
-                            "group/btn relative px-12 h-20 rounded-[2rem] font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
+                            "group/btn relative px-12 h-20 rounded-4xl font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
                             success
                                 ? "bg-secondary text-secondary-foreground border-secondary/20 scale-105 shadow-secondary/40"
                                 : "bg-primary text-primary-foreground border-primary/20 hover:scale-110 active:scale-95 hover:shadow-primary/40"

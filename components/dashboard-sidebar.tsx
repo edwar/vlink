@@ -36,7 +36,7 @@ export function DashboardSidebar() {
     }
 
     return (
-        <div className="flex h-dvh flex-col gap-y-6 overflow-y-auto border-r border-primary/5 px-6 pb-6">
+        <div className="flex h-dvh flex-col gap-y-4 overflow-y-auto border-r border-primary/5 px-4 lg:px-6 pb-6">
             <div className="flex h-20 shrink-0 items-center justify-between">
                 <div id="tour-logo" className="flex items-center gap-2 group cursor-pointer">
                     <Logo className="h-8 w-8 text-primary" />
@@ -49,8 +49,8 @@ export function DashboardSidebar() {
 
             <PlanBadge />
 
-            <nav id="tour-nav" className="flex flex-1 flex-col mt-4">
-                <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <nav id="tour-nav" className="flex flex-1 flex-col mt-2">
+                <ul role="list" className="flex flex-1 flex-col gap-y-3">
                     <li>
                         <ul role="list" className="space-y-1.5">
                             {navigation.map((item) => {
@@ -60,7 +60,7 @@ export function DashboardSidebar() {
                                         <Link
                                             href={item.href}
                                             className={cn(
-                                                'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-colors duration-300 overflow-hidden',
+                                                'group relative flex items-center gap-x-3 rounded-sm p-2 sm:p-2.5 text-sm font-bold leading-6 transition-colors duration-300 overflow-hidden',
                                                 isActive
                                                     ? 'text-primary'
                                                     : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
@@ -69,14 +69,14 @@ export function DashboardSidebar() {
                                             {isActive && (
                                                 <motion.div
                                                     layoutId="sidebar-active"
-                                                    className="absolute inset-0 bg-primary/10 rounded-xl overflow-hidden shadow-none"
+                                                    className="absolute inset-0 bg-primary/10 rounded-sm overflow-hidden shadow-none"
                                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                                 >
                                                     <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-primary" />
                                                 </motion.div>
                                             )}
                                             <item.icon className={cn(
-                                                "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110 relative z-10",
+                                                "h-5 w-5 sm:h-6 sm:w-6 shrink-0 transition-transform duration-300 group-hover:scale-110 relative z-10",
                                                 isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
                                             )} aria-hidden="true" />
                                             <span className="relative z-10">{item.name}</span>
@@ -94,11 +94,11 @@ export function DashboardSidebar() {
                                     pathname.startsWith('/admin')
                                         ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-none'
                                         : 'text-muted-foreground hover:bg-amber-500/5 hover:text-amber-600',
-                                    'group relative flex gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 transition-all duration-300'
+                                    'group relative flex gap-x-4 rounded-sm p-3 text-sm font-bold leading-6 transition-all duration-300'
                                 )}
                             >
                                 <ShieldCheck className={cn(
-                                    "h-6 w-6 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                    "h-5 w-5 sm:h-6 sm:w-6 shrink-0 transition-transform duration-300 group-hover:scale-110",
                                     pathname.startsWith('/admin') ? "text-amber-600" : "text-muted-foreground group-hover:text-amber-600"
                                 )} aria-hidden="true" />
                                 VLink Admin
@@ -106,9 +106,9 @@ export function DashboardSidebar() {
                         )}
                         <button
                             onClick={handleSignOut}
-                            className="group flex w-full gap-x-4 rounded-xl p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
+                            className="group flex w-full items-center gap-x-3 rounded-sm p-2.5 sm:p-3 text-sm font-bold leading-6 text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 hover:cursor-pointer"
                         >
-                            <LogOut className="h-6 w-6 shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
+                            <LogOut className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                             Cerrar sesión
                         </button>
                     </li>
