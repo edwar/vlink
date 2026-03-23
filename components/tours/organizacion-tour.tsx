@@ -2,7 +2,7 @@
 
 import { PageTour } from "@/components/page-tour"
 
-export function OrganizacionTour() {
+export function OrganizacionTour({ isOwnerOrManager = true }: { isOwnerOrManager?: boolean }) {
     const steps = [
         {
             title: "Gestión de Organización",
@@ -57,18 +57,18 @@ export function OrganizacionTour() {
             intro: "Visualiza cómo tus clientes ven el perfil de tu organización y agendan citas directamente con tus profesionales.",
             position: "auto"
         },
-        {
+        ...(isOwnerOrManager ? [{
             element: "#tour-org-plan",
             title: "Tu Plan",
             intro: "Gestiona los límites de tu equipo y mejora tus características escalando de plan.",
             position: "auto"
-        }
+        }] : [])
     ]
 
     return (
         <PageTour
             pageKey="organizacion"
-            version="2026-03-21T22:30:00Z"
+            version="2026-03-25T12:00:00Z"
             steps={steps}
         />
     )

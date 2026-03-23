@@ -27,6 +27,23 @@ export function PageTour({ pageKey, version, steps, onComplete }: PageTourProps)
                 
                 // Small delay to ensure layout has settled
                 await new Promise(resolve => setTimeout(resolve, 500))
+                
+                // Wait for the first DOM element of the tour to exist
+                // This prevents introJS from trying to highlight elements that are still loading asynchronously
+                const firstElementStep = steps.find(s => s.element)
+                if (firstElementStep) {
+                    let retries = 0
+                    while (retries < 30) {
+                        try {
+                            if (document.querySelector(firstElementStep.element)) break;
+                        } catch (e) {
+                            // in case selector is invalid
+                            break;
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 200))
+                        retries++
+                    }
+                }
                 if (isStopped) return
 
                 const introJs = (await import("intro.js")).default

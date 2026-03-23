@@ -10,13 +10,25 @@ export function DisponibilidadTour() {
             position: "bottom"
         },
         {
-            element: "#tour-weekly-anchor",
+            element: "#tour-weekly-header",
             title: "Horario Semanal",
-            intro: "Configura tus horas de trabajo recurrentes. Ahora también puedes elegir en qué sede estarás cada día.",
+            intro: "Define aquí tus horas de trabajo recurrentes para que tus clientes puedan agendar.",
             position: "auto"
         },
         {
-            element: "#tour-special-anchor",
+            element: "#tour-weekly-location",
+            title: "Selección de Sede",
+            intro: "Elige la sede sobre la cual deseas configurar el horario. Puedes cambiar entre tus múltiples sedes rápidamente aquí.",
+            position: "auto"
+        },
+        {
+            element: "#tour-weekly-days",
+            title: "Configuración por Día",
+            intro: "Activa cada día y define tus rangos de trabajo, incluyendo tus horas de almuerzo.",
+            position: "auto"
+        },
+        {
+            element: "#tour-special-blocks",
             title: "Bloqueos Especiales",
             intro: "¿Vacaciones o una cita médica? Añade bloqueos para días específicos en los que no quieres ser agendado.",
             position: "auto"
@@ -32,7 +44,7 @@ export function DisponibilidadTour() {
     return (
         <PageTour
             pageKey="disponibilidad"
-            version="2026-03-21T22:30:00Z"
+            version="2026-03-28T12:00:00Z"
             steps={steps}
         />
     )

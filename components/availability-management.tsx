@@ -313,12 +313,12 @@ export function AvailabilityManagement() {
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <section id="tour-weekly-schedule" className="relative space-y-8">
                 <div id="tour-weekly-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                <div className="flex flex-col w-full">
+                <div id="tour-weekly-header" className="flex flex-col w-full">
                     <h3 className="text-2xl font-black font-display tracking-tight">Horario Semanal</h3>
                     <p className="text-muted-foreground font-medium mt-1">Define tus horas de trabajo recurrentes para que tus clientes puedan agendar.</p>
                 </div>
 
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-muted/20 p-6 rounded-lg border border-border/40">
+                <div id="tour-weekly-location" className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-muted/20 p-6 rounded-lg border border-border/40">
                     <div className="h-12 w-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
                         <MapPinned className="h-6 w-6" />
                     </div>
@@ -410,7 +410,7 @@ export function AvailabilityManagement() {
                 })()}
 
                 {selectedLocationId ? (
-                    <div className="grid gap-4">
+                    <div id="tour-weekly-days" className="grid gap-4">
                         {DAYS.map((day) => {
                             const dayState = recurringDays.find(d => d.dayId === day.id)
                             const active = dayState?.active || false

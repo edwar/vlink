@@ -31,7 +31,7 @@ export function DashboardTour() {
         {
             element: isMobile ? "#tour-mobile-nav-trigger" : "#tour-nav",
             title: "Navegación",
-            intro: isMobile 
+            intro: isMobile
                 ? "Toca el menú para acceder a tu agenda, equipo, perfil y configuraciones."
                 : "Accede a tu agenda, equipo, perfil y configuraciones desde aquí.",
             position: isMobile ? 'bottom' : 'right' as const
@@ -69,10 +69,10 @@ export function DashboardTour() {
     ]
 
     return (
-        <PageTour 
-            pageKey="dashboard-main" 
-            version="2026-03-22T23:55:00Z" 
-            steps={steps} 
+        <PageTour
+            pageKey="dashboard-main"
+            version="2026-03-25T12:00:00Z"
+            steps={steps}
         />
     )
 }

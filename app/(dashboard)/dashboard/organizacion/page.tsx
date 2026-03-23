@@ -515,7 +515,7 @@ export default async function OrganizacionPage(props: {
                     </div>
                 </div>
             </div>
-            <OrganizacionTour />
+            <OrganizacionTour isOwnerOrManager={isOwnerOrManager} />
         </div>
     )
 }

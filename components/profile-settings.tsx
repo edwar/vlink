@@ -407,8 +407,7 @@ export function ProfileSettings() {
 
             {/* Global Save Button - Centered at the bottom */}
             <div className="flex flex-col items-center justify-center pt-10 sticky bottom-10 z-50 pointer-events-none">
-                <div className="relative w-fit group/save pointer-events-auto">
-                    <div id="tour-save-anchor" className="absolute -inset-4 pointer-events-none rounded-[3rem] bg-primary/10 blur-xl opacity-0 group-hover/save:opacity-100 transition-opacity" />
+                <div id="tour-save" className="relative w-fit group/save pointer-events-auto">
                     <Button
                         onClick={handleSave}
                         disabled={saving}
