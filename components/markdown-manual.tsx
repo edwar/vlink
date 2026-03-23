@@ -2,14 +2,16 @@
 
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { Printer, ArrowLeft, Download } from "lucide-react"
+import { ArrowLeft, Download } from "lucide-react"
 import { Button } from "./ui/button"
 import Link from "next/link"
-import { useSession } from "@/lib/auth-client"
 
+
+import { useRouter } from "next/navigation"
+import { BackButton } from "./ui/back-button"
 
 export function MarkdownManual({ content }: { content: string }) {
-    const { data: session } = useSession()
+    const router = useRouter()
 
     const handleDownloadPdf = () => {
         window.print()
@@ -19,13 +21,12 @@ export function MarkdownManual({ content }: { content: string }) {
         <div className="max-w-4xl mx-auto px-6 py-12 sm:py-20 animate-in fade-in duration-1000">
             {/* Action Bar (Hid on print) */}
             <div className="print:hidden flex items-center justify-between mb-12 border-b border-border/40 pb-6">
-                <Link
-                    href={session ? "/dashboard" : "/"}
-                    className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
-                >
+                <BackButton>
                     <ArrowLeft className="h-4 w-4" />
-                    {session ? "Volver al Dashboard" : "Volver al Inicio"}
-                </Link>
+                    Regresar
+                </BackButton>
+
+
 
                 <div className="flex items-center gap-3">
                     <Button

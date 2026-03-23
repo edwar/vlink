@@ -6,6 +6,8 @@ import { Sparkles, ArrowLeft, Loader2, Chrome } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import { BackButton } from "@/components/ui/back-button"
+import { Button } from "@/components/ui/button"
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -59,13 +61,12 @@ export default function LoginPage() {
             <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-accent blur-[100px] rounded-full -z-10 opacity-50" />
 
             <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-1000">
-                <Link
-                    href="/"
-                    className="group inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-all mb-4 px-4 py-2 hover:bg-primary/5 rounded-xl border border-transparent hover:border-primary/10"
-                >
+                <BackButton>
                     <ArrowLeft className="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" />
-                    Volver al inicio
-                </Link>
+                    Volver
+                </BackButton>
+
+
 
                 <div className="bg-card/50 backdrop-blur-sm border border-primary/10 rounded-[40px] p-8 md:p-12 shadow-none space-y-10 relative overflow-hidden">
                     {/* Subtle inner glow */}
@@ -94,10 +95,11 @@ export default function LoginPage() {
                     </div>
 
                     <div className="space-y-6">
-                        <button
+                        <Button
+                            variant="outline"
                             onClick={handleGoogleLogin}
                             disabled={isLoading}
-                            className="w-full group relative flex items-center justify-center gap-4 bg-white text-black border-2 border-slate-100 hover:border-primary/20 py-5 rounded-2xl font-bold text-lg shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 overflow-hidden"
+                            className="w-full group relative flex items-center justify-center gap-4 bg-white text-black border-2 border-slate-200 hover:border-primary/20 py-5 font-bold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-linear-to-tr from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             {isLoading ? (
@@ -123,7 +125,7 @@ export default function LoginPage() {
                                 </svg>
                             )}
                             {isLoading ? "Iniciando sesión..." : "Continuar con Google"}
-                        </button>
+                        </Button>
 
                         <div className="flex items-center gap-4 py-2">
                             <div className="h-px flex-1 bg-primary/10" />

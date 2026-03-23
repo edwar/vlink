@@ -1,8 +1,13 @@
+"use client"
+
 import Link from "next/link"
-import { ArrowLeft, Home, Search } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { ArrowLeft, Home } from "lucide-react"
 import { Logo } from "@/components/logo"
 
 export default function NotFound() {
+    const router = useRouter()
+
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground overflow-hidden flex flex-col relative">
             {/* Abstract Background Blur - Similar to Landing */}
@@ -22,11 +27,6 @@ export default function NotFound() {
             {/* Main Content */}
             <main className="flex-1 flex flex-col items-center justify-center px-6 text-center space-y-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
                 <div className="space-y-4">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/50 rounded-full border border-primary/10 text-xs font-bold uppercase tracking-widest text-primary mb-4">
-                        <Search className="h-3.5 w-3.5" />
-                        Página no encontrada
-                    </div>
-
                     <h1 className="text-[120px] md:text-[200px] font-display font-black tracking-tighter leading-none text-primary/10 relative">
                         404
                         <span className="absolute inset-0 flex items-center justify-center text-foreground text-5xl md:text-7xl lg:text-8xl italic">
@@ -52,13 +52,13 @@ export default function NotFound() {
                         Ir al Inicio
                     </Link>
 
-                    <Link
-                        href="javascript:history.back()"
+                    <button
+                        onClick={() => router.back()}
                         className="w-full sm:w-auto px-8 py-4 bg-card border border-primary/10 rounded-2xl font-bold text-base transition-all hover:bg-accent flex items-center justify-center gap-3"
                     >
                         <ArrowLeft className="h-5 w-5" />
                         Regresar
-                    </Link>
+                    </button>
                 </div>
             </main>
 
@@ -67,3 +67,4 @@ export default function NotFound() {
         </div>
     )
 }
+

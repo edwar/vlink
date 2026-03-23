@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, CheckCircle2, XCircle } from "lucide-react"
+import { BackButton } from "@/components/ui/back-button"
 
 export default function InvitePage() {
     const params = useParams()
@@ -182,10 +183,9 @@ export default function InvitePage() {
                     )}
 
                     {status === "error" && (
-                        <Button variant="outline" className="w-full" onClick={() => router.push("/")}>
-                            Volver al inicio
-                        </Button>
+                        <BackButton />
                     )}
+
                 </CardFooter>
             </Card>
         </div>

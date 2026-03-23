@@ -7,6 +7,7 @@ import {
     ArrowRight,
     ChevronLeft
 } from "lucide-react"
+import { BackButton } from "@/components/ui/back-button"
 import Link from "next/link"
 
 interface OrgBookingPageProps {
@@ -102,10 +103,7 @@ export default async function OrgBookingPage({ params }: OrgBookingPageProps) {
                 </div>
 
                 <div className="flex justify-center pt-8">
-                    <Link href={`/org/${organization.slug}`} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-black uppercase tracking-widest text-xs">
-                        <ChevronLeft className="h-4 w-4" />
-                        Volver al inicio
-                    </Link>
+                    <BackButton />
                 </div>
             </div>
         </div>

@@ -30,10 +30,6 @@ export default function PrivacyPage() {
                 <div className="space-y-16 animate-in fade-in slide-in-from-bottom-10 duration-700">
                     {/* Hero Title */}
                     <div className="space-y-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full border border-primary/10 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                            <FileText className="h-3.5 w-3.5" />
-                            Documentación Legal
-                        </div>
                         <h1 className="text-5xl md:text-7xl font-display font-black tracking-tighter leading-[0.9]">
                             Políticas de <span className="text-primary italic">Privacidad</span>
                         </h1>

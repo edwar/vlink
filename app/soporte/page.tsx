@@ -30,10 +30,6 @@ export default function SoportePage() {
                 <div className="space-y-16 animate-in fade-in slide-in-from-bottom-10 duration-700">
                     {/* Hero Title */}
                     <div className="space-y-6 text-center">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full border border-primary/10 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                            <Zap className="h-3.5 w-3.5" />
-                            Canales de Ayuda
-                        </div>
                         <h1 className="text-5xl md:text-7xl font-display font-black tracking-tighter leading-[0.9]">
                             Centro de <span className="text-primary italic">Soporte</span>
                         </h1>
@@ -50,8 +46,8 @@ export default function SoportePage() {
                             </div>
                             <h3 className="text-2xl font-display font-black tracking-tight">Vía WhatsApp</h3>
                             <p className="text-muted-foreground font-medium">Nuestro canal más veloz para soporte técnico y dudas rápidas en tiempo real.</p>
-                            <Link 
-                                href="https://wa.me/573216830302" 
+                            <Link
+                                href="https://wa.me/573216830302"
                                 target="_blank"
                                 className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-widest text-xs hover:gap-4 transition-all"
                             >
@@ -65,8 +61,8 @@ export default function SoportePage() {
                             </div>
                             <h3 className="text-2xl font-display font-black tracking-tight">Correo Electrónico</h3>
                             <p className="text-muted-foreground font-medium">Para consultas administrativas, facturación o reportes de errores detallados.</p>
-                            <Link 
-                                href="mailto:soporte@vlink.cognilab.dev" 
+                            <Link
+                                href="mailto:soporte@vlink.cognilab.dev"
                                 className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-widest text-xs hover:gap-4 transition-all"
                             >
                                 Enviar email <Mail className="h-3.5 w-3.5" />
