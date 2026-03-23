@@ -8,6 +8,7 @@ import { randomUUID } from "crypto"
 import { getBogotaDay, getBogotaISO } from "@/lib/utils"
 import { createWompiTransaction } from "@/lib/wompi"
 import { pusherServer } from "@/lib/pusher"
+import { isHolidayColombia } from "@/lib/holidays"
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -195,10 +196,23 @@ export async function getProfessionalsByLocation(locationId: string, date?: Date
 export async function getAvailableSlots(username: string, date: Date, durationMinutes: number = 30, locationId?: string) {
     const profile = await prisma.profile.findUnique({
         where: { username },
-        include: { availabilities: true }
+        include: {
+            availabilities: true,
+            organization: {
+                select: { id: true, workOnHolidays: true }
+            }
+        }
     });
 
     if (!profile) throw new Error("Perfil no encontrado")
+
+    // Check for Holidays if organization doesn't work on them
+    if (profile.organization && !profile.organization.workOnHolidays) {
+        const { isHoliday } = isHolidayColombia(date);
+        if (isHoliday) {
+            return []; // No hay disponibilidad en festivos
+        }
+    }
 
     const dayOfWeek = getBogotaDay(date)
     // 1. Obtener disponibilidad recurrente para este día de la semana

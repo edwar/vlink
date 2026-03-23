@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 import { format, addDays } from "date-fns"
 import { es } from "date-fns/locale"
-import { Clock, ChevronLeft, ChevronRight, User, Loader2, Building2 } from "lucide-react"
+import { Clock, ChevronLeft, ChevronRight, User, Loader2, Building2, CalendarX2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getOrgConsolidatedSlots } from "@/app/actions/consolidated-availability"
 import { UserAvatar } from "@/components/user-avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { isHolidayColombia } from "@/lib/holidays"
 
 interface ConsolidatedAgendaProps {
     orgSlug: string
@@ -19,6 +20,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<any[]>([])
     const [selectedLocationId, setSelectedLocationId] = useState<string>("all")
+    const holidayInfo = isHolidayColombia(selectedDate)
 
     useEffect(() => {
         async function load() {
@@ -130,12 +132,17 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                 </div>
             ) : (
                 <div className="p-20 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden rounded-[2.5rem] flex flex-col items-center justify-center text-center">
-                    <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mb-4 text-muted-foreground">
-                        <User className="h-8 w-8" />
+                    <div className={`h-16 w-16 rounded-full flex items-center justify-center mb-4 ${holidayInfo.isHoliday ? 'bg-orange-100 text-orange-500' : 'bg-muted text-muted-foreground'}`}>
+                        {holidayInfo.isHoliday ? <CalendarX2 className="h-8 w-8" /> : <User className="h-8 w-8" />}
                     </div>
-                    <h3 className="text-xl font-black font-display">No hay espacios libres</h3>
+                    <h3 className="text-xl font-black font-display">
+                        {holidayInfo.isHoliday ? '🎉 Día Festivo' : 'No hay espacios libres'}
+                    </h3>
                     <p className="text-muted-foreground mt-2 max-w-xs mx-auto">
-                        Ningún profesional del equipo tiene disponibilidad configurada para esta fecha/sede o todos los espacios están ocupados.
+                        {holidayInfo.isHoliday
+                            ? `Hoy es ${holidayInfo.name}. La organización no atiende en días festivos.`
+                            : 'Ningún profesional del equipo tiene disponibilidad configurada para esta fecha/sede o todos los espacios están ocupados.'
+                        }
                     </p>
                 </div>
             )}

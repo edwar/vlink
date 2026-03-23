@@ -7,11 +7,12 @@ import Image from "next/image"
 import { motion, Variants } from "framer-motion"
 import { format, addDays, startOfTomorrow, isSameDay, isValid } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles, AlertCircle } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles, AlertCircle, CalendarX2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, getLocationsByOrgId } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LoadingState } from "@/components/loading-state"
+import { isHolidayColombia } from "@/lib/holidays"
 import { Logo } from "@/components/logo"
 import { sileo } from "sileo"
 import { MapPin, Navigation, Phone } from "lucide-react"
@@ -309,6 +310,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
     }
 
     const displayName = profileData.displayName
+    const holidayInfo = isHolidayColombia(selectedDate)
 
     return (
         <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground relative">
@@ -603,9 +605,11 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                 </div>
                             ) : (
                                 <EmptyState
-                                    title="Horarios"
-                                    description="No hay horarios disponibles para este día."
-                                    icon={CalendarOff}
+                                    title={holidayInfo.isHoliday ? 'Día Festivo' : 'Horarios'}
+                                    description={holidayInfo.isHoliday 
+                                        ? `Hoy es ${holidayInfo.name}. No hay atención en días festivos.` 
+                                        : "No hay horarios disponibles para este día."}
+                                    icon={holidayInfo.isHoliday ? CalendarX2 : CalendarOff}
                                 />
                             )}
                         </section>

@@ -18,6 +18,7 @@ import { OrganizacionTour } from "@/components/tours/organizacion-tour"
 import { LeaveOrganization } from "@/components/leave-organization"
 import { CloseOrganization } from "@/components/close-organization"
 import { TransferOwnership } from "@/components/transfer-ownership"
+import { ToggleHolidayWork } from "@/components/toggle-holiday-work"
 import { ChangeMemberRole } from "@/components/change-member-role"
 import { RemoveMember } from "@/components/remove-member"
 import { Button } from "@/components/ui/button"
@@ -154,6 +155,15 @@ export default async function OrganizacionPage(props: {
                     </div>
                 </div>
             </header>
+
+            {isOwnerOrManager && (
+                <div className="max-w-md">
+                    <ToggleHolidayWork
+                        initialValue={organization.workOnHolidays}
+                        organizationId={organization.id}
+                    />
+                </div>
+            )}
 
             {/* Row 1: QR Code & Invitaciones */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative mt-8">

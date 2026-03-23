@@ -7,6 +7,19 @@ import { revalidatePath } from "next/cache"
 import { randomUUID } from "crypto"
 import { createWompiSubaccount } from "@/lib/wompi"
 
+export async function updateOrganizationHolidayWork(organizationId: string, enabled: boolean) {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) throw new Error("No hay sesión activa")
+
+    const result = await prisma.organization.update({
+        where: { id: organizationId },
+        data: { workOnHolidays: enabled }
+    })
+
+    revalidatePath("/dashboard")
+    return result
+}
+
 /**
  * Configures a Wompi subaccount for the organization.
  * Only allowed if the global Wompi Marketplace feature is enabled by Admin.
@@ -37,10 +50,10 @@ export async function setupWompiSubaccount(organizationId: string, data: {
 
     // 2. Verify user is OWNER of the organization
     const membership = await prisma.member.findFirst({
-        where: { 
-            userId: session.user.id, 
-            organizationId, 
-            role: "OWNER" 
+        where: {
+            userId: session.user.id,
+            organizationId,
+            role: "OWNER"
         }
     })
 

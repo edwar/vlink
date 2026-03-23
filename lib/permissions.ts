@@ -21,12 +21,16 @@ export async function getEffectiveProfile() {
 
     // 1. If no "view as" is specified, return the user's personal profile
     if (!viewAsProfileId) {
-        const personalProfile = await prisma.profile.findUnique({
-            where: { userId: session.user.id },
-            include: { organization: true, user: true }
-        })
-        if (!personalProfile) throw new Error("Personal profile not found")
-        return personalProfile
+        try {
+            const personalProfile = await prisma.profile.findUnique({
+                where: { userId: session.user.id },
+                include: { organization: true, user: true }
+            })
+            if (!personalProfile) throw new Error("Personal profile not found")
+            return personalProfile
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     // 2. If "view as" is specified, verify permissions
