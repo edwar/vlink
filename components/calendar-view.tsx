@@ -25,6 +25,8 @@ import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, LayoutGrid, Clock,
 import { cn } from "@/lib/utils"
 import { getAvailability, getAppointmentsForDashboard } from "@/app/actions/availability"
 import { getOrganizationLocations } from "@/app/actions/locations"
+import { getOrganizationSettings } from "@/app/actions/organization"
+import { isHolidayColombia } from "@/lib/holidays"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { pusherClient } from "@/lib/pusher-client"
 import { useRouter } from "next/navigation"
@@ -296,6 +298,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
     const [locations, setLocations] = useState<any[]>([])
     const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null)
     const [appointments, setAppointments] = useState<any[]>([])
+    const [organization, setOrganization] = useState<any | null>(null)
     const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null)
     const [loading, setLoading] = useState(true)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -327,14 +330,16 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [availData, apptsData, locsData] = await Promise.all([
+                const [availData, apptsData, locsData, orgData] = await Promise.all([
                     getAvailability(),
                     getAppointmentsForDashboard(),
-                    getOrganizationLocations(organizationId)
+                    getOrganizationLocations(organizationId),
+                    getOrganizationSettings(organizationId)
                 ])
                 setAvailability(availData)
                 setAppointments(apptsData)
                 setLocations(locsData)
+                setOrganization(orgData)
             } catch (err) {
                 console.error("Error fetching data for calendar:", err)
             } finally {
@@ -409,8 +414,11 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                         const daySlots = filteredAvail.filter(a => a.dayOfWeek === dayOfWeek && !a.specificDate)
                         const specificDateSlots = filteredAvail.filter(a => a.specificDate && isSameDay(new Date(a.specificDate), day))
 
+                        const { isHoliday, name: holidayName } = isHolidayColombia(day)
+                        const holidayBlocked = isHoliday && !organization?.workOnHolidays
+
                         const mainAvailability = daySlots.find(s => !s.isBlocked)
-                        const isBlocked = specificDateSlots.some(s => s.isBlocked)
+                        const isBlocked = specificDateSlots.some(s => s.isBlocked) || holidayBlocked
                         const isPast = isBefore(day, startOfDay(new Date()))
                         const isFullyUnavailable = !mainAvailability || isPast
 
@@ -464,7 +472,10 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                     {isBlocked && (
                                         <div className="px-1 sm:px-1.5 py-0.5 bg-red-100 text-destructive text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit">
                                             <Lock className="h-2.5 w-2.5" />
-                                            <span className="hidden sm:inline">Bloqueado</span>
+                                            <span className="hidden sm:inline">
+                                                {holidayBlocked ? (holidayName || "Festivo") : "Bloqueado"}
+                                            </span>
+                                            <span className="sm:hidden text-[6px]">FSTV</span>
                                         </div>
                                     )}
                                     {isFullyUnavailable && !isBlocked && (
@@ -557,7 +568,9 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                             {/* Days columns */}
                             {displayDays.map((day) => {
                                 const dayOfWeek = getDay(day)
-                                const now = new Date() // Define now here for consistent client-side rendering
+                                const { isHoliday: isFestivo } = isHolidayColombia(day)
+                                const isHolidayBlocked = isFestivo && !organization?.workOnHolidays
+
                                 return (
                                     <div key={day.toString()} className="flex flex-col relative border-r border-border/50 last:border-r-0">
                                         {/* Current Time Line (Only for today) */}
@@ -589,7 +602,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                             const isPastSlot = isBefore(slotDate, now)
 
                                             let isAvailable = false
-                                            if (mainAvailability && !isPastSlot) {
+                                            if (mainAvailability && !isPastSlot && !isHolidayBlocked) {
                                                 const [startH] = mainAvailability.startTime.split(':').map(Number)
                                                 const [endH] = mainAvailability.endTime.split(':').map(Number)
                                                 if (hour >= startH && hour < endH) isAvailable = true

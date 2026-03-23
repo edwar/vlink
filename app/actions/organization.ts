@@ -20,6 +20,22 @@ export async function updateOrganizationHolidayWork(organizationId: string, enab
     return result
 }
 
+export async function getOrganizationSettings(organizationId: string) {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) throw new Error("No hay sesión activa")
+
+    const org = await prisma.organization.findUnique({
+        where: { id: organizationId },
+        select: {
+            workOnHolidays: true,
+            id: true,
+            name: true
+        }
+    })
+
+    return org
+}
+
 /**
  * Configures a Wompi subaccount for the organization.
  * Only allowed if the global Wompi Marketplace feature is enabled by Admin.
