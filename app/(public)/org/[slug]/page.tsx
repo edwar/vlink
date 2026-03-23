@@ -53,15 +53,6 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
                             Bienvenido a nuestra plataforma de agendamiento. Elige una sede o un profesional para comenzar.
                         </p>
                     </div>
-                    
-                    <div className="pt-4">
-                        <Button asChild size="lg" variant="vlink" className="rounded-2xl h-14 px-10 text-base">
-                            <Link href={`/org/${slug}/reservar`}>
-                                Reservar Ahora
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </Button>
-                    </div>
                 </header>
 
                 <div className="space-y-10">
@@ -71,7 +62,7 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
                             Nuestras Sedes
                         </h2>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {locations.length === 0 ? (
                             <p className="text-muted-foreground italic col-span-full text-center py-10 bg-muted/10 rounded-3xl border border-dashed">No hay sedes públicas listadas todavía.</p>
@@ -100,7 +91,7 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
                             Nuestro Equipo
                         </h2>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                         {members.map((member: any) => (
                             <Link key={member.id} href={member.user.profile?.username ? `/${member.user.profile.username}` : '#'} className="group flex flex-col items-center text-center space-y-4">

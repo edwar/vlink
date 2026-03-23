@@ -487,7 +487,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
         const hours = [...Array(24)].map((_, i) => i)
 
         return (
-            <div className="flex flex-col border border-primary/10 rounded-[2.5rem] bg-transparent overflow-hidden h-[600px]">
+            <div className="flex flex-col border border-primary/10 rounded-lg bg-transparent overflow-hidden h-[600px]">
                 <div ref={scrollContainerRef} className="overflow-auto scrollbar-hide flex-1">
                     <div className={cn(
                         "flex flex-col min-w-full transition-all duration-300",

@@ -107,9 +107,9 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                 </div>
 
                 {invitationUrl && (
-                    <div className="p-5 bg-background/60 rounded-[1.8rem] border border-border/50 space-y-4 animate-in zoom-in duration-500">
+                    <div className="space-y-4 animate-in zoom-in duration-500">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-primary/70 ml-1">Enlace de invitación</Label>
-                        <div className="flex gap-2">
+                        <div className="flex">
                             <Input
                                 readOnly
                                 value={invitationUrl}

@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import {
     MapPin,
@@ -30,6 +30,10 @@ export default async function OrgBookingPage({ params }: OrgBookingPageProps) {
     if (!organization) notFound()
 
     const locations = organization.locations || []
+
+    if (locations.length === 1) {
+        redirect(`/org/${slug}/reservar/${locations[0].id}`)
+    }
 
     return (
         <div className="min-h-screen bg-background p-6 md:p-12 flex flex-col items-center">

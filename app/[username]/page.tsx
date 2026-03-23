@@ -58,7 +58,7 @@ export default async function BookingPage({ params }: { params: Promise<{ userna
         "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Servicios",
-            "itemListElement": profile.services.map((s, i) => ({
+            "itemListElement": (profile.services as any[]).map((s: any, i: number) => ({
                 "@type": "Offer",
                 "itemOffered": {
                     "@type": "Service",

@@ -270,13 +270,28 @@ export async function acceptInvitation(token: string) {
         throw new Error("Invitation invalid or expired")
     }
 
-    // Block if the user is already OWNER of another organization
+    // 1. Block if the user is already a member of this organization
+    const existingMembership = await prisma.member.findUnique({
+        where: {
+            userId_organizationId: {
+                userId: session.user.id,
+                organizationId: invitation.organizationId
+            }
+        }
+    })
+
+    if (existingMembership) {
+        if (existingMembership.role === "OWNER") {
+            throw new Error("Ya eres el propietario de esta organización.")
+        }
+        throw new Error("Ya eres miembro de esta organización.")
+    }
+
+    // 2. Block if the user is already OWNER of another organization
     const existingOwnership = await prisma.member.findFirst({
         where: {
             userId: session.user.id,
             role: "OWNER",
-            // Make sure it's not the same organization (re-accepting an invite)
-            NOT: { organizationId: invitation.organizationId }
         },
         include: { organization: { select: { name: true } } }
     })
@@ -383,8 +398,7 @@ export async function getManagedProfiles(organizationId: string) {
 
     const allMembers = await prisma.member.findMany({
         where: {
-            organizationId,
-            user: { role: { not: "ADMIN" } }
+            organizationId
         },
         include: {
             user: {
@@ -439,7 +453,11 @@ export async function getOrganizationPublicProfiles(slug: string) {
             locations: { where: { isActive: true } } as any,
             members: {
                 where: {
-                    user: { role: { not: "ADMIN" } }
+                    user: {
+                        profile: {
+                            showOnOrgPage: true
+                        }
+                    }
                 },
                 include: {
                     user: {

@@ -48,10 +48,21 @@ export default async function SedesPage() {
                 orderBy: { createdAt: 'asc' }
             },
             members: {
+                where: {
+                    user: {
+                        profile: {
+                            showOnOrgPage: true
+                        }
+                    }
+                },
                 include: {
                     user: {
                         include: {
-                            profile: true
+                            profile: {
+                                include: {
+                                    services: true
+                                }
+                            }
                         }
                     },
                     locationServices: {
@@ -63,6 +74,10 @@ export default async function SedesPage() {
     }) as any
 
     if (!organization) redirect("/dashboard")
+    
+    const currentUserMember = organization.members.find((m: any) => m.userId === session.user.id);
+    const currentUserRole = currentUserMember?.role || "PROFESSIONAL";
+    const canManageAll = currentUserRole === "OWNER" || currentUserRole === "MANAGER";
 
     // Get plan config to check limits
     const planConfig = await prisma.planConfig.findUnique({
@@ -73,12 +88,6 @@ export default async function SedesPage() {
     const currentLocationsCount = organization.locations.length
     const canAddLocation = maxLocations === 0 || currentLocationsCount < maxLocations
 
-    // Fetch all services for the organization to use in member config
-    const allServices = await prisma.service.findMany({
-        where: { profile: { organizationId: organization.id } },
-        select: { id: true, name: true }
-    })
-
     return (
         <div className="space-y-8 animate-in fade-in duration-700 py-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -86,30 +95,32 @@ export default async function SedesPage() {
                     <h1 className="text-4xl font-display font-black tracking-tight text-foreground uppercase">Sedes y Sucursales</h1>
                     <p className="text-muted-foreground font-medium">Gestiona los puntos físicos donde prestas tus servicios.</p>
                 </div>
-
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button
-                            disabled={!canAddLocation}
-                            variant="vlink"
-                            className="rounded-2xl h-12 px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
-                        >
-                            <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
-                            Agregar Nueva Sede
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card shadow-2xl">
-                        <DialogHeader className="p-8 pb-0">
-                            <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Nueva Sede</DialogTitle>
-                            <DialogDescription className="text-muted-foreground font-medium pt-2">
-                                Ingresa los detalles de tu nueva ubicación física.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="p-8">
-                            <LocationForm organizationId={organization.id} />
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                
+                {canManageAll && (
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button
+                                disabled={!canAddLocation}
+                                variant="vlink"
+                                className="rounded-2xl h-12 px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
+                            >
+                                <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
+                                Agregar Nueva Sede
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card shadow-2xl">
+                            <DialogHeader className="p-8 pb-0">
+                                <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Nueva Sede</DialogTitle>
+                                <DialogDescription className="text-muted-foreground font-medium pt-2">
+                                    Ingresa los detalles de tu nueva ubicación física.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="p-8">
+                                <LocationForm organizationId={organization.id} />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                )}
             </div>
 
             {/* Plan Limit Alert */}
@@ -148,30 +159,32 @@ export default async function SedesPage() {
                                         <Building2 className="h-7 w-7" />
                                     </div>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted/50">
-                                                    <Settings2 className="h-4 w-4 text-muted-foreground" />
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card">
-                                                <DialogHeader className="p-8 pb-0">
-                                                    <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
-                                                </DialogHeader>
-                                                <div className="p-8">
-                                                    <LocationForm
-                                                        organizationId={organization.id}
-                                                        initialData={{
-                                                            id: loc.id,
-                                                            name: loc.name,
-                                                            address: loc.address,
-                                                            city: loc.city,
-                                                            phone: loc.phone
-                                                        }}
-                                                    />
-                                                </div>
-                                            </DialogContent>
-                                        </Dialog>
+                                        {canManageAll && (
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted/50">
+                                                        <Settings2 className="h-4 w-4 text-muted-foreground" />
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card">
+                                                    <DialogHeader className="p-8 pb-0">
+                                                        <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
+                                                    </DialogHeader>
+                                                    <div className="p-8">
+                                                        <LocationForm
+                                                            organizationId={organization.id}
+                                                            initialData={{
+                                                                id: loc.id,
+                                                                name: loc.name,
+                                                                address: loc.address,
+                                                                city: loc.city,
+                                                                phone: loc.phone
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </DialogContent>
+                                            </Dialog>
+                                        )}
                                     </div>
                                 </div>
                                 <CardTitle className="text-2xl font-black font-display tracking-tight uppercase group-hover:text-primary transition-colors duration-300">
@@ -206,7 +219,9 @@ export default async function SedesPage() {
                                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Configuración de Equipo</h4>
 
                                     <div className="space-y-2">
-                                        {(organization as any).members.map((member: any) => {
+                                        {(organization as any).members
+                                            .filter((m: any) => canManageAll || m.userId === session.user.id)
+                                            .map((member: any) => {
                                             const configuredServicesCount = member.locationServices?.filter((ls: any) => ls.locationId === loc.id).length || 0;
                                             
                                             return (
@@ -246,7 +261,7 @@ export default async function SedesPage() {
                                                             memberName={member.user.name || "Miembro"}
                                                             locationId={loc.id}
                                                             locationName={loc.name}
-                                                            allServices={allServices}
+                                                            allServices={member.user.profile?.services || []}
                                                         />
                                                     </div>
                                                 </DialogContent>

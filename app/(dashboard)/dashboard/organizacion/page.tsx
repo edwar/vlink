@@ -71,22 +71,14 @@ export default async function OrganizacionPage(props: {
     // Fetch members of the organization with pagination
     const totalMembers = await prisma.member.count({
         where: {
-            organizationId: organization.id,
-            OR: [
-                { user: { role: { not: "ADMIN" } } },
-                { role: "OWNER" }
-            ]
+            organizationId: organization.id
         }
     })
     const totalPagesMembers = Math.ceil(totalMembers / limit)
 
     const members = await prisma.member.findMany({
         where: {
-            organizationId: organization.id,
-            OR: [
-                { user: { role: { not: "ADMIN" } } },
-                { role: "OWNER" }
-            ]
+            organizationId: organization.id
         },
         include: {
             user: {
