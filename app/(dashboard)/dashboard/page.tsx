@@ -4,7 +4,7 @@ import { es } from "date-fns/locale"
 import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, TrendingUp, Users, Download, CreditCard } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AgendaTabsUI } from "@/components/agenda-tabs-ui"
 import { subDays, eachDayOfInterval, format as formatDateFns } from "date-fns"
 import { getEffectiveProfile } from "@/lib/permissions"
 import { AppointmentCard } from "@/components/appointment-card"
@@ -17,12 +17,14 @@ import { DashboardRealtimeUpdater } from "@/components/dashboard-realtime-update
 import { PaginationControls } from "@/components/pagination-controls"
 
 export default async function DashboardPage(props: {
-    searchParams: Promise<{ page?: string }>
+    searchParams: Promise<{ page?: string, pastPage?: string }>
 }) {
     const searchParams = await props.searchParams
     const page = Number(searchParams.page) || 1
+    const pastPage = Number(searchParams.pastPage) || 1
     const limit = 5
-    const skip = (page - 1) * limit
+    const skipUpcoming = (page - 1) * limit
+    const skipPast = (pastPage - 1) * limit
     const profile = await getEffectiveProfile()
     const today = new Date()
 
@@ -58,7 +60,16 @@ export default async function DashboardPage(props: {
 
     const totalUpcoming = upcomingAppointmentsAll.length
     const totalPagesUpcoming = Math.ceil(totalUpcoming / limit)
-    const upcomingAppointments = upcomingAppointmentsAll.slice(skip, skip + limit)
+    const upcomingAppointments = upcomingAppointmentsAll.slice(skipUpcoming, skipUpcoming + limit)
+
+    // Paginated past appointments (Before today start or cancelled)
+    const pastAppointmentsAll = allAppointmentsWithCancelled.filter(appt =>
+        appt.startTime < startOfDay(today) || appt.status === "CANCELLED"
+    ).sort((a, b) => b.startTime.getTime() - a.startTime.getTime())
+
+    const totalPast = pastAppointmentsAll.length
+    const totalPagesPast = Math.ceil(totalPast / limit)
+    const pastAppointments = pastAppointmentsAll.slice(skipPast, skipPast + limit)
 
     // ANALYTICS DATA GENERATION
     // 1. Weekly Stats (Last 7 days)
@@ -233,91 +244,132 @@ export default async function DashboardPage(props: {
                         <div className="relative">
                             <div className="absolute inset-0 bg-linear-to-br from-primary/30 via-transparent to-transparent h-64 -mx-10 blur-3xl opacity-20 pointer-events-none" />
 
-                            <div className="space-y-12">
-                                {/* Hoy */}
-                                <section className="space-y-8 relative">
-                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
-                                        <div id="tour-agenda-today" className="space-y-1">
-                                            <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                                <div className="h-8 w-1.5 bg-primary rounded-full" />
-                                                Agenda de Hoy
-                                            </h2>
-                                            <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
+                            <AgendaTabsUI
+                                children_hoy={
+                                    /* Hoy */
+                                    <section className="space-y-8 relative">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+                                            <div id="tour-agenda-today" className="space-y-1">
+                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
+                                                    <div className="h-8 w-1.5 bg-primary rounded-full" />
+                                                    Agenda de Hoy
+                                                </h2>
+                                                <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-5 py-2 bg-primary/10 text-primary text-xs font-black uppercase tracking-widest rounded-xl border border-primary/10 shadow-none">
+                                                    {todayAppointments.length} bloqueos
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="px-5 py-2 bg-primary/10 text-primary text-xs font-black uppercase tracking-widest rounded-xl border border-primary/10 shadow-none">
-                                                {todayAppointments.length} bloqueos
-                                            </span>
-                                        </div>
-                                    </div>
 
-                                    {todayAppointments.length > 0 ? (
-                                        <div className="grid gap-6">
-                                            {todayAppointments.map((appt) => (
-                                                <AppointmentCard key={appt.id} appt={appt} />
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <EmptyState
-                                            title="Día libre"
-                                            description="No tienes citas agendadas para hoy. Un buen momento para organizar tus servicios o descansar."
-                                            actionText="Configurar Disponibilidad"
-                                            actionHref="/dashboard/disponibilidad"
-                                            icon={CalendarOff}
-                                        />
-                                    )}
-                                </section>
-
-                                {/* Todas las Próximas */}
-                                <section className="space-y-8">
-                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
-                                        <div className="space-y-1">
-                                            <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                                <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
-                                                Próximas Reservas
-                                            </h2>
-                                            <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="px-5 py-2 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/10 shadow-none">
-                                                {upcomingAppointments.length} por venir
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {upcomingAppointments.length > 0 ? (
-                                        <div className="space-y-6">
+                                        {todayAppointments.length > 0 ? (
                                             <div className="grid gap-6">
-                                                {upcomingAppointments.map((appt) => (
-                                                    <AppointmentCard key={appt.id} appt={appt} showDate />
+                                                {todayAppointments.map((appt) => (
+                                                    <AppointmentCard key={appt.id} appt={appt} />
                                                 ))}
                                             </div>
-                                            <PaginationControls
-                                                totalPages={totalPagesUpcoming}
-                                                currentPage={page}
+                                        ) : (
+                                            <EmptyState
+                                                title="Día libre"
+                                                description="No tienes citas agendadas para hoy. Un buen momento para organizar tus servicios o descansar."
+                                                actionText="Configurar Disponibilidad"
+                                                actionHref="/dashboard/disponibilidad"
+                                                icon={CalendarOff}
                                             />
+                                        )}
+                                    </section>
+                                }
+                                children_proximas={
+                                    /* Todas las Próximas */
+                                    <section className="space-y-8">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+                                            <div className="space-y-1">
+                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
+                                                    <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
+                                                    Próximas Reservas
+                                                </h2>
+                                                <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-5 py-2 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/10 shadow-none">
+                                                    {upcomingAppointments.length} por venir
+                                                </span>
+                                            </div>
                                         </div>
-                                    ) : (
-                                        <EmptyState
-                                            title="Sin futuras citas"
-                                            description="No hay reservas en el horizonte cercano. ¡Prueba compartiendo tu link público!"
-                                            actionText="Ir a mi Perfil"
-                                            actionHref="/dashboard/perfil"
-                                            icon={CalendarOff}
-                                        />
-                                    )}
-                                </section>
-                            </div>
+
+                                        {upcomingAppointments.length > 0 ? (
+                                            <div className="space-y-6">
+                                                <div className="grid gap-6">
+                                                    {upcomingAppointments.map((appt) => (
+                                                        <AppointmentCard key={appt.id} appt={appt} showDate />
+                                                    ))}
+                                                </div>
+                                                <PaginationControls
+                                                    totalPages={totalPagesUpcoming}
+                                                    currentPage={page}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <EmptyState
+                                                title="Sin futuras citas"
+                                                description="No hay reservas en el horizonte cercano. ¡Prueba compartiendo tu link público!"
+                                                actionText="Ir a mi Perfil"
+                                                actionHref="/dashboard/perfil"
+                                                icon={CalendarOff}
+                                            />
+                                        )}
+                                    </section>
+                                }
+                                children_historial={
+                                    /* Historial de Citas (Pasadas / Canceladas) */
+                                    <section className="space-y-8">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+                                            <div className="space-y-1">
+                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3 text-muted-foreground">
+                                                    <div className="h-8 w-1.5 bg-muted-foreground/30 rounded-full" />
+                                                    Historial de Citas
+                                                </h2>
+                                                <p className="text-muted-foreground/70 font-medium text-sm">Registro de citas que ya concluyeron o fueron canceladas.</p>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-5 py-2 bg-muted/30 text-muted-foreground text-xs font-black uppercase tracking-widest rounded-xl shadow-none">
+                                                    {totalPast} históricas
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {pastAppointments.length > 0 ? (
+                                            <div className="space-y-6">
+                                                <div className="grid gap-6 opacity-75">
+                                                    {pastAppointments.map((appt) => (
+                                                        <AppointmentCard key={`past-${appt.id}`} appt={appt} showDate />
+                                                    ))}
+                                                </div>
+                                                <PaginationControls
+                                                    totalPages={totalPagesPast}
+                                                    currentPage={pastPage}
+                                                    paramName="pastPage"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <EmptyState
+                                                title="Historial limpio"
+                                                description="Aún no tienes citas pasadas registradas en el sistema."
+                                                actionText=""
+                                                actionHref=""
+                                                icon={CalendarOff}
+                                            />
+                                        )}
+                                    </section>
+                                }
+                            />
                         </div>
                     </div>
                 }
                 children_analytics={
                     <div className="py-8">
                         <div className="space-y-4 mb-10 border-b border-dashed border-border/50 pb-8">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
-                                <Users className="h-3 w-3" />
-                                Insights de Negocio
-                            </div>
                             <h2 className="text-3xl sm:text-4xl font-display font-black tracking-tight flex items-center gap-3">
                                 <div className="h-8 w-1.5 bg-primary rounded-full" />
                                 Rendimiento Comercial

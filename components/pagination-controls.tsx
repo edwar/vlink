@@ -11,9 +11,10 @@ interface PaginationControlsProps {
     currentPage: number
     baseUrl?: string
     maxVisiblePages?: number
+    paramName?: string
 }
 
-export function PaginationControls({ totalPages, currentPage, baseUrl, maxVisiblePages = 5 }: PaginationControlsProps) {
+export function PaginationControls({ totalPages, currentPage, baseUrl, maxVisiblePages = 5, paramName = "page" }: PaginationControlsProps) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
@@ -21,7 +22,7 @@ export function PaginationControls({ totalPages, currentPage, baseUrl, maxVisibl
 
     const createPageURL = (pageNumber: number | string) => {
         const params = new URLSearchParams(searchParams)
-        params.set("page", pageNumber.toString())
+        params.set(paramName, pageNumber.toString())
         return `${baseUrl || pathname}?${params.toString()}`
     }
 

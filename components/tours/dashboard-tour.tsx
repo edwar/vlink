@@ -38,8 +38,14 @@ export function DashboardTour() {
         },
         {
             element: "#tour-tab-agenda",
-            title: "Tu Agenda",
-            intro: "Visualiza todas tus citas del día y próximas reservas en un solo lugar.",
+            title: "Agenda principal",
+            intro: "Esta es tu vista principal del calendario y las listas de citas.",
+            position: 'bottom' as const
+        },
+        {
+            element: "#tour-agenda-tabs",
+            title: "Vistas de la Agenda",
+            intro: "Ahora puedes navegar fácilmente entre las citas de Hoy, Próximas Reservas y tu Historial pasadas desde estas pestañas.",
             position: 'bottom' as const
         },
         {
@@ -65,7 +71,7 @@ export function DashboardTour() {
     return (
         <PageTour 
             pageKey="dashboard-main" 
-            version="2026-03-14T17:46:00Z" 
+            version="2026-03-22T23:55:00Z" 
             steps={steps} 
         />
     )
