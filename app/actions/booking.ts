@@ -17,7 +17,10 @@ export async function getProfileForBooking(username: string) {
                 include: {
                     memberships: {
                         include: {
-                            organization: true
+                            organization: true,
+                            locationServices: {
+                                where: { isActive: true }
+                            }
                         }
                     }
                 }
@@ -115,7 +118,11 @@ export async function getProfileForBooking(username: string) {
             name: s.name,
             durationMinutes: s.durationMinutes,
             price: s.price
-        }))
+        })),
+        locationServices: membership?.locationServices?.map((ls: any) => ({
+            locationId: ls.locationId,
+            serviceId: ls.serviceId
+        })) || []
     }
 }
 

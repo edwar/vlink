@@ -44,6 +44,7 @@ interface ProfileData {
     services: ServiceOption[]
     isLocked: boolean
     organizationId: string
+    locationServices: { locationId: string, serviceId: string }[]
 }
 
 export function BookingClient({ params }: { params: { username: string } }) {
@@ -86,47 +87,47 @@ export function BookingClient({ params }: { params: { username: string } }) {
                 setProfileData(data)
 
                 // Fetch locations for organization
-                const orgLocs = data.organizationId ? await getLocationsByOrgId(data.organizationId) : []
-                setLocations(orgLocs)
+                const orgLocs: LocationInfo[] = data.organizationId ? await getLocationsByOrgId(data.organizationId) : []
+                
+                // Filter locations: Only show those where the professional has AT LEAST one service mapped
+                // If NO mappings exist at all for the professional, show all org locations (fallback)
+                const availableLocs = (!data.locationServices?.length)
+                    ? orgLocs
+                    : orgLocs.filter(loc => data.locationServices.some((ls: { locationId: string, serviceId: string }) => ls.locationId === loc.id));
+
+                setLocations(availableLocs)
 
                 if (queryLocationId) {
-                    const loc = orgLocs.find((l: any) => l.id === queryLocationId)
+                    const loc = availableLocs.find((l: any) => l.id === queryLocationId)
                     if (loc) {
                         setSelectedLocation(loc)
-                        if (data.services.length === 1) {
-                            setSelectedService(data.services[0])
-                            setStep(1)
-                        } else if (data.services.length === 0) {
-                            setNoServices(true)
-                        } else {
-                            setStep(0)
-                        }
-                        return
                     }
-                }
-
-                if (orgLocs.length === 1) {
-                    setSelectedLocation(orgLocs[0])
+                } else if (availableLocs.length === 1) {
+                    setSelectedLocation(availableLocs[0])
                 }
 
                 // Service selection logic
-                if (data.services.length === 0) {
+                const currentLoc = queryLocationId 
+                    ? availableLocs.find(l => l.id === queryLocationId) 
+                    : (availableLocs.length === 1 ? availableLocs[0] : null);
+
+                const currentLocId = currentLoc?.id;
+
+                const filteredServices = (!availableLocs.length || !data.locationServices?.length) 
+                    ? data.services 
+                    : data.services.filter((s: ServiceOption) => 
+                        data.locationServices.some((ls: { locationId: string, serviceId: string }) => ls.locationId === currentLocId && ls.serviceId === s.id)
+                    );
+
+                if (filteredServices.length === 0 && (currentLocId || availableLocs.length <= 1)) {
                     setNoServices(true)
-                } else if (data.services.length === 1) {
-                    setSelectedService(data.services[0])
-                    // Only go to step 1 if we have a location selected or if no locations exist
-                    if (orgLocs.length <= 1) {
-                        setStep(1)
-                    } else {
-                        setStep(-1) // Need to pick location first
-                    }
+                } else if (filteredServices.length === 1 && currentLocId) {
+                    setSelectedService(filteredServices[0])
+                    setStep(1)
+                } else if (availableLocs.length > 1 && !currentLocId) {
+                    setStep(-1)
                 } else {
-                    // Multiple services - pick location first if many
-                    if (orgLocs.length > 1 && !queryLocationId) {
-                        setStep(-1)
-                    } else {
-                        setStep(0)
-                    }
+                    setStep(0)
                 }
             } catch (error) {
                 console.error(error)
@@ -192,8 +193,16 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
     const handleSelectLocation = (location: LocationInfo) => {
         setSelectedLocation(location)
-        if (profileData?.services.length === 1) {
-            setSelectedService(profileData.services[0])
+        if (!profileData) return
+
+        const filteredServices = (!profileData.locationServices?.length)
+            ? profileData.services
+            : profileData.services.filter((s: ServiceOption) =>
+                profileData.locationServices.some((ls: { locationId: string, serviceId: string }) => ls.locationId === location.id && ls.serviceId === s.id)
+            );
+
+        if (filteredServices.length === 1) {
+            setSelectedService(filteredServices[0])
             setStep(1)
         } else {
             setStep(0)
@@ -415,7 +424,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                     </div>
                 )}
 
-                {step === 0 && profileData.services.length > 1 && (
+                {step === 0 && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {locations.length > 1 && (
                             <button
@@ -435,7 +444,14 @@ export function BookingClient({ params }: { params: { username: string } }) {
                             </div>
                             <h2 className="sr-only">Selecciona el Servicio</h2>
                             <div className="space-y-3">
-                                {profileData.services.map((service) => (
+                                {profileData.services
+                                    .filter(service => {
+                                        if (!selectedLocation || !profileData.locationServices?.length) return true;
+                                        return profileData.locationServices.some(
+                                            ls => ls.locationId === selectedLocation.id && ls.serviceId === service.id
+                                        );
+                                    })
+                                    .map((service) => (
                                     <button
                                         key={service.id}
                                         onClick={() => handleSelectService(service)}
