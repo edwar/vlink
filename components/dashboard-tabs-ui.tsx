@@ -24,9 +24,12 @@ export function DashboardTabsUI({
 }: DashboardTabsUIProps) {
     const [activeTab, setActiveTab] = React.useState("agenda")
     const [mounted, setMounted] = React.useState(false)
+    const [currentTime, setCurrentTime] = React.useState(new Date())
 
     React.useEffect(() => {
         setMounted(true)
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000)
+        return () => clearInterval(timer)
     }, [])
 
     return (
@@ -75,7 +78,9 @@ export function DashboardTabsUI({
                         <div id="tour-export-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <span className="flex items-center gap-2 shrink-0">
                             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                            {mounted ? new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : "--:--:--"}
+                            <div className="w-[100px] text-left font-mono font-medium tracking-tight">
+                                {mounted ? currentTime.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : "--:--:--"}
+                            </div>
                         </span>
                         <div className="h-3 w-px bg-border/50 shrink-0" />
                         <span className="flex items-center gap-2 shrink-0"><div className="h-2 w-2 rounded-full bg-primary" /> {stats.totalToday} Hoy</span>

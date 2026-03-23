@@ -56,11 +56,12 @@ export function AvailabilityManagement() {
                 // Fetch locations first
                 const { getOrganizationLocations } = await import("@/app/actions/locations")
                 const organizations = await (await import("@/app/actions/organization")).getUserOrganizations()
+                let fetchedLocs: any[] = []
                 if (organizations[0]) {
-                    const locs = await getOrganizationLocations(organizations[0].id)
-                    setLocations(locs)
-                    if (locs.length > 0) {
-                        setNewBlock(prev => ({ ...prev, locationId: locs[0].id }))
+                    fetchedLocs = await getOrganizationLocations(organizations[0].id)
+                    setLocations(fetchedLocs)
+                    if (fetchedLocs.length > 0) {
+                        setNewBlock(prev => ({ ...prev, locationId: fetchedLocs[0].id }))
                     }
                 }
 
@@ -95,7 +96,7 @@ export function AvailabilityManagement() {
                     setAllRecurringData(dataMap)
 
                     // Determine which location to show first
-                    const firstLocId = locations[0]?.id || ""
+                    const firstLocId = fetchedLocs[0]?.id || ""
                     setSelectedLocationId(firstLocId)
 
                     const currentDays = dataMap.get(firstLocId)
@@ -105,9 +106,9 @@ export function AvailabilityManagement() {
 
                     // Set special blocks
                     setSpecialBlocks(data.filter((d: any) => d.specificDate !== null))
-                } else if (locations.length > 0) {
-                    setSelectedLocationId(locations[0].id)
-                    setNewBlock(prev => ({ ...prev, locationId: locations[0].id }))
+                } else if (fetchedLocs.length > 0) {
+                    setSelectedLocationId(fetchedLocs[0].id)
+                    setNewBlock(prev => ({ ...prev, locationId: fetchedLocs[0].id }))
                 }
             } catch (error) {
                 console.error("Error fetching availability:", error)
