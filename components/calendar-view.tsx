@@ -379,7 +379,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
         const weekDays = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
 
         return (
-            <div className="border border-primary/10 rounded-[2.5rem] bg-transparent overflow-hidden">
+            <div className="border border-primary/10 rounded-lg bg-transparent overflow-hidden">
                 <div className="grid grid-cols-7 border-b border-border/50 bg-muted/10">
                     {weekDays.map(day => (
                         <div key={day} className="p-3 sm:p-4 text-center text-[10px] sm:text-[11px] font-black text-muted-foreground uppercase tracking-widest">

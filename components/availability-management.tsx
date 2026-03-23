@@ -157,7 +157,7 @@ export function AvailabilityManagement() {
             })
 
             const result = await updateAvailability(payload)
-            
+
             if (result && !result.success) {
                 sileo.error({
                     title: "Error al guardar",
@@ -318,7 +318,7 @@ export function AvailabilityManagement() {
                     <p className="text-muted-foreground font-medium mt-1">Define tus horas de trabajo recurrentes para que tus clientes puedan agendar.</p>
                 </div>
 
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-muted/20 p-6 rounded-[2.5rem] border border-border/40">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-muted/20 p-6 rounded-lg border border-border/40">
                     <div className="h-12 w-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
                         <MapPinned className="h-6 w-6" />
                     </div>
@@ -385,7 +385,7 @@ export function AvailabilityManagement() {
                     if (daysWithConflicts.length === 0) return null
 
                     return (
-                        <div className="flex flex-col gap-3 bg-red-500/10 border border-red-500/20 p-6 rounded-[2.5rem] animate-in slide-in-from-top-4 duration-500">
+                        <div className="flex flex-col gap-3 bg-red-500/10 border border-red-500/20 p-6 rounded-lg animate-in slide-in-from-top-4 duration-500">
                             <div className="flex items-center gap-3 text-red-600">
                                 <div className="h-10 w-10 bg-red-500/10 rounded-xl flex items-center justify-center">
                                     <Clock className="h-5 w-5" />
@@ -421,7 +421,7 @@ export function AvailabilityManagement() {
                                 <div
                                     key={day.id}
                                     className={cn(
-                                        "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative flex flex-col xl:flex-row xl:items-center justify-between w-full px-2 py-6 sm:py-7 rounded-4xl transition-all duration-300 gap-6 xl:gap-8 overflow-hidden",
+                                        "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative flex flex-col xl:flex-row xl:items-center justify-between w-full px-4 py-6 sm:py-7 rounded-lg transition-all duration-300 gap-1 xl:gap-8 overflow-hidden",
                                         active
                                             ? "border border-border/40 shadow-none"
                                             : "border border-dashed border-border/30 opacity-60 hover:opacity-100"
@@ -473,8 +473,8 @@ export function AvailabilityManagement() {
                                         {active ? (
                                             <div className="flex flex-col xl:flex-row xl:items-center justify-between w-full gap-6 animate-in fade-in slide-in-from-left-4 duration-500">
                                                 {/* Hours Selection */}
-                                                <div className="flex items-center gap-3 bg-muted/20 p-2 rounded-2xl w-full xl:w-fit border border-border/30">
-                                                    <div className="flex-1 xl:w-32 relative">
+                                                <div className="flex items-center gap-1 bg-muted/20 p-2 rounded-2xl w-full xl:w-fit border border-border/30">
+                                                    <div className="flex-1 relative">
                                                         <Input
                                                             type="time"
                                                             value={start}
@@ -483,9 +483,9 @@ export function AvailabilityManagement() {
                                                         />
                                                     </div>
                                                     <div className="px-1">
-                                                        <span className="text-[11px] font-black tracking-widest text-muted-foreground/40 uppercase">hasta</span>
+                                                        <span className="text-[11px] font-black tracking-widest text-muted-foreground/40 uppercase">a</span>
                                                     </div>
-                                                    <div className="flex-1 xl:w-32 relative">
+                                                    <div className="flex-1 relative">
                                                         <Input
                                                             type="time"
                                                             value={end}
@@ -515,14 +515,14 @@ export function AvailabilityManagement() {
                                                                 "text-[11px] font-black uppercase tracking-widest transition-colors",
                                                                 dayState?.lunchActive ? "text-primary" : "text-muted-foreground/50"
                                                             )}>
-                                                                Horario de Almuerzo
+                                                                Almuerzo
                                                             </span>
-                                                            <span className="text-[10px] font-medium text-muted-foreground/40">Bloquea este tiempo</span>
+                                                            <span className="text-[10px] font-medium text-muted-foreground/40">Bloquear</span>
                                                         </div>
                                                     </div>
 
                                                     {dayState?.lunchActive && (
-                                                        <div className="flex items-center gap-3 animate-in slide-in-from-right-4 fade-in duration-500 w-full xl:w-fit bg-muted/20 p-2 rounded-2xl border border-border/30">
+                                                        <div className="flex items-center gap-1 animate-in slide-in-from-right-4 fade-in duration-500 w-full xl:w-fit bg-muted/20 p-2 rounded-2xl border border-border/30">
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchStart}
@@ -721,7 +721,7 @@ export function AvailabilityManagement() {
                         {saving && (
                             <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite] pointer-events-none" />
                         )}
-                        
+
                         <div className="relative z-10 flex items-center gap-6">
                             <div className="p-3 bg-white/10 rounded-2xl">
                                 {saving ? (
