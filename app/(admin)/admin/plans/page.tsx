@@ -103,7 +103,7 @@ export default async function AdminPlans() {
                 )}
             </div>
 
-            <Card className="bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-[2.5rem] p-8">
+            <Card className="bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-lg p-8">
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="h-20 w-20 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-600 shrink-0">
                         <AlertTriangle className="h-10 w-10" />

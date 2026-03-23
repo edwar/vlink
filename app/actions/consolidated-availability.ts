@@ -3,7 +3,7 @@
 import { getOrganizationPublicProfiles } from "@/app/actions/organization"
 import { getAvailableSlots } from "@/app/actions/booking"
 
-export async function getOrgConsolidatedSlots(orgSlug: string, date: Date) {
+export async function getOrgConsolidatedSlots(orgSlug: string, date: Date, locationId?: string) {
     const org = await getOrganizationPublicProfiles(orgSlug)
     if (!org) throw new Error("Organización no encontrada")
 
@@ -17,7 +17,7 @@ export async function getOrgConsolidatedSlots(orgSlug: string, date: Date) {
 
         try {
             // Defaulting to 30 mins duration for consolidated search
-            const slots = await getAvailableSlots(profile.username, date, 30)
+            const slots = await getAvailableSlots(profile.username, date, 30, locationId)
             if (slots.length > 0) {
                 results.push({
                     profile: {

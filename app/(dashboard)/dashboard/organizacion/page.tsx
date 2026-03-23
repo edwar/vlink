@@ -160,7 +160,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* QR Code Column */}
                 <div className="lg:col-span-5 flex flex-col h-full">
-                    <div id="tour-org-qr" className="relative flex-1 space-y-4 flex flex-col bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                    <div id="tour-org-qr" className="relative flex-1 space-y-4 flex flex-col bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
                         <div id="tour-org-qr-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="flex items-center gap-3 relative z-10">
                             <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
@@ -210,7 +210,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* Lateral: Invitaciones */}
                 <div className="lg:col-span-7 flex flex-col h-full">
-                    <div id="tour-org-invite" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden h-full">
+                    <div id="tour-org-invite" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden h-full">
                         <div id="tour-org-invite-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="flex items-center gap-3 relative z-10">
                             <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
@@ -239,7 +239,7 @@ export default async function OrganizacionPage(props: {
             {/* Row 1.5: Pagos, Comunicación & Sedes */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative mt-8">
                 {/* Cobros y Pagos */}
-                <div id="tour-org-payments" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden">
+                <div id="tour-org-payments" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-emerald-500/40 rounded-full" />
                         <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
@@ -254,7 +254,7 @@ export default async function OrganizacionPage(props: {
                 </div>
 
                 {/* Infraestructura & Sedes */}
-                <div id="tour-org-sedes" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden group">
+                <div id="tour-org-sedes" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden group">
                     <div id="tour-org-sedes-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
 
                     {/* Background Decorative Icon */}
@@ -299,7 +299,7 @@ export default async function OrganizacionPage(props: {
                 </div>
 
                 {/* Comunicación & Soporte */}
-                <div id="tour-org-contact" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 overflow-hidden md:col-span-2 lg:col-span-1">
+                <div id="tour-org-contact" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden md:col-span-2 lg:col-span-1">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
                         <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Soporte</h2>
@@ -358,7 +358,7 @@ export default async function OrganizacionPage(props: {
                             <div
                                 key={member.id}
                                 className={cn(
-                                    "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative bg-card border border-border/50 rounded-[2.5rem] hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6",
+                                    "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative bg-card border border-border/50 rounded-lg hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6",
                                     !isPlanActive && "opacity-70 grayscale-[0.3] border-red-500/20"
                                 )}
                                 style={{ animationDelay: `${index * 50}ms` }}

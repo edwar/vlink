@@ -31,16 +31,12 @@ export default async function ConsolidatedAgendaPage() {
                 <ArrowLeft className="h-4 w-4" /> Volver a Organización
             </Link>
 
-            <header className="relative p-8 rounded-3xl bg-linear-to-br from-primary/5 via-background to-background overflow-hidden">
+            <header className="relative">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <CalendarRange className="h-24 w-24 text-primary rotate-12" />
                 </div>
 
                 <div className="relative z-10 space-y-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
-                        <CalendarRange className="h-3 w-3" />
-                        Visibilidad de Equipo
-                    </div>
                     <Title title="Disponibilidad Consolidada" />
                     <p className="text-muted-foreground font-medium text-lg max-w-2xl">
                         Visualiza de un vistazo los huecos libres de todos tus profesionales para coordinar citas de último minuto.
@@ -49,7 +45,7 @@ export default async function ConsolidatedAgendaPage() {
             </header>
 
             {organization.subscriptionPlan === "BASIC" ? (
-                <div className="p-12 bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-[2.5rem] flex flex-col items-center text-center gap-6">
+                <div className="p-12 bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-lg flex flex-col items-center text-center gap-6">
                     <div className="h-20 w-20 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-600">
                         <CalendarRange className="h-10 w-10" />
                     </div>
@@ -66,7 +62,10 @@ export default async function ConsolidatedAgendaPage() {
                     </Link>
                 </div>
             ) : (
-                <ConsolidatedAgenda orgSlug={organization.slug} />
+                <ConsolidatedAgenda 
+                    orgSlug={organization.slug} 
+                    locations={organization.locations} 
+                />
             )}
         </div>
     )

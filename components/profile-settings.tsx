@@ -181,7 +181,7 @@ export function ProfileSettings() {
                                     Identidad VLink (Username)
                                 </Label>
                                 <div className="group transition-all">
-                                    <InputGroup id="tour-username" className="relative h-14 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/40 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
+                                    <InputGroup id="tour-username" className="relative h-14 rounded-2xl overflow-hidden border border-primary/5 transition-all">
                                         <div id="tour-username-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                                         <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-14 flex items-center justify-center">
                                             <InputGroupText className="text-primary font-black text-[13px] tracking-tighter">
@@ -232,7 +232,7 @@ export function ProfileSettings() {
                             <p className="text-sm text-muted-foreground font-medium">Comparte este link para recibir reservas.</p>
                         </div>
 
-                        <div className="flex items-center gap-3 p-3 bg-muted/20 rounded-3xl border border-muted-foreground/10 shadow-inner group-hover:border-primary/20 transition-all">
+                        <div className="flex items-center">
                             <div className="flex-1 px-5 py-3.5 text-sm font-black overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-primary/5 shadow-inner-sm text-primary group-hover:bg-background transition-colors">
                                 {profileUrl.replace(/^https?:\/\//, '')}
                             </div>
@@ -263,10 +263,10 @@ export function ProfileSettings() {
                                     Tiempo de Descanso (Buffer)
                                 </Label>
                                 <div className="flex items-center gap-4">
-                                    <input 
-                                        type="range" 
-                                        min="0" 
-                                        max="60" 
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="60"
                                         step="5"
                                         value={bufferTime}
                                         onChange={(e) => setBufferTime(parseInt(e.target.value))}
@@ -296,7 +296,7 @@ export function ProfileSettings() {
                                             onClick={() => setAdvanceNoticeHours(hours)}
                                             className={cn(
                                                 "py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all",
-                                                advanceNoticeHours === hours 
+                                                advanceNoticeHours === hours
                                                     ? "bg-primary text-primary-foreground border-primary shadow-sm"
                                                     : "bg-surface/50 text-muted-foreground border-border/50 hover:border-primary/30"
                                             )}
@@ -423,7 +423,7 @@ export function ProfileSettings() {
                         {saving && (
                             <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite] pointer-events-none" />
                         )}
-                        
+
                         <div className="relative z-10 flex items-center gap-6">
                             <div className="p-3 bg-white/10 rounded-2xl">
                                 {saving ? (

@@ -1,29 +1,34 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { format, addDays, startOfDay } from "date-fns"
+import { format, addDays } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, ChevronLeft, ChevronRight, User, Loader2, Search } from "lucide-react"
+import { Clock, ChevronLeft, ChevronRight, User, Loader2, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getOrgConsolidatedSlots } from "@/app/actions/consolidated-availability"
 import { UserAvatar } from "@/components/user-avatar"
-import { cn } from "@/lib/utils"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface ConsolidatedAgendaProps {
     orgSlug: string
+    locations: any[]
 }
 
-export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
+export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaProps) {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<any[]>([])
-    const [searchTerm, setSearchTerm] = useState("")
+    const [selectedLocationId, setSelectedLocationId] = useState<string>("all")
 
     useEffect(() => {
         async function load() {
             setLoading(true)
             try {
-                const results = await getOrgConsolidatedSlots(orgSlug, selectedDate)
+                const results = await getOrgConsolidatedSlots(
+                    orgSlug, 
+                    selectedDate, 
+                    selectedLocationId === "all" ? undefined : selectedLocationId
+                )
                 setData(results)
             } catch (error) {
                 console.error(error)
@@ -32,29 +37,24 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
             }
         }
         load()
-    }, [orgSlug, selectedDate])
-
-    const filteredData = data.filter(item =>
-        item.profile.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.profile.username.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    }, [orgSlug, selectedDate, selectedLocationId])
 
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
-            {/* Header / Date Picker */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-3xl bg-linear-to-br from-primary/5 via-background to-background overflow-hidden">
+            {/* Header / Date Picker / Location Selector */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6">
                 <div className="flex items-center gap-4">
                     <Button
                         variant="outline"
                         size="icon"
                         onClick={() => setSelectedDate(prev => addDays(prev, -1))}
-                        className="rounded-xl"
+                        className="rounded-xl h-12 w-12"
                     >
-                        <ChevronLeft className="h-4 w-4" />
+                        <ChevronLeft className="h-5 w-5" />
                     </Button>
 
                     <div className="flex flex-col items-center min-w-[200px]">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary">Agenda Consolidada</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Agenda Consolidada</span>
                         <h2 className="text-xl font-black font-display tracking-tight text-center">
                             {format(selectedDate, "EEEE, d 'de' MMMM", { locale: es })}
                         </h2>
@@ -64,21 +64,29 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                         variant="outline"
                         size="icon"
                         onClick={() => setSelectedDate(prev => addDays(prev, 1))}
-                        className="rounded-xl"
+                        className="rounded-xl h-12 w-12"
                     >
-                        <ChevronRight className="h-4 w-4" />
+                        <ChevronRight className="h-5 w-5" />
                     </Button>
                 </div>
 
-                <div className="relative w-full md:w-64">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <input
-                        type="text"
-                        placeholder="Buscar profesional..."
-                        className="w-full h-11 pl-10 pr-4 bg-muted/40 border-none rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="hidden md:flex h-10 w-10 items-center justify-center bg-primary/5 rounded-xl border border-primary/10">
+                        <Building2 className="h-5 w-5 text-primary" />
+                    </div>
+                    <Select value={selectedLocationId} onValueChange={setSelectedLocationId}>
+                        <SelectTrigger className="w-full md:w-[220px] h-12 rounded-xl bg-background border-border/40 font-bold">
+                            <SelectValue placeholder="Todas las sedes" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl border-border/40 font-medium">
+                            <SelectItem value="all" className="font-bold">Todas las sedes</SelectItem>
+                            {locations.map((loc) => (
+                                <SelectItem key={loc.id} value={loc.id}>
+                                    {loc.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
 
@@ -87,9 +95,9 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                     <Loader2 className="h-10 w-10 text-primary animate-spin" />
                     <p className="text-muted-foreground font-black uppercase text-[10px] tracking-widest">Sincronizando Disponibilidades...</p>
                 </div>
-            ) : filteredData.length > 0 ? (
+            ) : data.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4">
-                    {filteredData.map((item) => (
+                    {data.map((item) => (
                         <div
                             key={item.profile.username}
                             className="group p-4 rounded-2xl transition-all flex flex-col md:flex-row md:items-center gap-6 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden"
@@ -106,7 +114,7 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                                 </div>
                             </div>
 
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-2 flex-1">
                                 {item.slots.map((slot: string) => (
                                     <span
                                         key={slot}
@@ -127,10 +135,11 @@ export function ConsolidatedAgenda({ orgSlug }: ConsolidatedAgendaProps) {
                     </div>
                     <h3 className="text-xl font-black font-display">No hay espacios libres</h3>
                     <p className="text-muted-foreground mt-2 max-w-xs mx-auto">
-                        Ningún profesional del equipo tiene disponibilidad configurada para esta fecha o todos los espacios están ocupados.
+                        Ningún profesional del equipo tiene disponibilidad configurada para esta fecha/sede o todos los espacios están ocupados.
                     </p>
                 </div>
             )}
         </div>
     )
 }
+

@@ -26,7 +26,7 @@ export default async function AdminDashboard() {
                 {cards.map((card) => {
                     const Icon = card.icon
                     return (
-                        <Card key={card.title} className={`col-span-3 p-6 sm:p-8 bg-linear-to-bl from-primary/5 to-transparent border border-border/10 rounded-[2.5rem] space-y-6 flex flex-col justify-between hover:from-primary/10 ${card.hoverBorder} transition-colors group overflow-hidden relative`}>
+                        <Card key={card.title} className={`col-span-3 p-6 sm:p-8 bg-linear-to-bl from-primary/5 to-transparent border border-border/10 rounded-lg space-y-6 flex flex-col justify-between hover:from-primary/10 ${card.hoverBorder} transition-colors group overflow-hidden relative`}>
                             <div className={`absolute top-0 right-0 w-32 h-32 ${card.bg} rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700`} />
                             <CardContent>
                                 <div className="flex items-center justify-between mb-4">
