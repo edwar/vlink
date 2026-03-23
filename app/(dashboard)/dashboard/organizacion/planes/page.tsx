@@ -76,17 +76,13 @@ export default async function BillingPage({
                 </div>
             )}
 
-            <header className="relative p-8 px-4 sm:px-8 rounded-3xl bg-linear-to-br from-primary/10 via-background to-background border-2 border-primary/5 shadow-none overflow-hidden">
+            <header className="relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <CreditCard className="h-24 w-24 text-primary -rotate-12" />
                 </div>
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div className="space-y-2">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
-                            <CreditCard className="h-3 w-3" />
-                            Suscripciones
-                        </div>
                         <h1 className="text-4xl md:text-5xl font-display font-black tracking-tighter text-primary uppercase">
                             Facturación
                         </h1>
