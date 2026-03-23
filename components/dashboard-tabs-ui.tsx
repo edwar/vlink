@@ -16,8 +16,8 @@ interface DashboardTabsUIProps {
     exportLink: React.ReactNode
 }
 
-export function DashboardTabsUI({ 
-    children_agenda, 
+export function DashboardTabsUI({
+    children_agenda,
     children_analytics,
     stats,
     exportLink
@@ -34,13 +34,13 @@ export function DashboardTabsUI({
 
     return (
         <Tabs defaultValue="agenda" onValueChange={setActiveTab} className="space-y-8">
-            <div className="flex flex-col xl:flex-row items-center xl:justify-between gap-4 px-2 w-full">
-                <TabsList className="relative w-fit xs:w-auto bg-surface/50 border border-border/20 p-1.5 rounded-full h-auto gap-1">
-                    <TabsTrigger 
+            <div className="flex flex-col xl:flex-row items-center xl:justify-between gap-4 w-full">
+                <TabsList className="relative w-fit xs:w-auto bg-surface/50 border border-border/20 py-1.5 rounded-full h-auto gap-1">
+                    <TabsTrigger
                         id="tour-tab-agenda"
-                        value="agenda" 
+                        value="agenda"
                         className={cn(
-                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                             activeTab === "agenda" ? "text-primary" : "text-muted-foreground hover:text-foreground"
                         )}
                     >
@@ -53,12 +53,12 @@ export function DashboardTabsUI({
                         )}
                         <span className="relative z-20">Mi Agenda</span>
                     </TabsTrigger>
-                    
-                    <TabsTrigger 
+
+                    <TabsTrigger
                         id="tour-tab-analytics"
-                        value="analytics" 
+                        value="analytics"
                         className={cn(
-                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                             activeTab === "analytics" ? "text-primary" : "text-muted-foreground hover:text-foreground"
                         )}
                     >

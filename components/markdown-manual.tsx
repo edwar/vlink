@@ -18,7 +18,7 @@ export function MarkdownManual({ content }: { content: string }) {
     }
 
     return (
-        <div className="max-w-4xl mx-auto px-6 py-12 sm:py-20 animate-in fade-in duration-1000">
+        <div className="max-w-5xl mx-auto px-6 py-12 sm:py-20 animate-in fade-in duration-1000">
             {/* Action Bar (Hid on print) */}
             <div className="print:hidden flex items-center justify-between mb-12 border-b border-border/40 pb-6">
                 <BackButton>

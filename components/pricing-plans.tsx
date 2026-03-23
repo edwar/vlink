@@ -58,11 +58,12 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
     const plans = [
         {
             id: "BASIC" as const,
-            name: "BASIC",
+            name: "Básico",
             price: plansInfo.find(p => p.id === 'BASIC')?.price || "Gratis",
             period: "para siempre",
             description: "Para profesionales independientes empezando.",
             icon: User,
+            mustPopulate: false,
             color: "text-zinc-500",
             bgLight: "bg-zinc-500/10",
             border: "border-zinc-500/20",
@@ -81,6 +82,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
             period: "COP / mes",
             description: "Para clínicas y agencias en crecimiento.",
             icon: ShieldCheck,
+            mustPopulate: true,
             color: "text-blue-500",
             bgLight: "bg-blue-500/10",
             border: "border-blue-500/20",
@@ -99,6 +101,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
             period: "COP / mes",
             description: "Gestión a gran escala y múltiples sedes.",
             icon: Building,
+            mustPopulate: false,
             color: "text-primary",
             bgLight: "bg-primary/10",
             border: "border-primary/20",
@@ -162,6 +165,12 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                 </div>
                             )}
 
+                            {plan.mustPopulate && !isCurrent && (
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-linear-to-r from-amber-400 via-yellow-400 to-amber-600 text-amber-950 shadow-lg border border-amber-200/50">
+                                    Más popular
+                                </div>
+                            )}
+
                             <div className="mb-6 space-y-4">
                                 <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center shadow-lg", plan.bgLight)}>
                                     <Icon className={cn("h-7 w-7", plan.color)} />
@@ -211,10 +220,8 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                         <Loader2 className="h-5 w-5 animate-spin" />
                                     ) : isCurrent ? (
                                         "Activo"
-                                    ) : plan.id === "BASIC" ? (
-                                        "Degradar a Gratis"
                                     ) : (
-                                        `Cambiar a ${plan.name}`
+                                        `Cambiar a plan ${plan.name}`
                                     )}
                                 </Button>
                             </div>

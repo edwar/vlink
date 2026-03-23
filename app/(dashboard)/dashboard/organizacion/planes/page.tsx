@@ -76,7 +76,7 @@ export default async function BillingPage({
                 </div>
             )}
 
-            <header className="relative overflow-hidden">
+            <header className="relative">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                     <CreditCard className="h-24 w-24 text-primary -rotate-12" />
                 </div>

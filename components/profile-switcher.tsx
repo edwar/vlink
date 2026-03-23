@@ -74,7 +74,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                     <Building2 className="h-3 w-3" />
                     Viendo Agenda De:
                 </p>
-                <div className="flex items-center gap-2 h-12 bg-background border-2 border-primary/5 rounded-xl px-2 shadow-sm">
+                <div className="flex items-center gap-2 h-12 bg-background border-2 border-primary/5 rounded-sm px-2 shadow-sm">
                     <UserAvatar
                         image={activeProfile?.image}
                         name={activeProfile?.displayName || "Mi Agenda"}
@@ -93,7 +93,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                 Viendo Agenda De:
             </p>
             <Select value={selectedProfileId || "personal"} onValueChange={handleSwitch}>
-                <SelectTrigger className="w-full h-12 bg-background border-2 focus:ring-primary/20 transition-all rounded-xl pl-2">
+                <SelectTrigger className="w-full h-12 bg-background border-2 focus:ring-primary/20 transition-all rounded-sm pl-2">
                     <SelectValue>
                         <div className="flex items-center gap-2 truncate">
                             <UserAvatar
@@ -111,7 +111,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                         </div>
                     </SelectValue>
                 </SelectTrigger>
-                <SelectContent position="popper" side="bottom" align="start" className="rounded-xl border-2 shadow-xl">
+                <SelectContent position="popper" side="bottom" align="start" className="w-(--radix-select-trigger-width) rounded-sm border-2 shadow-xl">
                     <SelectGroup>
                         <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50">Personal</SelectLabel>
                         <SelectItem value="personal" className="py-2.5 focus:bg-primary/5 rounded-lg cursor-pointer">
@@ -121,8 +121,8 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                                     name={activeProfile?.displayName}
                                     className="h-8 w-8 rounded-lg"
                                 />
-                                <div className="flex flex-col">
-                                    <span className="font-bold text-sm">Mi Agenda Personal</span>
+                                <div className="flex flex-col text-left">
+                                    <span className="font-bold text-sm truncate max-w-[130px]">Mi Agenda Personal</span>
                                     <span className="text-[10px] text-muted-foreground">Propietario</span>
                                 </div>
                             </div>
@@ -152,7 +152,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                                                 className="h-8 w-8 rounded-lg"
                                             />
                                             <div className="flex flex-col text-left">
-                                                <span className="font-bold text-sm truncate max-w-[150px]">
+                                                <span className="font-bold text-sm truncate max-w-[130px]">
                                                     {profile.displayName || profile.user?.name}
                                                 </span>
                                                 <span className="text-[10px] text-muted-foreground truncate flex flex-wrap gap-1">

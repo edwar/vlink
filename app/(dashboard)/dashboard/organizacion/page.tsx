@@ -110,7 +110,7 @@ export default async function OrganizacionPage(props: {
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
             <header className="relative py-8 rounded-3xl bg-surface/50 overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
+                <div className="absolute top-0 right-0 p-2 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
                 </div>
 

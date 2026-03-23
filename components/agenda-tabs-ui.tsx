@@ -20,11 +20,11 @@ export function AgendaTabsUI({
 
     return (
         <Tabs defaultValue="hoy" onValueChange={setActiveTab} className="w-full">
-            <TabsList id="tour-agenda-tabs" className="relative w-full max-w-3xl bg-surface/50 border border-border/20 p-1.5 rounded-full h-auto gap-1 mb-8 overflow-x-auto custom-scrollbar flex-nowrap shrink-0">
+            <TabsList id="tour-agenda-tabs" className="relative w-full max-w-3xl bg-surface/50 border border-border/20 py-1.5 rounded-full h-auto gap-1 mb-8 overflow-x-auto custom-scrollbar flex-nowrap shrink-0">
                 <TabsTrigger
                     value="hoy"
                     className={cn(
-                        "relative z-10 flex-1 min-w-[140px] rounded-full px-4 sm:px-6 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                        "relative z-10 flex-1 min-w-[140px] rounded-full px-4 sm:px-6 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                         activeTab === "hoy" ? "text-primary" : "text-muted-foreground hover:text-foreground"
                     )}
                 >
@@ -37,11 +37,11 @@ export function AgendaTabsUI({
                     )}
                     <span className="relative z-20 whitespace-nowrap">Agenda de Hoy</span>
                 </TabsTrigger>
-                
+
                 <TabsTrigger
                     value="proximas"
                     className={cn(
-                        "relative z-10 flex-1 min-w-[140px] rounded-full px-4 sm:px-6 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                        "relative z-10 flex-1 min-w-[140px] rounded-full px-4 sm:px-6 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                         activeTab === "proximas" ? "text-blue-500" : "text-muted-foreground hover:text-foreground"
                     )}
                 >
@@ -58,7 +58,7 @@ export function AgendaTabsUI({
                 <TabsTrigger
                     value="historial"
                     className={cn(
-                        "relative z-10 flex-1 min-w-[140px] rounded-full px-4 sm:px-6 py-3 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                        "relative z-10 flex-1 min-w-[140px] rounded-full px-4 sm:px-6 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                         activeTab === "historial" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                     )}
                 >
