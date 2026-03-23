@@ -9,6 +9,8 @@ import { Loader2, Check, Wrench } from "lucide-react"
 import { sileo } from "sileo"
 import { EmptyState } from "./empty-state"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { DialogClose } from "./ui/dialog"
 
 interface LocationMembersConfigProps {
     memberId: string
@@ -29,6 +31,7 @@ export function LocationMembersConfig({
 }: LocationMembersConfigProps) {
     const [selectedIds, setSelectedIds] = useState<string[]>(currentServiceIds)
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     const toggleService = (id: string) => {
         setSelectedIds(prev =>
@@ -41,6 +44,8 @@ export function LocationMembersConfig({
         try {
             await setMemberServicesForLocation(memberId, locationId, selectedIds)
             sileo.success({ title: "Configuración guardada", description: "Los servicios del profesional se actualizaron para esta sede" })
+            router.refresh()
+            document.getElementById("close-members-config-btn")?.click()
         } catch (error: any) {
             sileo.error({ title: "Error al actualizar", description: error.message || "No se pudieron actualizar los servicios" })
         } finally {
@@ -102,6 +107,9 @@ export function LocationMembersConfig({
                     Guardar Configuración
                 </Button>
             )}
+            <DialogClose asChild>
+                <button type="button" id="close-members-config-btn" className="hidden" aria-hidden="true" />
+            </DialogClose>
         </div>
     )
 }

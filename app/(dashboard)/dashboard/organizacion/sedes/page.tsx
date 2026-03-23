@@ -53,6 +53,9 @@ export default async function SedesPage() {
                         include: {
                             profile: true
                         }
+                    },
+                    locationServices: {
+                        where: { isActive: true }
                     }
                 }
             }
@@ -203,7 +206,10 @@ export default async function SedesPage() {
                                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Configuración de Equipo</h4>
 
                                     <div className="space-y-2">
-                                        {(organization as any).members.map((member: any) => (
+                                        {(organization as any).members.map((member: any) => {
+                                            const configuredServicesCount = member.locationServices?.filter((ls: any) => ls.locationId === loc.id).length || 0;
+                                            
+                                            return (
                                             <Dialog key={member.id}>
                                                 <DialogTrigger asChild>
                                                     <Button
@@ -216,7 +222,12 @@ export default async function SedesPage() {
                                                             </div>
                                                             <div className="text-left">
                                                                 <p className="text-xs font-black uppercase tracking-tight text-foreground">{member.user.name}</p>
-                                                                <p className="text-[10px] font-medium text-muted-foreground italic">Configurar servicios</p>
+                                                                <p className="text-[10px] font-medium text-muted-foreground italic">
+                                                                    {configuredServicesCount === 0 
+                                                                        ? "Sin servicios asignados" 
+                                                                        : `${configuredServicesCount} servicio${configuredServicesCount === 1 ? '' : 's'} asignado${configuredServicesCount === 1 ? '' : 's'}`
+                                                                    }
+                                                                </p>
                                                             </div>
                                                         </div>
                                                         <ArrowRight className="h-4 w-4 text-muted-foreground group-hover/btn:text-primary group-hover/btn:translate-x-1 transition-all" />
@@ -240,7 +251,7 @@ export default async function SedesPage() {
                                                     </div>
                                                 </DialogContent>
                                             </Dialog>
-                                        ))}
+                                        )})}
                                     </div>
                                 </div>
                             </CardContent>
