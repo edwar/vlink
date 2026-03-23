@@ -257,60 +257,68 @@ export function ConfigurationSettings() {
 
                             {/* New Service Form */}
                             {showNewForm && (
-                                <div className="p-8 border border-dashed border-border/60 rounded-[2rem] space-y-10 bg-transparent animate-in slide-in-from-top-6 duration-500 overflow-hidden relative">
-                                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                                <div className="rounded-3xl border border-border/50 bg-card p-8 sm:p-10 space-y-10 shadow-sm animate-in slide-in-from-top-4 duration-500 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
 
-                                    <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Nombre del Servicio</Label>
+                                    <div className="flex items-center gap-4 border-b border-border/40 pb-6">
+                                        <div className="p-3 bg-primary/10 rounded-2xl">
+                                            <Plus className="h-5 w-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-xl uppercase tracking-widest text-foreground">Nuevo Servicio</h4>
+                                            <p className="text-sm font-medium text-muted-foreground mt-1">Configura las opciones de tu servicio</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4 relative z-10">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Nombre del Servicio</Label>
                                         <Input
                                             type="text"
                                             value={newName}
                                             onChange={(e) => setNewName(e.target.value)}
-                                            placeholder="Ej: Consultoría Estratégica, Sesión de Coaching..."
-                                            className="h-12 rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner"
+                                            placeholder="Ej: Consultoría Profesional"
+                                            className="h-14 rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-muted/20 px-6"
                                         />
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                                         <div className="space-y-4">
-                                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Inversión (COP)</Label>
-                                            <div className="group transition-all">
-                                                <InputGroup className="h-12 rounded-2xl overflow-hidden border-2 border-primary/5 bg-background/50 focus-within:border-primary/20 focus-within:ring-4 focus-within:ring-primary/5 transition-all shadow-inner">
-                                                    <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-12 flex items-center justify-center">
-                                                        <InputGroupText className="text-primary font-black text-xl">$</InputGroupText>
-                                                    </InputGroupAddon>
-                                                    <InputGroupInput
-                                                        type="text"
-                                                        inputMode="numeric"
-                                                        pattern="[0-9.]*"
-                                                        value={newPrice}
-                                                        onChange={(e) => setNewPrice(formatPrice(e.target.value))}
-                                                        className="font-black text-xl px-6 h-12 bg-transparent border-none focus:ring-0"
-                                                        placeholder="0"
-                                                    />
-                                                </InputGroup>
-                                            </div>
+                                            <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Inversión (COP)</Label>
+                                            <InputGroup className="h-14 rounded-2xl overflow-hidden border-2 border-border/50 bg-muted/20 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-none">
+                                                <InputGroupAddon className="bg-muted/50 border-r border-border/50 px-6 flex items-center justify-center">
+                                                    <InputGroupText className="text-foreground/60 font-black text-lg">$</InputGroupText>
+                                                </InputGroupAddon>
+                                                <InputGroupInput
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    pattern="[0-9.]*"
+                                                    value={newPrice}
+                                                    onChange={(e) => setNewPrice(formatPrice(e.target.value))}
+                                                    className="font-bold text-lg px-6 h-14 bg-transparent border-none focus:ring-0"
+                                                    placeholder="0"
+                                                />
+                                            </InputGroup>
                                         </div>
 
                                         <div className="space-y-4">
-                                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary/80 ml-1">Tiempo de Sesión</Label>
+                                            <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Tiempo de Sesión</Label>
                                             <Select
                                                 value={newDuration.toString()}
                                                 onValueChange={(val) => setNewDuration(parseInt(val))}
                                             >
-                                                <SelectTrigger className="h-12 w-full rounded-2xl border-2 border-primary/5 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner">
+                                                <SelectTrigger className="h-14 w-full rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-muted/20 px-6">
                                                     <div className="flex items-center gap-3">
-                                                        <Clock className="h-5 w-5 text-primary" />
+                                                        <Clock className="h-5 w-5 text-muted-foreground" />
                                                         <SelectValue placeholder="Duración" />
                                                     </div>
                                                 </SelectTrigger>
-                                                <SelectContent position="popper" className="rounded-2xl border-2 border-primary/5 shadow-2xl p-2 bg-popover/90 backdrop-blur-xl">
+                                                <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
                                                     <SelectGroup>
                                                         {DURATION_OPTIONS.map((opt) => (
                                                             <SelectItem
                                                                 key={opt.value}
                                                                 value={opt.value.toString()}
-                                                                className="font-black text-sm py-4 px-6 rounded-xl focus:bg-primary focus:text-white cursor-pointer transition-colors"
+                                                                className="font-bold text-sm py-3 px-4 rounded-xl focus:bg-primary focus:text-white cursor-pointer transition-colors"
                                                             >
                                                                 {opt.label}
                                                             </SelectItem>
@@ -321,7 +329,7 @@ export function ConfigurationSettings() {
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col-reverse sm:flex-row gap-4 justify-end pt-8 border-t border-primary/10">
+                                    <div className="flex flex-col-reverse sm:flex-row gap-4 justify-end pt-6 border-t border-border/40 relative z-10">
                                         <Button
                                             variant="ghost"
                                             onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
@@ -332,7 +340,7 @@ export function ConfigurationSettings() {
                                         <Button
                                             onClick={handleCreateService}
                                             disabled={creatingService || !newName.trim()}
-                                            className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+                                            className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 hover:scale-105 transition-all active:scale-95 bg-primary text-primary-foreground"
                                         >
                                             {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Check className="h-5 w-5 mr-2" />}
                                             Publicar Servicio
@@ -366,38 +374,37 @@ export function ConfigurationSettings() {
                                     {services.map((service) => (
                                         <div
                                             key={service.id}
-                                            className={cn(
-                                                "group relative p-6 sm:p-8 rounded-[2rem] border transition-all duration-500 overflow-hidden",
-                                                !service.isActive
-                                                    ? "bg-muted/10 border-border/40 opacity-60 grayscale"
-                                                    : "bg-card border-border/40 hover:border-border/80 hover:shadow-sm",
-                                                editingId === service.id && "bg-linear-to-br from-primary/5 via-transparent to-transparent border-primary/20 shadow-sm"
-                                            )}
+                                            className="group relative p-6 sm:p-8 rounded-3xl border transition-all duration-500 overflow-hidden bg-card border-border/40 hover:border-border/80 hover:shadow-sm"
                                         >
                                             <div className="relative z-10">
                                                 {editingId === service.id ? (
-                                                    <div className="space-y-8">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="p-2 bg-primary/10 rounded-lg">
-                                                                <Pencil className="h-4 w-4 text-primary" />
+                                                    <>
+                                                        <div className="flex items-center gap-4 border-b border-border/40 pb-6">
+                                                            <div className="p-3 bg-primary/10 rounded-2xl">
+                                                                <Pencil className="h-5 w-5 text-primary" />
                                                             </div>
-                                                            <h4 className="font-black text-lg uppercase tracking-widest text-primary">Redactando Servicio</h4>
+                                                            <div>
+                                                                <h4 className="font-black text-xl uppercase tracking-widest text-foreground">Redactando Servicio</h4>
+                                                                <p className="text-sm font-medium text-muted-foreground mt-1">Modifica la información</p>
+                                                            </div>
                                                         </div>
+
                                                         <div className="space-y-4">
-                                                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Nombre</Label>
+                                                            <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Nombre</Label>
                                                             <Input
                                                                 type="text"
                                                                 value={editName}
                                                                 onChange={(e) => setEditName(e.target.value)}
-                                                                className="h-12 rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6"
+                                                                className="h-14 rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all font-bold bg-muted/20 px-6"
                                                             />
                                                         </div>
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                                             <div className="space-y-4">
-                                                                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Precio</Label>
-                                                                <InputGroup className="h-12 rounded-xl border-2 border-primary/10 focus-within:border-primary/30 focus-within:ring-4 focus-within:ring-primary/5 transition-all bg-background px-0 overflow-hidden shadow-none">
-                                                                    <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-5 flex items-center justify-center">
-                                                                        <InputGroupText className="font-black text-primary">$</InputGroupText>
+                                                                <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Precio</Label>
+                                                                <InputGroup className="h-14 rounded-2xl border-2 border-border/50 bg-muted/20 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-all overflow-hidden shadow-none">
+                                                                    <InputGroupAddon className="bg-muted/50 border-r border-border/50 px-5 flex items-center justify-center">
+                                                                        <InputGroupText className="font-black text-foreground/60 text-lg">$</InputGroupText>
                                                                     </InputGroupAddon>
                                                                     <InputGroupInput
                                                                         type="text"
@@ -405,25 +412,29 @@ export function ConfigurationSettings() {
                                                                         pattern="[0-9.]*"
                                                                         value={editPrice}
                                                                         onChange={(e) => setEditPrice(formatPrice(e.target.value))}
-                                                                        className="font-black text-lg px-5 h-12 bg-transparent border-none focus:ring-0"
+                                                                        className="font-bold text-lg px-5 h-14 bg-transparent border-none focus:ring-0"
                                                                     />
                                                                 </InputGroup>
                                                             </div>
+
                                                             <div className="space-y-4">
-                                                                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Duración</Label>
+                                                                <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Duración</Label>
                                                                 <Select
                                                                     value={editDuration.toString()}
                                                                     onValueChange={(val) => setEditDuration(parseInt(val))}
                                                                 >
-                                                                    <SelectTrigger className="h-12 w-full rounded-xl border-2 border-primary/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all text-lg font-black bg-background px-6">
-                                                                        <SelectValue placeholder="Duración" />
+                                                                    <SelectTrigger className="h-14 w-full rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all font-bold text-lg bg-muted/20 px-6">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <Clock className="h-5 w-5 text-muted-foreground" />
+                                                                            <SelectValue placeholder="Duración" />
+                                                                        </div>
                                                                     </SelectTrigger>
-                                                                    <SelectContent position="popper" className="rounded-xl border-2 border-primary/5 shadow-2xl p-2 bg-popover/90 backdrop-blur-xl">
+                                                                    <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
                                                                         {DURATION_OPTIONS.map(opt => (
                                                                             <SelectItem
                                                                                 key={opt.value}
                                                                                 value={opt.value.toString()}
-                                                                                className="font-black text-sm py-3 px-6 rounded-lg focus:bg-primary focus:text-white cursor-pointer"
+                                                                                className="font-bold text-sm py-3 px-4 rounded-xl focus:bg-primary focus:text-white cursor-pointer"
                                                                             >
                                                                                 {opt.label}
                                                                             </SelectItem>
@@ -432,95 +443,98 @@ export function ConfigurationSettings() {
                                                                 </Select>
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center justify-end gap-3 pt-6 border-t border-primary/10">
-                                                            <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-black h-12 uppercase tracking-widest text-[10px]">
+
+                                                        <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 pt-6 border-t border-border/40">
+                                                            <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive w-full sm:w-auto">
                                                                 Cancelar
                                                             </Button>
                                                             <Button
                                                                 onClick={() => handleUpdateService(service.id)}
                                                                 disabled={updatingService || !editName.trim()}
-                                                                className="rounded-xl font-black h-12 px-8 uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20"
+                                                                className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 w-full sm:w-auto"
                                                             >
-                                                                {updatingService ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                                                                {updatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                                                                 Confirmar Cambios
                                                             </Button>
                                                         </div>
-                                                    </div>
+                                                    </>
                                                 ) : (
-                                                    <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
-                                                        {/* Status Indicator */}
-                                                        <div className={cn(
-                                                            "h-12 w-16 sm:h-20 sm:w-20 rounded-[1.5rem] flex items-center justify-center shrink-0 border-2 transition-all duration-700",
-                                                            service.isActive
-                                                                ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-110 group-hover:rotate-6"
-                                                                : "bg-muted border-muted-foreground/10 opacity-50 shrink-0"
-                                                        )}>
-                                                            <Briefcase className={cn("h-7 w-7 sm:h-9 sm:w-9", service.isActive ? "text-primary" : "text-muted-foreground/40")} />
-                                                        </div>
-
-                                                        <div className="flex-1 min-w-0 text-center sm:text-left space-y-2">
-                                                            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-2">
-                                                                <h4 className="font-black text-xl sm:text-2xl truncate tracking-tight text-foreground/90 leading-tight">
-                                                                    {service.name}
-                                                                </h4>
-                                                                <span className={cn(
-                                                                    "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                                                                    service.isActive
-                                                                        ? "bg-green-500/10 text-green-600 border-green-500/20"
-                                                                        : "bg-muted text-muted-foreground border-muted-foreground/10"
-                                                                )}>
-                                                                    {service.isActive ? "Vigente" : "Latente"}
-                                                                </span>
+                                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                                                        <div className="flex items-center gap-4 sm:gap-5 w-full sm:w-auto min-w-0 p-1">
+                                                            {/* Status Indicator */}
+                                                            <div className={cn(
+                                                                "h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center shrink-0 border-2 transition-all duration-700",
+                                                                service.isActive
+                                                                    ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-105 group-hover:rotate-3"
+                                                                    : "bg-muted border-muted-foreground/10 opacity-50"
+                                                            )}>
+                                                                <Briefcase className={cn("h-5 w-5 sm:h-6 sm:w-6", service.isActive ? "text-primary" : "text-muted-foreground/40")} />
                                                             </div>
-                                                            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-[11px] font-black uppercase tracking-widest">
-                                                                <div className="flex items-center gap-2 text-primary bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10">
-                                                                    <Clock className="h-3.5 w-3.5" />
-                                                                    <span>
-                                                                        {service.durationMinutes >= 60
-                                                                            ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
-                                                                            : `${service.durationMinutes} minutos`}
+
+                                                            <div className="flex flex-col min-w-0 flex-1">
+                                                                <div className="flex items-center gap-3 mb-1.5 overflow-hidden">
+                                                                    <h4 className="font-black text-base sm:text-lg truncate tracking-tight text-foreground/90 leading-tight">
+                                                                        {service.name}
+                                                                    </h4>
+                                                                    <span className={cn(
+                                                                        "shrink-0 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                                                        service.isActive
+                                                                            ? "bg-green-500/10 text-green-600 border-green-500/20"
+                                                                            : "bg-muted text-muted-foreground border-muted-foreground/10"
+                                                                    )}>
+                                                                        {service.isActive ? "Vigente" : "Latente"}
                                                                     </span>
                                                                 </div>
-                                                                <div className="flex items-center gap-2 text-foreground/70 bg-muted/30 px-3 py-1.5 rounded-xl border border-foreground/5 shadow-inner">
-                                                                    <span className="text-primary/60">$</span>
-                                                                    <span>{(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP</span>
+                                                                <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 text-[9px] font-black uppercase tracking-widest">
+                                                                    <div className="flex items-center gap-1.5 text-primary bg-primary/5 px-2.5 py-1 rounded-lg border border-primary/10">
+                                                                        <Clock className="h-3 w-3" />
+                                                                        <span>
+                                                                            {service.durationMinutes >= 60
+                                                                                ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
+                                                                                : `${service.durationMinutes} min`}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-1.5 text-foreground/70 bg-muted/30 px-2.5 py-1 rounded-lg border border-foreground/5 shadow-inner">
+                                                                        <span className="text-primary/50">$</span>
+                                                                        <span>{(service.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         {/* Actions */}
-                                                        <div className="flex sm:flex-col gap-2 shrink-0 pt-4 sm:pt-0">
+                                                        <div className="flex items-center justify-end w-full sm:w-auto gap-2 shrink-0 pt-4 sm:pt-0 mt-2 sm:mt-0 border-t sm:border-none border-border/40">
                                                             <Button
                                                                 variant="outline"
                                                                 onClick={() => handleToggleActive(service)}
                                                                 className={cn(
-                                                                    "h-12 w-12 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2",
+                                                                    "h-10 w-10 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2",
                                                                     service.isActive
                                                                         ? "text-green-600 border-green-500/20 hover:border-green-500/40 hover:bg-green-500/5 shadow-lg shadow-green-500/5"
                                                                         : "text-muted-foreground border-primary/5 hover:border-primary/20"
                                                                 )}
                                                                 title={service.isActive ? "Archivar" : "Activar"}
                                                             >
-                                                                <Check className={cn("h-5 w-5", service.isActive ? "opacity-100" : "opacity-30")} />
+                                                                <Check className={cn("h-4 w-4", service.isActive ? "opacity-100" : "opacity-30")} />
                                                             </Button>
                                                             <Button
                                                                 variant="outline"
                                                                 onClick={() => startEditing(service)}
-                                                                className="h-12 w-12 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-primary/5 hover:border-primary/20 hover:bg-primary/5"
+                                                                className="h-10 w-10 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-primary/5 hover:border-primary/20 hover:bg-primary/5"
                                                                 title="Ajustar"
                                                             >
-                                                                <Pencil className="h-5 w-5" />
+                                                                <Pencil className="h-4 w-4" />
                                                             </Button>
                                                             <Button
                                                                 variant="outline"
                                                                 onClick={() => setServiceToDelete(service)}
                                                                 disabled={deletingId === service.id}
-                                                                className="h-12 w-12 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-destructive/5 hover:border-destructive/20 hover:bg-destructive/5 text-destructive"
+                                                                className="h-10 w-10 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-destructive/5 hover:border-destructive/20 hover:bg-destructive/5 text-destructive hover:text-destructive"
                                                                 title="Eliminar"
                                                             >
                                                                 {deletingId === service.id
-                                                                    ? <Loader2 className="h-5 w-5 animate-spin" />
-                                                                    : <Trash2 className="h-5 w-5" />}
+                                                                    ? <Loader2 className="h-4 w-4 animate-spin" />
+                                                                    : <Trash2 className="h-4 w-4" />}
                                                             </Button>
                                                         </div>
                                                     </div>
