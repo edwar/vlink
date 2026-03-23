@@ -27,8 +27,8 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
             setLoading(true)
             try {
                 const results = await getOrgConsolidatedSlots(
-                    orgSlug, 
-                    selectedDate, 
+                    orgSlug,
+                    selectedDate,
                     selectedLocationId === "all" ? undefined : selectedLocationId
                 )
                 setData(results)
@@ -78,10 +78,9 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                     </div>
                     <Select value={selectedLocationId} onValueChange={setSelectedLocationId}>
                         <SelectTrigger className="w-full md:w-[220px] h-12 rounded-xl bg-background border-border/40 font-bold">
-                            <SelectValue placeholder="Todas las sedes" />
+                            <SelectValue defaultValue={locations[0].id} />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl border-border/40 font-medium">
-                            <SelectItem value="all" className="font-bold">Todas las sedes</SelectItem>
                             {locations.map((loc) => (
                                 <SelectItem key={loc.id} value={loc.id}>
                                     {loc.name}
