@@ -116,6 +116,14 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                     </div>
                 )}
             </div>
+            
+            <div className="mt-auto pt-6 border-t border-border/50">
+                <p className="text-[9px] font-black opacity-30 uppercase tracking-[0.2em] text-center flex items-center justify-center gap-1.5">
+                    <span className="w-4 h-px bg-foreground/20" />
+                    Powered by Wompi
+                    <span className="w-4 h-px bg-foreground/20" />
+                </p>
+            </div>
         </div>
     )
 }
