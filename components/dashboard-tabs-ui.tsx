@@ -73,8 +73,8 @@ export function DashboardTabsUI({
                     </TabsTrigger>
                 </TabsList>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-full">
-                    <div id="tour-export-csv" className="relative flex items-center gap-4 sm:gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-full xl:w-fit bg-transparent px-2 py-2 overflow-x-auto custom-scrollbar">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 max-w-full">
+                    <div id="tour-export-csv" className="relative flex items-center gap-1 sm:gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-full xl:w-fit bg-transparent p-2 overflow-x-auto custom-scrollbar">
                         <div id="tour-export-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <span className="flex items-center gap-2 shrink-0">
                             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />

@@ -703,7 +703,7 @@ export function AvailabilityManagement() {
             </Dialog>
 
             {/* Global Save Button - Centered at the bottom */}
-            <div className="flex flex-col items-center justify-center pt-10 sticky bottom-10 z-50 pointer-events-none">
+            <div className="flex flex-col items-center justify-center pt-10 sticky bottom-0 z-20 pointer-events-none">
                 <div className="relative w-fit group/save pointer-events-auto">
                     <div id="tour-save-anchor" className="absolute -inset-4 pointer-events-none rounded-[3rem] bg-primary/10 blur-xl opacity-0 group-hover/save:opacity-100 transition-opacity" />
                     <Button
@@ -711,7 +711,7 @@ export function AvailabilityManagement() {
                         disabled={saving}
                         id="tour-save-availability"
                         className={cn(
-                            "group/btn relative px-12 h-20 rounded-4xl font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
+                            "group/btn relative px-8 h-18 rounded-4xl font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
                             success
                                 ? "bg-secondary text-secondary-foreground border-secondary/20 scale-105 shadow-secondary/40"
                                 : "bg-primary text-primary-foreground border-primary/20 hover:scale-110 active:scale-95 hover:shadow-primary/40"
@@ -737,7 +737,7 @@ export function AvailabilityManagement() {
                                     {saving ? "Sincronizando..." : success ? "Éxito" : "Control Maestro"}
                                 </span>
                                 <span className="text-xl">
-                                    {saving ? "Salvando cambios..." : success ? "Horario Actualizado" : "Guardar Disponibilidad Profesional"}
+                                    {saving ? "Salvando cambios..." : success ? "Horario Actualizado" : "Guardar Disponibilidad"}
                                 </span>
                             </div>
                         </div>

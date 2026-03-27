@@ -74,8 +74,8 @@ export function WompiSubaccountForm({ organizationId, onCreated, disabled }: { o
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button 
-                    variant="outline" 
+                <Button
+                    variant="outline"
                     disabled={disabled}
                     className="w-full h-12 rounded-2xl border-dashed border-primary/40 text-primary hover:bg-primary/5 font-black uppercase tracking-widest text-[10px] gap-2"
                 >
@@ -120,7 +120,7 @@ export function WompiSubaccountForm({ organizationId, onCreated, disabled }: { o
                                 <SelectTrigger className="h-12 rounded-xl text-sm font-bold bg-muted/20 border-none shadow-none">
                                     <SelectValue placeholder="Selecciona" />
                                 </SelectTrigger>
-                                <SelectContent className="rounded-xl">
+                                <SelectContent position="popper" className="rounded-xl">
                                     <SelectItem value="CC">Cédula de Ciudadanía</SelectItem>
                                     <SelectItem value="NIT">NIT</SelectItem>
                                     <SelectItem value="CE">Cédula de Extranjería</SelectItem>
@@ -137,7 +137,6 @@ export function WompiSubaccountForm({ organizationId, onCreated, disabled }: { o
                         </div>
                     </div>
 
-                    <input type="hidden" name="bankCode" value="WOMPI" />
 
                     <div className="p-5 bg-primary/5 rounded-3xl border border-primary/10 space-y-3">
                         <div className="flex items-center gap-3">
@@ -150,16 +149,13 @@ export function WompiSubaccountForm({ organizationId, onCreated, disabled }: { o
                         </div>
                         <ul className="space-y-2">
                             <li className="text-[11px] text-muted-foreground flex items-center gap-2">
-                                • Disposición inmediata de tus saldos.
+                                • Disposición rápida de tus saldos.
                             </li>
                             <li className="text-[11px] text-muted-foreground flex items-center gap-2 font-bold">
                                 • Tarifa por transferencia: $1.849 + 0.4% + IVA.
                             </li>
                             <li className="text-[11px] text-muted-foreground flex items-center gap-2">
                                 • Sin costos fijos de mantenimiento.
-                            </li>
-                            <li className="text-[11px] text-muted-foreground">
-                                • El dinero se mantiene en tu ecosistema digital Wompi.
                             </li>
                         </ul>
                     </div>

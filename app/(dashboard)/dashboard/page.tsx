@@ -123,7 +123,7 @@ export default async function DashboardPage(props: {
     const hoursOccupied = Math.round((totalMinutes / 60) * 10) / 10
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
             {/* Header section with profile overview */}
             <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
@@ -252,7 +252,7 @@ export default async function DashboardPage(props: {
                                             <div id="tour-agenda-today" className="space-y-1">
                                                 <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
                                                     <div className="h-8 w-1.5 bg-primary rounded-full" />
-                                                    Agenda de Hoy
+                                                    Agenda
                                                 </h2>
                                                 <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
                                             </div>
@@ -287,7 +287,7 @@ export default async function DashboardPage(props: {
                                             <div className="space-y-1">
                                                 <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
                                                     <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
-                                                    Próximas Reservas
+                                                    Reservas
                                                 </h2>
                                                 <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
                                             </div>
@@ -328,7 +328,7 @@ export default async function DashboardPage(props: {
                                             <div className="space-y-1">
                                                 <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3 text-muted-foreground">
                                                     <div className="h-8 w-1.5 bg-muted-foreground/30 rounded-full" />
-                                                    Historial de Citas
+                                                    Historial
                                                 </h2>
                                                 <p className="text-muted-foreground/70 font-medium text-sm">Registro de citas que ya concluyeron o fueron canceladas.</p>
                                             </div>

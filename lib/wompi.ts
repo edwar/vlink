@@ -4,8 +4,8 @@ const WOMPI_PUB = process.env.WOMPI_PUBLIC_KEY || '';
 const WOMPI_PRIV = process.env.WOMPI_PRIVATE_KEY || '';
 const WOMPI_INTEGRITY = process.env.WOMPI_INTEGRITY_SECRET || '';
 const WOMPI_EVENTS = process.env.WOMPI_EVENTS_SECRET || '';
-const WOMPI_API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://production.wompi.co/v1' 
+const WOMPI_API_URL = WOMPI_PUB.startsWith('pub_prod_')
+  ? 'https://api.wompi.co/v1' 
   : 'https://sandbox.wompi.co/v1';
 
 export function generateSignature(reference: string, amountInCents: number, currency: string = 'COP') {
@@ -132,6 +132,9 @@ export async function createWompiSubaccount(data: {
     accountNumber?: string;
     bankCode?: string;
 }) {
+    // Wompi Marketplace: creates a subaccount for the organization.
+    // Requires the Marketplace role to be approved by Wompi on your account.
+    // Contact Wompi support at comercios.wompi.co to request this role.
     const payload = {
         name: data.name,
         email: data.email,
@@ -148,7 +151,7 @@ export async function createWompiSubaccount(data: {
     const response = await fetch(`${WOMPI_API_URL}/sub_accounts`, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${WOMPI_PRIV}`, // Needs private key
+            'Authorization': `Bearer ${WOMPI_PRIV}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
@@ -160,5 +163,5 @@ export async function createWompiSubaccount(data: {
         throw new Error(result.error?.reason || "Failed to create Wompi subaccount");
     }
 
-    return result.data.id; // Returns the subaccount ID (e.g. "123")
+    return result.data.id; // Returns the subaccount ID
 }

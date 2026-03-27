@@ -52,12 +52,27 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                     <p className="text-sm text-muted-foreground font-medium leading-tight mt-1">
                         {isConfigured
                             ? "Tu organización está lista para recibir pagos directamente en tu cuenta digital Wompi."
-                            : "Vincula tu Subcuenta de Wompi para poder cobrar automáticamente en el agendamiento."}
+                            : "Crea tu cuenta de cobros en Wompi para recibir los pagos de tus reservas de forma automática."}
                     </p>
                 </div>
             </div>
 
             <div className="flex-1 flex flex-col gap-4 relative z-10 w-full">
+                {/* Cost breakdown cards */}
+                <div className="grid grid-cols-2 gap-3 mb-1">
+                    <div className="p-4 bg-blue-500/5 border border-blue-500/10 rounded-2xl flex flex-col gap-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-600/70">Recibir Pago</p>
+                        <p className="text-[13px] text-foreground/90 font-black leading-tight">2.65% + $700</p>
+                        <p className="text-[9px] font-medium text-muted-foreground leading-tight">+ IVA · por transacción aprobada</p>
+                    </div>
+                    <div className="p-4 bg-violet-500/5 border border-violet-500/10 rounded-2xl flex flex-col gap-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-violet-600/70">Dispersión</p>
+                        <p className="text-[13px] text-foreground/90 font-black leading-tight">$1.849 + 0.4%</p>
+                        <p className="text-[9px] font-medium text-muted-foreground leading-tight">+ IVA · por transferencia a subcuenta</p>
+                    </div>
+                </div>
+
+
                 {isConfigured ? (
                     <div className="space-y-6">
                         <div className="p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-4xl flex items-center justify-between">
@@ -89,19 +104,6 @@ export function WompiIntegration({ organizationId, initialSubaccountId, disabled
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        {!isMarketplaceEnabled && (
-                            <div className="p-5 bg-amber-500/10 border border-amber-500/20 rounded-3xl flex items-start gap-4">
-                                <div className="h-10 w-10 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-600 shrink-0">
-                                    <AlertTriangle className="h-5 w-5" />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-[11px] font-black uppercase tracking-widest text-amber-600">Activación Pendiente</p>
-                                    <p className="text-[12px] text-amber-900/70 font-bold leading-tight">
-                                        El administrador global está activando el Rol Marketplace. Por ahora, no se pueden crear nuevas subcuentas.
-                                    </p>
-                                </div>
-                            </div>
-                        )}
                         <WompiSubaccountForm
                             organizationId={organizationId}
                             disabled={disabled || !isMarketplaceEnabled}

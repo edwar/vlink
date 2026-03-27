@@ -9,7 +9,7 @@ export default async function AgendaPage() {
     const profile = await getEffectiveProfile();
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
             <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
                     <CalendarIcon className="h-24 w-24 text-primary rotate-12" />

@@ -108,7 +108,7 @@ export default async function OrganizacionPage(props: {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
+        <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
             <header className="relative py-8 rounded-3xl bg-surface/50 overflow-hidden">
                 <div className="absolute top-0 right-0 p-2 opacity-10">
                     <Building2 className="h-24 w-24 text-primary rotate-12" />
@@ -325,13 +325,13 @@ export default async function OrganizacionPage(props: {
             </div>
 
             {/* Row 2: Mi Equipo */}
-            <div className="pt-12 mt-12 border-t border-border/50 space-y-6">
+            <div className="pt-6 border-t border-border/50 space-y-6">
                 <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-primary rounded-full" />
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Mi Equipo</h2>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
                         <span className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 shadow-none">
                             {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>

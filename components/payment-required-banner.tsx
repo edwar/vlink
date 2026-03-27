@@ -50,7 +50,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className={`relative px-4 py-3 mt-16 lg:mt-0 md:px-5 md:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 border-b ${isUrgent
+                className={`relative px-4 py-3 pt-8 mt-16 lg:mt-0 md:px-5 md:py-4 flex flex-row items-center justify-between gap-3 md:gap-4 border-b ${isUrgent
                     ? "bg-destructive/10 border-destructive/20"
                     : "bg-blue-500/5 border-blue-500/10"
                     }`}
@@ -63,7 +63,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                     <div className="min-w-0">
                         <div className={`text-[10px] md:text-xs font-bold leading-tight ${isUrgent ? "text-destructive dark:text-destructive" : "text-blue-700 dark:text-blue-400"}`}>
                             {timeLeft ? (
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                                <div className="flex flex-col w-full sm:flex-row sm:items-center gap-1.5 sm:gap-3">
                                     <span className="opacity-80">Trial expira en:</span>
                                     <div className="flex gap-1 items-center">
                                         <div className="flex flex-col items-center">
@@ -130,7 +130,7 @@ export function PaymentRequiredBanner({ planName, daysRemaining, endDate }: Paym
                                     : `Estás usando el plan ${planName} en periodo de prueba gratuito`
                             )}
                         </div>
-                        <p className={cn("block text-[11px] font-display", isUrgent ? "text-destructive/50" : "text-muted-foreground")}>
+                        <p className={cn("hidden md:block text-[11px] font-display", isUrgent ? "text-destructive/50" : "text-muted-foreground")}>
                             Agrega un método de pago para desbloquear todas las características sin interrupciones.
                         </p>
                     </div>
