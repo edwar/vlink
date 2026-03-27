@@ -24,10 +24,15 @@ const navigation = [
 
 export function MobileNav() {
     const [isOpen, setIsOpen] = useState(false)
+    const [mounted, setMounted] = useState(false)
     const pathname = usePathname()
     const router = useRouter()
     const { data: session } = useSession()
     const isAdmin = (session?.user as any)?.role === "ADMIN"
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const handleSignOut = async () => {
         await signOut()
@@ -36,7 +41,7 @@ export function MobileNav() {
 
     // Prevent scrolling when menu is open
     useEffect(() => {
-        if (isOpen) {
+        if (mounted && isOpen) {
             document.body.style.overflow = 'hidden'
         } else {
             document.body.style.overflow = 'unset'
@@ -44,7 +49,7 @@ export function MobileNav() {
         return () => {
             document.body.style.overflow = 'unset'
         }
-    }, [isOpen])
+    }, [isOpen, mounted])
 
     return (
         <div className="lg:hidden">
@@ -130,7 +135,7 @@ export function MobileNav() {
                             </ul>
                         </li>
                         <li className="mt-auto space-y-1">
-                            {isAdmin && (
+                            {mounted && isAdmin && (
                                 <Link
                                     href="/admin"
                                     onClick={() => setIsOpen(false)}

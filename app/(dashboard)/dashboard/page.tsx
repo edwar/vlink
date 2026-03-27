@@ -343,7 +343,7 @@ export default async function DashboardPage(props: {
                                             <div className="space-y-6">
                                                 <div className="grid gap-6 opacity-75">
                                                     {pastAppointments.map((appt) => (
-                                                        <AppointmentCard key={`past-${appt.id}`} appt={appt} showDate />
+                                                        <AppointmentCard key={`past-${appt.id}`} appt={appt} showDate readOnly />
                                                     ))}
                                                 </div>
                                                 <PaginationControls

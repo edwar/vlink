@@ -36,7 +36,11 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
     if (!organization) notFound()
 
     const locations = organization.locations || []
-    const members = organization.members || []
+    const members = (organization.members || []).filter((member: any) => {
+        // Only show members who are set to be visible on the organization page
+        // Default to true if the profile or setting doesn't exist yet
+        return member.user.profile?.showOnOrgPage !== false;
+    })
 
     return (
         <div className="min-h-screen bg-background p-6 md:p-12 flex flex-col items-center">
@@ -110,7 +114,9 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
                                     )}
                                 </div>
                                 <div>
-                                    <h3 className="font-black font-display tracking-tight uppercase text-sm group-hover:text-primary transition-colors">{member.user.name}</h3>
+                                    <h3 className="font-black font-display tracking-tight uppercase text-sm group-hover:text-primary transition-colors">
+                                        {member.user.profile?.displayName || member.user.name}
+                                    </h3>
                                     <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{member.role}</p>
                                 </div>
                             </Link>

@@ -20,7 +20,7 @@ import { RescheduleDialog } from "@/components/reschedule-dialog"
 import { AppointmentNotesDialog } from "@/components/appointment-notes-dialog"
 import { sileo } from "sileo"
 
-export function AppointmentCard({ appt, showDate = false }: { appt: any, showDate?: boolean }) {
+export function AppointmentCard({ appt, showDate = false, readOnly = false }: { appt: any, showDate?: boolean, readOnly?: boolean }) {
     const [isPending, setIsPending] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
 
@@ -122,7 +122,7 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                     WhatsApp
                 </Link>
 
-                {appt.status !== "CANCELLED" && (
+                {appt.status !== "CANCELLED" && !readOnly && (
                     <RescheduleDialog appt={{
                         id: appt.id,
                         clientName: appt.clientName,
@@ -138,48 +138,50 @@ export function AppointmentCard({ appt, showDate = false }: { appt: any, showDat
                     initialNotes={appt.notes ?? null}
                 />
 
-                <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                    <DialogTrigger asChild>
-                        <Button
-                            className="h-12 w-12 bg-red-500/5 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
-                            title="Cancelar cita"
-                            aria-label="Cancelar cita"
-                        >
-                            <XCircle className="h-5 w-5" aria-hidden="true" />
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="rounded-lg max-w-md">
-                        <DialogHeader className="pt-4">
-                            <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto">
-                                <AlertTriangle className="h-8 w-8" />
-                            </div>
-                            <DialogTitle className="text-2xl font-display font-black tracking-tight text-center sm:text-left">
-                                ¿Cancelar esta cita?
-                            </DialogTitle>
-                            <DialogDescription className="text-base text-center sm:text-left">
-                                Estás a punto de cancelar la cita de <span className="font-bold text-foreground">{appt.clientName}</span> para el día <span className="font-bold text-foreground">{format(new Date(appt.startTime), "d 'de' MMMM", { locale: es })}</span>. Esta acción no se puede deshacer.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter className="flex w-full gap-3 sm:flex-row pt-4">
+                {!readOnly && (
+                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                        <DialogTrigger asChild>
                             <Button
-                                variant="outline"
-                                onClick={() => setIsOpen(false)}
-                                className="flex-1 rounded-2xl border-border/50 font-bold h-12"
-                                disabled={isPending}
+                                className="h-12 w-12 bg-red-500/5 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
+                                title="Cancelar cita"
+                                aria-label="Cancelar cita"
                             >
-                                Mantener cita
+                                <XCircle className="h-5 w-5" aria-hidden="true" />
                             </Button>
-                            <Button
-                                variant="destructive"
-                                onClick={handleCancel}
-                                className="flex-1 rounded-2xl font-bold h-12 shadow-[none]"
-                                disabled={isPending}
-                            >
-                                {isPending ? "Cancelando..." : "Sí, cancelar cita"}
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-lg max-w-md">
+                            <DialogHeader className="pt-4">
+                                <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto">
+                                    <AlertTriangle className="h-8 w-8" />
+                                </div>
+                                <DialogTitle className="text-2xl font-display font-black tracking-tight text-center sm:text-left">
+                                    ¿Cancelar esta cita?
+                                </DialogTitle>
+                                <DialogDescription className="text-base text-center sm:text-left">
+                                    Estás a punto de cancelar la cita de <span className="font-bold text-foreground">{appt.clientName}</span> para el día <span className="font-bold text-foreground">{format(new Date(appt.startTime), "d 'de' MMMM", { locale: es })}</span>. Esta acción no se puede deshacer.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter className="flex w-full gap-3 sm:flex-row pt-4">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex-1 rounded-2xl border-border/50 font-bold h-12"
+                                    disabled={isPending}
+                                >
+                                    Mantener cita
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleCancel}
+                                    className="flex-1 rounded-2xl font-bold h-12 shadow-[none]"
+                                    disabled={isPending}
+                                >
+                                    {isPending ? "Cancelando..." : "Sí, cancelar cita"}
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                )}
             </div>
         </div>
     )

@@ -394,7 +394,7 @@ export default async function OrganizacionPage(props: {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <h3 className="text-lg sm:text-lg font-black font-display tracking-tight truncate text-foreground/90">
-                                            {member.user.name}
+                                            {member.user.profile?.displayName || member.user.name}
                                         </h3>
                                         <p className="text-xs text-muted-foreground font-medium truncate flex items-center gap-1.5">
                                             <UserCircle className="h-3.5 w-3.5 opacity-50 shrink-0" />

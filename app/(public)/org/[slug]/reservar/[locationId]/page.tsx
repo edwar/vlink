@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { BackButton } from "@/components/ui/back-button"
 
 interface LocationBookingPageProps {
     params: Promise<{
@@ -49,7 +50,8 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
 
     // Filter members who have configured services for this specific location
     const availableMembers = organization.members.filter((member: any) =>
-        member.locationServices && member.locationServices.length > 0
+        member.locationServices && member.locationServices.length > 0 &&
+        member.user.profile?.showOnOrgPage !== false
     )
 
     if (availableMembers.length === 1 && availableMembers[0].user.profile?.username) {
@@ -115,7 +117,7 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
                                 </div>
 
                                 <h3 className="text-xl font-black font-display tracking-tight uppercase group-hover:text-primary transition-colors">
-                                    {member.user.name}
+                                    {member.user.profile?.displayName || member.user.name}
                                 </h3>
                                 <p className="text-muted-foreground font-medium text-sm mt-1 mb-6">
                                     {member.user.profile?.bio?.substring(0, 60)}
@@ -132,10 +134,10 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
                 </div>
 
                 <div className="flex justify-center pt-8">
-                    <Link href={`/org/${slug}/reservar`} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-black uppercase tracking-widest text-xs">
+                    <BackButton className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-black uppercase tracking-widest text-xs">
                         <ChevronLeft className="h-4 w-4" />
-                        Cambiar sede
-                    </Link>
+                        Cambiar sedess
+                    </BackButton>
                 </div>
             </div>
         </div>

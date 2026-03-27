@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Calendar, Clock, Settings, User, LogOut, LayoutDashboard, Users, ShieldCheck, BookOpen } from "lucide-react"
@@ -25,9 +26,14 @@ const navigation = [
 export function DashboardSidebar() {
     const pathname = usePathname()
     const router = useRouter()
+    const [mounted, setMounted] = useState(false)
     const clearProfile = useProfileStore((state) => state.clearProfile)
     const { data: session } = useSession()
     const isAdmin = (session?.user as any)?.role === "ADMIN"
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const handleSignOut = async () => {
         clearProfile()
@@ -54,7 +60,9 @@ export function DashboardSidebar() {
                     <li>
                         <ul role="list" className="space-y-1.5">
                             {navigation.map((item) => {
-                                const isActive = pathname === item.href;
+                                const isActive = item.href === '/dashboard' 
+                                    ? pathname === '/dashboard' 
+                                    : pathname.startsWith(item.href);
                                 return (
                                     <li key={item.name}>
                                         <Link
@@ -87,7 +95,7 @@ export function DashboardSidebar() {
                         </ul>
                     </li>
                     <li className="mt-auto space-y-1">
-                        {isAdmin && (
+                        {mounted && isAdmin && (
                             <Link
                                 href="/admin"
                                 className={cn(
