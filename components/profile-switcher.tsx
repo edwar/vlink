@@ -87,7 +87,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
     }
 
     return (
-        <div className="py-4 bg-muted/20">
+        <div className="py-4">
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">
                 <Building2 className="h-3 w-3" />
                 Viendo Agenda De:
@@ -111,15 +111,15 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                         </div>
                     </SelectValue>
                 </SelectTrigger>
-                <SelectContent position="popper" side="bottom" align="start" className="w-(--radix-select-trigger-width) rounded-sm border-2 shadow-xl">
+                <SelectContent position="popper" side="bottom" align="start" className="w-(--radix-select-trigger-width) rounded-sm border shadow-xl">
                     <SelectGroup>
                         <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50">Personal</SelectLabel>
-                        <SelectItem value="personal" className="py-2.5 focus:bg-primary/5 rounded-lg cursor-pointer">
+                        <SelectItem value="personal" className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/30">
                             <div className="flex items-center gap-2">
                                 <UserAvatar
                                     image={activeProfile?.image}
                                     name={activeProfile?.displayName}
-                                    className="h-8 w-8 rounded-lg"
+                                    className="h-8 w-8 rounded-lg shrink-0"
                                 />
                                 <div className="flex flex-col text-left">
                                     <span className="font-bold text-sm truncate max-w-[130px]">Mi Agenda Personal</span>
@@ -143,13 +143,13 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                                     <SelectItem
                                         key={profile.id}
                                         value={profile.id}
-                                        className="py-2.5 focus:bg-primary/5 rounded-lg cursor-pointer"
+                                        className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/30"
                                     >
                                         <div className="flex items-center gap-2">
                                             <UserAvatar
                                                 image={profile.user?.image}
                                                 name={profile.displayName || profile.user?.name}
-                                                className="h-8 w-8 rounded-lg"
+                                                className="h-8 w-8 rounded-lg shrink-0"
                                             />
                                             <div className="flex flex-col text-left">
                                                 <span className="font-bold text-sm truncate max-w-[130px]">
