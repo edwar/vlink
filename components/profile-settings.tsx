@@ -451,7 +451,7 @@ export function ProfileSettings() {
 
             {/* Confirmation Modal */}
             <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-                <DialogContent className="max-w-md p-6 sm:p-8 bg-card border border-border/40 rounded-3xl shadow-lg space-y-8">
+                <DialogContent className="max-w-md p-6 sm:p-8 rounded-3xl shadow-lg space-y-8">
                     <div className="flex flex-col items-center text-center space-y-4">
                         <div className="h-20 w-20 rounded-3xl bg-destructive/10 flex items-center justify-center text-destructive border border-destructive/20">
                             <AlertCircle className="h-10 w-10" />

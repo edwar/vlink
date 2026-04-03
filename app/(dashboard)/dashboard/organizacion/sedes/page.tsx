@@ -75,7 +75,7 @@ export default async function SedesPage() {
     }) as any
 
     if (!organization) redirect("/dashboard")
-    
+
     const currentUserMember = organization.members.find((m: any) => m.userId === session.user.id);
     const currentUserRole = currentUserMember?.role || "PROFESSIONAL";
     const canManageAll = currentUserRole === "OWNER" || currentUserRole === "MANAGER";
@@ -96,7 +96,7 @@ export default async function SedesPage() {
                     <h1 className="text-4xl font-display font-black tracking-tight text-foreground uppercase">Sedes y Sucursales</h1>
                     <p className="text-muted-foreground font-medium">Gestiona los puntos físicos donde prestas tus servicios.</p>
                 </div>
-                
+
                 {canManageAll && (
                     <Dialog>
                         <DialogTrigger asChild>
@@ -109,7 +109,7 @@ export default async function SedesPage() {
                                 Agregar Nueva Sede
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card shadow-2xl">
+                        <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden shadow-2xl">
                             <DialogHeader className="p-8 pb-0">
                                 <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Nueva Sede</DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium pt-2">
@@ -167,7 +167,7 @@ export default async function SedesPage() {
                                                         <Settings2 className="h-4 w-4 text-muted-foreground" />
                                                     </Button>
                                                 </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card">
+                                                <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden">
                                                     <DialogHeader className="p-8 pb-0">
                                                         <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
                                                     </DialogHeader>
@@ -219,7 +219,7 @@ export default async function SedesPage() {
                                 <div className="pt-2 border-t border-border/40">
                                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Configuración de Equipo</h4>
 
-                                    <LocationTeamList 
+                                    <LocationTeamList
                                         members={(organization as any).members.filter((m: any) => canManageAll || m.userId === session.user.id)}
                                         locationId={loc.id}
                                         locationName={loc.name}

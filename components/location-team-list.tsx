@@ -26,7 +26,7 @@ export function LocationTeamList({
 }: LocationTeamListProps) {
     // We use a small hack for hydration: only render the interactive Dialogs on the client
     // OR we can just rely on this being a Client Component to stabilize IDs
-    
+
     return (
         <div className="space-y-2">
             {members.map((member: any) => {
@@ -50,8 +50,8 @@ export function LocationTeamList({
                                     <div className="text-left">
                                         <p className="text-xs font-black uppercase tracking-tight text-foreground">{member.user.name}</p>
                                         <p className="text-[10px] font-medium text-muted-foreground italic">
-                                            {configuredServicesCount === 0 
-                                                ? "Sin servicios asignados" 
+                                            {configuredServicesCount === 0
+                                                ? "Sin servicios asignados"
                                                 : `${configuredServicesCount} servicio${configuredServicesCount === 1 ? '' : 's'} asignado${configuredServicesCount === 1 ? '' : 's'}`
                                             }
                                         </p>
@@ -60,7 +60,7 @@ export function LocationTeamList({
                                 <ArrowRight className="h-4 w-4 text-muted-foreground group-hover/btn:text-primary group-hover/btn:translate-x-1 transition-all" />
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[550px] border-none rounded-[2.5rem] p-0 overflow-hidden bg-card shadow-2xl">
+                        <DialogContent className="sm:max-w-[550px] border-none rounded-[2.5rem] p-0 overflow-hidden shadow-2xl">
                             <DialogHeader className="p-8 pb-0">
                                 <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Configurar Profesional</DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium pt-2">

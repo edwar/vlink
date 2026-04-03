@@ -61,7 +61,7 @@ export function CloseOrganization({ organizationId, organizationName }: CloseOrg
                     Cerrar Organización
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[460px] bg-background/95 backdrop-blur-3xl border-2 border-red-500/10 sm:rounded-4xl p-8">
+            <DialogContent className="sm:max-w-[460px] sm:rounded-4xl p-8">
                 <DialogHeader className="space-y-3">
                     <div className="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 mb-2">
                         <TriangleAlert className="h-6 w-6" />

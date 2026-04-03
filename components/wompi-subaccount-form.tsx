@@ -82,7 +82,7 @@ export function WompiSubaccountForm({ organizationId, onCreated, disabled }: { o
                     <PlusCircle className="h-4 w-4" /> Crear Nueva Subcuenta
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl sm:rounded-lg p-8 border-border/40 max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-2xl sm:rounded-lg p-8 max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="mb-6">
                     <DialogTitle className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
                         <div className="p-2 bg-primary/10 rounded-xl text-primary">

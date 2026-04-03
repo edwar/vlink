@@ -626,7 +626,7 @@ export function AvailabilityManagement() {
             </section>
 
             <Dialog open={showBlockModal} onOpenChange={setShowBlockModal}>
-                <DialogContent className="bg-muted border-2 border-border sm:max-w-md rounded-lg p-8 overflow-hidden">
+                <DialogContent className="border-2 border-border sm:max-w-md rounded-lg p-8 overflow-hidden">
                     <DialogHeader className="mb-6">
                         <DialogTitle className="text-3xl font-black font-display tracking-tighter">Nuevo Bloqueo</DialogTitle>
                         <p className="text-muted-foreground font-medium">Define una fecha y hora específica para tu descanso.</p>
@@ -683,7 +683,7 @@ export function AvailabilityManagement() {
                             </div>
                         </div>
                     </div>
-                    <DialogFooter className="mt-10 flex md:flex-row-reverse md:flex-row gap-4">
+                    <DialogFooter className="mt-10 flex md:flex-row gap-4">
                         <Button
                             variant="ghost"
                             onClick={() => setShowBlockModal(false)}
