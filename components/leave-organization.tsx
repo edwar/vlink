@@ -54,7 +54,7 @@ export function LeaveOrganization({ organizationId, organizationName }: LeaveOrg
                     Abandonar Organización
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] sm:rounded-4xl p-8">
+            <DialogContent className="sm:max-w-[425px] p-8">
                 <DialogHeader className="space-y-3">
                     <div className="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 mb-2">
                         <AlertTriangle className="h-6 w-6" />

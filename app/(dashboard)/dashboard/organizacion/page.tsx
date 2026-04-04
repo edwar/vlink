@@ -205,7 +205,7 @@ export default async function OrganizacionPage(props: {
                                         <span className="relative z-10 uppercase tracking-widest">Tarjeta de Presentación</span>
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden border-border/40 sm:rounded-3xl p-6 sm:p-10 shadow-none flex flex-col">
+                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden sm:rounded-3xl p-6 sm:p-10 shadow-none flex flex-col">
                                     <DialogTitle className="text-2xl md:text-3xl font-display font-black tracking-tight uppercase text-primary mb-1">
                                         Tarjeta de Presentación
                                     </DialogTitle>

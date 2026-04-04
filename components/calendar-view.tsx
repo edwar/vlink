@@ -709,7 +709,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
             </div>
 
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="sm:max-w-md p-0 overflow-hidden border-border/50 rounded-lg">
+                <DialogContent className="sm:max-w-md p-0 overflow-hidden">
                     <div className="border-b border-border/50 p-6">
                         <DialogHeader>
                             <DialogTitle className="text-xl font-display font-bold">

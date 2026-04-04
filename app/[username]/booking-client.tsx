@@ -89,7 +89,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
                 // Fetch locations for organization
                 const orgLocs: LocationInfo[] = data.organizationId ? await getLocationsByOrgId(data.organizationId) : []
-                
+
                 // Filter locations: Only show those where the professional has AT LEAST one service mapped
                 // If NO mappings exist at all for the professional, show all org locations (fallback)
                 const availableLocs = (!data.locationServices?.length)
@@ -108,15 +108,15 @@ export function BookingClient({ params }: { params: { username: string } }) {
                 }
 
                 // Service selection logic
-                const currentLoc = queryLocationId 
-                    ? availableLocs.find(l => l.id === queryLocationId) 
+                const currentLoc = queryLocationId
+                    ? availableLocs.find(l => l.id === queryLocationId)
                     : (availableLocs.length === 1 ? availableLocs[0] : null);
 
                 const currentLocId = currentLoc?.id;
 
-                const filteredServices = (!availableLocs.length || !data.locationServices?.length) 
-                    ? data.services 
-                    : data.services.filter((s: ServiceOption) => 
+                const filteredServices = (!availableLocs.length || !data.locationServices?.length)
+                    ? data.services
+                    : data.services.filter((s: ServiceOption) =>
                         data.locationServices.some((ls: { locationId: string, serviceId: string }) => ls.locationId === currentLocId && ls.serviceId === s.id)
                     );
 
@@ -147,8 +147,8 @@ export function BookingClient({ params }: { params: { username: string } }) {
             setLoadingSlots(true)
             try {
                 const available = await getAvailableSlots(
-                    username, 
-                    selectedDate, 
+                    username,
+                    selectedDate,
                     selectedService.durationMinutes,
                     selectedLocation?.id
                 )
@@ -454,44 +454,44 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         );
                                     })
                                     .map((service) => (
-                                    <button
-                                        key={service.id}
-                                        onClick={() => handleSelectService(service)}
-                                        disabled={profileData.isLocked}
-                                        className={cn(
-                                            "w-full p-5 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
-                                            selectedService?.id === service.id
-                                                ? "bg-primary/90 text-primary-foreground border-primary shadow-none scale-[1.02]"
-                                                : "bg-card hover:border-2 hover:border-primary/30 hover:bg-primary/5"
-                                        )}
-                                    >
-                                        <div className={cn(
-                                            "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/btn:scale-110 duration-500",
-                                            selectedService?.id === service.id ? "bg-primary-foreground/20" : "bg-primary/10"
-                                        )}>
-                                            <Briefcase className={cn(
-                                                "h-6 w-6",
-                                                selectedService?.id === service.id ? "text-primary-foreground" : "text-primary"
-                                            )} />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-black text-base sm:text-lg tracking-tight mb-0.5">{service.name}</p>
-                                            <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs font-bold uppercase tracking-widest opacity-70">
-                                                <div className="flex items-center gap-1.5">
-                                                    <Clock className="h-3.5 w-3.5" />
-                                                    <span>
-                                                        {service.durationMinutes >= 60
-                                                            ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
-                                                            : `${service.durationMinutes} min`}
-                                                    </span>
-                                                </div>
-                                                <div className="flex items-center gap-1.5">
-                                                    <span className={cn("px-2 py-0.5 rounded-full", selectedService?.id === service.id ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground")}>$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                        <button
+                                            key={service.id}
+                                            onClick={() => handleSelectService(service)}
+                                            disabled={profileData.isLocked}
+                                            className={cn(
+                                                "w-full p-5 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
+                                                selectedService?.id === service.id
+                                                    ? "bg-primary/90 text-primary-foreground border-primary shadow-none scale-[1.02]"
+                                                    : "bg-card hover:border-2 hover:border-primary/30 hover:bg-primary/5"
+                                            )}
+                                        >
+                                            <div className={cn(
+                                                "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/btn:scale-110 duration-500",
+                                                selectedService?.id === service.id ? "bg-primary-foreground/20" : "bg-primary/10"
+                                            )}>
+                                                <Briefcase className={cn(
+                                                    "h-6 w-6",
+                                                    selectedService?.id === service.id ? "text-primary-foreground" : "text-primary"
+                                                )} />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-black text-base sm:text-lg tracking-tight mb-0.5">{service.name}</p>
+                                                <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs font-bold uppercase tracking-widest opacity-70">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <Clock className="h-3.5 w-3.5" />
+                                                        <span>
+                                                            {service.durationMinutes >= 60
+                                                                ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
+                                                                : `${service.durationMinutes} min`}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className={cn("px-2 py-0.5 rounded-full", selectedService?.id === service.id ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground")}>$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </button>
-                                ))}
+                                        </button>
+                                    ))}
                             </div>
                         </section>
                     </div>
@@ -606,8 +606,8 @@ export function BookingClient({ params }: { params: { username: string } }) {
                             ) : (
                                 <EmptyState
                                     title={holidayInfo.isHoliday ? 'Día Festivo' : 'Horarios'}
-                                    description={holidayInfo.isHoliday 
-                                        ? `Hoy es ${holidayInfo.name}. No hay atención en días festivos.` 
+                                    description={holidayInfo.isHoliday
+                                        ? `Hoy es ${holidayInfo.name}. No hay atención en días festivos.`
                                         : "No hay horarios disponibles para este día."}
                                     icon={holidayInfo.isHoliday ? CalendarX2 : CalendarOff}
                                 />
@@ -745,7 +745,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             disabled={isSubmitting}
-                            className="w-full bg-card h-12 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
+                            className="w-full h-12 py-4 px-6 font-medium "
                         />
                     </div>
 
@@ -758,7 +758,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={isSubmitting}
-                            className="w-full bg-card h-12 rounded-2xl py-4 px-6 outline-none font-medium transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5 focus:border-primary/20"
+                            className="w-full h-12 py-4 px-6 font-medium "
                         />
                     </div>
 
@@ -782,7 +782,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                                     setPhone(formattedValue);
                                 }}
                                 disabled={isSubmitting}
-                                className="w-full h-12 bg-card focus:border-primary/20 rounded-2xl py-4 pl-16 pr-6 outline-none font-bold text-lg transition-all focus:ring-4 focus:ring-primary/5 border-2 border-primary/5"
+                                className="w-full h-12 py-4 pl-16 pr-6 font-bold text-lg"
                             />
                         </div>
                     </div>
@@ -844,7 +844,7 @@ function SuccessView({ bookingInfo, displayName, serviceName, price, locationInf
                     initial={{ scale: 0, opacity: 0, rotate: -45 }}
                     animate={{ scale: 1, opacity: 1, rotate: 0 }}
                     transition={{ type: "spring", stiffness: 250, damping: 20, delay: 0.1 }}
-                    className="relative z-10 w-full h-full bg-primary/10 rounded-full flex items-center justify-center border-[4px] border-background shadow-xl shadow-primary/20 backdrop-blur-sm"
+                    className="relative z-10 w-full h-full bg-primary/10 rounded-full flex items-center justify-center border-4border-background shadow-xl shadow-primary/20 backdrop-blur-sm"
                 >
                     <motion.svg
                         width="56"

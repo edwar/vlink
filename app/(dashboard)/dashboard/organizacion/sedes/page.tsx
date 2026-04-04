@@ -109,7 +109,7 @@ export default async function SedesPage() {
                                 Agregar Nueva Sede
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden shadow-2xl">
+                        <DialogContent className="sm:max-w-[500px]">
                             <DialogHeader className="p-8 pb-0">
                                 <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Nueva Sede</DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium pt-2">
@@ -138,9 +138,9 @@ export default async function SedesPage() {
                 </div>
             )}
 
-            <div id="tour-org-sedes" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="tour-org-sedes" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {organization.locations.length === 0 ? (
-                    <Card className="col-span-full border-2 border-dashed border-border/40 bg-muted/5 rounded-[2.5rem] py-20 flex flex-col items-center justify-center text-center space-y-4 shadow-none">
+                    <Card className="col-span-full border-2 border-dashed border-border/40 bg-muted/5 rounded-lg py-20 flex flex-col items-center justify-center text-center space-y-4 shadow-none">
                         <div className="h-20 w-20 bg-muted/20 rounded-full flex items-center justify-center text-muted-foreground">
                             <MapPinned className="h-10 w-10" />
                         </div>
@@ -153,13 +153,13 @@ export default async function SedesPage() {
                     </Card>
                 ) : (
                     (organization.locations as any[]).map((loc) => (
-                        <Card key={loc.id} className="group overflow-hidden rounded-[2.5rem] bg-card border border-border/40 hover:border-primary/30 transition-all duration-500 shadow-none hover:shadow-2xl hover:shadow-primary/5">
+                        <Card key={loc.id} className="group overflow-hidden rounded-lg bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40">
                             <CardHeader className="p-6 pb-2">
                                 <div className="flex items-start justify-between">
                                     <div className="h-14 w-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform duration-500">
                                         <Building2 className="h-7 w-7" />
                                     </div>
-                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <div className="flex items-center gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
                                         {canManageAll && (
                                             <Dialog>
                                                 <DialogTrigger asChild>
@@ -167,7 +167,7 @@ export default async function SedesPage() {
                                                         <Settings2 className="h-4 w-4 text-muted-foreground" />
                                                     </Button>
                                                 </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[500px] border-none rounded-[2.5rem] p-0 overflow-hidden">
+                                                <DialogContent className="sm:max-w-[500px]">
                                                     <DialogHeader className="p-8 pb-0">
                                                         <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
                                                     </DialogHeader>

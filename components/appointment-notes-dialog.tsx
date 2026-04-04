@@ -51,7 +51,7 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="rounded-lg max-w-md">
+            <DialogContent className="max-w-md">
                 <DialogHeader className="pt-4">
                     <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                         <StickyNote className="h-8 w-8" />

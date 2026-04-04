@@ -604,7 +604,7 @@ export function ConfigurationSettings() {
             </div>
 
             <Dialog open={!!serviceToDelete} onOpenChange={(open) => !open && setServiceToDelete(null)}>
-                <DialogContent className="rounded-3xl border border-border/40 p-10 max-w-md shadow-lg">
+                <DialogContent className="p-10 max-w-md shadow-lg">
                     <DialogHeader className="space-y-4">
                         <div className="h-16 w-16 bg-destructive/10 rounded-2xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
                             <Trash2 className="h-8 w-8" />

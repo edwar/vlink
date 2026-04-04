@@ -149,7 +149,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                                 <XCircle className="h-5 w-5" aria-hidden="true" />
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="rounded-lg max-w-md">
+                        <DialogContent className="max-w-md">
                             <DialogHeader className="pt-4">
                                 <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto">
                                     <AlertTriangle className="h-8 w-8" />

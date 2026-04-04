@@ -86,7 +86,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                         <FormItem>
                             <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Nombre de la Sede</FormLabel>
                             <FormControl>
-                                <Input placeholder="Ej: Sede Norte, Consultorio Central..." {...field} className="h-12 bg-muted/30 border-border/40 rounded-xl" />
+                                <Input placeholder="Ej: Sede Norte, Consultorio Central..." {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -100,7 +100,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                             <FormItem>
                                 <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Ciudad</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Bogotá" {...field} className="h-12 bg-muted/30 border-border/40 rounded-xl" />
+                                    <Input placeholder="Bogotá" {...field} className="h-12" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -124,7 +124,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                                                 field.onChange(e.target.value);
                                             }
                                         }}
-                                        className="h-12 bg-muted/30 border-border/40 rounded-xl"
+                                        className="h-12"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -139,7 +139,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                         <FormItem>
                             <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Dirección</FormLabel>
                             <FormControl>
-                                <Input placeholder="Calle 123 # 45 - 67" {...field} className="h-12 bg-muted/30 border-border/40 rounded-xl" />
+                                <Input placeholder="Calle 123 # 45 - 67" {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

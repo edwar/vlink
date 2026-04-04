@@ -333,12 +333,12 @@ export function AvailabilityManagement() {
                             value={selectedLocationId || ""}
                             onValueChange={(value) => switchLocation(value)}
                         >
-                            <SelectTrigger className="w-full h-14 rounded-2xl bg-background border-border/40 px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
+                            <SelectTrigger className="w-full h-14 rounded-2xl px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
                                 <SelectValue placeholder="Seleccionar Sede" />
                             </SelectTrigger>
-                            <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-2xl">
+                            <SelectContent position="popper" className="shadow-2xl">
                                 {locations.map(loc => (
-                                    <SelectItem key={loc.id} value={loc.id} className="font-black py-3 rounded-xl">
+                                    <SelectItem key={loc.id} value={loc.id} className="font-black py-3">
                                         {loc.name}
                                     </SelectItem>
                                 ))}
@@ -424,7 +424,7 @@ export function AvailabilityManagement() {
                                         "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative flex flex-col xl:flex-row xl:items-center justify-between w-full px-4 py-6 sm:py-7 rounded-lg transition-all duration-300 gap-1 xl:gap-8 overflow-hidden",
                                         active
                                             ? "border border-border/40 shadow-none"
-                                            : "border border-dashed border-border/30 opacity-60 hover:opacity-100"
+                                            : "border border-dashed border-border/30"
                                     )}
                                 >
                                     {/* Day Selector Section */}
@@ -437,14 +437,14 @@ export function AvailabilityManagement() {
                                                 "h-14 w-14 flex items-center justify-center transition-all duration-500 ring-offset-background",
                                                 active
                                                     ? "bg-primary text-primary-foreground rounded-2xl shadow-none scale-100"
-                                                    : "bg-muted/40 text-muted-foreground/30 rounded-2xl grayscale scale-95 hover:scale-100"
+                                                    : "bg-primary/10 text-primary rounded-2xl scale-95 hover:scale-100"
                                             )}>
-                                                {active ? <CheckCircle2 className="h-7 w-7 animate-in zoom-in duration-300" /> : <Clock className="h-7 w-7 opacity-40" />}
+                                                {active ? <CheckCircle2 className="h-7 w-7 animate-in zoom-in duration-300" /> : <Clock className="h-7 w-7" />}
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className={cn(
                                                     "font-black text-2xl tracking-tighter transition-colors leading-none",
-                                                    active ? "text-foreground" : "text-muted-foreground/40"
+                                                    active ? "text-foreground" : "text-muted-foreground"
                                                 )}>
                                                     {day.name}
                                                 </span>
@@ -454,7 +454,7 @@ export function AvailabilityManagement() {
                                                         Abierto
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[10px] font-bold text-muted-foreground/20 uppercase tracking-widest mt-1.5">Descanso</span>
+                                                    <span className="text-[10px] font-bold text-primary/40 uppercase tracking-widest mt-1.5">Descanso</span>
                                                 )}
                                             </div>
                                         </div>
@@ -479,7 +479,7 @@ export function AvailabilityManagement() {
                                                             type="time"
                                                             value={start}
                                                             onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                            className="w-full bg-background border-none h-12 text-sm font-black rounded-xl text-center shadow-none focus-visible:ring-0 focus-visible:bg-muted/30 transition-all cursor-pointer"
+                                                            className="w-full h-12 text-sm font-black text-center"
                                                         />
                                                     </div>
                                                     <div className="px-1">
@@ -490,7 +490,7 @@ export function AvailabilityManagement() {
                                                             type="time"
                                                             value={end}
                                                             onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                            className="w-full bg-background border-none h-12 text-sm font-black rounded-xl text-center shadow-none focus-visible:ring-0 focus-visible:bg-muted/30 transition-all cursor-pointer"
+                                                            className="w-full h-12 text-sm font-black text-center"
                                                         />
                                                     </div>
                                                 </div>
@@ -527,14 +527,14 @@ export function AvailabilityManagement() {
                                                                 type="time"
                                                                 value={dayState?.lunchStart}
                                                                 onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                                className="flex-1 xl:w-28 bg-background border-none h-11 text-xs font-black rounded-xl text-center shadow-none transition-all"
+                                                                className="flex-1 xl:w-28 h-11 text-xs font-black text-center"
                                                             />
                                                             <span className="text-[10px] font-black text-muted-foreground/30 uppercase shrink-0">a</span>
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchEnd}
                                                                 onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                                className="flex-1 xl:w-28 bg-background border-none h-11 text-xs font-black rounded-xl text-center shadow-none transition-all"
+                                                                className="flex-1 xl:w-28 h-11 text-xs font-black text-center"
                                                             />
                                                         </div>
                                                     )}
@@ -544,8 +544,8 @@ export function AvailabilityManagement() {
                                             <div className="hidden xl:flex items-center justify-end w-full group-hover:px-4 transition-all duration-500">
                                                 <div className="h-px flex-1 bg-linear-to-r from-transparent via-border/50 to-transparent" />
                                                 <div className="ml-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-dashed border-border/60 bg-muted/5">
-                                                    <CalendarOff className="h-3 w-3 text-muted-foreground/30" />
-                                                    <span className="text-[11px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">
+                                                    <CalendarOff className="h-3 w-3 text-primary/40" />
+                                                    <span className="text-[11px] font-black text-primary/40 uppercase tracking-[0.2em]">
                                                         Día de Descanso
                                                     </span>
                                                 </div>
@@ -626,7 +626,7 @@ export function AvailabilityManagement() {
             </section>
 
             <Dialog open={showBlockModal} onOpenChange={setShowBlockModal}>
-                <DialogContent className="border-2 border-border sm:max-w-md rounded-lg p-8 overflow-hidden">
+                <DialogContent className="sm:max-w-md p-8 overflow-hidden">
                     <DialogHeader className="mb-6">
                         <DialogTitle className="text-3xl font-black font-display tracking-tighter">Nuevo Bloqueo</DialogTitle>
                         <p className="text-muted-foreground font-medium">Define una fecha y hora específica para tu descanso.</p>
@@ -639,7 +639,7 @@ export function AvailabilityManagement() {
                                 type="date"
                                 value={newBlock.date}
                                 onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
-                                className="w-full bg-muted/20 border-border/40 focus:bg-background rounded-2xl h-14 px-6 font-bold text-lg transition-all"
+                                className="w-full h-14 px-6 font-bold text-lg"
                             />
                         </div>
                         <div className="space-y-3">
@@ -648,7 +648,7 @@ export function AvailabilityManagement() {
                                 value={newBlock.locationId}
                                 onValueChange={(value) => setNewBlock(prev => ({ ...prev, locationId: value }))}
                             >
-                                <SelectTrigger className="w-full bg-muted/20 border-border/40 focus:bg-background rounded-2xl h-14 px-6 font-bold text-lg transition-all text-left">
+                                <SelectTrigger className="w-full h-14 px-6 font-bold text-lg text-left">
                                     <SelectValue placeholder="Seleccionar Sede" />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-border/40 shadow-2xl">
@@ -668,7 +668,7 @@ export function AvailabilityManagement() {
                                     type="time"
                                     value={newBlock.start}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
-                                    className="w-full bg-muted/20 border-border/40 focus:bg-background rounded-2xl h-14 px-4 font-bold text-lg text-center transition-all"
+                                    className="w-full h-14 px-4 font-bold text-lg text-center"
                                 />
                             </div>
                             <div className="space-y-3">
@@ -678,7 +678,7 @@ export function AvailabilityManagement() {
                                     type="time"
                                     value={newBlock.end}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}
-                                    className="w-full bg-muted/20 border-border/40 focus:bg-background rounded-2xl h-14 px-4 font-bold text-lg text-center transition-all"
+                                    className="w-full h-14 px-4 font-bold text-lg text-center"
                                 />
                             </div>
                         </div>
