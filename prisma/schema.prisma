@@ -83,7 +83,6 @@ model Organization {
   subscriptionPlan  SubscriptionPlan @default(BASIC)
   phone             String?
   whatsapp             String?
-  wompiSubaccountId    String?
   slotGenerationMethod SlotGenerationMethod @default(SERVICE_DURATION)
   invitations          Invitation[]
   locations         Location[]
@@ -251,7 +250,6 @@ model SystemConfig {
   announcementBody        String?
   announcementType        String   @default("INFO")
   updatedAt               DateTime @updatedAt
-  wompiMarketplaceEnabled Boolean  @default(false)
 
   @@map("system_config")
 }

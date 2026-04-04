@@ -22,7 +22,6 @@ import { ToggleHolidayWork } from "@/components/toggle-holiday-work"
 import { ChangeMemberRole } from "@/components/change-member-role"
 import { RemoveMember } from "@/components/remove-member"
 import { Button } from "@/components/ui/button"
-import { WompiIntegration } from "@/components/wompi-integration"
 import { OrganizationContact } from "@/components/organization-contact"
 import { ToggleSlotGeneration } from "@/components/toggle-slot-generation"
 
@@ -61,8 +60,6 @@ export default async function OrganizacionPage(props: {
     }
 
     const config = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
-    const isWompiMarketplaceEnabled = config?.wompiMarketplaceEnabled ?? false;
-
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/org/${organization.slug}`
 
     const planConfig = await prisma.planConfig.findUnique({
@@ -256,23 +253,8 @@ export default async function OrganizacionPage(props: {
             </div>
 
 
-            {/* Row 1.5: Pagos, Comunicación & Sedes */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative mt-8">
-                {/* Cobros y Pagos */}
-                <div id="tour-org-payments" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
-                    <div className="flex items-center gap-3">
-                        <div className="h-6 w-1 bg-emerald-500/40 rounded-full" />
-                        <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Pagos & Cobros</h2>
-                    </div>
-                    <div id="tour-org-payments-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                    <WompiIntegration
-                        organizationId={organization.id}
-                        initialSubaccountId={(organization as any).wompiSubaccountId}
-                        disabled={currentUserRole !== "OWNER" && currentUserRole !== "MANAGER"}
-                        isMarketplaceEnabled={isWompiMarketplaceEnabled}
-                    />
-                </div>
-
+            {/* Row 1.5: Comunicación & Sedes */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative mt-8">
                 {/* Infraestructura & Sedes */}
                 <div id="tour-org-sedes" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden group">
                     <div id="tour-org-sedes-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
@@ -319,7 +301,7 @@ export default async function OrganizacionPage(props: {
                 </div>
 
                 {/* Comunicación & Soporte */}
-                <div id="tour-org-contact" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden md:col-span-2 lg:col-span-1">
+                <div id="tour-org-contact" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
                     <div className="flex items-center gap-3">
                         <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
                         <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Soporte</h2>

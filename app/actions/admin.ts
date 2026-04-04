@@ -216,7 +216,6 @@ export async function updateSystemConfig(data: {
     announcementTitle?: string | null,
     announcementBody?: string | null,
     announcementType?: string,
-    wompiMarketplaceEnabled?: boolean
 }) {
     await ensureAdmin()
 

@@ -122,44 +122,6 @@ export default async function AdminSettings() {
                     </CardContent>
                 </Card>
 
-                {/* Wompi Marketplace Settings */}
-                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-2xl">
-                    <CardHeader className="p-6">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-2xl bg-primary/10 text-primary">
-                                <ShieldAlert className="h-6 w-6" />
-                            </div>
-                            <div>
-                                <CardTitle className="text-xl font-black font-display tracking-tight">Wompi Marketplace</CardTitle>
-                                <CardDescription className="font-medium">Habilita la creación de subcuentas para profesionales.</CardDescription>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="p-6 pt-0 space-y-6">
-                        <div className="p-4 bg-muted/40 rounded-2xl flex items-center justify-between">
-                            <div className="space-y-1">
-                                <p className="text-sm font-bold">Estado del Rol</p>
-                                <p className={`text-xs font-black uppercase tracking-widest ${config.wompiMarketplaceEnabled ? 'text-primary' : 'text-muted-foreground'}`}>
-                                    {config.wompiMarketplaceEnabled ? 'Activado (Rol Maestra Activo)' : 'Desactivado (Rol Pendiente)'}
-                                </p>
-                            </div>
-                            <form action={async () => {
-                                "use server"
-                                await updateSystemConfig({ wompiMarketplaceEnabled: !config.wompiMarketplaceEnabled })
-                            }}>
-                                <Button
-                                    variant={config.wompiMarketplaceEnabled ? "outline" : "default"}
-                                    className="rounded-xl font-black uppercase tracking-widest text-[10px] px-6"
-                                >
-                                    {config.wompiMarketplaceEnabled ? 'Inhabilitar' : 'Habilitar'}
-                                </Button>
-                            </form>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
-                            ⚠️ NOTA: Solo activa esto una vez que Wompi haya confirmado que tu cuenta es "Maestra". Si se activa antes, las solicitudes de creación de subcuentas fallarán.
-                        </p>
-                    </CardContent>
-                </Card>
             </div>
         </div>
     )

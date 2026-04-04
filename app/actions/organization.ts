@@ -5,7 +5,6 @@ import { headers, cookies } from "next/headers"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { randomUUID } from "crypto"
-import { createWompiSubaccount } from "@/lib/wompi"
 
 export async function updateOrganizationHolidayWork(organizationId: string, enabled: boolean) {
     const session = await auth.api.getSession({ headers: await headers() })
@@ -36,64 +35,6 @@ export async function getOrganizationSettings(organizationId: string) {
     return org
 }
 
-/**
- * Configures a Wompi subaccount for the organization.
- * Only allowed if the global Wompi Marketplace feature is enabled by Admin.
- */
-export async function setupWompiSubaccount(organizationId: string, data: {
-    name: string;
-    email: string;
-    phone: string;
-    documentType: 'CC' | 'CE' | 'NIT' | 'PP';
-    documentNumber: string;
-    accountType: 'SAVINGS' | 'CHECKING';
-    accountNumber: string;
-    bankCode: string;
-}) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session?.user?.id) {
-        throw new Error("Unauthorized")
-    }
-
-    // 1. Check if Wompi Marketplace features are enabled by Admin
-    const config = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
-    if (!config?.wompiMarketplaceEnabled) {
-        throw new Error("La creación de subcuentas Wompi está temporalmente deshabilitada por el administrador hasta completar la activación del rol Marketplace.")
-    }
-
-    // 2. Verify user is OWNER of the organization
-    const membership = await prisma.member.findFirst({
-        where: {
-            userId: session.user.id,
-            organizationId,
-            role: "OWNER"
-        }
-    })
-
-    if (!membership) {
-        throw new Error("Solo el dueño de la organización puede configurar los datos de pago.")
-    }
-
-    // 3. Create subaccount in Wompi
-    try {
-        const subaccountId = await createWompiSubaccount(data);
-
-        // 4. Update organization in DB
-        await prisma.organization.update({
-            where: { id: organizationId },
-            data: { wompiSubaccountId: subaccountId.toString() }
-        })
-
-        revalidatePath("/dashboard/organizacion")
-        return { success: true, subaccountId }
-    } catch (error: any) {
-        console.error("Setup Wompi Error:", error);
-        throw new Error(error.message || "Error al crear la subcuenta en Wompi.")
-    }
-}
 
 /**
  * Updates organization contact information (Phone and WhatsApp)
@@ -922,36 +863,7 @@ export async function removeMember(organizationId: string, targetUserId: string)
     return { success: true, removedName: targetMembership.user.name }
 }
 
-/**
- * Updates the Wompi subaccount ID for the organization to receive direct payments.
- */
-export async function updateWompiSubaccount(organizationId: string, subaccountId: string | null) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session?.user?.id) throw new Error("No autorizado")
-
-    // Verify caller is OWNER or MANAGER
-    const membership = await prisma.member.findFirst({
-        where: {
-            organizationId,
-            userId: session.user.id,
-            role: { in: ["OWNER", "MANAGER"] }
-        }
-    })
-
-    if (!membership) throw new Error("No tienes permisos para configurar los pagos de la organización")
-
-    await prisma.organization.update({
-        where: { id: organizationId },
-        data: { wompiSubaccountId: subaccountId?.trim() || null }
-    })
-
-    revalidatePath("/dashboard")
-    revalidatePath("/dashboard/organizacion")
-    return { success: true }
-}export async function updateSlotGenerationMethod(organizationId: string, method: "SERVICE_DURATION" | "FIXED_30_MIN") {
+export async function updateSlotGenerationMethod(organizationId: string, method: "SERVICE_DURATION" | "FIXED_30_MIN") {
     const session = await auth.api.getSession({
         headers: await headers()
     })
