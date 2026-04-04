@@ -131,5 +131,12 @@ Para que la implementación sea exitosa, asegúrate de registrarte en el Portal 
 - **Habilitar el Rol de Marketplace:** Debes solicitar a Wompi que tu cuenta sea "Maestra" para poder crear subcuentas a tus profesionales.
 - **URL de Notificación:** Debes entrar al dashboard de Wompi y pegar la URL de tu webhook (ej. `https://tu-api.com/api/webhooks/wompi`) para que ellos sepan a dónde enviar los avisos de pago.
 
+## 9. Convenciones y Flujo de Desarrollo
+
+### Control de Ramas de Base de Datos (NeonDB)
+- **Desarrollo de Features/Fixes:** Todo nuevo desarrollo, experimentación o corrección de errores que requiera cambios en el esquema de la base de datos **debe apuntar única y exclusivamente a la rama de `testing`** (o entorno local).
+- **Despliegue a Producción:** Solo cuando el código haya sido probado exhaustivamente y se considere estable, los cambios en la base de datos podrán enviarse e impactar la rama de `production`.
+- **Protección CRÍTICA de Datos:** La regla de oro es proteger la base de datos en vivo. Se deben emplear migraciones seguras buscando siempre la forma de **no corromper los datos de producción** y, por ningún motivo, se deben borrar datos en la rama principal de producción.
+
 ---
 *Documento vivo de arquitectura y entregables. Refleja fielmente el estado avanzado y el nuevo horizonte de VLink.*
