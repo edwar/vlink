@@ -951,4 +951,29 @@ export async function updateWompiSubaccount(organizationId: string, subaccountId
     revalidatePath("/dashboard")
     revalidatePath("/dashboard/organizacion")
     return { success: true }
+}export async function updateSlotGenerationMethod(organizationId: string, method: "SERVICE_DURATION" | "FIXED_30_MIN") {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session?.user?.id) throw new Error("No autorizado")
+
+    // Verificar que el usuario es OWNER o MANAGER
+    const membership = await prisma.member.findFirst({
+        where: {
+            organizationId,
+            userId: session.user.id,
+            role: { in: ["OWNER", "MANAGER"] }
+        }
+    })
+
+    if (!membership) throw new Error("No tienes permisos para modificar la configuración de la organización")
+
+    await prisma.organization.update({
+        where: { id: organizationId },
+        data: { slotGenerationMethod: method }
+    })
+
+    revalidatePath("/dashboard/organizacion")
+    return { success: true }
 }

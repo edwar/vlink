@@ -114,7 +114,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                 <SelectContent position="popper" side="bottom" align="start" className="w-(--radix-select-trigger-width) rounded-sm border shadow-xl">
                     <SelectGroup>
                         <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50">Personal</SelectLabel>
-                        <SelectItem value="personal" className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/30">
+                        <SelectItem value="personal" className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/50">
                             <div className="flex items-center gap-2">
                                 <UserAvatar
                                     image={activeProfile?.image}
@@ -143,7 +143,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                                     <SelectItem
                                         key={profile.id}
                                         value={profile.id}
-                                        className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/30"
+                                        className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/50"
                                     >
                                         <div className="flex items-center gap-2">
                                             <UserAvatar

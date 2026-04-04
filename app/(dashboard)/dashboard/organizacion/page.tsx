@@ -24,6 +24,7 @@ import { RemoveMember } from "@/components/remove-member"
 import { Button } from "@/components/ui/button"
 import { WompiIntegration } from "@/components/wompi-integration"
 import { OrganizationContact } from "@/components/organization-contact"
+import { ToggleSlotGeneration } from "@/components/toggle-slot-generation"
 
 import { PaginationControls } from "@/components/pagination-controls"
 
@@ -157,11 +158,19 @@ export default async function OrganizacionPage(props: {
             </header>
 
             {isOwnerOrManager && (
-                <div className="max-w-md">
-                    <ToggleHolidayWork
-                        initialValue={organization.workOnHolidays}
-                        organizationId={organization.id}
-                    />
+                <div className="flex flex-col lg:flex-row gap-8 items-stretch mt-8">
+                    <div className="flex-1 lg:max-w-lg">
+                        <ToggleHolidayWork
+                            initialValue={organization.workOnHolidays}
+                            organizationId={organization.id}
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <ToggleSlotGeneration
+                            organizationId={organization.id}
+                            currentMethod={organization.slotGenerationMethod}
+                        />
+                    </div>
                 </div>
             )}
 
@@ -170,7 +179,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* QR Code Column */}
                 <div className="lg:col-span-5 flex flex-col h-full">
-                    <div id="tour-org-qr" className="relative flex-1 space-y-4 flex flex-col bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
+                    <div id="tour-org-qr" className="∏relative flex-1 space-y-4 flex flex-col bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
                         <div id="tour-org-qr-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="flex items-center gap-3 relative z-10">
                             <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
@@ -245,6 +254,7 @@ export default async function OrganizacionPage(props: {
                     </div>
                 </div>
             </div>
+
 
             {/* Row 1.5: Pagos, Comunicación & Sedes */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative mt-8">

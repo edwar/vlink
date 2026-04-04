@@ -55,6 +55,7 @@ VLink es una plataforma de gestión de citas diseñada para facilitar la program
 - **ORM:** Prisma Studio y Client.
 - **Autenticación:** Better-Auth con el adaptador de Prisma (Soporte OAuth de Google).
 - **Comunicaciones:** Resend para envío de Emails (Formatos React-Email y HTML).
+- **Feedback:** Sileo para notificaciones tipo Toast y alertas dinámicas al usuario.
 - **Infraestructura Cloud:** Vercel (Optimizaciones orientadas al modelo de funciones Serverless y Edge). Integración API de GCP (Google Calendar).
 
 ## 5. Gestión Organizacional y Multicuenta

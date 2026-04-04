@@ -82,9 +82,10 @@ model Organization {
   mpSubscriptionId  String?          @unique
   subscriptionPlan  SubscriptionPlan @default(BASIC)
   phone             String?
-  whatsapp          String?
-  wompiSubaccountId String?
-  invitations       Invitation[]
+  whatsapp             String?
+  wompiSubaccountId    String?
+  slotGenerationMethod SlotGenerationMethod @default(SERVICE_DURATION)
+  invitations          Invitation[]
   locations         Location[]
   members           Member[]
   profiles          Profile[]
@@ -290,6 +291,11 @@ enum SubscriptionPlan {
   BASIC
   TEAM
   CORPORATE
+}
+
+enum SlotGenerationMethod {
+  SERVICE_DURATION
+  FIXED_30_MIN
 }
 
 enum BillingStatus {

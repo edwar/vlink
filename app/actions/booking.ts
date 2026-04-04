@@ -199,7 +199,7 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
         include: {
             availabilities: true,
             organization: {
-                select: { id: true, workOnHolidays: true }
+                select: { id: true, workOnHolidays: true, slotGenerationMethod: true }
             }
         }
     });
@@ -304,8 +304,9 @@ export async function getAvailableSlots(username: string, date: Date, durationMi
                     }
                 }
             }
-            // Mover al siguiente slot (usan una granularidad de 30 minutos para mayor flexibilidad)
-            const increment = Math.min(30, durationMinutes);
+            // Mover al siguiente slot según el método de la organización
+            const method = profile.organization?.slotGenerationMethod || 'SERVICE_DURATION';
+            const increment = method === 'FIXED_30_MIN' ? 30 : durationMinutes;
             currentMinutes += increment;
         }
     }

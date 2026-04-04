@@ -127,5 +127,51 @@ describe('booking actions', () => {
             // for 10:30 it's 24.5h -> allowed
             expect(slots).toEqual(['10:00', '10:30'])
         })
+
+        it('respects slotGenerationMethod: SERVICE_DURATION (default)', async () => {
+            const profileWithOrg = {
+                ...mockProfile,
+                advanceNoticeHours: 0,
+                availabilities: [
+                    { dayOfWeek: 1, startTime: '09:00', endTime: '11:00', isBlocked: false }
+                ],
+                organization: {
+                    slotGenerationMethod: 'SERVICE_DURATION'
+                }
+            }
+            vi.mocked(prisma.profile.findUnique).mockResolvedValue(profileWithOrg as any)
+            vi.mocked(prisma.appointment.findMany).mockResolvedValue([])
+            vi.setSystemTime(new Date('2026-01-01T00:00:00Z'))
+
+            // Monday, service 60 min. Increment should be 60.
+            const date = new Date('2026-03-02T12:00:00Z')
+            const slots = await getAvailableSlots('testuser', date, 60)
+            
+            // Expected: 09:00, 10:00. (11:00 is end)
+            expect(slots).toEqual(['09:00', '10:00'])
+        })
+
+        it('respects slotGenerationMethod: FIXED_30_MIN', async () => {
+            const profileWithOrg = {
+                ...mockProfile,
+                advanceNoticeHours: 0,
+                availabilities: [
+                    { dayOfWeek: 1, startTime: '09:00', endTime: '11:00', isBlocked: false }
+                ],
+                organization: {
+                    slotGenerationMethod: 'FIXED_30_MIN'
+                }
+            }
+            vi.mocked(prisma.profile.findUnique).mockResolvedValue(profileWithOrg as any)
+            vi.mocked(prisma.appointment.findMany).mockResolvedValue([])
+            vi.setSystemTime(new Date('2026-01-01T00:00:00Z'))
+
+            // Monday, service 60 min. Increment should be 30.
+            const date = new Date('2026-03-02T12:00:00Z')
+            const slots = await getAvailableSlots('testuser', date, 60)
+            
+            // Expected: 09:00, 09:30, 10:00. (10:30 + 60 = 11:30 > 11:00, so not included)
+            expect(slots).toEqual(['09:00', '09:30', '10:00'])
+        })
     })
 })
