@@ -125,7 +125,7 @@ function CalendarHeader({
             </div>
 
             <div className="hidden sm:flex items-center justify-between gap-4 w-full">
-                <div id="tour-calendar-view-switcher" className="relative flex items-center bg-muted/30 p-1.5 rounded-full border border-border/50">
+                <div id="tour-calendar-view-switcher" className="relative flex items-center gap-2 bg-muted/30 p-1.5 rounded-full border border-border/50">
                     <div id="tour-calendar-switcher-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     <Button
                         variant={view === 'day' ? "secondary" : "ghost"}
@@ -133,7 +133,7 @@ function CalendarHeader({
                         onClick={() => onViewChange('day')}
                         className={cn(
                             "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
-                            view === 'day' ? "bg-background text-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                            view === 'day' ? "bg-primary text-primary-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
                         <Clock className="h-4 w-4 mr-2" />
@@ -145,7 +145,7 @@ function CalendarHeader({
                         onClick={() => onViewChange('week')}
                         className={cn(
                             "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
-                            view === 'week' ? "bg-background text-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                            view === 'week' ? "bg-primary text-primary-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
                         <CalendarIcon className="h-4 w-4 mr-2" />
@@ -157,7 +157,7 @@ function CalendarHeader({
                         onClick={() => onViewChange('month')}
                         className={cn(
                             "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
-                            view === 'month' ? "bg-background text-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                            view === 'month' ? "bg-primary text-primary-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
                         <LayoutGrid className="h-4 w-4 mr-2" />

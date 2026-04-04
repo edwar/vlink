@@ -2,6 +2,7 @@
 
 import Lottie from "lottie-react"
 import calendarAnimation from "./animations/Calendar.json"
+import { cn } from "@/lib/utils"
 
 export function LoadingState({
     message = "Cargando...",
@@ -12,14 +13,14 @@ export function LoadingState({
 }) {
     const content = (
         <div className="relative w-full flex flex-col items-center justify-center gap-2">
-            <div className="w-[500px] h-[500px]">
+            <div className={cn("w-[500px] h-[500px]", !fullPage && "w-[250px] h-[250px]")}>
                 <Lottie
                     animationData={calendarAnimation}
                     loop={true}
                     autoplay={true}
                 />
             </div>
-            <p className="absolute bottom-10 w-full text-center text-[24px] md:text-[48px] font-display font-black tracking-tighter leading-none text-primary">{message}</p>
+            <p className={cn("absolute bottom-10 w-full text-center text-[24px] md:text-[48px] font-display font-black tracking-tighter leading-none text-primary", !fullPage && "text-[16px] md:text-[32px] bottom-0")}>{message}</p>
         </div>
     )
 

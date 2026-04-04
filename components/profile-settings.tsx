@@ -181,9 +181,9 @@ export function ProfileSettings() {
                                     Identidad VLink (Username)
                                 </Label>
                                 <div className="group transition-all">
-                                    <InputGroup id="tour-username" className="relative h-14 rounded-2xl overflow-hidden border border-primary/5 transition-all">
+                                    <InputGroup id="tour-username" className="relative rounded-2xl overflow-hidden border border-primary/5 transition-all">
                                         <div id="tour-username-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                                        <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 h-14 flex items-center justify-center">
+                                        <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 flex items-center justify-center">
                                             <InputGroupText className="text-primary font-black text-[13px] tracking-tighter">
                                                 {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
                                             </InputGroupText>
@@ -194,7 +194,7 @@ export function ProfileSettings() {
                                             onChange={(e) => setUsername(
                                                 e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "")
                                             )}
-                                            className="font-black text-xl px-6 h-14 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30"
+                                            className="font-black text-xl px-6 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30"
                                             placeholder="tu-nombre"
                                         />
                                     </InputGroup>
@@ -232,14 +232,14 @@ export function ProfileSettings() {
                             <p className="text-sm text-muted-foreground font-medium">Comparte este link para recibir reservas.</p>
                         </div>
 
-                        <div className="flex items-center">
-                            <div className="flex-1 px-5 py-3.5 text-sm font-black overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-primary/5 shadow-inner-sm text-primary group-hover:bg-background transition-colors">
+                        <div className="flex items-center gap-2">
+                            <div className="flex-1 px-5 py-2 text-sm font-black overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-primary/5 shadow-inner-sm text-primary group-hover:bg-background transition-colors">
                                 {profileUrl.replace(/^https?:\/\//, '')}
                             </div>
                             <Button
                                 variant="secondary"
                                 onClick={copyToClipboard}
-                                className="rounded-xl font-black h-12 w-12 p-0 shadow-lg active:scale-75 transition-all hover:bg-primary hover:text-white hover:shadow-primary/20"
+                                className="rounded-sm font-black h-8 w-8 p-0 shadow-lg active:scale-75 transition-all hover:bg-primary hover:text-white hover:shadow-primary/20"
                             >
                                 {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                             </Button>
@@ -370,7 +370,7 @@ export function ProfileSettings() {
                                     </div>
 
                                     <div className="flex flex-col gap-3">
-                                        {!isSyncEnabled && hasCalendarScope && (
+                                        {!isSyncEnabled && hasCalendarScope ? (
                                             <Button
                                                 size="sm"
                                                 onClick={handleEnableSync}
@@ -379,23 +379,22 @@ export function ProfileSettings() {
                                             >
                                                 {enablingSync ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Empezar Sincronización"}
                                             </Button>
-                                        )}
-
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={handleDisconnectGoogle}
-                                            disabled={isDisconnecting}
-                                            className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 h-10 transition-colors"
-                                        >
-                                            {isDisconnecting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : "Revocar Acceso de Google"}
-                                        </Button>
+                                        ) :
+                                            (<Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={handleDisconnectGoogle}
+                                                disabled={isDisconnecting}
+                                                className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 h-10 transition-colors"
+                                            >
+                                                {isDisconnecting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : "Revocar Acceso de Google"}
+                                            </Button>)}
                                     </div>
                                 </div>
                             ) : (
                                 <Button
                                     onClick={handleConnectGoogle}
-                                    className="w-full rounded-2xl font-black h-12 shadow-sm transition-all hover:scale-105 text-lg mt-4"
+                                    className="w-full rounded-xl font-black shadow-sm transition-all hover:scale-105 text-lg mt-4"
                                 >
                                     Conectar Calendario
                                 </Button>

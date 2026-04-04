@@ -25,10 +25,10 @@ export function OrganizationContact({
         if (!value) return ""
         // Remove all non-digits
         const digits = value.replace(/\D/g, "")
-        
+
         // Limit to 10 digits
         const limited = digits.slice(0, 10)
-        
+
         // Apply mask: XXX XXX XXXX
         if (limited.length <= 3) return limited
         if (limited.length <= 6) return `${limited.slice(0, 3)} ${limited.slice(3)}`
@@ -117,9 +117,10 @@ export function OrganizationContact({
             {!disabled && (
                 <div className="pt-2 relative z-10">
                     <Button
+                        size="default"
                         onClick={handleSave}
                         disabled={saving || !hasChanges}
-                        className="w-full h-12 rounded-2xl font-black uppercase tracking-widest text-[10px] gap-2 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:hover:scale-100"
+                        className="w-full rounded-lg font-black uppercase tracking-widest text-[10px] gap-2 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                         {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                         {saving ? "Guardando..." : hasChanges ? "Guardar Cambios" : "Guardado"}

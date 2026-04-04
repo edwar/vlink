@@ -205,7 +205,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                             <div className="pt-auto mt-auto">
                                 <Button
                                     variant={isCurrent ? "outline" : "vlink"}
-                                    size="lg"
+                                    size="default"
                                     className="w-full"
                                     onClick={() => {
                                         if (plan.id === "BASIC") {

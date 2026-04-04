@@ -569,7 +569,7 @@ export function ConfigurationSettings() {
                                             value={displayName}
                                             onChange={(e) => setDisplayName(e.target.value)}
                                             placeholder="Ej: Ing. Marco Antonio Solís"
-                                            className="h-12 w-full rounded-2xl border-2 border-primary/5 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-xl font-black bg-background/50 px-8 shadow-inner outline-none"
+                                            className="w-full h-10"
                                         />
                                     </div>
 

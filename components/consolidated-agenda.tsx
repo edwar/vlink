@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/user-avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { isHolidayColombia } from "@/lib/holidays"
 import { Skeleton } from "./ui/skeleton"
+import { LoadingState } from "./loading-state"
 
 interface ConsolidatedAgendaProps {
     orgSlug: string
@@ -49,9 +50,8 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                 <div className="flex items-center gap-4">
                     <Button
                         variant="outline"
-                        size="icon"
                         onClick={() => setSelectedDate(prev => addDays(prev, -1))}
-                        className="rounded-xl h-12 w-12"
+                        className="rounded-lg h-12 w-12"
                     >
                         <ChevronLeft className="h-5 w-5" />
                     </Button>
@@ -65,9 +65,8 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
 
                     <Button
                         variant="outline"
-                        size="icon"
                         onClick={() => setSelectedDate(prev => addDays(prev, 1))}
-                        className="rounded-xl h-12 w-12"
+                        className="rounded-lg h-12 w-12"
                     >
                         <ChevronRight className="h-5 w-5" />
                     </Button>
@@ -97,10 +96,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
             </div>
 
             {loading ? (
-                <div className="flex flex-col items-center justify-center py-20 gap-4">
-                    <Loader2 className="h-10 w-10 text-primary animate-spin" />
-                    <p className="text-muted-foreground font-black uppercase text-[10px] tracking-widest">Sincronizando Disponibilidades...</p>
-                </div>
+                <LoadingState fullPage={false} />
             ) : data.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4">
                     {data.map((item) => (

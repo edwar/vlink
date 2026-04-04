@@ -129,11 +129,11 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                 )}
 
                 <Button
-                    className="w-full h-14 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
+                    size="default"
+                    className="w-fit ml-auto rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
                     onClick={handleCreateInvitation}
                     disabled={isPending || disabled}
                 >
-                    <div className="absolute inset-0 bg-linear-to-r from-primary via-primary/80 to-primary opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                     <div className="relative z-10 flex items-center justify-center gap-3">
                         {isPending ? (
                             <>

@@ -198,8 +198,8 @@ export default async function OrganizacionPage(props: {
                                 <DialogTrigger asChild>
                                     <Button
                                         variant="outline"
-                                        size="lg"
-                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none h-14 rounded-2xl"
+                                        size="default"
+                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none rounded-2xl"
                                     >
                                         <IdCard className="h-5 w-5 relative z-10 mr-2" />
                                         <span className="relative z-10 uppercase tracking-widest">Tarjeta de Presentación</span>
@@ -291,7 +291,7 @@ export default async function OrganizacionPage(props: {
                     </div>
 
                     <div className="relative z-10 pt-2 mt-auto">
-                        <Button asChild variant="vlink" size="lg" className="w-full h-14 rounded-2xl group/btn border-2 border-border shadow-none">
+                        <Button asChild variant="vlink" size="default" className="w-full rounded-lg group/btn">
                             <a href="/dashboard/organizacion/sedes">
                                 <Store className="h-5 w-5 mr-2 group-hover/btn:-translate-y-0.5 transition-transform" />
                                 <span className="uppercase tracking-widest text-xs font-black">Gestionar Sedes</span>
