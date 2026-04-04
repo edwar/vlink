@@ -52,20 +52,7 @@ Accede a la **Vista de Equipo** para ver los calendarios de todos los miembros e
 
 ---
 
-## 💳 4. Ecosistema de Pagos y Finanzas
-Monetiza tu tiempo de forma automatizada y segura.
-
-### 🔗 Integración con Wompi
-VLink se integra profundamente con Wompi para que tus clientes paguen al agendar.
-1.  **Conexión Directa:** Vincula tu cuenta de Wompi desde la pestaña de Organización.
-2.  **Múltiples Canales:** Recibe dinero a través de Nequi, Daviplata, tarjetas de crédito y transferencias bancarias.
-3.  **Seguridad Total:** Los fondos se gestionan de forma segura y se transfieren directamente a tu cuenta configurada.
-
-> **⚠️ IMPORTANTE:** Configurar los pagos automáticos reduce la tasa de inasistencia (no-shows) en un **85%**.
-
----
-
-## 📢 5. Marketing y Conectividad
+## 📢 4. Marketing y Conectividad
 Haz que sea ridículamente fácil para tus clientes encontrarte.
 
 *   **🔳 Revolución QR:** Tu organización tiene un código QR dinámico. Descárgalo y úsalo en tu vitrina, menú o redes sociales.
@@ -74,7 +61,7 @@ Haz que sea ridículamente fácil para tus clientes encontrarte.
 
 ---
 
-## 🛠 6. Configuración Avanzada y Políticas de Reserva
+## 🛠 5. Configuración Avanzada y Políticas de Reserva
 No dejes que el trabajo controle tu vida. Tú controlas el trabajo.
 
 ### 🛡️ Políticas de Reserva Personalizadas
@@ -87,7 +74,7 @@ Configura tus reglas de juego desde la sección de *Perfil*:
  
 ---
  
-## 📅 7. Sincronización con Google Calendar
+## 📅 6. Sincronización con Google Calendar
 No permitas que las citas de trabajo interfieran con tu vida personal.
  
 *   **🔄 Sincronización Total:** Al conectar tu cuenta de Google, VLink lee tus eventos existentes y bloquea automáticamente esos espacios en tu disponibilidad pública.
@@ -98,7 +85,7 @@ No permitas que las citas de trabajo interfieran con tu vida personal.
 
 ---
 
-## 🕒 8. Agenda Interactiva de Alta Velocidad
+## 🕒 7. Agenda Interactiva de Alta Velocidad
 Tu agenda profesional no es estática; es un ecosistema vivo.
 
 *   **⚡️ Refresco Instantáneo:** Tanto la vista semanal como mensual reaccionan al segundo. Si un cliente cancela su cita desde su correo o tú bloqueas un espacio, verás el cambio reflejado en tu pantalla sin mover un dedo.
@@ -108,7 +95,7 @@ Tu agenda profesional no es estática; es un ecosistema vivo.
 
 ---
 
-## 🏎️ 9. La Experiencia del Cliente (Flujo de Reservas)
+## 🏎️ 8. La Experiencia del Cliente (Flujo de Reservas)
 Hemos optimizado al máximo la experiencia de reserva desde la perspectiva del cliente final, asegurando conversiones exitosas.
 
 *   **Redirecciones Inteligentes (Cero Fricción):** Si tu organización ofrece un solo servicio, o solo atiende en una sede en particular, VLink lo selecciona automáticamente para tu cliente. ¡Menos clics significa más agendamientos!

@@ -28,12 +28,6 @@ export function OrganizacionTour({ isOwnerOrManager = true }: { isOwnerOrManager
             position: "auto"
         },
         {
-            element: "#tour-org-payments-anchor",
-            title: "Pagos y Cobros",
-            intro: "Configura tu cuenta de Wompi para automatizar los cobros de tu organización y gestionar tus ingresos.",
-            position: "auto"
-        },
-        {
             element: "#tour-org-contact-anchor",
             title: "Comunicación y Soporte",
             intro: "Mantén actualizados tus canales de contacto (WhatsApp y teléfono) para que tus clientes puedan comunicarse contigo fácilmente.",
