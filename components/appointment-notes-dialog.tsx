@@ -69,7 +69,7 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Escribe detalles importantes del cliente, preferencias, historial..."
-                        className="w-full h-40 p-4 rounded-2xl bg-muted/50 border border-primary/10 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all"
+                        className="min-h-[160px] resize-none"
                     />
 
                     <Button

@@ -94,7 +94,7 @@ function CalendarHeader({
                             value={selectedLocationId || ''}
                             onValueChange={(value) => onLocationChange(value)}
                         >
-                            <SelectTrigger id="tour-calendar-location" className="flex w-[220px] h-10 bg-muted/30 px-3 rounded-full border border-border/50 text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
+                            <SelectTrigger id="tour-calendar-location" className="flex w-[220px] h-10 bg-muted/30 px-3 rounded-full border border-input text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <MapPinned className="h-4 w-4 text-primary shrink-0" />
                                     <SelectValue placeholder="Seleccionar Ubicación" />
@@ -238,7 +238,7 @@ function CalendarHeader({
                             value={selectedLocationId || "all"}
                             onValueChange={(value) => { onLocationChange(value === "all" ? null : value); onMenuToggle(); }}
                         >
-                            <SelectTrigger className="w-full h-10 rounded-xl bg-muted/20 border-border/40 px-4 text-xs font-bold transition-all text-foreground">
+                            <SelectTrigger className="w-full h-10 rounded-xl bg-muted/20 px-4 text-xs font-bold transition-all text-foreground">
                                 <SelectValue placeholder="Todas las Sedes" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">

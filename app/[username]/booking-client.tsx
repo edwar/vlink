@@ -745,7 +745,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             disabled={isSubmitting}
-                            className="w-full h-12 py-4 px-6 font-medium "
+                            className="font-medium"
                         />
                     </div>
 
@@ -758,7 +758,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={isSubmitting}
-                            className="w-full h-12 py-4 px-6 font-medium "
+                            className="font-medium"
                         />
                     </div>
 
@@ -782,7 +782,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
                                     setPhone(formattedValue);
                                 }}
                                 disabled={isSubmitting}
-                                className="w-full h-12 py-4 pl-16 pr-6 font-bold text-lg"
+                                className="pl-16 font-bold"
                             />
                         </div>
                     </div>

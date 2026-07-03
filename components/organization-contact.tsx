@@ -92,7 +92,7 @@ export function OrganizationContact({
                             value={phone}
                             onChange={handlePhoneChange}
                             disabled={disabled || saving}
-                            className="pl-11 h-12 bg-background/50 rounded-2xl transition-all font-medium"
+                            className="pl-11 font-medium"
                             placeholder="321 000 0000"
                         />
                     </div>
@@ -107,7 +107,7 @@ export function OrganizationContact({
                             value={whatsapp}
                             onChange={handleWhatsappChange}
                             disabled={disabled || saving}
-                            className="pl-11 h-12 bg-background/50 rounded-2xl transition-all font-medium"
+                            className="pl-11 font-medium"
                             placeholder="321 000 0000"
                         />
                     </div>

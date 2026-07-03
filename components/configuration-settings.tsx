@@ -230,7 +230,7 @@ export function ConfigurationSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Services (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-10">
                             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
@@ -277,16 +277,16 @@ export function ConfigurationSettings() {
                                             value={newName}
                                             onChange={(e) => setNewName(e.target.value)}
                                             placeholder="Ej: Consultoría Profesional"
-                                            className="h-14 rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-muted/20 px-6"
+                                            className="font-bold"
                                         />
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                                         <div className="space-y-4">
                                             <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Inversión (COP)</Label>
-                                            <InputGroup className="h-14 rounded-2xl overflow-hidden border-2 border-border/50 bg-muted/20 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-none">
-                                                <InputGroupAddon className="bg-muted/50 border-r border-border/50 px-6 flex items-center justify-center">
-                                                    <InputGroupText className="text-foreground/60 font-black text-lg">$</InputGroupText>
+                                            <InputGroup>
+                                                <InputGroupAddon>
+                                                    <InputGroupText className="font-black">$</InputGroupText>
                                                 </InputGroupAddon>
                                                 <InputGroupInput
                                                     type="text"
@@ -294,7 +294,7 @@ export function ConfigurationSettings() {
                                                     pattern="[0-9.]*"
                                                     value={newPrice}
                                                     onChange={(e) => setNewPrice(formatPrice(e.target.value))}
-                                                    className="font-bold text-lg px-6 h-14 bg-transparent border-none focus:ring-0"
+                                                    className="font-bold"
                                                     placeholder="0"
                                                 />
                                             </InputGroup>
@@ -306,7 +306,7 @@ export function ConfigurationSettings() {
                                                 value={newDuration.toString()}
                                                 onValueChange={(val) => setNewDuration(parseInt(val))}
                                             >
-                                                <SelectTrigger className="h-14 w-full rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold bg-muted/20 px-6">
+                                                <SelectTrigger className="h-14 w-full font-bold text-lg px-6">
                                                     <div className="flex items-center gap-3">
                                                         <Clock className="h-5 w-5 text-muted-foreground" />
                                                         <SelectValue placeholder="Duración" />
@@ -395,26 +395,19 @@ export function ConfigurationSettings() {
                                                                 type="text"
                                                                 value={editName}
                                                                 onChange={(e) => setEditName(e.target.value)}
-                                                                className="h-14 rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all font-bold bg-muted/20 px-6"
+                                                                className="font-bold"
                                                             />
                                                         </div>
 
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                                             <div className="space-y-4">
                                                                 <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Precio</Label>
-                                                                <InputGroup className="h-14 rounded-2xl border-2 border-border/50 bg-muted/20 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-all overflow-hidden shadow-none">
-                                                                    <InputGroupAddon className="bg-muted/50 border-r border-border/50 px-5 flex items-center justify-center">
-                                                                        <InputGroupText className="font-black text-foreground/60 text-lg">$</InputGroupText>
-                                                                    </InputGroupAddon>
-                                                                    <InputGroupInput
-                                                                        type="text"
-                                                                        inputMode="numeric"
-                                                                        pattern="[0-9.]*"
-                                                                        value={editPrice}
-                                                                        onChange={(e) => setEditPrice(formatPrice(e.target.value))}
-                                                                        className="font-bold text-lg px-5 h-14 bg-transparent border-none focus:ring-0"
-                                                                    />
-                                                                </InputGroup>
+                                                                <Input
+                                                                    type="text"
+                                                                    value={editPrice}
+                                                                    onChange={(e) => setEditPrice(formatPrice(e.target.value))}
+                                                                    className="font-bold"
+                                                                />
                                                             </div>
 
                                                             <div className="space-y-4">
@@ -423,7 +416,7 @@ export function ConfigurationSettings() {
                                                                     value={editDuration.toString()}
                                                                     onValueChange={(val) => setEditDuration(parseInt(val))}
                                                                 >
-                                                                    <SelectTrigger className="h-14 w-full rounded-2xl border-2 border-border/50 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all font-bold text-lg bg-muted/20 px-6">
+                                                                    <SelectTrigger className="h-14 w-full font-bold text-lg px-6">
                                                                         <div className="flex items-center gap-3">
                                                                             <Clock className="h-5 w-5 text-muted-foreground" />
                                                                             <SelectValue placeholder="Duración" />
@@ -553,7 +546,7 @@ export function ConfigurationSettings() {
 
                 {/* Column 2: Commercial Name (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-10">
-                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-12 relative overflow-hidden">
+                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-12 relative overflow-hidden">
                         <div className="relative z-10 space-y-12">
                             <div className="space-y-6">
                                 <div className="space-y-2">
@@ -569,7 +562,6 @@ export function ConfigurationSettings() {
                                             value={displayName}
                                             onChange={(e) => setDisplayName(e.target.value)}
                                             placeholder="Ej: Ing. Marco Antonio Solís"
-                                            className="w-full h-10"
                                         />
                                     </div>
 
