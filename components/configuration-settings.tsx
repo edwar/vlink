@@ -17,8 +17,10 @@ import {
 } from "./ui/select"
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "./ui/input-group"
 import { PillInput } from "./ui/pill-input"
+import Image from "next/image"
 import { sileo } from "sileo"
 import { LoadingState } from "./loading-state"
+import { ServiceImageUploader } from "./service-image-uploader"
 import {
     Dialog,
     DialogContent,
@@ -37,16 +39,24 @@ const DURATION_OPTIONS = [
     { label: "2 hrs", value: 120 },
 ]
 
+interface ServiceImage {
+    id: string
+    url: string
+    order: number
+}
+
 interface ServiceItem {
     id: string
     name: string
     durationMinutes: number
     isActive: boolean
     price: number
+    images: ServiceImage[]
 }
 
 export function ConfigurationSettings() {
     const [loading, setLoading] = useState(true)
+    const [profileId, setProfileId] = useState("")
     const [displayName, setDisplayName] = useState("")
     const [expertise, setExpertise] = useState<string[]>([])
     const [savingConfig, setSavingConfig] = useState(false)
@@ -74,6 +84,7 @@ export function ConfigurationSettings() {
         const fetchData = async () => {
             try {
                 const data = await getConfiguration()
+                setProfileId(data.profileId)
                 setDisplayName(data.displayName)
                 setExpertise(data.expertise || [])
                 setServices(data.services)
@@ -116,7 +127,7 @@ export function ConfigurationSettings() {
         if (!newName.trim()) return
         setCreatingService(true)
         try {
-            await createService({
+            const result = await createService({
                 name: newName,
                 durationMinutes: newDuration,
                 price: parseFloat(parsePrice(newPrice)) || 0
@@ -127,9 +138,21 @@ export function ConfigurationSettings() {
             setNewPrice("0")
             setNewDuration(30)
             setShowNewForm(false)
+
+            // Auto-open edit for the new service so they can add an image
+            if (result.serviceId) {
+                const created = data.services.find((s: any) => s.id === result.serviceId)
+                if (created) {
+                    setEditingId(created.id)
+                    setEditName(created.name)
+                    setEditPrice(formatPrice(created.price.toString()))
+                    setEditDuration(created.durationMinutes)
+                }
+            }
+
             sileo.success({
                 title: "Servicio creado",
-                description: "El nuevo servicio ya está disponible para tus clientes.",
+                description: "Agrega una imagen para que tus clientes la vean al agendar.",
                 styles: {
                     title: "text-green-600! font-bold!",
                     badge: "text-green-600!"
@@ -284,20 +307,7 @@ export function ConfigurationSettings() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                                         <div className="space-y-4">
                                             <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Inversión (COP)</Label>
-                                            <InputGroup>
-                                                <InputGroupAddon>
-                                                    <InputGroupText className="font-black">$</InputGroupText>
-                                                </InputGroupAddon>
-                                                <InputGroupInput
-                                                    type="text"
-                                                    inputMode="numeric"
-                                                    pattern="[0-9.]*"
-                                                    value={newPrice}
-                                                    onChange={(e) => setNewPrice(formatPrice(e.target.value))}
-                                                    className="font-bold"
-                                                    placeholder="0"
-                                                />
-                                            </InputGroup>
+                                            <Input type="text" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="font-bold" placeholder="0" />
                                         </div>
 
                                         <div className="space-y-4">
@@ -437,6 +447,18 @@ export function ConfigurationSettings() {
                                                             </div>
                                                         </div>
 
+                                                        <div className="border-t border-border/40 pt-6">
+                                                            <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1 mb-3 block">Imágenes del Servicio</Label>
+                                                            <ServiceImageUploader
+                                                                serviceId={editingId!}
+                                                                images={services.find(s => s.id === editingId)?.images ?? []}
+                                                                profileId={profileId}
+                                                                onImagesChange={(newImages) => {
+                                                                    setServices(prev => prev.map(s => s.id === editingId ? { ...s, images: newImages } : s))
+                                                                }}
+                                                            />
+                                                        </div>
+
                                                         <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 pt-6 border-t border-border/40">
                                                             <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive w-full sm:w-auto">
                                                                 Cancelar
@@ -454,14 +476,25 @@ export function ConfigurationSettings() {
                                                 ) : (
                                                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
                                                         <div className="flex items-center gap-4 sm:gap-5 w-full sm:w-auto min-w-0 p-1">
-                                                            {/* Status Indicator */}
+                                                            {/* Service Image or Status Indicator */}
                                                             <div className={cn(
-                                                                "h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center shrink-0 border-2 transition-all duration-700",
-                                                                service.isActive
+                                                                "h-12 w-12 sm:h-14 sm:w-14 shrink-0",
+                                                                service.images.length > 0 ? "rounded-xl overflow-hidden border border-border/40" : "rounded-2xl flex items-center justify-center border-2",
+                                                                service.isActive && service.images.length === 0
                                                                     ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-105 group-hover:rotate-3"
-                                                                    : "bg-muted border-muted-foreground/10 opacity-50"
+                                                                    : !service.isActive ? "bg-muted border-muted-foreground/10 opacity-50" : ""
                                                             )}>
-                                                                <Briefcase className={cn("h-5 w-5 sm:h-6 sm:w-6", service.isActive ? "text-primary" : "text-muted-foreground/40")} />
+                                                                {service.images.length > 0 ? (
+                                                                    <Image
+                                                                        src={service.images[0].url}
+                                                                        alt={service.name}
+                                                                        width={56}
+                                                                        height={56}
+                                                                        className="h-full w-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <Briefcase className={cn("h-5 w-5 sm:h-6 sm:w-6", service.isActive ? "text-primary" : "text-muted-foreground/40")} />
+                                                                )}
                                                             </div>
 
                                                             <div className="flex flex-col min-w-0 flex-1">

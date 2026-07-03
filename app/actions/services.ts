@@ -14,19 +14,26 @@ export async function getConfiguration() {
 
     const services = await prisma.service.findMany({
         where: { profileId: profile.id },
-        orderBy: { createdAt: 'asc' }
+        include: { images: { orderBy: { order: "asc" } } },
+        orderBy: { createdAt: "asc" }
     })
 
     return {
+        profileId: profile.id,
         displayName: profile.displayName || profile.username || "",
         advanceNoticeHours: profile.advanceNoticeHours,
         expertise: (profile as any).expertise || [],
-        services: services.map(s => ({
+        services: services.map((s: any) => ({
             id: s.id,
             name: s.name,
             durationMinutes: s.durationMinutes,
             isActive: s.isActive,
-            price: (s as any).price ?? 0
+            price: (s as any).price ?? 0,
+            images: s.images.map((img: any) => ({
+                id: img.id,
+                url: img.url,
+                order: img.order
+            }))
         }))
     }
 }
@@ -75,7 +82,6 @@ export async function createService(data: { name: string, durationMinutes: numbe
 
     const name = data.name.trim()
 
-    // Check for duplicate name for this profile
     const existing = await prisma.service.findUnique({
         where: {
             profileId_name: {
@@ -89,7 +95,7 @@ export async function createService(data: { name: string, durationMinutes: numbe
         throw new Error(`Ya tienes un servicio llamado "${name}". Por favor usa un nombre diferente.`)
     }
 
-    await prisma.service.create({
+    const service = await prisma.service.create({
         data: {
             profileId: profile.id,
             name,
@@ -99,13 +105,12 @@ export async function createService(data: { name: string, durationMinutes: numbe
     })
 
     revalidatePath("/dashboard/configuracion")
-    return { success: true }
+    return { success: true, serviceId: service.id }
 }
 
 export async function updateService(id: string, data: { name?: string, durationMinutes?: number, isActive?: boolean, price?: number }) {
     const { profile } = await getProfileForUser()
 
-    // Verify ownership
     const service = await prisma.service.findFirst({
         where: { id, profileId: profile.id }
     })
@@ -123,6 +128,76 @@ export async function updateService(id: string, data: { name?: string, durationM
             ...(data.price !== undefined && { price: data.price })
         }
     })
+
+    revalidatePath("/dashboard/configuracion")
+    return { success: true }
+}
+
+export async function addServiceImage(serviceId: string, url: string) {
+    const { profile } = await getProfileForUser()
+
+    const service = await prisma.service.findFirst({
+        where: { id: serviceId, profileId: profile.id }
+    })
+
+    if (!service) {
+        throw new Error("Servicio no encontrado")
+    }
+
+    const maxOrder = await prisma.serviceImage.aggregate({
+        where: { serviceId },
+        _max: { order: true }
+    })
+
+    const image = await prisma.serviceImage.create({
+        data: {
+            serviceId,
+            url,
+            order: (maxOrder._max.order ?? -1) + 1
+        }
+    })
+
+    revalidatePath("/dashboard/configuracion")
+    return { success: true, image: { id: image.id, url: image.url, order: image.order } }
+}
+
+export async function removeServiceImage(imageId: string) {
+    const { profile } = await getProfileForUser()
+
+    const image = await prisma.serviceImage.findUnique({
+        where: { id: imageId },
+        include: { service: true }
+    })
+
+    if (!image || image.service.profileId !== profile.id) {
+        throw new Error("Imagen no encontrada")
+    }
+
+    await prisma.serviceImage.delete({ where: { id: imageId } })
+
+    revalidatePath("/dashboard/configuracion")
+    return { success: true }
+}
+
+export async function reorderServiceImages(serviceId: string, imageIds: string[]) {
+    const { profile } = await getProfileForUser()
+
+    const service = await prisma.service.findFirst({
+        where: { id: serviceId, profileId: profile.id }
+    })
+
+    if (!service) {
+        throw new Error("Servicio no encontrado")
+    }
+
+    await prisma.$transaction(
+        imageIds.map((id, index) =>
+            prisma.serviceImage.update({
+                where: { id },
+                data: { order: index }
+            })
+        )
+    )
 
     revalidatePath("/dashboard/configuracion")
     return { success: true }
