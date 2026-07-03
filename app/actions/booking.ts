@@ -27,7 +27,8 @@ export async function getProfileForBooking(username: string) {
             },
             services: {
                 where: { isActive: true },
-                orderBy: { createdAt: 'asc' }
+                orderBy: { createdAt: 'asc' },
+                include: { images: { orderBy: { order: "asc" } } }
             }
         }
     }) as any
@@ -117,7 +118,8 @@ export async function getProfileForBooking(username: string) {
             id: s.id,
             name: s.name,
             durationMinutes: s.durationMinutes,
-            price: s.price
+            price: s.price,
+            images: s.images.map((img: any) => ({ id: img.id, url: img.url, order: img.order }))
         })),
         locationServices: membership?.locationServices?.map((ls: any) => ({
             locationId: ls.locationId,

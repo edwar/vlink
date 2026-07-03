@@ -193,9 +193,22 @@ model Service {
   appointments     Appointment[]
   locationServices MemberLocationService[]
   profile          Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  images           ServiceImage[]
 
   @@unique([profileId, name])
   @@map("service")
+}
+
+model ServiceImage {
+  id        String   @id @default(cuid())
+  url       String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, order])
+  @@map("service_image")
 }
 
 model Availability {

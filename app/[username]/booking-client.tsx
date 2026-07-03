@@ -7,7 +7,7 @@ import Image from "next/image"
 import { motion, Variants } from "framer-motion"
 import { format, addDays, startOfTomorrow, isSameDay, isValid } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, UserX, CalendarOff, Sparkles, AlertCircle, CalendarX2 } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, ImageOffIcon, UserX, CalendarOff, Sparkles, AlertCircle, CalendarX2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, getLocationsByOrgId } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -19,12 +19,35 @@ import { MapPin, Navigation, Phone } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/empty-state"
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
+
+export function Example() {
+    return (
+        <Carousel
+            plugins={[
+                Autoplay({
+                    delay: 2000,
+                }),
+            ]}
+        >
+      // ...
+        </Carousel>
+    )
+}
+
+interface ServiceImage {
+    id: string
+    url: string
+    order: number
+}
 
 interface ServiceOption {
     id: string
     name: string
     durationMinutes: number
     price: number | null
+    images: ServiceImage[]
 }
 
 interface LocationInfo {
@@ -61,6 +84,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
     const [selectedLocation, setSelectedLocation] = useState<LocationInfo | null>(null)
     const [locations, setLocations] = useState<LocationInfo[]>([])
     const [selectedService, setSelectedService] = useState<ServiceOption | null>(null)
+    const [serviceImageIndex, setServiceImageIndex] = useState<Record<string, number>>({})
     const [selectedDate, setSelectedDate] = useState<Date>(() => {
         if (queryDate) {
             const [year, month, day] = queryDate.split('-').map(Number)
@@ -191,6 +215,27 @@ export function BookingClient({ params }: { params: { username: string } }) {
             }
         }
     }, [profileData, queryDate])
+
+    // Auto-rotate service images every 2 seconds
+    useEffect(() => {
+        if (!profileData?.services) return
+        const hasImages = profileData.services.some(s => s.images.length > 1)
+        if (!hasImages) return
+
+        const interval = setInterval(() => {
+            setServiceImageIndex(prev => {
+                const next: Record<string, number> = {}
+                for (const s of profileData.services) {
+                    if (s.images.length > 1) {
+                        next[s.id] = ((prev[s.id] ?? 0) + 1) % s.images.length
+                    }
+                }
+                return { ...prev, ...next }
+            })
+        }, 7000)
+
+        return () => clearInterval(interval)
+    }, [profileData?.services])
 
     const handleSelectLocation = (location: LocationInfo) => {
         setSelectedLocation(location)
@@ -453,45 +498,96 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                             ls => ls.locationId === selectedLocation.id && ls.serviceId === service.id
                                         );
                                     })
-                                    .map((service) => (
-                                        <button
-                                            key={service.id}
-                                            onClick={() => handleSelectService(service)}
-                                            disabled={profileData.isLocked}
-                                            className={cn(
-                                                "w-full p-5 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all flex items-center gap-4 group/btn",
-                                                selectedService?.id === service.id
-                                                    ? "bg-primary/90 text-primary-foreground border-primary shadow-none scale-[1.02]"
-                                                    : "bg-card hover:border-2 hover:border-primary/30 hover:bg-primary/5"
-                                            )}
-                                        >
-                                            <div className={cn(
-                                                "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/btn:scale-110 duration-500",
-                                                selectedService?.id === service.id ? "bg-primary-foreground/20" : "bg-primary/10"
-                                            )}>
-                                                <Briefcase className={cn(
-                                                    "h-6 w-6",
-                                                    selectedService?.id === service.id ? "text-primary-foreground" : "text-primary"
-                                                )} />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="font-black text-base sm:text-lg tracking-tight mb-0.5">{service.name}</p>
-                                                <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs font-bold uppercase tracking-widest opacity-70">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <Clock className="h-3.5 w-3.5" />
-                                                        <span>
-                                                            {service.durationMinutes >= 60
-                                                                ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
-                                                                : `${service.durationMinutes} min`}
-                                                        </span>
+                                    .map((service) => {
+                                        const currentIdx = serviceImageIndex[service.id] ?? 0
+                                        const imgCount = service.images.length
+
+                                        return (
+                                            <div
+                                                key={service.id}
+                                                className={cn(
+                                                    "relative rounded-2xl border-2 transition-all bg-card overflow-hidden",
+                                                    selectedService?.id === service.id
+                                                        ? "border-primary shadow-md shadow-primary/10"
+                                                        : "border-muted-foreground/20 hover:border-primary/30"
+                                                )}
+                                            >
+                                                <button
+                                                    onClick={() => handleSelectService(service)}
+                                                    disabled={profileData.isLocked}
+                                                    className="w-full text-left flex items-stretch"
+                                                >
+                                                    <div className="relative shrink-0 w-24 sm:w-28 aspect-square bg-muted/20 select-none overflow-hidden rounded-l-2xl">
+                                                        {imgCount > 0 ? (
+                                                            <div
+                                                                className="absolute inset-0 cursor-pointer"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
+                                                                    setServiceImageIndex(prev => ({
+                                                                        ...prev,
+                                                                        [service.id]: (currentIdx + 1) % imgCount
+                                                                    }))
+                                                                }}
+                                                            >
+                                                                <Image
+                                                                    src={service.images[currentIdx].url}
+                                                                    alt=""
+                                                                    fill
+                                                                    className="object-cover"
+                                                                    sizes="120px"
+                                                                />
+                                                                {imgCount > 1 && (
+                                                                    <>
+                                                                        {Array.from({ length: Math.min(imgCount - 1, 2) }).map((_, i) => (
+                                                                            <div
+                                                                                key={i}
+                                                                                className="absolute rounded-xl border border-border/20 bg-card overflow-hidden shadow-xs pointer-events-none"
+                                                                                style={{
+                                                                                    inset: 0,
+                                                                                    zIndex: -(i + 1),
+                                                                                    transform: `translate(${(i + 1) * 3}px, ${(i + 1) * 3}px)`,
+                                                                                }}
+                                                                            >
+                                                                                <Image
+                                                                                    src={service.images[(currentIdx + 1 + i) % imgCount].url}
+                                                                                    alt=""
+                                                                                    fill
+                                                                                    className="object-cover"
+                                                                                    sizes="120px"
+                                                                                />
+                                                                            </div>
+                                                                        ))}
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/40">
+                                                                <ImageOffIcon className="h-8 w-8 sm:h-10 sm:w-10" />
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <div className="flex items-center gap-1.5">
-                                                        <span className={cn("px-2 py-0.5 rounded-full", selectedService?.id === service.id ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground")}>$ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</span>
+                                                    <div className="flex-1 min-w-0 px-4 py-3">
+                                                        <p className="font-black text-sm sm:text-base tracking-tight truncate leading-tight mb-0.5">{service.name}</p>
+                                                        <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70">
+                                                            <span>
+                                                                {service.durationMinutes >= 60
+                                                                    ? `${Math.floor(service.durationMinutes / 60)}h ${service.durationMinutes % 60 > 0 ? `${service.durationMinutes % 60}m` : ""}`
+                                                                    : `${service.durationMinutes} min`}
+                                                            </span>
+                                                            <span className={cn(
+                                                                "px-2 py-0.5 rounded-full text-[10px]",
+                                                                selectedService?.id === service.id
+                                                                    ? "bg-primary-foreground text-primary"
+                                                                    : "bg-primary/10 text-primary"
+                                                            )}>
+                                                                $ {(service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </button>
                                             </div>
-                                        </button>
-                                    ))}
+                                        )
+                                    })}
                             </div>
                         </section>
                     </div>
@@ -521,18 +617,44 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         )}
 
                         {selectedService && (
-                            <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded-xl">
-                                <Briefcase className="h-4 w-4 text-primary shrink-0" />
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold truncate">{selectedService.name}</p>
-                                </div>
-                                <div className="flex flex-col items-end gap-0.5">
-                                    <span className="text-[10px] text-muted-foreground font-semibold leading-none">
-                                        {selectedService.durationMinutes >= 60
-                                            ? `${Math.floor(selectedService.durationMinutes / 60)}h ${selectedService.durationMinutes % 60 > 0 ? `${selectedService.durationMinutes % 60}min` : ""}`
-                                            : `${selectedService.durationMinutes} min`}
-                                    </span>
-                                    <span className="text-xs font-black text-primary leading-none">
+                            <div className="space-y-4">
+                                {selectedService.images.length > 0 && (
+                                    <Carousel
+                                        opts={{ align: "start", loop: true }}
+                                        className="w-full max-w-48 sm:max-w-xs md:max-w-sm"
+                                        plugins={[
+                                            Autoplay({ delay: 3000 })
+                                        ]}
+                                    >
+                                        <CarouselContent>
+                                            {selectedService.images.map((img) => (
+                                                <CarouselItem key={img.id} className="basis-1/2 lg:basis-1/3">
+                                                    <div className="p-1">
+                                                        <div className="relative aspect-square rounded-xl overflow-hidden bg-muted/20">
+                                                            <Image
+                                                                src={img.url}
+                                                                alt=""
+                                                                fill
+                                                                className="object-cover"
+                                                                sizes="(max-width: 768px) 192px, 384px"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                    </Carousel>
+                                )}
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="font-black text-lg sm:text-xl tracking-tight">{selectedService.name}</p>
+                                        <p className="text-xs text-muted-foreground font-medium mt-0.5">
+                                            {selectedService.durationMinutes >= 60
+                                                ? `${Math.floor(selectedService.durationMinutes / 60)}h ${selectedService.durationMinutes % 60 > 0 ? `${selectedService.durationMinutes % 60}min` : ""}`
+                                                : `${selectedService.durationMinutes} min`}
+                                        </p>
+                                    </div>
+                                    <span className="text-sm sm:text-base font-black text-primary">
                                         $ {(selectedService.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
                                     </span>
                                 </div>
