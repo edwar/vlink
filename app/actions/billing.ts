@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma"
 import { generateSubscriptionLink } from "@/lib/mercadopago"
 import { revalidatePath } from "next/cache"
 
-export async function createCheckoutSession(organizationId: string, planType: "TEAM" | "CORPORATE") {
+export async function createCheckoutSession(organizationId: string, planType: "BASIC" | "TEAM" | "CORPORATE") {
     try {
         const session = await auth.api.getSession({
             headers: await headers()
@@ -33,8 +33,11 @@ export async function createCheckoutSession(organizationId: string, planType: "T
 
         if (!org) throw new Error("Organización no encontrada");
 
-        // Use Mercadopago to generate checkout URL for subscriptions
-        const initPoint = await generateSubscriptionLink(planType, organizationId, session.user.email);
+        // Get plan price from database config
+        const planConfig = await prisma.planConfig.findUnique({ where: { id: planType } })
+        const planPrice = planConfig?.price ? Number(planConfig.price) : undefined
+
+        const initPoint = await generateSubscriptionLink(planType, organizationId, session.user.email, planPrice);
 
         if (!initPoint) {
             throw new Error("No se pudo iniciar el flujo de pago con Mercado Pago")
@@ -80,7 +83,7 @@ export async function getOrgPaymentStatus() {
     if (!membership) return null
 
     const org = membership.organization
-    const hasPaymentMethod = !!org.mpCustomerId
+    const hasPaymentMethod = !!(org.mpCustomerId || org.mpSubscriptionId)
     const plan = org.subscriptionPlan
 
     let daysRemaining: number | null = null
@@ -98,7 +101,7 @@ export async function getOrgPaymentStatus() {
         planName: plan === "BASIC" ? "Básico" : plan === "TEAM" ? "Equipos" : "Corporativo",
         daysRemaining,
         trialExpired,
-        needsPaymentBanner: !hasPaymentMethod && plan !== "BASIC",
+        needsPaymentBanner: !hasPaymentMethod,
         organizationId: org.id,
         endDate: org.gracePeriodEnd?.getTime() || null,
     }
