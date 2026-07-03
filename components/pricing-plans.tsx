@@ -28,7 +28,9 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
     const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null)
     const [error, setError] = useState<string | null>(null)
 
-    const handleSubscribe = async (plan: "TEAM" | "CORPORATE") => {
+    const hasSubscription = !!mpSubscriptionId
+
+    const handleSubscribe = async (plan: PlanType) => {
         setLoadingPlan(plan)
         setError(null)
 
@@ -60,7 +62,7 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
             id: "BASIC" as const,
             name: "Básico",
             price: plansInfo.find(p => p.id === 'BASIC')?.price || "Gratis",
-            period: "para siempre",
+            period: (plansInfo.find(p => p.id === 'BASIC')?.price && plansInfo.find(p => p.id === 'BASIC')!.price !== "0") ? "COP / mes" : "para siempre",
             description: "Para profesionales independientes empezando.",
             icon: User,
             mustPopulate: false,
@@ -207,19 +209,15 @@ export function PricingPlans({ organizationId, currentPlan, isAdmin = false, ini
                                     variant={isCurrent ? "outline" : "vlink"}
                                     size="default"
                                     className="w-full"
-                                    onClick={() => {
-                                        if (plan.id === "BASIC") {
-                                            handleTestChange("BASIC")
-                                        } else {
-                                            handleSubscribe(plan.id)
-                                        }
-                                    }}
-                                    disabled={loadingPlan === plan.id || isCurrent}
+                                    onClick={() => handleSubscribe(plan.id)}
+                                    disabled={loadingPlan === plan.id || (isCurrent && hasSubscription)}
                                 >
                                     {loadingPlan === plan.id ? (
                                         <Loader2 className="h-5 w-5 animate-spin" />
-                                    ) : isCurrent ? (
+                                    ) : isCurrent && hasSubscription ? (
                                         "Activo"
+                                    ) : isCurrent && !hasSubscription ? (
+                                        "Agregar método de pago"
                                     ) : (
                                         `Cambiar a plan ${plan.name}`
                                     )}
