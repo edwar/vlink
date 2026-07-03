@@ -76,7 +76,7 @@ export function ToggleSlotGeneration({ organizationId, currentMethod }: ToggleSl
                             onValueChange={(val) => handleUpdate(val as any)}
                             disabled={isUpdating}
                         >
-                            <SelectTrigger className="w-full md:w-[400px] h-11 bg-muted/50 border-border/50 hover:bg-muted transition-colors">
+                            <SelectTrigger className="w-full md:w-[400px] h-11 bg-muted/50 hover:bg-muted transition-colors">
                                 <SelectValue placeholder="Selecciona un método" />
                             </SelectTrigger>
                             <SelectContent position="popper" align="start" className="w-(--radix-select-trigger-width) rounded-sm border shadow-xl">

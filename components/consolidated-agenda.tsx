@@ -78,7 +78,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                     </div>
                     {locations.length > 0 ? (
                         <Select value={selectedLocationId} onValueChange={setSelectedLocationId}>
-                            <SelectTrigger className="w-full md:w-[220px] h-12 rounded-xl bg-background border-border/40 font-bold">
+                            <SelectTrigger className="w-full md:w-[220px] h-12 rounded-xl bg-background font-bold">
                                 <SelectValue placeholder="Seleccionar Ubicación" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="rounded-xl border-border/40 font-medium">

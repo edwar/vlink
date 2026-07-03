@@ -113,7 +113,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                             <Input
                                 readOnly
                                 value={invitationUrl}
-                                className="h-14 bg-background border-dashed border-2 rounded-l-2xl rounded-r-none font-medium truncate focus-visible:ring-0 text-sm"
+                                className="rounded-r-none border-dashed font-medium truncate"
                             />
                             <Button
                                 size="icon"

@@ -17,6 +17,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { authClient } from "@/lib/auth-client"
+import { Input } from "./ui/input"
 
 export function ProfileSettings() {
     const [loading, setLoading] = useState(true)
@@ -163,7 +164,7 @@ export function ProfileSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Column 1: Public Identity (Left) */}
                 <div className="lg:col-span-12 xl:col-span-6 space-y-6">
-                    <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-2">
                             <div className="flex items-center gap-3">
@@ -181,9 +182,9 @@ export function ProfileSettings() {
                                     Identidad VLink (Username)
                                 </Label>
                                 <div className="group transition-all">
-                                    <InputGroup id="tour-username" className="relative rounded-2xl overflow-hidden border border-primary/5 transition-all">
+                                    <InputGroup id="tour-username">
                                         <div id="tour-username-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                                        <InputGroupAddon className="bg-primary/5 border-r border-primary/10 px-6 flex items-center justify-center">
+                                        <InputGroupAddon className="bg-primary/5 border-r rounded-l-md w-auto px-2">
                                             <InputGroupText className="text-primary font-black text-[13px] tracking-tighter">
                                                 {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
                                             </InputGroupText>
@@ -194,7 +195,7 @@ export function ProfileSettings() {
                                             onChange={(e) => setUsername(
                                                 e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "")
                                             )}
-                                            className="font-black text-xl px-6 bg-transparent border-none focus:ring-0 placeholder:text-muted-foreground/30"
+                                            className="font-black text-xl px-6 bg-transparent placeholder:text-muted-foreground/30"
                                             placeholder="tu-nombre"
                                         />
                                     </InputGroup>
@@ -213,7 +214,7 @@ export function ProfileSettings() {
                                     <Textarea
                                         value={bio}
                                         onChange={(e) => setBio(e.target.value)}
-                                        className="w-full bg-background/40 backdrop-blur-sm border-2 border-primary/5 rounded-4xl p-8 outline-none focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-lg min-h-[300px] font-medium leading-relaxed resize-none shadow-inner"
+                                        className="min-h-[300px] p-8 text-lg font-medium leading-relaxed resize-none shadow-inner bg-background/40 backdrop-blur-sm"
                                         placeholder="Describe tu experiencia, especialidades y el valor que ofreces a tus clientes..."
                                     />
                                     <div className="absolute bottom-6 right-8 text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest">
@@ -225,7 +226,7 @@ export function ProfileSettings() {
                     </section>
 
                     {/* Moved Section: Public Link */}
-                    <section id="tour-profile-url" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
+                    <section id="tour-profile-url" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 space-y-8">
                         <div id="tour-profile-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
                             <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Enlace de Agenda</h3>
@@ -233,9 +234,10 @@ export function ProfileSettings() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            <div className="flex-1 px-5 py-2 text-sm font-black overflow-hidden text-ellipsis whitespace-nowrap bg-background/80 rounded-xl border border-primary/5 shadow-inner-sm text-primary group-hover:bg-background transition-colors">
-                                {profileUrl.replace(/^https?:\/\//, '')}
-                            </div>
+                            <Input
+                                disabled
+                                value={profileUrl.replace(/^https?:\/\//, '')}
+                            />
                             <Button
                                 variant="secondary"
                                 onClick={copyToClipboard}
@@ -250,7 +252,7 @@ export function ProfileSettings() {
                 {/* Column 2: Policies and Sync (Right) */}
                 <div className="lg:col-span-12 xl:col-span-6 space-y-6">
                     {/* Section: Reservation Policies */}
-                    <section id="tour-policies" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
+                    <section id="tour-policies" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 space-y-8">
                         <div id="tour-policies-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
                             <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Políticas de Reserva</h3>
@@ -311,7 +313,7 @@ export function ProfileSettings() {
                     </section>
 
                     {/* Section: Google Calendar */}
-                    <section id="tour-google-sync" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-[2.5rem] p-8 space-y-8">
+                    <section id="tour-google-sync" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 space-y-8">
                         <div id="tour-google-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="flex items-start justify-between gap-4">
                             <div className="space-y-2">
@@ -411,7 +413,7 @@ export function ProfileSettings() {
                         onClick={handleSave}
                         disabled={saving}
                         className={cn(
-                            "group/btn relative px-8 h-18 rounded-4xl font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
+                            "group/btn relative px-8 h-18 font-black text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-700 overflow-hidden border-2",
                             success
                                 ? "bg-secondary text-secondary-foreground border-secondary/20 scale-105 shadow-secondary/40"
                                 : "bg-primary text-primary-foreground border-primary/20 hover:scale-110 active:scale-95 hover:shadow-primary/40"

@@ -85,7 +85,7 @@ export default async function AdminSettings() {
                                 <input
                                     name="title"
                                     defaultValue={config.announcementTitle || ''}
-                                    className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                                    className="flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm shadow-xs transition-[color,box-shadow] placeholder:text-muted-foreground"
                                     placeholder="Ej: Mantenimiento programado para el domingo"
                                 />
                             </div>
@@ -94,7 +94,7 @@ export default async function AdminSettings() {
                                 <textarea
                                     name="body"
                                     defaultValue={config.announcementBody || ''}
-                                    className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
+                                    className="flex min-h-20 w-full rounded-xl border border-input bg-background px-4 py-3 text-sm shadow-xs transition-[color,box-shadow] placeholder:text-muted-foreground"
                                     placeholder="Detalles del anuncio..."
                                 />
                             </div>
@@ -102,7 +102,7 @@ export default async function AdminSettings() {
                                 <div className="space-y-2 flex-1">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tipo</label>
                                     <Select name="type" defaultValue={config.announcementType}>
-                                        <SelectTrigger className="w-full bg-muted/40 border-none rounded-xl h-12 px-4 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all">
+                                        <SelectTrigger className="w-full h-12 text-sm font-black uppercase tracking-widest">
                                             <SelectValue placeholder="Tipo" />
                                         </SelectTrigger>
                                         <SelectContent position="popper" className="rounded-2xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">

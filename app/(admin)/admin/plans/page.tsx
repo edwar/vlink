@@ -60,7 +60,7 @@ export default async function AdminPlans() {
                                         <input
                                             name="price"
                                             defaultValue={p.price}
-                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                            className="flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm shadow-xs transition-[color,box-shadow] placeholder:text-muted-foreground"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -68,7 +68,7 @@ export default async function AdminPlans() {
                                         <input
                                             name="limit"
                                             defaultValue={p.limit}
-                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                            className="flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm shadow-xs transition-[color,box-shadow] placeholder:text-muted-foreground"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -77,7 +77,7 @@ export default async function AdminPlans() {
                                             name="maxSeats"
                                             type="number"
                                             defaultValue={p.maxSeats}
-                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                            className="flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm shadow-xs transition-[color,box-shadow] placeholder:text-muted-foreground"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -86,7 +86,7 @@ export default async function AdminPlans() {
                                             name="maxLocations"
                                             type="number"
                                             defaultValue={(p as any).maxLocations}
-                                            className="w-full bg-muted/40 border-none rounded-xl px-4 py-3 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all"
+                                            className="flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm shadow-xs transition-[color,box-shadow] placeholder:text-muted-foreground"
                                         />
                                     </div>
                                     <PlanFeaturesEditor initialFeatures={p.features} />

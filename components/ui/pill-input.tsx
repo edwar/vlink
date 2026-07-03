@@ -39,13 +39,13 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
         }
 
         return (
-            <div
-                role="presentation"
-                className={cn(
-                    "min-h-12 w-full rounded-md border-[0.5px] border-primary/10 bg-transparent px-6 py-3 flex flex-wrap gap-2 items-center cursor-text transition-all",
-                    "focus-within:border-primary focus-visible:border-primary focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-                    className
-                )}
+    <div
+        role="presentation"
+        className={cn(
+            "flex min-h-12 w-full flex-wrap items-center gap-2 rounded-lg border border-input bg-background px-4 py-2.5 text-sm shadow-xs transition-[color,box-shadow] cursor-text",
+            "focus-within:border-primary",
+            className
+        )}
                 onClick={() => inputRef.current?.focus()}
                 onKeyDown={() => inputRef.current?.focus()}
             >
@@ -80,7 +80,7 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
                     enterKeyHint="done"
                     autoCapitalize="sentences"
                     placeholder={value.length === 0 ? placeholder : ""}
-                    className="flex-1 bg-transparent border-0 ring-0 focus:ring-0 outline-none text-xl md:text-sm font-black min-w-[120px] py-1 placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground"
+                    className="flex-1 bg-transparent border-0 ring-0 focus:ring-0 outline-none text-sm font-black min-w-[120px] py-1 placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground"
                 />
                 {inputValue.trim() && (
                     <button

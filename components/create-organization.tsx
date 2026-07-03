@@ -103,7 +103,6 @@ export function CreateOrganization() {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleNext() } }}
-                                    className="h-12 text-lg border-2 focus:border-primary rounded-xl transition-all"
                                     disabled={isPending}
                                     autoFocus
                                 />

@@ -95,7 +95,7 @@ export function CloseOrganization({ organizationId, organizationName }: CloseOrg
                             value={confirmText}
                             onChange={(e) => setConfirmText(e.target.value)}
                             placeholder={organizationName}
-                            className="rounded-xl border-2 focus:border-red-500/40"
+                            className="border-destructive/50 focus:border-destructive"
                             disabled={isLoading}
                         />
                     </div>

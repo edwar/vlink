@@ -479,7 +479,7 @@ export function AvailabilityManagement() {
                                                             type="time"
                                                             value={start}
                                                             onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                            className="w-full h-12 text-sm font-black text-center"
+                                                            className="font-black text-center"
                                                         />
                                                     </div>
                                                     <div className="px-1">
@@ -490,7 +490,7 @@ export function AvailabilityManagement() {
                                                             type="time"
                                                             value={end}
                                                             onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                            className="w-full h-12 text-sm font-black text-center"
+                                                            className="font-black text-center"
                                                         />
                                                     </div>
                                                 </div>
@@ -527,14 +527,14 @@ export function AvailabilityManagement() {
                                                                 type="time"
                                                                 value={dayState?.lunchStart}
                                                                 onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                                className="flex-1 xl:w-28 h-11 text-xs font-black text-center"
+                                                                className="flex-1 xl:w-28 font-black text-center"
                                                             />
                                                             <span className="text-[10px] font-black text-muted-foreground/30 uppercase shrink-0">a</span>
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchEnd}
                                                                 onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                                className="flex-1 xl:w-28 h-11 text-xs font-black text-center"
+                                                                className="flex-1 xl:w-28 font-black text-center"
                                                             />
                                                         </div>
                                                     )}
@@ -639,7 +639,7 @@ export function AvailabilityManagement() {
                                 type="date"
                                 value={newBlock.date}
                                 onChange={(e) => setNewBlock(prev => ({ ...prev, date: e.target.value }))}
-                                className="w-full h-14 px-6 font-bold text-lg"
+                                className="font-bold"
                             />
                         </div>
                         <div className="space-y-3">
@@ -648,7 +648,7 @@ export function AvailabilityManagement() {
                                 value={newBlock.locationId}
                                 onValueChange={(value) => setNewBlock(prev => ({ ...prev, locationId: value }))}
                             >
-                                <SelectTrigger className="w-full h-14 px-6 font-bold text-lg text-left">
+                                <SelectTrigger className="font-bold text-left">
                                     <SelectValue placeholder="Seleccionar Sede" />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-border/40 shadow-2xl">
@@ -668,7 +668,7 @@ export function AvailabilityManagement() {
                                     type="time"
                                     value={newBlock.start}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, start: e.target.value }))}
-                                    className="w-full h-14 px-4 font-bold text-lg text-center"
+                                    className="font-bold text-center"
                                 />
                             </div>
                             <div className="space-y-3">
@@ -678,7 +678,7 @@ export function AvailabilityManagement() {
                                     type="time"
                                     value={newBlock.end}
                                     onChange={(e) => setNewBlock(prev => ({ ...prev, end: e.target.value }))}
-                                    className="w-full h-14 px-4 font-bold text-lg text-center"
+                                    className="font-bold text-center"
                                 />
                             </div>
                         </div>
