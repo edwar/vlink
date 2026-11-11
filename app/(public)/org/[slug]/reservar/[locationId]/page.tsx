@@ -63,7 +63,7 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
             <div className="w-full max-w-4xl space-y-12">
                 <header className="flex flex-col items-center text-center space-y-4">
                     <div className="flex flex-col items-center">
-                        <div className="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-4">
+                        <div className="h-16 w-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4">
                             <Briefcase className="h-8 w-8" />
                         </div>
                         <h2 className="text-sm font-black uppercase tracking-[0.2em] text-primary/60 mb-1">
@@ -86,7 +86,7 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
                                 <p className="text-muted-foreground font-medium max-w-sm mx-auto leading-relaxed">
                                     Parece que no hay profesionales asignados con servicios activos para esta sede todavía.
                                 </p>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-primary/40 pt-4">
+                                <p className="label-caps text-primary/40 pt-4">
                                     Tip: Asegúrate de asignar servicios a tus colaboradores en la pestaña de Sedes del Dashboard.
                                 </p>
                             </div>
@@ -124,7 +124,7 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
                                     {(member.user.profile?.bio?.length || 0) > 60 ? '...' : ''}
                                 </p>
 
-                                <Button variant="outline" className="mt-auto w-full rounded-2xl border-primary/20 text-primary font-black uppercase tracking-widest text-[10px] group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                                <Button variant="outline" className="mt-auto w-full rounded-xl border-primary/20 text-primary font-black uppercase tracking-widest text-2xs group-hover:bg-primary group-hover:text-white transition-all duration-500">
                                     Ver Agenda
                                     <ArrowRight className="ml-2 h-3.5 w-3.5" />
                                 </Button>

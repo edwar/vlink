@@ -58,7 +58,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                     <span className="text-sm font-black text-primary leading-none">
                         {format(new Date(appt.startTime), "d")}
                     </span>
-                    <span className="text-[9px] font-black uppercase tracking-widest text-primary/60 mt-1">
+                    <span className="text-2xs font-black uppercase tracking-widest text-primary/60 mt-1">
                         {format(new Date(appt.startTime), "MMM", { locale: es })}
                     </span>
                 </div>
@@ -74,17 +74,17 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                             {appt.clientName}
                         </h3>
                         {showDate && (
-                            <span className="hidden md:inline-flex text-[10px] font-black uppercase tracking-widest bg-primary/5 text-primary px-2.5 py-1 rounded-xl border border-primary/10">
+                            <span className="hidden md:inline-flex label-caps bg-primary/5 text-primary px-2.5 py-1 rounded-xl border border-primary/10">
                                 {format(new Date(appt.startTime), "d MMM", { locale: es })}
                             </span>
                         )}
                         {appt.status === "PAGADA" ? (
-                            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-2 py-0.5 rounded-full border border-green-500/20 ml-2">
+                            <span className="inline-flex items-center gap-1 text-2xs sm:text-2xs font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-2 py-0.5 rounded-full border border-green-500/20 ml-2">
                                 <CheckCircle2 className="h-3 w-3" />
                                 Pagada
                             </span>
                         ) : appt.status === "PENDING" ? (
-                            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 px-2 py-0.5 rounded-full border border-yellow-500/20 ml-2">
+                            <span className="inline-flex items-center gap-1 text-2xs sm:text-2xs font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 px-2 py-0.5 rounded-full border border-yellow-500/20 ml-2">
                                 <Clock className="h-3 w-3" />
                                 Pago Pendiente
                             </span>
@@ -103,7 +103,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                                     <span className="truncate max-w-[120px] sm:max-w-none">{appt.service.name}</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <span className="text-[10px] font-black bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
+                                    <span className="text-2xs font-black bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
                                         $ {(appt.service.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
                                     </span>
                                 </div>
@@ -117,7 +117,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                 <Link
                     href={`https://wa.me/${appt.clientPhone.replace(/\D/g, '')}`}
                     target="_blank"
-                    className="h-12 flex-1 md:flex-none px-6 bg-transparent text-primary rounded-2xl flex items-center justify-center font-bold text-sm border-2 border-primary/20 hover:bg-primary/10 transition-all"
+                    className="h-12 flex-1 md:flex-none px-6 bg-transparent text-primary rounded-xl flex items-center justify-center font-bold text-sm border-2 border-primary/20 hover:bg-primary/10 transition-all"
                 >
                     WhatsApp
                 </Link>
@@ -142,7 +142,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogTrigger asChild>
                             <Button
-                                className="h-12 w-12 bg-red-500/5 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
+                                className="h-12 w-12 bg-red-500/5 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
                                 title="Cancelar cita"
                                 aria-label="Cancelar cita"
                             >
@@ -165,7 +165,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                                 <Button
                                     variant="outline"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex-1 rounded-2xl border-border/50 font-bold h-12"
+                                    className="flex-1 rounded-xl border-border/50 font-bold h-12"
                                     disabled={isPending}
                                 >
                                     Mantener cita
@@ -173,7 +173,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                                 <Button
                                     variant="destructive"
                                     onClick={handleCancel}
-                                    className="flex-1 rounded-2xl font-bold h-12 shadow-[none]"
+                                    className="flex-1 rounded-xl font-bold h-12 shadow-[none]"
                                     disabled={isPending}
                                 >
                                     {isPending ? "Cancelando..." : "Sí, cancelar cita"}

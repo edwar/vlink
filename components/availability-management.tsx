@@ -319,7 +319,7 @@ export function AvailabilityManagement() {
                 </div>
 
                 <div id="tour-weekly-location" className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-muted/20 p-6 rounded-lg border border-border/40">
-                    <div className="h-12 w-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
+                    <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0">
                         <MapPinned className="h-6 w-6" />
                     </div>
                     <div className="space-y-1 flex-1">
@@ -333,7 +333,7 @@ export function AvailabilityManagement() {
                             value={selectedLocationId || ""}
                             onValueChange={(value) => switchLocation(value)}
                         >
-                            <SelectTrigger className="w-full h-14 rounded-2xl px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
+                            <SelectTrigger className="w-full h-14 rounded-xl px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
                                 <SelectValue placeholder="Seleccionar Sede" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="shadow-2xl">
@@ -397,12 +397,12 @@ export function AvailabilityManagement() {
                             </div>
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {daysWithConflicts.map(c => (
-                                    <span key={c.dayId} className="px-4 py-1.5 bg-red-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-red-500/20">
+                                    <span key={c.dayId} className="px-4 py-1.5 bg-red-500 text-white label-caps rounded-full shadow-lg shadow-red-500/20">
                                         {c.dayName}
                                     </span>
                                 ))}
                             </div>
-                            <p className="text-[11px] font-bold text-red-500/60 mt-3 px-1 italic">
+                            <p className="text-xs font-bold text-red-500/60 mt-3 px-1 italic">
                                 * No puedes estar en dos lugares al mismo tiempo. Ajusta los horarios antes de guardar.
                             </p>
                         </div>
@@ -436,8 +436,8 @@ export function AvailabilityManagement() {
                                             <div className={cn(
                                                 "h-14 w-14 flex items-center justify-center transition-all duration-500 ring-offset-background",
                                                 active
-                                                    ? "bg-primary text-primary-foreground rounded-2xl shadow-none scale-100"
-                                                    : "bg-primary/10 text-primary rounded-2xl scale-95 hover:scale-100"
+                                                    ? "bg-primary text-primary-foreground rounded-xl shadow-none scale-100"
+                                                    : "bg-primary/10 text-primary rounded-xl scale-95 hover:scale-100"
                                             )}>
                                                 {active ? <CheckCircle2 className="h-7 w-7 animate-in zoom-in duration-300" /> : <Clock className="h-7 w-7" />}
                                             </div>
@@ -449,19 +449,19 @@ export function AvailabilityManagement() {
                                                     {day.name}
                                                 </span>
                                                 {active ? (
-                                                    <span className="text-[10px] font-black text-primary uppercase tracking-widest mt-1.5 flex items-center gap-1.5">
+                                                    <span className="text-2xs font-black text-primary uppercase tracking-widest mt-1.5 flex items-center gap-1.5">
                                                         <div className="h-1 w-1 rounded-full bg-primary animate-pulse" />
                                                         Abierto
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[10px] font-bold text-primary/40 uppercase tracking-widest mt-1.5">Descanso</span>
+                                                    <span className="text-2xs font-bold text-primary/40 uppercase tracking-widest mt-1.5">Descanso</span>
                                                 )}
                                             </div>
                                         </div>
 
                                         {!active && (
                                             <div className="xl:hidden px-4 py-1.5 bg-muted/20 border border-muted-foreground/10 rounded-full">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+                                                <span className="label-caps text-muted-foreground/40">
                                                     Inactivo
                                                 </span>
                                             </div>
@@ -473,7 +473,7 @@ export function AvailabilityManagement() {
                                         {active ? (
                                             <div className="flex flex-col xl:flex-row xl:items-center justify-between w-full gap-6 animate-in fade-in slide-in-from-left-4 duration-500">
                                                 {/* Hours Selection */}
-                                                <div className="flex items-center gap-1 bg-muted/20 p-2 rounded-2xl w-full xl:w-fit border border-border/30">
+                                                <div className="flex items-center gap-1 bg-muted/20 p-2 rounded-xl w-full xl:w-fit border border-border/30">
                                                     <div className="flex-1 relative">
                                                         <Input
                                                             type="time"
@@ -483,7 +483,7 @@ export function AvailabilityManagement() {
                                                         />
                                                     </div>
                                                     <div className="px-1">
-                                                        <span className="text-[11px] font-black tracking-widest text-muted-foreground/40 uppercase">a</span>
+                                                        <span className="text-xs font-black tracking-widest text-muted-foreground/40 uppercase">a</span>
                                                     </div>
                                                     <div className="flex-1 relative">
                                                         <Input
@@ -512,24 +512,24 @@ export function AvailabilityManagement() {
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <span className={cn(
-                                                                "text-[11px] font-black uppercase tracking-widest transition-colors",
+                                                                "text-xs font-black uppercase tracking-widest transition-colors",
                                                                 dayState?.lunchActive ? "text-primary" : "text-muted-foreground/50"
                                                             )}>
                                                                 Almuerzo
                                                             </span>
-                                                            <span className="text-[10px] font-medium text-muted-foreground/40">Bloquear</span>
+                                                            <span className="text-2xs font-medium text-muted-foreground/40">Bloquear</span>
                                                         </div>
                                                     </div>
 
                                                     {dayState?.lunchActive && (
-                                                        <div className="flex items-center gap-1 animate-in slide-in-from-right-4 fade-in duration-500 w-full xl:w-fit bg-muted/20 p-2 rounded-2xl border border-border/30">
+                                                        <div className="flex items-center gap-1 animate-in slide-in-from-right-4 fade-in duration-500 w-full xl:w-fit bg-muted/20 p-2 rounded-xl border border-border/30">
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchStart}
                                                                 onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
                                                                 className="flex-1 xl:w-28 font-black text-center"
                                                             />
-                                                            <span className="text-[10px] font-black text-muted-foreground/30 uppercase shrink-0">a</span>
+                                                            <span className="text-2xs font-black text-muted-foreground/30 uppercase shrink-0">a</span>
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchEnd}
@@ -545,7 +545,7 @@ export function AvailabilityManagement() {
                                                 <div className="h-px flex-1 bg-linear-to-r from-transparent via-border/50 to-transparent" />
                                                 <div className="ml-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-dashed border-border/60 bg-muted/5">
                                                     <CalendarOff className="h-3 w-3 text-primary/40" />
-                                                    <span className="text-[11px] font-black text-primary/40 uppercase tracking-[0.2em]">
+                                                    <span className="text-xs font-black text-primary/40 uppercase tracking-[0.2em]">
                                                         Día de Descanso
                                                     </span>
                                                 </div>
@@ -557,7 +557,7 @@ export function AvailabilityManagement() {
                         })}
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-border/40 rounded-[3rem] bg-muted/5 animate-in fade-in zoom-in duration-500">
+                    <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-border/40 rounded-3xl bg-muted/5 animate-in fade-in zoom-in duration-500">
                         <div className="h-20 w-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mb-6">
                             <MapPinned className="h-10 w-10" />
                         </div>
@@ -578,7 +578,7 @@ export function AvailabilityManagement() {
                     </div>
                     <Button
                         onClick={() => setShowBlockModal(true)}
-                        className="w-full md:w-auto px-8 rounded-full font-black active:scale-95 text-[11px] uppercase tracking-widest border border-border/40 hover:bg-primary/90 transition-all shadow-none"
+                        className="w-full md:w-auto px-8 rounded-full font-black active:scale-95 text-xs uppercase tracking-widest border border-border/40 hover:bg-primary/90 transition-all shadow-none"
                     >
                         <Plus className="h-5 w-5 mr-2" />
                         Añadir Bloqueo Especial
@@ -590,14 +590,14 @@ export function AvailabilityManagement() {
                         {specialBlocks.map((block) => (
                             <div key={block.id} className="group relative flex items-center justify-between p-6 border border-border/40 rounded-4xl animate-in zoom-in-95 duration-300 hover:border-primary/30 transition-all">
                                 <div className="flex items-center gap-5">
-                                    <div className="bg-red-500/10 text-red-500 rounded-2xl h-14 w-14 flex items-center justify-center shrink-0">
+                                    <div className="bg-red-500/10 text-red-500 rounded-xl h-14 w-14 flex items-center justify-center shrink-0">
                                         <CalendarIcon className="h-6 w-6" />
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="font-black text-lg tracking-tighter leading-none capitalize">
                                             {format(new Date(`${getBogotaISO(new Date(block.specificDate))}T12:00:00`), "EEEE, d 'de' MMMM", { locale: es })}
                                         </p>
-                                        <p className="text-[11px] font-black text-muted-foreground/60 uppercase tracking-widest mt-2 bg-muted/20 w-fit px-2 py-0.5 rounded-md">
+                                        <p className="text-xs font-black text-muted-foreground/60 uppercase tracking-widest mt-2 bg-muted/20 w-fit px-2 py-0.5 rounded-md">
                                             {block.startTime} — {block.endTime}
                                             {block.location && <span className="ml-2 border-l border-muted-foreground/20 pl-2">@{block.location.name}</span>}
                                         </p>
@@ -615,7 +615,7 @@ export function AvailabilityManagement() {
                         ))}
                     </div>
                 ) : (
-                    <div className="py-4 rounded-[3rem] border border-dashed border-border/40 bg-muted/5">
+                    <div className="py-4 rounded-3xl border border-dashed border-border/40 bg-muted/5">
                         <EmptyState
                             title="Sin bloqueos especiales"
                             description="Tus vacaciones y descansos específicos aparecerán en este lugar."
@@ -633,7 +633,7 @@ export function AvailabilityManagement() {
                     </DialogHeader>
                     <div className="space-y-8 py-2">
                         <div className="space-y-3">
-                            <label htmlFor="block-date" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground px-2">Fecha del bloqueo</label>
+                            <label htmlFor="block-date" className="label-caps text-muted-foreground px-2">Fecha del bloqueo</label>
                             <Input
                                 id="block-date"
                                 type="date"
@@ -643,7 +643,7 @@ export function AvailabilityManagement() {
                             />
                         </div>
                         <div className="space-y-3">
-                            <label htmlFor="block-location" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground px-2">Sede (Opcional)</label>
+                            <label htmlFor="block-location" className="label-caps text-muted-foreground px-2">Sede (Opcional)</label>
                             <Select
                                 value={newBlock.locationId}
                                 onValueChange={(value) => setNewBlock(prev => ({ ...prev, locationId: value }))}
@@ -651,7 +651,7 @@ export function AvailabilityManagement() {
                                 <SelectTrigger className="font-bold text-left">
                                     <SelectValue placeholder="Seleccionar Sede" />
                                 </SelectTrigger>
-                                <SelectContent className="rounded-2xl border-border/40 shadow-2xl">
+                                <SelectContent className="rounded-xl border-border/40 shadow-2xl">
                                     {locations.map(loc => (
                                         <SelectItem key={loc.id} value={loc.id} className="font-bold py-3 rounded-xl">
                                             {loc.name}
@@ -662,7 +662,7 @@ export function AvailabilityManagement() {
                         </div>
                         <div className="grid grid-cols-2 gap-6">
                             <div className="space-y-3">
-                                <label htmlFor="block-start" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground px-2">Desde las</label>
+                                <label htmlFor="block-start" className="label-caps text-muted-foreground px-2">Desde las</label>
                                 <Input
                                     id="block-start"
                                     type="time"
@@ -672,7 +672,7 @@ export function AvailabilityManagement() {
                                 />
                             </div>
                             <div className="space-y-3">
-                                <label htmlFor="block-end" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground px-2">Hasta las</label>
+                                <label htmlFor="block-end" className="label-caps text-muted-foreground px-2">Hasta las</label>
                                 <Input
                                     id="block-end"
                                     type="time"
@@ -687,14 +687,14 @@ export function AvailabilityManagement() {
                         <Button
                             variant="ghost"
                             onClick={() => setShowBlockModal(false)}
-                            className="flex-1 rounded-2xl font-black uppercase text-[11px] tracking-widest border border-border/40"
+                            className="flex-1 rounded-xl font-black uppercase text-xs tracking-widest border border-border/40"
                         >
                             Cancelar
                         </Button>
                         <Button
                             onClick={handleAddBlock}
                             disabled={!newBlock.date || saving}
-                            className="flex-1 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-none brightness-110 active:scale-95 transition-all"
+                            className="flex-1 rounded-xl font-black uppercase text-xs tracking-widest shadow-none brightness-110 active:scale-95 transition-all"
                         >
                             {saving ? <Loader2 className="animate-spin h-5 w-5" /> : "Registrar Bloqueo"}
                         </Button>
@@ -705,7 +705,7 @@ export function AvailabilityManagement() {
             {/* Global Save Button - Centered at the bottom */}
             <div className="flex flex-col items-center justify-center pt-10 sticky bottom-0 z-20 pointer-events-none">
                 <div className="relative w-fit group/save pointer-events-auto">
-                    <div id="tour-save-anchor" className="absolute -inset-4 pointer-events-none rounded-[3rem] bg-primary/10 blur-xl opacity-0 group-hover/save:opacity-100 transition-opacity" />
+                    <div id="tour-save-anchor" className="absolute -inset-4 pointer-events-none rounded-3xl bg-primary/10 blur-xl opacity-0 group-hover/save:opacity-100 transition-opacity" />
                     <Button
                         onClick={handleSave}
                         disabled={saving}
@@ -723,7 +723,7 @@ export function AvailabilityManagement() {
                         )}
 
                         <div className="relative z-10 flex items-center gap-6">
-                            <div className="p-3 bg-white/10 rounded-2xl">
+                            <div className="p-3 bg-white/10 rounded-xl">
                                 {saving ? (
                                     <Loader2 className="h-8 w-8 animate-spin" />
                                 ) : success ? (
@@ -733,7 +733,7 @@ export function AvailabilityManagement() {
                                 )}
                             </div>
                             <div className="flex flex-col items-start gap-0.5">
-                                <span className="uppercase tracking-[0.2em] text-[10px] font-black opacity-60">
+                                <span className="uppercase tracking-[0.2em] text-2xs font-black opacity-60">
                                     {saving ? "Sincronizando..." : success ? "Éxito" : "Control Maestro"}
                                 </span>
                                 <span className="text-xl">
@@ -743,7 +743,7 @@ export function AvailabilityManagement() {
                         </div>
                     </Button>
                 </div>
-                <p className="mt-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 animate-pulse">
+                <p className="mt-4 text-2xs font-black uppercase tracking-[0.3em] text-muted-foreground/40 animate-pulse">
                     Pulsa para aplicar tus nuevos horarios
                 </p>
             </div>

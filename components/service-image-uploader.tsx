@@ -142,7 +142,7 @@ export function ServiceImageUploader({ serviceId, images, profileId, onImagesCha
         </button>
       </div>
 
-      <p className="text-[10px] text-muted-foreground font-medium">
+      <p className="text-2xs text-muted-foreground font-medium">
         JPG, PNG o WebP. Máx 5 MB c/u. Pasa el mouse sobre las imágenes para reordenar o eliminar.
       </p>
 

@@ -57,7 +57,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                     </Button>
 
                     <div className="flex flex-col items-center min-w-[200px]">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Agenda Consolidada</span>
+                        <span className="label-caps text-primary mb-1">Agenda Consolidada</span>
                         <h2 className="text-xl font-black font-display tracking-tight text-center">
                             {format(selectedDate, "EEEE, d 'de' MMMM", { locale: es })}
                         </h2>
@@ -102,7 +102,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                     {data.map((item) => (
                         <div
                             key={item.profile.username}
-                            className="group p-4 rounded-2xl transition-all flex flex-col md:flex-row md:items-center gap-6 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden"
+                            className="group p-4 rounded-xl transition-all flex flex-col md:flex-row md:items-center gap-6 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden"
                         >
                             <div className="flex items-center gap-4 min-w-[240px]">
                                 <UserAvatar
@@ -112,7 +112,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                                 />
                                 <div>
                                     <h3 className="font-black text-foreground group-hover:text-primary transition-colors">{item.profile.displayName}</h3>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">@{item.profile.username}</p>
+                                    <p className="label-caps text-muted-foreground">@{item.profile.username}</p>
                                 </div>
                             </div>
 
@@ -131,7 +131,7 @@ export function ConsolidatedAgenda({ orgSlug, locations }: ConsolidatedAgendaPro
                     ))}
                 </div>
             ) : (
-                <div className="p-20 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden rounded-[2.5rem] flex flex-col items-center justify-center text-center">
+                <div className="p-20 bg-linear-to-br from-primary/5 via-background to-background overflow-hidden rounded-3xl flex flex-col items-center justify-center text-center">
                     <div className={`h-16 w-16 rounded-full flex items-center justify-center mb-4 ${holidayInfo.isHoliday ? 'bg-orange-100 text-orange-500' : 'bg-muted text-muted-foreground'}`}>
                         {holidayInfo.isHoliday ? <CalendarX2 className="h-8 w-8" /> : <User className="h-8 w-8" />}
                     </div>

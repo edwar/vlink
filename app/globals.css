@@ -167,6 +167,9 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: 0.75rem;
   --radius-3xl: 1rem;
+
+  /* Texto de apoyo muy pequeño (etiquetas, badges). Equivale a 10px. */
+  --text-2xs: 0.625rem;
  
   --shadow-2xs: var(--shadow-2xs);
   --shadow-xs: var(--shadow-xs);
@@ -190,6 +193,17 @@
       var(--background);
     color: var(--foreground);
   }
+}
+
+/*
+ * Convenciones de UI (ver components/page-header.tsx):
+ * - Radios: rounded-lg (controles), rounded-xl (tarjetas internas, inputs grandes),
+ *   rounded-3xl (tarjetas/paneles principales y diálogos). Evitar rounded-[…].
+ * - Tamaños de texto: usar la escala (text-2xs, text-xs, text-sm…), no text-[Npx].
+ * - Etiquetas en mayúsculas: clase label-caps.
+ */
+@utility label-caps {
+  @apply text-2xs font-black uppercase tracking-widest;
 }
 
 /* Custom Intro.js Styles */

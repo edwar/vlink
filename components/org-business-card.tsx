@@ -114,9 +114,9 @@ export function OrgBusinessCard({ organization, publicUrl }: OrgBusinessCardProp
                 />
             </div>
             <div className="group relative">
-                <div className="absolute inset-0 bg-primary/10 rounded-[2rem] blur-xl group-hover:bg-primary/20 transition-all duration-500 opacity-50" />
+                <div className="absolute inset-0 bg-primary/10 rounded-3xl blur-xl group-hover:bg-primary/20 transition-all duration-500 opacity-50" />
 
-                <div className="relative overflow-hidden w-full aspect-1.75/1 rounded-[2rem] bg-white border border-primary/10 shadow-xl shadow-primary/5 flex transition-transform duration-300 group-hover:scale-[1.02]">
+                <div className="relative overflow-hidden w-full aspect-1.75/1 rounded-3xl bg-white border border-primary/10 shadow-xl shadow-primary/5 flex transition-transform duration-300 group-hover:scale-[1.02]">
                     <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px]" />
                     <div className="w-2 md:w-3 h-full bg-slate-900 relative z-10" />
 
@@ -132,10 +132,10 @@ export function OrgBusinessCard({ organization, publicUrl }: OrgBusinessCardProp
                             </div>
 
                             <div className="space-y-0.5 pt-2 md:pt-4 lg:pt-6 mt-1 border-t border-slate-100">
-                                <p className="text-[7px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <p className="text-[7px] md:text-2xs font-black text-slate-400 uppercase tracking-widest">
                                     Tecnología de VLink
                                 </p>
-                                <p className="text-[10px] md:text-sm lg:text-base xl:text-lg font-bold text-primary truncate">
+                                <p className="text-2xs md:text-sm lg:text-base xl:text-lg font-bold text-primary truncate">
                                     {publicUrl.replace(/^https?:\/\//, "")}
                                 </p>
                             </div>
@@ -143,7 +143,7 @@ export function OrgBusinessCard({ organization, publicUrl }: OrgBusinessCardProp
                     </div>
 
                     <div className="p-3 md:p-6 lg:p-8 flex flex-col items-center justify-center gap-2 md:gap-4 relative z-10 bg-linear-to-l from-white via-white to-transparent">
-                        <div className="bg-white p-2 md:p-4 rounded-[1rem] lg:rounded-[2rem] shadow-lg border-[4px] md:border-[6px] border-slate-50">
+                        <div className="bg-white p-2 md:p-4 rounded-3xl lg:rounded-3xl shadow-lg border-[4px] md:border-[6px] border-slate-50">
                             <QRCodeSVG
                                 value={publicUrl}
                                 size={400}
@@ -161,10 +161,10 @@ export function OrgBusinessCard({ organization, publicUrl }: OrgBusinessCardProp
                     </div>
                 </div>
 
-                <div className="absolute inset-0 bg-black/10 backdrop-blur-2xs lg:bg-black/20 lg:backdrop-blur-sm rounded-[2rem] opacity-100 lg:opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20 hover:scale-[1.02]">
+                <div className="absolute inset-0 bg-black/10 backdrop-blur-2xs lg:bg-black/20 lg:backdrop-blur-sm rounded-3xl opacity-100 lg:opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20 hover:scale-[1.02]">
                     <button
                         onClick={downloadBusinessCard}
-                        className="flex items-center gap-2 px-2 py-2 lg:px-6 lg:py-3 rounded-2xl bg-primary-foreground text-primary hover:scale-105 active:scale-95 transition-all shadow-xl font-black uppercase text-xs tracking-widest"
+                        className="flex items-center gap-2 px-2 py-2 lg:px-6 lg:py-3 rounded-xl bg-primary-foreground text-primary hover:scale-105 active:scale-95 transition-all shadow-xl font-black uppercase text-xs tracking-widest"
                     >
                         <Download className="h-4 w-4" />
                         <span className="hidden lg:block">Descargar como SVG</span>

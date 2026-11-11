@@ -132,7 +132,7 @@ export default function InvitePage() {
                         <Button
                             onClick={handleLogin}
                             disabled={isJoining}
-                            className="w-full group relative flex items-center justify-center gap-4 bg-white text-black border-2 border-slate-100 hover:border-primary/20 py-5 rounded-2xl font-bold text-lg shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 overflow-hidden"
+                            className="w-full group relative flex items-center justify-center gap-4 bg-white text-black border-2 border-slate-100 hover:border-primary/20 py-5 rounded-xl font-bold text-lg shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-linear-to-tr from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             {isJoining ? (

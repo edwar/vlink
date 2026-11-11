@@ -44,7 +44,7 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button
-                    className="h-12 w-12 rounded-2xl flex items-center justify-center transition-all shrink-0 border bg-amber-500/5 text-amber-600 border-amber-500/20 hover:bg-amber-500 hover:text-white"
+                    className="h-12 w-12 rounded-xl flex items-center justify-center transition-all shrink-0 border bg-amber-500/5 text-amber-600 border-amber-500/20 hover:bg-amber-500 hover:text-white"
                     title="Notas internas"
                 >
                     <StickyNote className="h-4 w-4" />
@@ -75,7 +75,7 @@ export function AppointmentNotesDialog({ apptId, clientName, initialNotes }: App
                     <Button
                         onClick={handleSave}
                         disabled={saving}
-                        className="w-full h-12 rounded-2xl font-bold text-sm bg-primary hover:bg-primary/80 shadow-lg shadow-primary/20 text-primary-foreground"
+                        className="w-full h-12 rounded-xl font-bold text-sm bg-primary hover:bg-primary/80 shadow-lg shadow-primary/20 text-primary-foreground"
                     >
                         {saving ? (
                             <span className="flex items-center gap-2">

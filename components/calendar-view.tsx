@@ -101,7 +101,7 @@ function CalendarHeader({
                                     <SelectValue placeholder="Seleccionar Ubicación" />
                                 </div>
                             </SelectTrigger>
-                            <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
+                            <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-xl border-border/40 shadow-2xl">
                                 {locations.map(loc => (
                                     <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
                                         {loc.name}
@@ -133,7 +133,7 @@ function CalendarHeader({
                         size="sm"
                         onClick={() => onViewChange('day')}
                         className={cn(
-                            "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
+                            "px-4 py-1.5 h-auto rounded-full text-xs font-bold uppercase tracking-widest",
                             view === 'day' ? "bg-primary text-primary-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
@@ -145,7 +145,7 @@ function CalendarHeader({
                         size="sm"
                         onClick={() => onViewChange('week')}
                         className={cn(
-                            "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
+                            "px-4 py-1.5 h-auto rounded-full text-xs font-bold uppercase tracking-widest",
                             view === 'week' ? "bg-primary text-primary-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
@@ -157,7 +157,7 @@ function CalendarHeader({
                         size="sm"
                         onClick={() => onViewChange('month')}
                         className={cn(
-                            "px-4 py-1.5 h-auto rounded-full text-[11px] font-bold uppercase tracking-widest",
+                            "px-4 py-1.5 h-auto rounded-full text-xs font-bold uppercase tracking-widest",
                             view === 'month' ? "bg-primary text-primary-foreground shadow-[none]" : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                         )}
                     >
@@ -180,7 +180,7 @@ function CalendarHeader({
                         variant="ghost"
                         size="sm"
                         onClick={onToday}
-                        className="rounded-full h-8 px-4 font-black uppercase text-[10px] tracking-widest hover:bg-background"
+                        className="rounded-full h-8 px-4 font-black uppercase text-2xs tracking-widest hover:bg-background"
                     >
                         Hoy
                     </Button>
@@ -204,7 +204,7 @@ function CalendarHeader({
                                 variant={view === 'day' ? "vlink" : "secondary"}
                                 size="sm"
                                 onClick={() => { onViewChange('day'); onMenuToggle(); }}
-                                className="h-auto py-3 text-[10px] flex-col rounded-xl"
+                                className="h-auto py-3 text-2xs flex-col rounded-xl"
                             >
                                 <Clock className="h-4 w-4" />
                                 Día
@@ -213,7 +213,7 @@ function CalendarHeader({
                                 variant={view === 'week' ? "vlink" : "secondary"}
                                 size="sm"
                                 onClick={() => { onViewChange('week'); onMenuToggle(); }}
-                                className="h-auto py-3 text-[10px] flex-col rounded-xl"
+                                className="h-auto py-3 text-2xs flex-col rounded-xl"
                             >
                                 <CalendarIcon className="h-4 w-4" />
                                 Semana
@@ -222,7 +222,7 @@ function CalendarHeader({
                                 variant={view === 'month' ? "vlink" : "secondary"}
                                 size="sm"
                                 onClick={() => { onViewChange('month'); onMenuToggle(); }}
-                                className="h-auto py-3 text-[10px] flex-col rounded-xl"
+                                className="h-auto py-3 text-2xs flex-col rounded-xl"
                             >
                                 <LayoutGrid className="h-4 w-4" />
                                 Mes
@@ -242,7 +242,7 @@ function CalendarHeader({
                             <SelectTrigger className="w-full h-10 rounded-xl bg-muted/20 px-4 text-xs font-bold transition-all text-foreground">
                                 <SelectValue placeholder="Todas las Sedes" />
                             </SelectTrigger>
-                            <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-2xl border-border/40 shadow-2xl">
+                            <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-xl border-border/40 shadow-2xl">
                                 <SelectItem value="all" className="text-xs font-bold py-2 rounded-xl">Todas las Sedes</SelectItem>
                                 {locations.map(loc => (
                                     <SelectItem key={loc.id} value={loc.id} className="text-xs font-bold py-2 rounded-xl">
@@ -397,7 +397,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
             <div className="border border-primary/10 rounded-lg bg-transparent overflow-hidden">
                 <div className="grid grid-cols-7 border-b border-border/50 bg-muted/10">
                     {weekDays.map(day => (
-                        <div key={day} className="p-3 sm:p-4 text-center text-[10px] sm:text-[11px] font-black text-muted-foreground uppercase tracking-widest">
+                        <div key={day} className="p-3 sm:p-4 text-center text-2xs sm:text-xs font-black text-muted-foreground uppercase tracking-widest">
                             <span className="hidden sm:inline">{day}</span>
                             <span className="sm:hidden">{day.charAt(0)}</span>
                         </div>
@@ -462,7 +462,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                             >
                                 <div className="flex justify-between items-start">
                                     <span className={cn(
-                                        "flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-[10px] sm:text-sm font-medium",
+                                        "flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-2xs sm:text-sm font-medium",
                                         isToday(day) ? "bg-primary text-primary-foreground" : "text-foreground",
                                         isBlocked && "text-destructive"
                                     )}>
@@ -471,7 +471,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                 </div>
                                 <div className="mt-1 space-y-1">
                                     {isBlocked && (
-                                        <div className="px-1 sm:px-1.5 py-0.5 bg-red-100 text-destructive text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit">
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-red-100 text-destructive text-[8px] sm:text-2xs font-bold rounded flex items-center gap-1 w-fit">
                                             <Lock className="h-2.5 w-2.5" />
                                             <span className="hidden sm:inline">
                                                 {holidayBlocked ? (holidayName || "Festivo") : "Bloqueado"}
@@ -480,13 +480,13 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                         </div>
                                     )}
                                     {isFullyUnavailable && !isBlocked && (
-                                        <div className="px-1 sm:px-1.5 py-0.5 bg-muted text-muted-foreground text-[8px] sm:text-[10px] font-medium rounded w-fit">
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-muted text-muted-foreground text-[8px] sm:text-2xs font-medium rounded w-fit">
                                             <span className="hidden sm:inline">No disponible</span>
                                             <span className="sm:hidden">N/D</span>
                                         </div>
                                     )}
                                     {dayAppointments.length > 0 && !isBlocked && (
-                                        <div className="px-1 sm:px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] sm:text-[10px] font-bold rounded flex items-center gap-1 w-fit overflow-hidden">
+                                        <div className="px-1 sm:px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] sm:text-2xs font-bold rounded flex items-center gap-1 w-fit overflow-hidden">
                                             <span className="truncate">{dayAppointments.length} cita{dayAppointments.length > 1 ? 's' : ''}</span>
                                         </div>
                                     )}
@@ -535,7 +535,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                         "border-r border-border/50 last:border-r-0"
                                     )}
                                 >
-                                    <p className="text-[10px] sm:text-[11px] font-black text-muted-foreground uppercase tracking-widest">
+                                    <p className="text-2xs sm:text-xs font-black text-muted-foreground uppercase tracking-widest">
                                         {format(day, "eee", { locale: es })}
                                     </p>
                                     <div className="mt-1 flex justify-center">
@@ -560,7 +560,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                             {/* Time labels column */}
                             <div className="flex flex-col sticky left-0 z-20">
                                 {hours.map((hour) => (
-                                    <div key={hour} className="h-20 p-2 sm:p-4 pr-3 sm:pr-5 text-[10px] sm:text-xs font-black text-muted-foreground text-right border-r border-b border-border/50 bg-background/95 backdrop-blur-md">
+                                    <div key={hour} className="h-20 p-2 sm:p-4 pr-3 sm:pr-5 text-2xs sm:text-xs font-black text-muted-foreground text-right border-r border-b border-border/50 bg-background/95 backdrop-blur-md">
                                         {hour}:00
                                     </div>
                                 ))}
@@ -647,7 +647,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                                                     setSelectedAppointment(appt);
                                                                 }
                                                             }}
-                                                            className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-[10px] overflow-hidden z-10 cursor-pointer hover:bg-primary/20 hover:border-primary/40 transition-colors"
+                                                            className="absolute inset-x-1 border rounded-md p-1 bg-primary/10 border-primary/20 text-2xs overflow-hidden z-10 cursor-pointer hover:bg-primary/20 hover:border-primary/40 transition-colors"
                                                             style={{
                                                                 top: `${(new Date(appt.startTime).getMinutes() / 60) * 100}%`,
                                                                 height: `${Math.max(20, (((new Date(appt.endTime).getTime() - new Date(appt.startTime).getTime()) / 1000 / 60) / 60) * 100)}%`,
@@ -656,7 +656,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                                             }}
                                                         >
                                                             <p className="font-semibold text-primary truncate leading-tight">{appt.clientName}</p>
-                                                            {appt.service?.name && <p className="text-[10px] text-primary/80 truncate leading-tight">{appt.service.name}</p>}
+                                                            {appt.service?.name && <p className="text-2xs text-primary/80 truncate leading-tight">{appt.service.name}</p>}
                                                         </div>
                                                     ))}
 
@@ -680,10 +680,10 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
 
     if (!isMounted) {
         return (
-            <div className="w-full h-[800px] rounded-[2.5rem] bg-surface/50 border border-border/40 animate-pulse flex items-center justify-center">
+            <div className="w-full h-[800px] rounded-3xl border border-border/40 animate-pulse flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="h-12 w-12 animate-spin text-primary/40" />
-                    <p className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Sincronizando Agenda...</p>
+                    <p className="text-2xs uppercase font-black tracking-widest text-muted-foreground/60">Sincronizando Agenda...</p>
                 </div>
             </div>
         )
@@ -733,19 +733,19 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                         <div className="flex flex-col gap-2 items-start">
                                             <p className="font-bold text-lg leading-tight md:truncate max-w-[200px] md:max-w-none">{selectedAppointment.service?.name || "Servicio General"}</p>
                                             {selectedAppointment.status === "PAGADA" ? (
-                                                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-3 py-1 rounded-full border border-green-500/20">
+                                                <span className="inline-flex items-center gap-1.5 text-2xs sm:text-xs font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-3 py-1 rounded-full border border-green-500/20">
                                                     <CheckCircle2 className="h-3.5 w-3.5" />
                                                     Servicio Pagado
                                                 </span>
                                             ) : selectedAppointment.status === "PENDING" ? (
-                                                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 px-3 py-1 rounded-full border border-yellow-500/20">
+                                                <span className="inline-flex items-center gap-1.5 text-2xs sm:text-xs font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 px-3 py-1 rounded-full border border-yellow-500/20">
                                                     <Clock className="h-3.5 w-3.5" />
                                                     Pago Pendiente
                                                 </span>
                                             ) : null}
                                         </div>
                                         <div className="text-right shrink-0 pt-1">
-                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-1 -mr-[0.1em]">Pago</p>
+                                            <p className="text-2xs font-black uppercase text-muted-foreground tracking-widest mb-1 -mr-[0.1em]">Pago</p>
                                             <p className="font-black text-primary text-md leading-none">$ {(selectedAppointment.service?.price ?? 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
                                         </div>
                                     </div>
@@ -757,16 +757,16 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                             </span>
                                         </div>
                                         <span className="opacity-40 hidden xs:inline">•</span>
-                                        <span className="font-bold bg-primary/5 text-primary px-2 py-0.5 rounded-full text-[10px] tracking-widest uppercase">
+                                        <span className="font-bold bg-primary/5 text-primary px-2 py-0.5 rounded-full text-2xs tracking-widest uppercase">
                                             {format(new Date(selectedAppointment.startTime), "HH:mm")} - {format(new Date(selectedAppointment.endTime), "HH:mm")}
                                         </span>
                                     </div>
-                                    <div className="pt-3 flex items-center gap-2 text-[10px] text-muted-foreground border-t border-dashed border-border/50 mt-3 font-semibold uppercase tracking-widest">
+                                    <div className="pt-3 flex items-center gap-2 text-2xs text-muted-foreground border-t border-dashed border-border/50 mt-3 font-semibold uppercase tracking-widest">
                                         <CalendarIcon className="h-3 w-3" />
                                         <span>Registrada el: {format(new Date(selectedAppointment.createdAt), "dd/MM/yyyy HH:mm")}</span>
                                     </div>
                                     {selectedAppointment.location && (
-                                        <div className="pt-2 flex items-center gap-2 text-[10px] text-primary/60 font-semibold uppercase tracking-widest">
+                                        <div className="pt-2 flex items-center gap-2 text-2xs text-primary/60 font-semibold uppercase tracking-widest">
                                             <MapPinned className="h-3 w-3" />
                                             <span>Sede: {selectedAppointment.location.name}</span>
                                         </div>
@@ -775,25 +775,25 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                             </div>
 
                             <div className="space-y-4">
-                                <h4 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Información del Cliente</h4>
+                                <h4 className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Información del Cliente</h4>
                                 <div className="grid gap-3">
-                                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-transparent border border-dashed border-border/50 hover:bg-primary/5 hover:border-primary/20 transition-colors">
+                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-transparent border border-dashed border-border/50 hover:bg-primary/5 hover:border-primary/20 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                             <User className="h-4 w-4" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="text-[10px] text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Nombre</p>
+                                            <p className="text-2xs text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Nombre</p>
                                             <p className="text-sm font-bold truncate">{selectedAppointment.clientName}</p>
                                         </div>
                                     </div>
 
                                     {selectedAppointment.clientEmail && (
-                                        <div className="flex items-center gap-3 p-3 rounded-2xl bg-transparent border border-dashed border-border/50 hover:bg-primary/5 hover:border-primary/20 transition-colors">
+                                        <div className="flex items-center gap-3 p-3 rounded-xl bg-transparent border border-dashed border-border/50 hover:bg-primary/5 hover:border-primary/20 transition-colors">
                                             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                                 <Mail className="h-4 w-4" />
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <p className="text-[10px] text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Correo Electrónico</p>
+                                                <p className="text-2xs text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Correo Electrónico</p>
                                                 <a href={`mailto:${selectedAppointment.clientEmail}`} className="text-sm font-bold text-primary hover:underline break-all block leading-tight">
                                                     {selectedAppointment.clientEmail}
                                                 </a>
@@ -801,12 +801,12 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                                         </div>
                                     )}
 
-                                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-transparent border border-dashed border-border/50 hover:bg-green-500/5 hover:border-green-500/20 transition-colors">
+                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-transparent border border-dashed border-border/50 hover:bg-green-500/5 hover:border-green-500/20 transition-colors">
                                         <div className="h-8 w-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 shrink-0">
                                             <Phone className="h-4 w-4" />
                                         </div>
                                         <div>
-                                            <p className="text-[10px] text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Teléfono (WhatsApp)</p>
+                                            <p className="text-2xs text-muted-foreground leading-none mb-1 font-semibold uppercase tracking-widest">Teléfono (WhatsApp)</p>
                                             <a href={`https://wa.me/${selectedAppointment.clientPhone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-green-600 hover:underline">
                                                 {selectedAppointment.clientPhone}
                                             </a>

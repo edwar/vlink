@@ -117,7 +117,7 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
                                     <h3 className="font-black font-display tracking-tight uppercase text-sm group-hover:text-primary transition-colors">
                                         {member.user.profile?.displayName || member.user.name}
                                     </h3>
-                                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{member.role}</p>
+                                    <p className="text-2xs text-muted-foreground font-bold uppercase tracking-widest">{member.role}</p>
                                 </div>
                             </Link>
                         ))}

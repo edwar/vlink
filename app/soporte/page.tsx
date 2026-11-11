@@ -41,7 +41,7 @@ export default function SoportePage() {
                     {/* Support Channels Grid */}
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="p-10 bg-linear-to-br from-primary/5 via-transparent to-transparent rounded-[40px] border border-primary/10 space-y-6 hover:-translate-y-2 transition-transform duration-500 group">
-                            <div className="h-14 w-14 bg-accent rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                            <div className="h-14 w-14 bg-accent rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                                 <MessageSquare className="h-8 w-8" />
                             </div>
                             <h3 className="text-2xl font-display font-black tracking-tight">Vía WhatsApp</h3>
@@ -56,7 +56,7 @@ export default function SoportePage() {
                         </div>
 
                         <div className="p-10 bg-linear-to-br from-primary/5 via-transparent to-transparent rounded-[40px] border border-primary/10 space-y-6 hover:-translate-y-2 transition-transform duration-500 group">
-                            <div className="h-14 w-14 bg-accent rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                            <div className="h-14 w-14 bg-accent rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                                 <Mail className="h-8 w-8" />
                             </div>
                             <h3 className="text-2xl font-display font-black tracking-tight">Correo Electrónico</h3>

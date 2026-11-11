@@ -98,7 +98,7 @@ export function LandingNav() {
                                 onClick={() => setMenuOpen(false)}
                                 onKeyDown={() => setMenuOpen(false)}
                             />
-                            <div className="absolute top-full right-4 mt-2 w-56 bg-card border border-border/60 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="absolute top-full right-4 mt-2 w-56 bg-card border border-border/60 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                                 {/* Dashboard / Empezar */}
                                 <Link
                                     href={isLoggedIn ? "/dashboard" : "/login"}

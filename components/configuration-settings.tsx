@@ -253,7 +253,7 @@ export function ConfigurationSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Services (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 sm:p-10 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-10">
                             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
@@ -270,7 +270,7 @@ export function ConfigurationSettings() {
                                     <Button
                                         onClick={() => setShowNewForm(true)}
                                         id="tour-new-service"
-                                        className="shrink-0 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
+                                        className="shrink-0 px-8 rounded-xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
                                     >
                                         <Plus className="h-5 w-5 mr-2" />
                                         Nuevo Servicio
@@ -284,7 +284,7 @@ export function ConfigurationSettings() {
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
 
                                     <div className="flex items-center gap-4 border-b border-border/40 pb-6">
-                                        <div className="p-3 bg-primary/10 rounded-2xl">
+                                        <div className="p-3 bg-primary/10 rounded-xl">
                                             <Plus className="h-5 w-5 text-primary" />
                                         </div>
                                         <div>
@@ -322,7 +322,7 @@ export function ConfigurationSettings() {
                                                         <SelectValue placeholder="Duración" />
                                                     </div>
                                                 </SelectTrigger>
-                                                <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
+                                                <SelectContent position="popper" className="rounded-xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
                                                     <SelectGroup>
                                                         {DURATION_OPTIONS.map((opt) => (
                                                             <SelectItem
@@ -343,14 +343,14 @@ export function ConfigurationSettings() {
                                         <Button
                                             variant="ghost"
                                             onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
-                                            className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                            className="rounded-xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
                                         >
                                             Descartar
                                         </Button>
                                         <Button
                                             onClick={handleCreateService}
                                             disabled={creatingService || !newName.trim()}
-                                            className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 hover:scale-105 transition-all active:scale-95 bg-primary text-primary-foreground"
+                                            className="rounded-xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 hover:scale-105 transition-all active:scale-95 bg-primary text-primary-foreground"
                                         >
                                             {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Check className="h-5 w-5 mr-2" />}
                                             Publicar Servicio
@@ -390,7 +390,7 @@ export function ConfigurationSettings() {
                                                 {editingId === service.id ? (
                                                     <>
                                                         <div className="flex items-center gap-4 border-b border-border/40 pb-6">
-                                                            <div className="p-3 bg-primary/10 rounded-2xl">
+                                                            <div className="p-3 bg-primary/10 rounded-xl">
                                                                 <Pencil className="h-5 w-5 text-primary" />
                                                             </div>
                                                             <div>
@@ -432,7 +432,7 @@ export function ConfigurationSettings() {
                                                                             <SelectValue placeholder="Duración" />
                                                                         </div>
                                                                     </SelectTrigger>
-                                                                    <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
+                                                                    <SelectContent position="popper" className="rounded-xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
                                                                         {DURATION_OPTIONS.map(opt => (
                                                                             <SelectItem
                                                                                 key={opt.value}
@@ -460,13 +460,13 @@ export function ConfigurationSettings() {
                                                         </div>
 
                                                         <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 pt-6 border-t border-border/40">
-                                                            <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive w-full sm:w-auto">
+                                                            <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive w-full sm:w-auto">
                                                                 Cancelar
                                                             </Button>
                                                             <Button
                                                                 onClick={() => handleUpdateService(service.id)}
                                                                 disabled={updatingService || !editName.trim()}
-                                                                className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 w-full sm:w-auto"
+                                                                className="rounded-xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 w-full sm:w-auto"
                                                             >
                                                                 {updatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                                                                 Confirmar Cambios
@@ -479,7 +479,7 @@ export function ConfigurationSettings() {
                                                             {/* Service Image or Status Indicator */}
                                                             <div className={cn(
                                                                 "h-12 w-12 sm:h-14 sm:w-14 shrink-0",
-                                                                service.images.length > 0 ? "rounded-xl overflow-hidden border border-border/40" : "rounded-2xl flex items-center justify-center border-2",
+                                                                service.images.length > 0 ? "rounded-xl overflow-hidden border border-border/40" : "rounded-xl flex items-center justify-center border-2",
                                                                 service.isActive && service.images.length === 0
                                                                     ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-105 group-hover:rotate-3"
                                                                     : !service.isActive ? "bg-muted border-muted-foreground/10 opacity-50" : ""
@@ -503,7 +503,7 @@ export function ConfigurationSettings() {
                                                                         {service.name}
                                                                     </h4>
                                                                     <span className={cn(
-                                                                        "shrink-0 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                                                        "shrink-0 px-2 py-0.5 rounded-full text-2xs font-black uppercase tracking-widest border",
                                                                         service.isActive
                                                                             ? "bg-green-500/10 text-green-600 border-green-500/20"
                                                                             : "bg-muted text-muted-foreground border-muted-foreground/10"
@@ -511,7 +511,7 @@ export function ConfigurationSettings() {
                                                                         {service.isActive ? "Vigente" : "Latente"}
                                                                     </span>
                                                                 </div>
-                                                                <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 text-[9px] font-black uppercase tracking-widest">
+                                                                <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 text-2xs font-black uppercase tracking-widest">
                                                                     <div className="flex items-center gap-1.5 text-primary bg-primary/5 px-2.5 py-1 rounded-lg border border-primary/10">
                                                                         <Clock className="h-3 w-3" />
                                                                         <span>
@@ -579,7 +579,7 @@ export function ConfigurationSettings() {
 
                 {/* Column 2: Commercial Name (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-10">
-                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-12 relative overflow-hidden">
+                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 sm:p-10 space-y-12 relative overflow-hidden">
                         <div className="relative z-10 space-y-12">
                             <div className="space-y-6">
                                 <div className="space-y-2">
@@ -589,7 +589,7 @@ export function ConfigurationSettings() {
 
                                 <div className="space-y-8">
                                     <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
+                                        <Label className="label-caps text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
                                         <Input
                                             type="text"
                                             value={displayName}
@@ -599,7 +599,7 @@ export function ConfigurationSettings() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Áreas de Experticia</Label>
+                                        <Label className="label-caps text-muted-foreground/80 ml-1">Áreas de Experticia</Label>
                                         <PillInput
                                             value={expertise}
                                             onChange={setExpertise}
@@ -612,7 +612,7 @@ export function ConfigurationSettings() {
                                         onClick={handleSaveConfig}
                                         disabled={savingConfig}
                                         id="tour-save-config"
-                                        className="w-full rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
+                                        className="w-full rounded-xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
                                     >
                                         {savingConfig ? (
                                             <Loader2 className="h-6 w-6 animate-spin mr-3" />
@@ -631,7 +631,7 @@ export function ConfigurationSettings() {
             <Dialog open={!!serviceToDelete} onOpenChange={(open) => !open && setServiceToDelete(null)}>
                 <DialogContent className="p-10 max-w-md shadow-lg">
                     <DialogHeader className="space-y-4">
-                        <div className="h-16 w-16 bg-destructive/10 rounded-2xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
+                        <div className="h-16 w-16 bg-destructive/10 rounded-xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
                             <Trash2 className="h-8 w-8" />
                         </div>
                         <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Eliminar Servicio</DialogTitle>
@@ -643,7 +643,7 @@ export function ConfigurationSettings() {
                         <Button
                             variant="ghost"
                             onClick={() => setServiceToDelete(null)}
-                            className="flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
+                            className="flex-1 rounded-xl font-black h-12 uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
                         >
                             Conservar
                         </Button>
@@ -653,7 +653,7 @@ export function ConfigurationSettings() {
                             }}
                             disabled={deletingId === serviceToDelete?.id}
                             variant="destructive"
-                            className="flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
+                            className="flex-1 rounded-xl font-black h-12 uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
                         >
                             {deletingId === serviceToDelete?.id ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <Trash2 className="h-5 w-5 mr-2" />}
                             Confirmar Baja

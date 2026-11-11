@@ -40,7 +40,7 @@ export function DashboardTabsUI({
                         id="tour-tab-agenda"
                         value="agenda"
                         className={cn(
-                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-4.5 font-black uppercase text-2xs sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                             activeTab === "agenda" ? "text-primary" : "text-muted-foreground hover:text-foreground"
                         )}
                     >
@@ -58,7 +58,7 @@ export function DashboardTabsUI({
                         id="tour-tab-analytics"
                         value="analytics"
                         className={cn(
-                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-4.5 font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
+                            "relative z-10 flex-1 sm:flex-none rounded-full px-6 sm:px-8 py-4.5 font-black uppercase text-2xs sm:text-xs tracking-[0.2em] transition-colors duration-300 shadow-none border-none",
                             activeTab === "analytics" ? "text-primary" : "text-muted-foreground hover:text-foreground"
                         )}
                     >
@@ -74,7 +74,7 @@ export function DashboardTabsUI({
                 </TabsList>
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 max-w-full">
-                    <div id="tour-export-csv" className="relative flex items-center gap-1 sm:gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground w-full xl:w-fit bg-transparent p-2 overflow-x-auto custom-scrollbar">
+                    <div id="tour-export-csv" className="relative flex items-center gap-1 sm:gap-2 text-2xs font-black uppercase tracking-[0.2em] text-muted-foreground w-full xl:w-fit bg-transparent p-2 overflow-x-auto custom-scrollbar">
                         <div id="tour-export-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <span className="flex items-center gap-2 shrink-0">
                             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />

@@ -46,7 +46,7 @@ export function AdminMobileNav() {
                 <div className="flex items-center gap-2">
                     <Logo className="h-8 w-8 text-primary" />
                     <span className="text-xl font-display font-black tracking-tighter text-foreground uppercase">
-                        VLink <span className="text-primary italic text-[10px] lowercase">admin</span>
+                        VLink <span className="text-primary italic text-2xs lowercase">admin</span>
                     </span>
                 </div>
                 <button
@@ -77,7 +77,7 @@ export function AdminMobileNav() {
                     <div className="flex items-center gap-2">
                         <Logo className="h-8 w-8 text-primary" />
                         <span className="text-xl font-display font-black tracking-tighter text-foreground uppercase">
-                            VLink <span className="text-primary italic text-[10px] lowercase">admin</span>
+                            VLink <span className="text-primary italic text-2xs lowercase">admin</span>
                         </span>
                     </div>
                 </div>
@@ -112,7 +112,7 @@ export function AdminMobileNav() {
 
                         <li className="mt-auto space-y-1">
                             <div className="flex items-center justify-between px-2 py-3 bg-muted/20 rounded-xl mb-4">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Tema</span>
+                                <span className="label-caps text-muted-foreground pl-1">Tema</span>
                                 <ThemeToggle />
                             </div>
 

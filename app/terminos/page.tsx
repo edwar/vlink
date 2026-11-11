@@ -121,7 +121,7 @@ function Section({ icon, title, children }: { icon: React.ReactNode, title: stri
     return (
         <section className="space-y-6">
             <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
+                <div className="h-12 w-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
                     {icon}
                 </div>
                 <h2 className="text-2xl md:text-3xl font-display font-black tracking-tight text-foreground">{title}</h2>

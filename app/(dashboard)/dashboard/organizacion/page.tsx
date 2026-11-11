@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/page-header"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
@@ -49,10 +50,11 @@ export default async function OrganizacionPage(props: {
     if (!organization) {
         return (
             <div className="space-y-12 animate-in fade-in duration-700 pb-20 max-w-2xl mx-auto">
-                <header className="text-center space-y-2">
-                    <h1 className="text-4xl font-display font-black tracking-tight text-primary uppercase">Equipo y Organización</h1>
-                    <p className="text-muted-foreground font-medium">Gestiona tu equipo y sus agendas centralizadas.</p>
-                </header>
+                <PageHeader
+                    icon={Building2}
+                    title="Equipo y Organización"
+                    description="Gestiona tu equipo y sus agendas centralizadas."
+                />
 
                 <CreateOrganization />
             </div>
@@ -102,40 +104,29 @@ export default async function OrganizacionPage(props: {
 
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <header className="relative py-8 rounded-3xl bg-surface/50 overflow-hidden">
-                <div className="absolute top-0 right-0 p-2 opacity-10">
-                    <Building2 className="h-24 w-24 text-primary rotate-12" />
-                </div>
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                    <div className="space-y-2">
-                        {isOwnerOrManager ? (
-                            <RenameOrganization
-                                organizationId={organization.id}
-                                currentName={organization.name}
-                            />
-                        ) : (
-                            <h1 className="text-5xl font-display font-black tracking-tighter text-primary uppercase">
-                                {organization.name}
-                            </h1>
-                        )}
-                        <p className="text-muted-foreground font-medium text-lg max-w-2xl">
-                            Administra tu equipo de profesionales, coordina agendas compartidas y escala tu negocio centralizadamente.
-                        </p>
-                    </div>
+            <PageHeader
+                icon={Building2}
+                title={isOwnerOrManager ? (
+                    <RenameOrganization
+                        organizationId={organization.id}
+                        currentName={organization.name}
+                    />
+                ) : organization.name}
+                description="Administra tu equipo de profesionales, coordina agendas compartidas y escala tu negocio centralizadamente."
+                actions={
                     <div className="flex flex-col sm:flex-row gap-3">
-                        <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-none inline-flex items-center gap-3">
+                        <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-xl shadow-none inline-flex items-center gap-3">
                             <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                 <Shield className="h-5 w-5" />
                             </div>
                             <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tu Rol</p>
+                                <p className="label-caps text-muted-foreground">Tu Rol</p>
                                 <p className="text-sm font-black text-foreground">{currentUserRole ? ROLE_LABELS[currentUserRole] : "Miembro"}</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </header>
+                }
+            />
 
             {isOwnerOrManager && (
                 <div className="flex flex-col lg:flex-row gap-8 items-stretch mt-8">
@@ -182,7 +173,7 @@ export default async function OrganizacionPage(props: {
                                     <Button
                                         variant="outline"
                                         size="default"
-                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none rounded-2xl"
+                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none rounded-xl"
                                     >
                                         <IdCard className="h-5 w-5 relative z-10 mr-2" />
                                         <span className="relative z-10 uppercase tracking-widest">Tarjeta de Presentación</span>
@@ -252,13 +243,13 @@ export default async function OrganizacionPage(props: {
 
                         <div className="space-y-4">
                             <div className="flex items-center gap-4 text-sm font-medium text-foreground/80">
-                                <div className="h-10 w-10 shrink-0 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-600 border border-purple-500/20">
+                                <div className="h-10 w-10 shrink-0 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-600 border border-purple-500/20">
                                     <MapPin className="h-5 w-5" />
                                 </div>
                                 <span className="leading-snug text-xs sm:text-sm">Configuración de múltiples sucursales u oficinas</span>
                             </div>
                             <div className="flex items-center gap-4 text-sm font-medium text-foreground/80">
-                                <div className="h-10 w-10 shrink-0 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 border border-blue-500/20">
+                                <div className="h-10 w-10 shrink-0 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 border border-blue-500/20">
                                     <Briefcase className="h-5 w-5" />
                                 </div>
                                 <span className="leading-snug text-xs sm:text-sm">Asignación de disponibilidad por profesional</span>
@@ -300,13 +291,13 @@ export default async function OrganizacionPage(props: {
                         <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Mi Equipo</h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
-                        <span className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 shadow-none">
+                        <span className="px-4 py-1.5 bg-muted/30 text-foreground label-caps rounded-full border border-border/40 shadow-none">
                             {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}
                         </span>
                         <a
                             id="tour-team-agenda"
                             href="/dashboard/organizacion/agenda"
-                            className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
+                            className="px-4 py-1.5 bg-muted/30 text-foreground label-caps rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
                         >
                             <CalendarRange className="h-3 w-3 opacity-50" />
                             Agenda de Equipo
@@ -316,7 +307,7 @@ export default async function OrganizacionPage(props: {
                             href={`/org/${organization.slug}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="px-4 py-1.5 bg-muted/30 text-foreground text-[10px] font-black uppercase tracking-widest rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
+                            className="px-4 py-1.5 bg-muted/30 text-foreground label-caps rounded-full border border-border/40 hover:bg-muted/50 transition-colors flex items-center gap-1.5"
                         >
                             <Globe className="h-3 w-3 opacity-50" />
                             Ver página pública
@@ -341,7 +332,7 @@ export default async function OrganizacionPage(props: {
                                         <UserAvatar
                                             image={member.user.image}
                                             name={member.user.name ?? "Usuario"}
-                                            className="h-full w-full rounded-[1.2rem] shadow-none border border-border/50"
+                                            className="h-full w-full rounded-3xl shadow-none border border-border/50"
                                         />
                                         {member.role === "OWNER" && (
                                             <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-none border-2 border-background z-10">
@@ -368,7 +359,7 @@ export default async function OrganizacionPage(props: {
                                             <div className="flex items-center gap-3">
                                                 <div className="flex items-center gap-2 bg-muted/30 px-3 py-1.5 rounded-full border border-border/50 min-w-0">
                                                     <Briefcase className="h-3.5 w-3.5 text-foreground/60 shrink-0" />
-                                                    <span className="text-[11px] font-black text-foreground/70 truncate">
+                                                    <span className="text-xs font-black text-foreground/70 truncate">
                                                         {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/{member.user.profile.username}
                                                     </span>
                                                 </div>
@@ -389,7 +380,7 @@ export default async function OrganizacionPage(props: {
                                             />
                                         ) : (
                                             <span className={cn(
-                                                "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                                "px-4 py-1.5 rounded-full label-caps border",
                                                 member.role === "OWNER" ? "bg-amber-500/5 text-amber-600 border-amber-500/20" :
                                                     member.role === "MANAGER" ? "bg-blue-500/5 text-blue-600 border-blue-500/20" :
                                                         "bg-emerald-500/5 text-emerald-600 border-emerald-500/20"
@@ -427,7 +418,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* Row 3: Zona de Peligro */}
                 <div className="pt-12 border-t border-red-500/10 flex flex-col items-center gap-4">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-red-500/50">Zona de Peligro</p>
+                    <p className="label-caps text-red-500/50">Zona de Peligro</p>
                     <div className="flex flex-wrap items-center justify-center gap-3">
                         {currentUserRole !== "OWNER" && (
                             <LeaveOrganization

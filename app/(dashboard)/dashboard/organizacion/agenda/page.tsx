@@ -5,7 +5,7 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { ConsolidatedAgenda } from "@/components/consolidated-agenda"
 import { CalendarRange, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import { Title } from "@/components/title"
+import { PageHeader } from "@/components/page-header";
 
 export default async function ConsolidatedAgendaPage() {
     const session = await auth.api.getSession({
@@ -28,18 +28,11 @@ export default async function ConsolidatedAgendaPage() {
                 <ArrowLeft className="h-4 w-4" /> Volver a Organización
             </Link>
 
-            <header className="relative">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                    <CalendarRange className="h-24 w-24 text-primary rotate-12" />
-                </div>
-
-                <div className="relative z-10 space-y-2">
-                    <Title title="Disponibilidad Consolidada" />
-                    <p className="text-muted-foreground font-medium text-lg max-w-2xl">
-                        Visualiza de un vistazo los huecos libres de todos tus profesionales para coordinar citas de último minuto.
-                    </p>
-                </div>
-            </header>
+            <PageHeader
+                title="Disponibilidad Consolidada"
+                icon={CalendarRange}
+                description={<>Visualiza de un vistazo los huecos libres de todos tus profesionales para coordinar citas de último minuto.</>}
+            />
 
             <ConsolidatedAgenda
                 orgSlug={organization.slug}

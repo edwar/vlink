@@ -31,7 +31,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <AuthCTA
-              className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg shadow-none transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+              className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-xl font-bold text-lg shadow-none transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
               loggedInChildren={<>Ir al dashboard <ArrowRight className="h-5 w-5" /></>}
             >
               Crear mi cuenta gratis
@@ -65,7 +65,7 @@ export default function LandingPage() {
               key={feature.title}
               className="p-8 bg-linear-to-br from-primary/6 to-transparent rounded-[32px] space-y-6 hover:shadow-none transition-all hover:-translate-y-2 group"
             >
-              <div className="h-14 w-14 bg-accent rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+              <div className="h-14 w-14 bg-accent rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 {feature.icon}
               </div>
               <h3 className="text-2xl font-display font-bold">{feature.title}</h3>

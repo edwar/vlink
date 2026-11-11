@@ -9,7 +9,7 @@ import { subDays, eachDayOfInterval, format as formatDateFns } from "date-fns"
 import { getEffectiveProfile } from "@/lib/permissions"
 import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
-import { Title } from "@/components/title"
+import { PageHeader } from "@/components/page-header";
 import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
 import { DashboardTour } from "@/components/tours/dashboard-tour"
 import { DashboardRealtimeUpdater } from "@/components/dashboard-realtime-updater"
@@ -117,21 +117,11 @@ export default async function DashboardPage(props: {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            {/* Header section with profile overview */}
-            <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
-                    <CalendarIcon className="h-24 w-24 text-primary rotate-12" />
-                </div>
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8">
-                    <div className="space-y-2">
-                        <Title title="Panel de Control" />
-                        <p className="text-muted-foreground font-medium text-lg max-w-xl">
-                            Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.
-                        </p>
-                    </div>
-                </div>
-            </header>
+            <PageHeader
+                title="Panel de Control"
+                icon={CalendarIcon}
+                description={<>Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.</>}
+            />
 
             <DashboardTabsUI
                 stats={{
@@ -163,7 +153,7 @@ export default async function DashboardPage(props: {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{totalAppointmentsToday}</p>
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
+                                    <p className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
                                 </div>
                             </div>
 
@@ -174,7 +164,7 @@ export default async function DashboardPage(props: {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{allAppointments.length}</p>
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
+                                    <p className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
                                 </div>
                             </div>
 
@@ -185,7 +175,7 @@ export default async function DashboardPage(props: {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{hoursOccupied}h</p>
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
+                                    <p className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
                                 </div>
                             </div>
                         </div>

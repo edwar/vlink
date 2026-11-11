@@ -136,7 +136,7 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                 {/* URL display */}
                 <div className="w-full px-4 py-2.5 rounded-xl bg-muted border border-border flex items-center gap-2 overflow-hidden">
                     <QrCode className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <p className="text-[11px] font-mono font-bold text-muted-foreground truncate flex-1">
+                    <p className="text-xs font-mono font-bold text-muted-foreground truncate flex-1">
                         {publicUrl.replace(/^https?:\/\//, "")}
                     </p>
                 </div>
@@ -149,7 +149,7 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                     className="flex flex-col h-auto p-3 gap-1.5 group"
                 >
                     <Download className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">Descargar</span>
+                    <span className="text-2xs hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">Descargar</span>
                 </Button>
 
                 <Button
@@ -161,7 +161,7 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                         ? <Check className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 text-green-500" />
                         : <Copy className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
                     }
-                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">
+                    <span className="text-2xs hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">
                         {copied ? "¡Copiado!" : "Copiar"}
                     </span>
                 </Button>
@@ -172,11 +172,11 @@ export function OrgQRCode({ orgName, orgSlug, appUrl }: OrgQRCodeProps) {
                     className="flex flex-col h-auto p-3 gap-1.5 group"
                 >
                     <Share2 className="w-8 h-8 md:h-5 md:w-5 lg:w-12 lg:h-12 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">Compartir</span>
+                    <span className="text-2xs hidden md:block lg:hidden xl:block font-black uppercase tracking-widest leading-none">Compartir</span>
                 </Button>
             </div>
 
-            <p className="text-[10px] text-muted-foreground/60 text-center font-medium leading-relaxed">
+            <p className="text-2xs text-muted-foreground/60 text-center font-medium leading-relaxed">
                 El QR lleva directamente a la página pública donde tus clientes pueden elegir un profesional y agendar su cita.
             </p>
         </div>

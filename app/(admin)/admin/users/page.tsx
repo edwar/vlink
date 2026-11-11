@@ -34,11 +34,11 @@ export default async function AdminUsers(props: {
                     <div className="space-y-6">
                         <div className="grid grid-cols-1 gap-4">
                             {users.map((user) => (
-                                <Card key={user.id} className="border border-border/40 shadow-none bg-card rounded-2xl overflow-hidden group hover:border-primary/30 transition-colors">
+                                <Card key={user.id} className="border border-border/40 shadow-none bg-card rounded-xl overflow-hidden group hover:border-primary/30 transition-colors">
                                     <CardContent className="p-6">
                                         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                                             <div className="flex items-center gap-5 flex-1 min-w-0">
-                                                <div className="h-14 w-14 rounded-2xl bg-muted flex items-center justify-center text-muted-foreground overflow-hidden">
+                                                <div className="h-14 w-14 rounded-xl bg-muted flex items-center justify-center text-muted-foreground overflow-hidden">
                                                     {user.image ? (
                                                         <img src={user.image} alt={user.name} className="h-full w-full object-cover" />
                                                     ) : (
@@ -56,14 +56,14 @@ export default async function AdminUsers(props: {
                                                         <Mail className="h-3 w-3" /> {user.email}
                                                     </p>
                                                     <div className="flex items-center gap-3 mt-3">
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground bg-muted/50 px-2 py-1 rounded-lg border border-border/50">
+                                                        <span className="label-caps text-muted-foreground bg-muted/50 px-2 py-1 rounded-lg border border-border/50">
                                                             {user.memberships.length} Orgs
                                                         </span>
                                                         {user.profile && (
                                                             <Link
                                                                 href={`/${user.profile.username}`}
                                                                 target="_blank"
-                                                                className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline flex items-center gap-1"
+                                                                className="label-caps text-primary hover:underline flex items-center gap-1"
                                                             >
                                                                 @{user.profile.username} <ArrowUpRight className="h-2.5 w-2.5" />
                                                             </Link>
@@ -74,13 +74,13 @@ export default async function AdminUsers(props: {
 
                                             <div className="flex items-center gap-8 text-right shrink-0">
                                                 <div className="hidden sm:block">
-                                                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Registrado</p>
+                                                    <p className="label-caps text-muted-foreground mb-1">Registrado</p>
                                                     <p className="text-sm font-bold text-foreground">
                                                         {format(new Date(user.createdAt), "d MMM, yyyy", { locale: es })}
                                                     </p>
                                                 </div>
 
-                                                <button className="h-12 w-12 border border-border/30 bg-muted/20 text-muted-foreground rounded-2xl flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-colors">
+                                                <button className="h-12 w-12 border border-border/30 bg-muted/20 text-muted-foreground rounded-xl flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-colors">
                                                     <ShieldCheck className="h-5 w-5" />
                                                 </button>
                                             </div>

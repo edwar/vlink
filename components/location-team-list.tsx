@@ -41,15 +41,15 @@ export function LocationTeamList({
                         <DialogTrigger asChild>
                             <Button
                                 variant="ghost"
-                                className="w-full h-14 bg-muted/10 hover:bg-primary/5 border border-border/30 hover:border-primary/20 rounded-2xl flex items-center justify-between px-4 group/btn"
+                                className="w-full h-14 bg-muted/10 hover:bg-primary/5 border border-border/30 hover:border-primary/20 rounded-xl flex items-center justify-between px-4 group/btn"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-black text-primary">
+                                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-2xs font-black text-primary">
                                         {member.user.name?.charAt(0)}
                                     </div>
                                     <div className="text-left">
                                         <p className="text-xs font-black uppercase tracking-tight text-foreground">{member.user.name}</p>
-                                        <p className="text-[10px] font-medium text-muted-foreground italic">
+                                        <p className="text-2xs font-medium text-muted-foreground italic">
                                             {configuredServicesCount === 0
                                                 ? "Sin servicios asignados"
                                                 : `${configuredServicesCount} servicio${configuredServicesCount === 1 ? '' : 's'} asignado${configuredServicesCount === 1 ? '' : 's'}`

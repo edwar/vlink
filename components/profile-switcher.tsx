@@ -70,7 +70,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
     if (organizations.length === 0 || organizations.reduce((acc, org) => acc + (managedProfiles[org.id]?.length || 0), 0) === 0) {
         return (
             <div className="py-4 bg-muted/20">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">
+                <p className="label-caps text-muted-foreground mb-2 px-2 flex items-center gap-2">
                     <Building2 className="h-3 w-3" />
                     Viendo Agenda De:
                 </p>
@@ -88,7 +88,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
 
     return (
         <div className="py-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 px-2 flex items-center gap-2">
+            <p className="label-caps text-muted-foreground mb-2 px-2 flex items-center gap-2">
                 <Building2 className="h-3 w-3" />
                 Viendo Agenda De:
             </p>
@@ -113,7 +113,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                 </SelectTrigger>
                 <SelectContent position="popper" side="bottom" align="start" className="w-(--radix-select-trigger-width) rounded-sm border shadow-xl">
                     <SelectGroup>
-                        <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50">Personal</SelectLabel>
+                        <SelectLabel className="text-2xs uppercase tracking-widest opacity-50">Personal</SelectLabel>
                         <SelectItem value="personal" className="py-2.5 ring-0 ring-offset-0 cursor-pointer rounded-[6px] focus:bg-accent/50">
                             <div className="flex items-center gap-2">
                                 <UserAvatar
@@ -123,7 +123,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                                 />
                                 <div className="flex flex-col text-left">
                                     <span className="font-bold text-sm truncate max-w-[130px]">Mi Agenda Personal</span>
-                                    <span className="text-[10px] text-muted-foreground">Propietario</span>
+                                    <span className="text-2xs text-muted-foreground">Propietario</span>
                                 </div>
                             </div>
                         </SelectItem>
@@ -135,7 +135,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
 
                         return (
                             <SelectGroup key={org.id}>
-                                <SelectLabel className="text-[10px] uppercase tracking-widest opacity-50 pt-3 flex items-center gap-2">
+                                <SelectLabel className="text-2xs uppercase tracking-widest opacity-50 pt-3 flex items-center gap-2">
                                     <Building2 className="h-3 w-3" />
                                     {org.name}
                                 </SelectLabel>
@@ -155,7 +155,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                                                 <span className="font-bold text-sm truncate max-w-[130px]">
                                                     {profile.displayName || profile.user?.name}
                                                 </span>
-                                                <span className="text-[10px] text-muted-foreground truncate flex flex-wrap gap-1">
+                                                <span className="text-2xs text-muted-foreground truncate flex flex-wrap gap-1">
                                                     <span>@{profile.username}</span>
                                                     <span>•</span>
                                                     <span className="capitalize">{profile.role?.toLowerCase() || 'Profesional'}</span>

@@ -74,7 +74,7 @@ export function OrganizationContact({
         <div className="h-full flex flex-col space-y-6 relative group/contact">
             <div className="flex flex-col gap-4 relative z-10 w-full mb-2">
                 <div className="flex w-full flex-col">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/70 mb-2">Canales de Atención</p>
+                    <p className="label-caps text-muted-foreground/70 mb-2">Canales de Atención</p>
                     <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase text-nowrap">Contacto Clientes</h3>
                     <p className="text-sm text-muted-foreground font-medium leading-tight mt-1">
                         Información pública para que tus clientes soliciten cambios de horario.
@@ -84,7 +84,7 @@ export function OrganizationContact({
 
             <div className="flex-1 flex flex-col gap-5 relative z-10 w-full">
                 <div className="space-y-2">
-                    <Label htmlFor="org-phone" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Línea Telefónica</Label>
+                    <Label htmlFor="org-phone" className="label-caps text-muted-foreground ml-1">Línea Telefónica</Label>
                     <div className="relative group/input">
                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors" />
                         <Input
@@ -99,7 +99,7 @@ export function OrganizationContact({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="org-whatsapp" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">WhatsApp</Label>
+                    <Label htmlFor="org-whatsapp" className="label-caps text-muted-foreground ml-1">WhatsApp</Label>
                     <div className="relative group/input">
                         <MessageSquare className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors" />
                         <Input
@@ -120,7 +120,7 @@ export function OrganizationContact({
                         size="default"
                         onClick={handleSave}
                         disabled={saving || !hasChanges}
-                        className="w-full rounded-lg font-black uppercase tracking-widest text-[10px] gap-2 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:hover:scale-100"
+                        className="w-full rounded-lg font-black uppercase tracking-widest text-2xs gap-2 shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                         {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                         {saving ? "Guardando..." : hasChanges ? "Guardar Cambios" : "Guardado"}
