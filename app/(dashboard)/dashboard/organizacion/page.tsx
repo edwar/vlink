@@ -25,6 +25,7 @@ import { RemoveMember } from "@/components/remove-member"
 import { Button } from "@/components/ui/button"
 import { OrganizationContact } from "@/components/organization-contact"
 import { ToggleSlotGeneration } from "@/components/toggle-slot-generation"
+import { BrandingInfoCard } from "@/components/branding-info-card"
 
 import { PaginationControls } from "@/components/pagination-controls"
 
@@ -143,6 +144,10 @@ export default async function OrganizacionPage(props: {
                         />
                     </div>
                 </div>
+            )}
+
+            {currentUserRole === "OWNER" && (
+                <BrandingInfoCard removedUntil={organization.brandingRemovedUntil} scope="organización" />
             )}
 
             {/* Row 1: QR Code & Invitaciones */}

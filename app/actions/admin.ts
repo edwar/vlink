@@ -113,15 +113,10 @@ export async function getAllOrganizations(page: number = 1, limit: number = 10) 
     await ensureAdmin()
     const skip = (page - 1) * limit
 
-    const where = {
-        members: {
-            none: {
-                user: {
-                    role: "ADMIN" as const
-                }
-            }
-        }
-    }
+    // Se listan todas las organizaciones. Antes se excluían las que tenían
+    // algún miembro ADMIN, lo que ocultaba la organización propia del admin y
+    // cualquier organización a la que el admin entrara con "Dar soporte".
+    const where = {}
 
     const [organizations, total] = await Promise.all([
         prisma.organization.findMany({
@@ -258,3 +253,40 @@ export async function supportOrganization(organizationId: string) {
     return { success: true }
 }
 
+
+/**
+ * Retira (o restaura) la marca "Agenda creada con VLink" de una organización o
+ * de un profesional. Se usa tras recibir un pago directo por transferencia.
+ * `until` = null restaura la marca.
+ */
+export async function setBrandingRemoval(
+    target: { type: "organization" | "profile"; id: string },
+    until: string | null
+) {
+    const session = await ensureAdmin()
+
+    let untilDate: Date | null = null
+    if (until !== null) {
+        untilDate = new Date(until)
+        if (isNaN(untilDate.getTime())) throw new Error("Fecha inválida")
+        if (untilDate <= new Date()) throw new Error("La fecha debe ser futura")
+    }
+
+    const data = {
+        brandingRemovedUntil: untilDate,
+        brandingUpdatedAt: new Date(),
+        brandingUpdatedBy: session.user.id,
+    }
+
+    if (target.type === "organization") {
+        const org = await prisma.organization.update({ where: { id: target.id }, data, select: { slug: true } })
+        revalidatePath(`/org/${org.slug}`)
+    } else {
+        const profile = await prisma.profile.update({ where: { id: target.id }, data, select: { username: true } })
+        revalidatePath(`/${profile.username}`)
+    }
+
+    revalidatePath("/admin/organizations")
+    revalidatePath("/admin/users")
+    return { success: true, brandingRemovedUntil: untilDate?.toISOString() ?? null }
+}

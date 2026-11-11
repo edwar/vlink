@@ -84,6 +84,10 @@ model Organization {
   phone             String?
   whatsapp             String?
   slotGenerationMethod SlotGenerationMethod @default(SERVICE_DURATION)
+  /// Marca "Agenda creada con VLink" oculta hasta esta fecha (pago manual)
+  brandingRemovedUntil DateTime?
+  brandingUpdatedAt    DateTime?
+  brandingUpdatedBy    String?
   invitations          Invitation[]
   locations         Location[]
   members           Member[]
@@ -157,6 +161,12 @@ model Profile {
   webhookExpiresAt   DateTime?
   webhookResourceId  String?
   bufferTime         Int            @default(0)
+  /// Marca "Agenda creada con VLink" oculta hasta esta fecha (pago manual)
+  brandingRemovedUntil DateTime?
+  brandingUpdatedAt    DateTime?
+  brandingUpdatedBy    String?
+  /// Último hito de citas para el que ya se mostró el aviso de donación
+  donationMilestoneSeen Int         @default(0)
   appointments       Appointment[]
   availabilities     Availability[]
   organization       Organization?  @relation(fields: [organizationId], references: [id])

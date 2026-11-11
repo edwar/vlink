@@ -12,6 +12,8 @@ import {
 import Link from "next/link"
 import Image from "next/image"
 import { BackButton } from "@/components/ui/back-button"
+import { PoweredBy } from "@/components/powered-by"
+import { isBrandingRemoved } from "@/lib/branding"
 
 interface LocationBookingPageProps {
     params: Promise<{
@@ -136,10 +138,11 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
                 <div className="flex justify-center pt-8">
                     <BackButton className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-black uppercase tracking-widest text-xs">
                         <ChevronLeft className="h-4 w-4" />
-                        Cambiar sedess
+                        Cambiar sede
                     </BackButton>
                 </div>
             </div>
+            {!isBrandingRemoved(organization.brandingRemovedUntil) && <PoweredBy />}
         </div>
     )
 }

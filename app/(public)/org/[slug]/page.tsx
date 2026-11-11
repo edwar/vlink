@@ -5,6 +5,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { PoweredBy } from "@/components/powered-by"
+import { isBrandingRemoved } from "@/lib/branding"
 
 interface OrgPageProps {
     params: Promise<{
@@ -124,6 +126,7 @@ export default async function OrgPublicPage({ params }: OrgPageProps) {
                     </div>
                 </div>
             </div>
+            {!isBrandingRemoved(organization.brandingRemovedUntil) && <PoweredBy />}
         </div>
     )
 }

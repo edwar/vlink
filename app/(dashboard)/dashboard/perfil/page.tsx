@@ -1,5 +1,6 @@
 import { ProfileSettings } from "@/components/profile-settings";
 import { PageHeader } from "@/components/page-header";
+import { BrandingInfoCard } from "@/components/branding-info-card";
 import { getEffectiveProfile } from "@/lib/permissions";
 import { UserCircle } from "lucide-react";
 import { PerfilTour } from "@/components/tours/perfil-tour";
@@ -16,6 +17,9 @@ export default async function PerfilPage() {
             />
 
             <ProfileSettings />
+            {!profile.organizationId && (
+                <BrandingInfoCard removedUntil={profile.brandingRemovedUntil} scope="perfil" />
+            )}
             <PerfilTour />
         </div>
     );

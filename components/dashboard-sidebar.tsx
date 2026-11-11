@@ -11,6 +11,7 @@ import { ProfileSwitcher } from "./profile-switcher"
 import { Logo } from "./logo"
 import { useProfileStore } from "@/lib/store/profile-store"
 import { motion } from "framer-motion"
+import { SupportVLinkLink } from "@/components/support-vlink-link"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -92,6 +93,7 @@ export function DashboardSidebar() {
                         </ul>
                     </li>
                     <li className="mt-auto space-y-1">
+                        <SupportVLinkLink />
                         {mounted && isAdmin && (
                             <Link
                                 href="/admin"

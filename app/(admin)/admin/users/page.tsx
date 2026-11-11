@@ -1,5 +1,5 @@
 import { getAllUsers } from "@/app/actions/admin"
-import { Users, ShieldCheck, Mail, Calendar, ArrowUpRight } from "lucide-react"
+import { Users, Mail, Calendar, ArrowUpRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
@@ -7,6 +7,7 @@ import Link from "next/link"
 import { AdminEmptyState } from "@/components/admin/admin-empty-state"
 
 import { PaginationControls } from "@/components/pagination-controls"
+import { BrandingControl } from "@/components/admin/branding-control"
 
 export default async function AdminUsers(props: {
     searchParams: Promise<{ page?: string }>
@@ -80,9 +81,12 @@ export default async function AdminUsers(props: {
                                                     </p>
                                                 </div>
 
-                                                <button className="h-12 w-12 border border-border/30 bg-muted/20 text-muted-foreground rounded-xl flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-colors">
-                                                    <ShieldCheck className="h-5 w-5" />
-                                                </button>
+                                                {user.profile && (
+                                                    <BrandingControl
+                                                        target={{ type: "profile", id: user.profile.id }}
+                                                        removedUntil={user.profile.brandingRemovedUntil}
+                                                    />
+                                                )}
                                             </div>
                                         </div>
                                     </CardContent>
