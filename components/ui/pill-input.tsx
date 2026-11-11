@@ -61,7 +61,8 @@ const PillInput = React.forwardRef<HTMLInputElement, PillInputProps>(
                                 e.stopPropagation()
                                 removePill(index)
                             }}
-                            className="hover:text-destructive-foreground/80 transition-colors shrink-0 p-1 -m-1"
+                            aria-label={`Quitar ${pill}`}
+                            className="hover:text-destructive-foreground/80 transition-colors shrink-0 p-1.5 -m-1.5 rounded-full"
                         >
                             <X className="h-3.5 w-3.5" />
                         </button>

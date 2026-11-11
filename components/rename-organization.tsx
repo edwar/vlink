@@ -100,7 +100,8 @@ export function RenameOrganization({ organizationId, currentName }: RenameOrgani
             <button
                 onClick={() => setEditing(true)}
                 title="Editar nombre de la organización"
-                className="h-9 w-9 rounded-xl bg-primary/5 border border-primary/10 text-primary/40 flex items-center justify-center opacity-0 group-hover/rename:opacity-100 hover:bg-primary/10 hover:text-primary hover:border-primary/20 hover:scale-105 transition-all duration-200"
+                aria-label="Editar nombre de la organización"
+                className="h-9 w-9 rounded-xl bg-primary/5 border border-primary/10 text-primary/40 flex items-center justify-center opacity-0 group-hover/rename:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100 hover:bg-primary/10 hover:text-primary hover:border-primary/20 hover:scale-105 transition-all duration-200"
             >
                 <Pencil className="h-4 w-4" />
             </button>

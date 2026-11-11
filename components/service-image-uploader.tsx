@@ -106,14 +106,14 @@ export function ServiceImageUploader({ serviceId, images, profileId, onImagesCha
         {images.map((img, index) => (
           <div key={img.id} className="group relative h-20 w-20 shrink-0 rounded-xl border border-border/40 overflow-hidden">
             <Image src={img.url} alt="" fill className="object-cover" sizes="80px" />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 pointer-coarse:bg-black/25 transition-all flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 pointer-coarse:opacity-100">
               {index > 0 && (
-                <button type="button" onClick={() => handleMoveUp(index)} className="h-6 w-6 rounded-full bg-white/80 text-foreground flex items-center justify-center hover:bg-white transition-colors text-xs font-black">
+                <button type="button" aria-label="Mover a la izquierda" onClick={() => handleMoveUp(index)} className="h-7 w-7 rounded-full bg-white/80 text-foreground flex items-center justify-center hover:bg-white transition-colors text-xs font-black">
                   {"<"}
                 </button>
               )}
               {index < images.length - 1 && (
-                <button type="button" onClick={() => handleMoveDown(index)} className="h-6 w-6 rounded-full bg-white/80 text-foreground flex items-center justify-center hover:bg-white transition-colors text-xs font-black">
+                <button type="button" aria-label="Mover a la derecha" onClick={() => handleMoveDown(index)} className="h-7 w-7 rounded-full bg-white/80 text-foreground flex items-center justify-center hover:bg-white transition-colors text-xs font-black">
                   {">"}
                 </button>
               )}
@@ -122,7 +122,8 @@ export function ServiceImageUploader({ serviceId, images, profileId, onImagesCha
               type="button"
               onClick={() => handleRemove(img.id)}
               disabled={removing === img.id}
-              className="absolute top-1 right-1 h-5 w-5 rounded-full bg-destructive text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-destructive/80 transition-all"
+              aria-label="Eliminar imagen"
+              className="absolute top-1 right-1 h-6 w-6 rounded-full bg-destructive text-white flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100 hover:bg-destructive/80 transition-all"
             >
               {removing === img.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <X className="h-3 w-3" />}
             </button>

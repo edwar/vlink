@@ -51,9 +51,9 @@ export function MobileNav() {
     }, [isOpen, mounted])
 
     return (
-        <div className="lg:hidden">
-            {/* Header with Hamburger */}
-            <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-primary/5 px-4 flex h-16 items-center justify-between">
+        <div className="lg:hidden shrink-0">
+            {/* Header with Hamburger: en el flujo (no fixed) para que el contenido no quede debajo */}
+            <header className="relative w-full z-50 bg-background/80 backdrop-blur-xl border-b border-primary/5 px-4 flex h-16 items-center justify-between">
                 <Logo className="h-8 w-8 text-primary" />
                 <span className="text-2xl font-display font-black tracking-tighter text-primary">VLink</span>
                 <button
