@@ -28,6 +28,7 @@ import { LocationMembersConfig } from "@/components/location-members-config"
 import { LocationTeamList } from "@/components/location-team-list"
 import { revalidatePath } from "next/cache"
 import { deleteLocation, getMemberServicesByLocation } from "@/app/actions/locations"
+import { getUserOrganizations } from "@/app/actions/organization"
 import { sileo } from "sileo"
 
 export default async function SedesPage() {
@@ -37,22 +38,22 @@ export default async function SedesPage() {
 
     if (!session) redirect("/login")
 
-    const organization = await prisma.organization.findFirst({
-        where: {
-            members: {
-                some: { userId: session.user.id }
-            }
-        },
+    // Misma organización activa que /dashboard/organizacion (membresía más reciente)
+    const [activeOrg] = await getUserOrganizations()
+    if (!activeOrg) redirect("/dashboard")
+
+    const organization = await prisma.organization.findUnique({
+        where: { id: activeOrg.id },
         include: {
             locations: {
                 orderBy: { createdAt: 'asc' }
             },
+            // Todos los miembros con perfil: "mostrar en la página pública" no debe
+            // afectar la configuración interna de sedes ni el rol del usuario actual
             members: {
                 where: {
                     user: {
-                        profile: {
-                            showOnOrgPage: true
-                        }
+                        profile: { isNot: null }
                     }
                 },
                 include: {
