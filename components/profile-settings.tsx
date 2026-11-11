@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Copy, Check, Calendar as CalendarIcon, Loader2, Save, AlertCircle, Clock } from "lucide-react"
 import { getProfile, updateProfile, disconnectGoogle, enableCalendarSync } from "@/app/actions/profile"
 import { cn } from "@/lib/utils"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupInput } from "@/components/ui/input-group"
 import { Textarea } from "./ui/textarea"
 import { Label } from "./ui/label"
@@ -318,10 +319,9 @@ export function ProfileSettings() {
                                 <p className="text-sm text-muted-foreground font-medium">Conexión con Google Calendar.</p>
                             </div>
                             {isGoogleConnected && (
-                                <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-600 rounded-full label-caps ring-1 ring-green-500/20 shadow-sm shadow-green-500/10">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                                    Online
-                                </div>
+                                <StatusBadge tone="success" dot pulse>
+                                    Conectado
+                                </StatusBadge>
                             )}
                         </div>
 
@@ -348,8 +348,8 @@ export function ProfileSettings() {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-lg font-black truncate tracking-tight text-foreground">{email || "Sin Cuenta"}</p>
-                                    <p className="text-2xs text-muted-foreground/60 font-black uppercase tracking-widest">
-                                        {isGoogleConnected ? "Google Activo" : "Google Inactivo"}
+                                    <p className="text-sm text-muted-foreground">
+                                        {isGoogleConnected ? "Cuenta de Google activa" : "Sin cuenta de Google"}
                                     </p>
                                 </div>
                             </div>

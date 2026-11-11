@@ -5,6 +5,7 @@ import { Loader2, Plus, Pencil, Trash2, Check, X, Clock, Save, Briefcase, Sparkl
 import { getConfiguration, updateConfiguration, createService, updateService, deleteService } from "@/app/actions/services"
 import { cn, formatPrice, parsePrice } from "@/lib/utils"
 import { Input } from "./ui/input"
+import { StatusBadge } from "./ui/status-badge"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 import {
@@ -499,14 +500,9 @@ export function ConfigurationSettings() {
                                                                     <h4 className="font-black text-base sm:text-lg truncate tracking-tight text-foreground/90 leading-tight">
                                                                         {service.name}
                                                                     </h4>
-                                                                    <span className={cn(
-                                                                        "shrink-0 px-2 py-0.5 rounded-full text-2xs font-black uppercase tracking-widest border",
-                                                                        service.isActive
-                                                                            ? "bg-green-500/10 text-green-600 border-green-500/20"
-                                                                            : "bg-muted text-muted-foreground border-muted-foreground/10"
-                                                                    )}>
-                                                                        {service.isActive ? "Vigente" : "Latente"}
-                                                                    </span>
+                                                                    <StatusBadge tone={service.isActive ? "success" : "neutral"} dot>
+                                                                        {service.isActive ? "Activo" : "Pausado"}
+                                                                    </StatusBadge>
                                                                 </div>
                                                                 <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 text-2xs font-black uppercase tracking-widest">
                                                                     <div className="flex items-center gap-1.5 text-primary bg-primary/5 px-2.5 py-1 rounded-lg border border-primary/10">
