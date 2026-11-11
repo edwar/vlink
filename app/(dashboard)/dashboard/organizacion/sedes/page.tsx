@@ -82,7 +82,7 @@ export default async function SedesPage() {
     const canManageAll = currentUserRole === "OWNER" || currentUserRole === "MANAGER";
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-700">
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <PageHeader
                 icon={Building2}
                 title="Sedes y Sucursales"
@@ -90,9 +90,9 @@ export default async function SedesPage() {
                 actions={canManageAll && (
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button
+                            <Button size="lg"
                                 variant="vlink"
-                                className="rounded-xl h-12 px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
+                                className="px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
                             >
                                 <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
                                 Agregar Nueva Sede
@@ -100,7 +100,7 @@ export default async function SedesPage() {
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[500px]">
                             <DialogHeader className="p-8 pb-0">
-                                <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Nueva Sede</DialogTitle>
+                                <DialogTitle>Nueva Sede</DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium pt-2">
                                     Ingresa los detalles de tu nueva ubicación física.
                                 </DialogDescription>
@@ -138,13 +138,13 @@ export default async function SedesPage() {
                                         {canManageAll && (
                                             <Dialog>
                                                 <DialogTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted/50">
+                                                    <Button variant="ghost" size="icon" className="h-9 w-9 hover:bg-muted/50">
                                                         <Settings2 className="h-4 w-4 text-muted-foreground" />
                                                     </Button>
                                                 </DialogTrigger>
                                                 <DialogContent className="sm:max-w-[500px]">
                                                     <DialogHeader className="p-8 pb-0">
-                                                        <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
+                                                        <DialogTitle>Editar Sede</DialogTitle>
                                                     </DialogHeader>
                                                     <div className="p-8">
                                                         <LocationForm

@@ -92,7 +92,7 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <Button
-                    className="h-12 w-12 bg-blue-500/5 text-blue-500 rounded-xl flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all shrink-0 border border-blue-500/10"
+                    className="h-12 w-12 bg-blue-500/5 text-blue-500 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all shrink-0 border border-blue-500/10"
                     title="Reprogramar cita"
                     aria-label="Reprogramar cita"
                 >
@@ -105,7 +105,7 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                     <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                         <RotateCcw className="h-8 w-8" />
                     </div>
-                    <DialogTitle className="text-2xl font-display font-black tracking-tight text-center">
+                    <DialogTitle className="text-center">
                         Reprogramar cita
                     </DialogTitle>
                     <p className="text-sm text-muted-foreground text-center">
@@ -184,10 +184,10 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                     )}
 
                     {/* Confirm button */}
-                    <Button
+                    <Button size="lg"
                         onClick={handleConfirm}
                         disabled={!selectedDate || !selectedSlot || saving}
-                        className="w-full h-12 rounded-xl font-bold text-sm shadow-lg shadow-primary/20"
+                        className="w-full font-bold text-sm shadow-lg shadow-primary/20"
                     >
                         {saving ? "Reprogramando..." : "Confirmar reprogramación"}
                     </Button>

@@ -320,7 +320,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                     <div className="flex flex-col gap-3 w-full max-w-[280px]">
                         <Button
                             asChild
-                            size="lg"
+                            size="xl"
                             variant="vlink"
                             className="w-full"
                         >
@@ -332,7 +332,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         <Button
                             asChild
                             variant="outline"
-                            size="lg"
+                            size="xl"
                             className="w-full"
                         >
                             <Link href="/login">
@@ -747,7 +747,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         disabled={!selectedTime}
                         onClick={() => setStep(2)}
                         variant="vlink"
-                        size="lg"
+                        size="xl"
                         className="w-full"
                     >
                         Continuar
@@ -893,7 +893,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
 
                     <Button
                         variant="vlink"
-                        size="lg"
+                        size="xl"
                         onClick={handleBooking}
                         disabled={isSubmitting || name.length < 3 || email.length < 5 || phone.replace(/\D/g, '').length < 10}
                         className="w-full text-xl hover:shadow-none hover:-translate-y-1"
@@ -1068,9 +1068,9 @@ function SuccessView({ bookingInfo, displayName, serviceName, price, locationInf
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                         variant="outline"
-                        size="lg"
+                        size="xl"
                         onClick={() => window.location.reload()}
-                        className="w-full font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all border-2 rounded-xl h-14"
+                        className="w-full font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all border-2 h-14"
                     >
                         Agendar otra cita
                     </Button>

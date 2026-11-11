@@ -64,7 +64,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     <UserPlus className="h-12 w-12" />
                 </div>
                 <div className="flex w-full flex-col items-centertext-center">
-                    <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Invitar a un Miembro</h3>
+                    <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Invitar a un Miembro</h3>
                     <p className="text-sm text-muted-foreground font-medium leading-tight">Genera un enlace para que alguien se una a tu equipo.</p>
                 </div>
             </div>
@@ -74,7 +74,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     <div className="space-y-2 w-full">
                         <Label htmlFor="role" className="label-caps text-muted-foreground/80 ml-1">Rol del invitado</Label>
                         <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
-                            <SelectTrigger id="role" className="h-14 rounded-xl border bg-background/40 hover:bg-background/80 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
+                            <SelectTrigger size="lg" id="role" className="border bg-background/40 hover:bg-background/80 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
                                 <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="rounded-xl border shadow-xl overflow-hidden">
@@ -130,7 +130,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
 
                 <Button
                     size="default"
-                    className="w-fit ml-auto rounded-xl font-black text-xs uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
+                    className="w-fit ml-auto font-black text-xs uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
                     onClick={handleCreateInvitation}
                     disabled={isPending || disabled}
                 >

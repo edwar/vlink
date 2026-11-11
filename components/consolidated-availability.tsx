@@ -42,7 +42,7 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                 <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-xl mb-2 text-primary">
                     <Search className="h-6 w-6" />
                 </div>
-                <h2 className="text-2xl font-display font-black tracking-tight">Buscar Disponibilidad</h2>
+                <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Buscar Disponibilidad</h2>
                 <p className="text-muted-foreground text-sm font-medium">Revisa qué profesionales tienen horarios libres en un día específico.</p>
             </div>
 

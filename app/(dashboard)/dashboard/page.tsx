@@ -116,7 +116,7 @@ export default async function DashboardPage(props: {
     const hoursOccupied = Math.round((totalMinutes / 60) * 10) / 10
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <PageHeader
                 title="Panel de Control"
                 icon={CalendarIcon}
@@ -190,8 +190,7 @@ export default async function DashboardPage(props: {
                                     <section className="space-y-8 relative">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                                             <div id="tour-agenda-today" className="space-y-1">
-                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                                    <div className="h-8 w-1.5 bg-primary rounded-full" />
+                                                <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase flex items-center gap-3">
                                                     Agenda
                                                 </h2>
                                                 <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
@@ -225,8 +224,7 @@ export default async function DashboardPage(props: {
                                     <section className="space-y-8">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                                             <div className="space-y-1">
-                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                                    <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
+                                                <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase flex items-center gap-3">
                                                     Reservas
                                                 </h2>
                                                 <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
@@ -266,8 +264,7 @@ export default async function DashboardPage(props: {
                                     <section className="space-y-8">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                                             <div className="space-y-1">
-                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3 text-muted-foreground">
-                                                    <div className="h-8 w-1.5 bg-muted-foreground/30 rounded-full" />
+                                                <h2 className="text-xl font-black font-display tracking-tight text-muted-foreground uppercase flex items-center gap-3">
                                                     Historial
                                                 </h2>
                                                 <p className="text-muted-foreground/70 font-medium text-sm">Registro de citas que ya concluyeron o fueron canceladas.</p>
@@ -310,8 +307,7 @@ export default async function DashboardPage(props: {
                 children_analytics={
                     <div className="py-8">
                         <div className="space-y-4 mb-10 border-b border-dashed border-border/50 pb-8">
-                            <h2 className="text-3xl sm:text-4xl font-display font-black tracking-tight flex items-center gap-3">
-                                <div className="h-8 w-1.5 bg-primary rounded-full" />
+                            <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase flex items-center gap-3">
                                 Rendimiento Comercial
                             </h2>
                             <p className="text-muted-foreground font-medium text-sm sm:text-base max-w-2xl">Mide el impacto y crecimiento de tu servicios digitales con datos precisos.</p>

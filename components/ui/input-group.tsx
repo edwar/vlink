@@ -14,8 +14,10 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex w-full items-stretch rounded-lg transition-[color,box-shadow] outline-none",
-        "h-10 min-w-0 has-[>textarea]:h-auto",
+        // Mismo alto, radio y borde que Input; el foco se marca en el grupo completo
+        "group/input-group relative flex w-full items-stretch overflow-hidden rounded-xl border border-input bg-background shadow-xs transition-[color,box-shadow] outline-none",
+        "h-11 min-w-0 has-[>textarea]:h-auto",
+        "has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50",
 
         // Variants based on alignment.
         "has-[>[data-align=inline-start]]:[&>input]:pl-2",
@@ -138,7 +140,7 @@ function InputGroupInput({
     <Input
       data-slot="input-group-control"
       className={cn(
-        "flex-1 rounded-sm border-l-0 rounded-l-none bg-transparent shadow-none dark:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
+        "h-full flex-1 rounded-none border-0 bg-transparent shadow-none dark:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
         className
       )}
       {...props}

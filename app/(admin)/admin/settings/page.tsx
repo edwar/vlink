@@ -43,7 +43,7 @@ export default async function AdminSettings() {
                             }}>
                                 <Button
                                     variant={config.maintenanceMode ? "default" : "destructive"}
-                                    className="rounded-xl font-black uppercase tracking-widest text-2xs px-6"
+                                    className="font-black uppercase tracking-widest text-2xs px-6"
                                 >
                                     {config.maintenanceMode ? 'Desactivar' : 'Activar'}
                                 </Button>
@@ -102,7 +102,7 @@ export default async function AdminSettings() {
                                 <div className="space-y-2 flex-1">
                                     <label className="label-caps text-muted-foreground">Tipo</label>
                                     <Select name="type" defaultValue={config.announcementType}>
-                                        <SelectTrigger className="w-full h-12 text-sm font-black uppercase tracking-widest">
+                                        <SelectTrigger size="lg" className="w-full text-sm font-black uppercase tracking-widest">
                                             <SelectValue placeholder="Tipo" />
                                         </SelectTrigger>
                                         <SelectContent position="popper" className="rounded-xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">

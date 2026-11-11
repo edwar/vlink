@@ -164,14 +164,11 @@ export function ProfileSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Column 1: Public Identity (Left) */}
                 <div className="lg:col-span-12 xl:col-span-6 space-y-6">
-                    <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-2">
-                            <div className="flex items-center gap-3">
-                                <div className="h-8 w-1 bg-primary rounded-full" />
-                                <h3 className="text-3xl font-black font-display tracking-tight text-primary uppercase">Datos Maestros</h3>
-                            </div>
-                            <p className="text-muted-foreground font-medium text-lg max-w-xl">
+                            <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Datos Maestros</h3>
+                            <p className="text-sm text-muted-foreground font-medium max-w-xl">
                                 Configura tu nombre público, biografía y personaliza tu identificador único en la plataforma.
                             </p>
                         </div>
@@ -184,7 +181,7 @@ export function ProfileSettings() {
                                 <div className="group transition-all">
                                     <InputGroup id="tour-username">
                                         <div id="tour-username-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                                        <InputGroupAddon className="bg-primary/5 border-r rounded-l-md w-auto px-2">
+                                        <InputGroupAddon className="bg-primary/5 border-r px-3">
                                             <InputGroupText className="text-primary font-black text-[13px] tracking-tighter">
                                                 {process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, '')}/
                                             </InputGroupText>
@@ -229,7 +226,7 @@ export function ProfileSettings() {
                     <section id="tour-profile-url" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 space-y-8">
                         <div id="tour-profile-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
-                            <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Enlace de Agenda</h3>
+                            <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Enlace de Agenda</h3>
                             <p className="text-sm text-muted-foreground font-medium">Comparte este link para recibir reservas.</p>
                         </div>
 
@@ -255,7 +252,7 @@ export function ProfileSettings() {
                     <section id="tour-policies" className="relative bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 space-y-8">
                         <div id="tour-policies-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="space-y-2">
-                            <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Políticas de Reserva</h3>
+                            <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Políticas de Reserva</h3>
                             <p className="text-sm text-muted-foreground font-medium">Define descansos y antelación mínima.</p>
                         </div>
 
@@ -317,7 +314,7 @@ export function ProfileSettings() {
                         <div id="tour-google-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                         <div className="flex items-start justify-between gap-4">
                             <div className="space-y-2">
-                                <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Sincronización</h3>
+                                <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Sincronización</h3>
                                 <p className="text-sm text-muted-foreground font-medium">Conexión con Google Calendar.</p>
                             </div>
                             {isGoogleConnected && (
@@ -377,7 +374,7 @@ export function ProfileSettings() {
                                                 size="sm"
                                                 onClick={handleEnableSync}
                                                 disabled={enablingSync}
-                                                className="w-full rounded-xl label-caps text-primary-foreground bg-primary hover:bg-primary/90 h-10 shadow-sm"
+                                                className="w-full label-caps text-primary-foreground bg-primary hover:bg-primary/90 h-10 shadow-sm"
                                             >
                                                 {enablingSync ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Empezar Sincronización"}
                                             </Button>
@@ -387,7 +384,7 @@ export function ProfileSettings() {
                                                 size="sm"
                                                 onClick={handleDisconnectGoogle}
                                                 disabled={isDisconnecting}
-                                                className="w-full rounded-xl label-caps text-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 h-10 transition-colors"
+                                                className="w-full label-caps text-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 h-10 transition-colors"
                                             >
                                                 {isDisconnecting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : "Revocar Acceso de Google"}
                                             </Button>)}
@@ -396,7 +393,7 @@ export function ProfileSettings() {
                             ) : (
                                 <Button
                                     onClick={handleConnectGoogle}
-                                    className="w-full rounded-xl font-black shadow-sm transition-all hover:scale-105 text-lg mt-4"
+                                    className="w-full font-black shadow-sm transition-all hover:scale-105 text-lg mt-4"
                                 >
                                     Conectar Calendario
                                 </Button>
@@ -458,7 +455,7 @@ export function ProfileSettings() {
                             <AlertCircle className="h-10 w-10" />
                         </div>
                         <div className="space-y-2">
-                            <DialogTitle className="text-3xl font-black font-display tracking-tight text-foreground uppercase">
+                            <DialogTitle>
                                 ¿Revocar Acceso?
                             </DialogTitle>
                             <DialogDescription className="text-muted-foreground font-medium text-lg leading-relaxed mt-2">
@@ -468,17 +465,17 @@ export function ProfileSettings() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <Button
+                        <Button size="xl"
                             variant="outline"
                             onClick={() => setConfirmOpen(false)}
-                            className="h-14 rounded-xl font-black uppercase tracking-widest text-xs border border-border/50 hover:bg-muted transition-all"
+                            className="font-black uppercase tracking-widest text-xs border border-border/50 hover:bg-muted transition-all"
                         >
                             Cancelar
                         </Button>
-                        <Button
+                        <Button size="xl"
                             variant="destructive"
                             onClick={confirmDisconnect}
-                            className="h-14 rounded-xl font-black uppercase tracking-widest text-xs shadow-sm bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all"
+                            className="font-black uppercase tracking-widest text-xs shadow-sm bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all"
                         >
                             Sí, desconectar
                         </Button>

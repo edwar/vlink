@@ -314,7 +314,7 @@ export function AvailabilityManagement() {
             <section id="tour-weekly-schedule" className="relative space-y-8">
                 <div id="tour-weekly-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                 <div id="tour-weekly-header" className="flex flex-col w-full">
-                    <h3 className="text-2xl font-black font-display tracking-tight">Horario Semanal</h3>
+                    <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Horario Semanal</h3>
                     <p className="text-muted-foreground font-medium mt-1">Define tus horas de trabajo recurrentes para que tus clientes puedan agendar.</p>
                 </div>
 
@@ -333,7 +333,7 @@ export function AvailabilityManagement() {
                             value={selectedLocationId || ""}
                             onValueChange={(value) => switchLocation(value)}
                         >
-                            <SelectTrigger className="w-full h-14 rounded-xl px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
+                            <SelectTrigger size="lg" className="w-full px-6 text-sm font-black outline-none focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer hover:border-primary/30 transition-all text-foreground">
                                 <SelectValue placeholder="Seleccionar Sede" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="shadow-2xl">
@@ -473,26 +473,20 @@ export function AvailabilityManagement() {
                                         {active ? (
                                             <div className="flex flex-col xl:flex-row xl:items-center justify-between w-full gap-6 animate-in fade-in slide-in-from-left-4 duration-500">
                                                 {/* Hours Selection */}
-                                                <div className="flex items-center gap-1 bg-muted/20 p-2 rounded-xl w-full xl:w-fit border border-border/30">
-                                                    <div className="flex-1 relative">
-                                                        <Input
-                                                            type="time"
-                                                            value={start}
-                                                            onChange={(e) => updateTime(day.id, 'start', e.target.value)}
-                                                            className="font-black text-center"
-                                                        />
-                                                    </div>
-                                                    <div className="px-1">
-                                                        <span className="text-xs font-black tracking-widest text-muted-foreground/40 uppercase">a</span>
-                                                    </div>
-                                                    <div className="flex-1 relative">
-                                                        <Input
-                                                            type="time"
-                                                            value={end}
-                                                            onChange={(e) => updateTime(day.id, 'end', e.target.value)}
-                                                            className="font-black text-center"
-                                                        />
-                                                    </div>
+                                                <div className="flex items-center gap-2 rounded-xl border border-border/30 bg-muted/20 p-2 w-full xl:w-fit">
+                                                    <Input
+                                                        type="time"
+                                                        value={start}
+                                                        onChange={(e) => updateTime(day.id, 'start', e.target.value)}
+                                                        className="w-full xl:w-32 font-black text-center"
+                                                    />
+                                                    <span className="shrink-0 px-1 text-2xs font-black uppercase tracking-widest text-muted-foreground/40">a</span>
+                                                    <Input
+                                                        type="time"
+                                                        value={end}
+                                                        onChange={(e) => updateTime(day.id, 'end', e.target.value)}
+                                                        className="w-full xl:w-32 font-black text-center"
+                                                    />
                                                 </div>
 
                                                 {/* Lunch Settings */}
@@ -522,19 +516,19 @@ export function AvailabilityManagement() {
                                                     </div>
 
                                                     {dayState?.lunchActive && (
-                                                        <div className="flex items-center gap-1 animate-in slide-in-from-right-4 fade-in duration-500 w-full xl:w-fit bg-muted/20 p-2 rounded-xl border border-border/30">
+                                                        <div className="flex items-center gap-2 rounded-xl border border-border/30 bg-muted/20 p-2 w-full xl:w-fit animate-in slide-in-from-right-4 fade-in duration-500">
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchStart}
                                                                 onChange={(e) => updateTime(day.id, 'lunchStart', e.target.value)}
-                                                                className="flex-1 xl:w-28 font-black text-center"
+                                                                className="w-full xl:w-32 font-black text-center"
                                                             />
-                                                            <span className="text-2xs font-black text-muted-foreground/30 uppercase shrink-0">a</span>
+                                                            <span className="shrink-0 px-1 text-2xs font-black uppercase tracking-widest text-muted-foreground/40">a</span>
                                                             <Input
                                                                 type="time"
                                                                 value={dayState?.lunchEnd}
                                                                 onChange={(e) => updateTime(day.id, 'lunchEnd', e.target.value)}
-                                                                className="flex-1 xl:w-28 font-black text-center"
+                                                                className="w-full xl:w-32 font-black text-center"
                                                             />
                                                         </div>
                                                     )}
@@ -573,7 +567,7 @@ export function AvailabilityManagement() {
                 <div id="tour-special-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                 <div className="flex flex-col md:flex-row gap-6 items-center justify-between px-2">
                     <div>
-                        <h3 className="text-2xl font-black font-display tracking-tight">Bloqueos Especiales</h3>
+                        <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Bloqueos Especiales</h3>
                         <p className="text-muted-foreground font-medium mt-1">Días específicos que no estarás disponible (vacaciones, citas, etc.)</p>
                     </div>
                     <Button
@@ -628,7 +622,7 @@ export function AvailabilityManagement() {
             <Dialog open={showBlockModal} onOpenChange={setShowBlockModal}>
                 <DialogContent className="sm:max-w-md p-8 overflow-hidden">
                     <DialogHeader className="mb-6">
-                        <DialogTitle className="text-3xl font-black font-display tracking-tighter">Nuevo Bloqueo</DialogTitle>
+                        <DialogTitle>Nuevo Bloqueo</DialogTitle>
                         <p className="text-muted-foreground font-medium">Define una fecha y hora específica para tu descanso.</p>
                     </DialogHeader>
                     <div className="space-y-8 py-2">
@@ -687,14 +681,14 @@ export function AvailabilityManagement() {
                         <Button
                             variant="ghost"
                             onClick={() => setShowBlockModal(false)}
-                            className="flex-1 rounded-xl font-black uppercase text-xs tracking-widest border border-border/40"
+                            className="flex-1 font-black uppercase text-xs tracking-widest border border-border/40"
                         >
                             Cancelar
                         </Button>
                         <Button
                             onClick={handleAddBlock}
                             disabled={!newBlock.date || saving}
-                            className="flex-1 rounded-xl font-black uppercase text-xs tracking-widest shadow-none brightness-110 active:scale-95 transition-all"
+                            className="flex-1 font-black uppercase text-xs tracking-widest shadow-none brightness-110 active:scale-95 transition-all"
                         >
                             {saving ? <Loader2 className="animate-spin h-5 w-5" /> : "Registrar Bloqueo"}
                         </Button>
@@ -703,7 +697,7 @@ export function AvailabilityManagement() {
             </Dialog>
 
             {/* Global Save Button - Centered at the bottom */}
-            <div className="flex flex-col items-center justify-center pt-10 sticky bottom-0 z-20 pointer-events-none">
+            <div className="flex flex-col items-center justify-center pt-10 sticky bottom-5 z-20 pointer-events-none">
                 <div className="relative w-fit group/save pointer-events-auto">
                     <div id="tour-save-anchor" className="absolute -inset-4 pointer-events-none rounded-3xl bg-primary/10 blur-xl opacity-0 group-hover/save:opacity-100 transition-opacity" />
                     <Button

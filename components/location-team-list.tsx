@@ -39,9 +39,9 @@ export function LocationTeamList({
                 return (
                     <Dialog key={member.id}>
                         <DialogTrigger asChild>
-                            <Button
+                            <Button size="xl"
                                 variant="ghost"
-                                className="w-full h-14 bg-muted/10 hover:bg-primary/5 border border-border/30 hover:border-primary/20 rounded-xl flex items-center justify-between px-4 group/btn"
+                                className="w-full bg-muted/10 hover:bg-primary/5 border border-border/30 hover:border-primary/20 flex items-center justify-between px-4 group/btn"
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-2xs font-black text-primary">
@@ -62,7 +62,7 @@ export function LocationTeamList({
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[550px] overflow-hidden">
                             <DialogHeader className="p-8 pb-0">
-                                <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Configurar Profesional</DialogTitle>
+                                <DialogTitle>Configurar Profesional</DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium pt-2">
                                     Asigna los servicios que {member.user.name} podrá realizar en {locationName}.
                                 </DialogDescription>

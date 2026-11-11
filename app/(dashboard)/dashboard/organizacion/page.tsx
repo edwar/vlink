@@ -49,7 +49,7 @@ export default async function OrganizacionPage(props: {
 
     if (!organization) {
         return (
-            <div className="space-y-12 animate-in fade-in duration-700 pb-20 max-w-2xl mx-auto">
+            <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-2xl mx-auto">
                 <PageHeader
                     icon={Building2}
                     title="Equipo y Organización"
@@ -103,7 +103,7 @@ export default async function OrganizacionPage(props: {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <PageHeader
                 icon={Building2}
                 title={isOwnerOrManager ? (
@@ -152,10 +152,7 @@ export default async function OrganizacionPage(props: {
                 <div className="lg:col-span-5 flex flex-col h-full">
                     <div id="tour-org-qr" className="∏relative flex-1 space-y-4 flex flex-col bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
                         <div id="tour-org-qr-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                        <div className="flex items-center gap-3 relative z-10">
-                            <div className="h-6 w-1 bg-blue-500/40 rounded-full" />
-                            <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Marketing & QR</h2>
-                        </div>
+                        <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase relative z-10">Marketing & QR</h2>
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Descarga el QR base o compártelo al instante con tus clientes en redes.
                         </p>
@@ -173,14 +170,14 @@ export default async function OrganizacionPage(props: {
                                     <Button
                                         variant="outline"
                                         size="default"
-                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none rounded-xl"
+                                        className="w-full text-xs font-black overflow-hidden relative group border hover:bg-primary/10 hover:border-primary/30 text-foreground hover:text-primary shadow-none"
                                     >
                                         <IdCard className="h-5 w-5 relative z-10 mr-2" />
                                         <span className="relative z-10 uppercase tracking-widest">Tarjeta de Presentación</span>
                                     </Button>
                                 </DialogTrigger>
                                 <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden sm:rounded-3xl p-6 sm:p-10 shadow-none flex flex-col">
-                                    <DialogTitle className="text-2xl md:text-3xl font-display font-black tracking-tight uppercase text-primary mb-1">
+                                    <DialogTitle className="mb-1">
                                         Tarjeta de Presentación
                                     </DialogTitle>
                                     <p className="text-muted-foreground text-sm font-medium mb-4 sm:mb-8 max-w-xl">
@@ -202,10 +199,7 @@ export default async function OrganizacionPage(props: {
                 <div className="lg:col-span-7 flex flex-col h-full">
                     <div id="tour-org-invite" className="relative flex-1 flex flex-col space-y-4 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden h-full">
                         <div id="tour-org-invite-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
-                        <div className="flex items-center gap-3 relative z-10">
-                            <div className="h-6 w-1 bg-muted-foreground/30 rounded-full" />
-                            <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Crecer / Equipo</h2>
-                        </div>
+                        <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase relative z-10">Crecer / Equipo</h2>
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Invita nuevos profesionales a tu organización copiando el enlace mágico para escalar tu negocio.
                         </p>
@@ -231,10 +225,7 @@ export default async function OrganizacionPage(props: {
                         <Store className="w-64 h-64 text-purple-500" />
                     </div>
 
-                    <div className="flex items-center gap-3 relative z-10">
-                        <div className="h-6 w-1 bg-purple-500/40 rounded-full" />
-                        <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Infraestructura</h2>
-                    </div>
+                    <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase relative z-10">Infraestructura</h2>
 
                     <div className="flex-1 flex flex-col space-y-6 relative z-10">
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed">
@@ -269,10 +260,7 @@ export default async function OrganizacionPage(props: {
 
                 {/* Comunicación & Soporte */}
                 <div id="tour-org-contact" className="relative flex flex-col space-y-6 bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-lg p-8 overflow-hidden">
-                    <div className="flex items-center gap-3">
-                        <div className="h-6 w-1 bg-orange-500/40 rounded-full" />
-                        <h2 className="text-xl font-display font-black tracking-tight text-foreground uppercase">Soporte</h2>
-                    </div>
+                    <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Soporte</h2>
                     <div id="tour-org-contact-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     <OrganizationContact
                         organizationId={organization.id}
@@ -286,10 +274,7 @@ export default async function OrganizacionPage(props: {
             {/* Row 2: Mi Equipo */}
             <div className="pt-6 border-t border-border/50 space-y-6">
                 <div className="flex flex-col gap-4 items-start md:gap-0 md:flex-row md:items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="h-6 w-1 bg-primary rounded-full" />
-                        <h2 className="text-2xl font-display font-black tracking-tight text-foreground">Mi Equipo</h2>
-                    </div>
+                    <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Mi Equipo</h2>
                     <div className="flex flex-wrap items-center gap-3">
                         <span className="px-4 py-1.5 bg-muted/30 text-foreground label-caps rounded-full border border-border/40 shadow-none">
                             {sortedMembers.length} {sortedMembers.length === 1 ? 'Profesional' : 'Profesionales'}

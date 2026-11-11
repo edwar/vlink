@@ -95,7 +95,7 @@ function CalendarHeader({
                             value={selectedLocationId || ''}
                             onValueChange={(value) => onLocationChange(value)}
                         >
-                            <SelectTrigger id="tour-calendar-location" className="flex w-[220px] h-10 bg-muted/30 px-3 rounded-full border border-input text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
+                            <SelectTrigger id="tour-calendar-location" className="flex w-[220px] bg-muted/30 px-3 rounded-full border border-input text-xs font-black uppercase tracking-widest focus:ring-0 shadow-none hover:bg-muted/50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <MapPinned className="h-4 w-4 text-primary shrink-0" />
                                     <SelectValue placeholder="Seleccionar Ubicación" />
@@ -202,27 +202,27 @@ function CalendarHeader({
                         <div className="grid grid-cols-3 gap-2">
                             <Button
                                 variant={view === 'day' ? "vlink" : "secondary"}
-                                size="sm"
+                               
                                 onClick={() => { onViewChange('day'); onMenuToggle(); }}
-                                className="h-auto py-3 text-2xs flex-col rounded-xl"
+                                className="h-9 h-auto py-3 text-2xs flex-col"
                             >
                                 <Clock className="h-4 w-4" />
                                 Día
                             </Button>
                             <Button
                                 variant={view === 'week' ? "vlink" : "secondary"}
-                                size="sm"
+                               
                                 onClick={() => { onViewChange('week'); onMenuToggle(); }}
-                                className="h-auto py-3 text-2xs flex-col rounded-xl"
+                                className="h-9 h-auto py-3 text-2xs flex-col"
                             >
                                 <CalendarIcon className="h-4 w-4" />
                                 Semana
                             </Button>
                             <Button
                                 variant={view === 'month' ? "vlink" : "secondary"}
-                                size="sm"
+                               
                                 onClick={() => { onViewChange('month'); onMenuToggle(); }}
-                                className="h-auto py-3 text-2xs flex-col rounded-xl"
+                                className="h-9 h-auto py-3 text-2xs flex-col"
                             >
                                 <LayoutGrid className="h-4 w-4" />
                                 Mes
@@ -239,7 +239,7 @@ function CalendarHeader({
                             value={selectedLocationId || "all"}
                             onValueChange={(value) => { onLocationChange(value === "all" ? null : value); onMenuToggle(); }}
                         >
-                            <SelectTrigger className="w-full h-10 rounded-xl bg-muted/20 px-4 text-xs font-bold transition-all text-foreground">
+                            <SelectTrigger className="w-full bg-muted/20 px-4 text-xs font-bold transition-all text-foreground">
                                 <SelectValue placeholder="Todas las Sedes" />
                             </SelectTrigger>
                             <SelectContent position="popper" className="w-(--radix-select-trigger-width) rounded-xl border-border/40 shadow-2xl">
@@ -260,7 +260,7 @@ function CalendarHeader({
                                 variant="outline"
                                 size="sm"
                                 onClick={() => { onPrevious(); onMenuToggle(); }}
-                                className="flex-1 h-10 rounded-xl"
+                                className="flex-1 h-10"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                                 Anterior
@@ -269,7 +269,7 @@ function CalendarHeader({
                                 variant="outline"
                                 size="sm"
                                 onClick={() => { onToday(); onMenuToggle(); }}
-                                className="flex-1 h-10 rounded-xl font-bold"
+                                className="flex-1 h-10 font-bold"
                             >
                                 Hoy
                             </Button>
@@ -277,7 +277,7 @@ function CalendarHeader({
                                 variant="outline"
                                 size="sm"
                                 onClick={() => { onNext(); onMenuToggle(); }}
-                                className="flex-1 h-10 rounded-xl"
+                                className="flex-1 h-10"
                             >
                                 Siguiente
                                 <ChevronRight className="h-4 w-4" />
@@ -713,7 +713,7 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
                 <DialogContent className="sm:max-w-md p-0 overflow-hidden">
                     <div className="border-b border-border/50 p-6">
                         <DialogHeader>
-                            <DialogTitle className="text-xl font-display font-bold">
+                            <DialogTitle>
                                 Detalles de la Cita
                             </DialogTitle>
                             <DialogDescription>

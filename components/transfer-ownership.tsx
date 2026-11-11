@@ -72,9 +72,9 @@ export function TransferOwnership({ organizationId, organizationName, members }:
             if (!open) setSelectedUserId(null)
         }}>
             <DialogTrigger asChild>
-                <Button
+                <Button size="sm"
                     variant="ghost"
-                    className="h-9 px-4 text-amber-500 hover:text-amber-600 hover:bg-amber-500/10 rounded-xl transition-all font-bold text-2xs uppercase tracking-widest gap-2 flex items-center"
+                    className="px-4 text-amber-500 hover:text-amber-600 hover:bg-amber-500/10 transition-all font-bold text-2xs uppercase tracking-widest gap-2 flex items-center"
                 >
                     <Crown className="h-3.5 w-3.5" />
                     Transferir Propiedad
@@ -85,7 +85,7 @@ export function TransferOwnership({ organizationId, organizationName, members }:
                     <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 mb-2">
                         <Crown className="h-6 w-6" />
                     </div>
-                    <DialogTitle className="text-2xl font-display font-black tracking-tight uppercase text-foreground">
+                    <DialogTitle>
                         Transferir Propiedad
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium leading-relaxed">
@@ -155,7 +155,7 @@ export function TransferOwnership({ organizationId, organizationName, members }:
                     <Button
                         variant="ghost"
                         onClick={() => setIsOpen(false)}
-                        className="rounded-xl font-black text-2xs uppercase tracking-widest"
+                        className="font-black text-2xs uppercase tracking-widest"
                         disabled={isLoading}
                     >
                         Cancelar
@@ -163,7 +163,7 @@ export function TransferOwnership({ organizationId, organizationName, members }:
                     <Button
                         onClick={handleTransfer}
                         disabled={!selectedUserId || isLoading}
-                        className="rounded-xl font-black text-2xs uppercase tracking-widest bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20 px-8 disabled:opacity-30"
+                        className="font-black text-2xs uppercase tracking-widest bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20 px-8 disabled:opacity-30"
                     >
                         {isLoading ? (
                             <>

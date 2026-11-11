@@ -144,7 +144,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                         </FormItem>
                     )}
                 />
-                <Button type="submit" disabled={loading} className="w-full h-12 rounded-xl font-black uppercase tracking-widest mt-4">
+                <Button size="lg" type="submit" disabled={loading} className="w-full font-black uppercase tracking-widest mt-4">
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {initialData ? "Actualizar Sede" : loading ? "Creando Sede..." : "Crear Sede"}
                 </Button>

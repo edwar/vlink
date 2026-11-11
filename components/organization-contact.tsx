@@ -75,7 +75,7 @@ export function OrganizationContact({
             <div className="flex flex-col gap-4 relative z-10 w-full mb-2">
                 <div className="flex w-full flex-col">
                     <p className="label-caps text-muted-foreground/70 mb-2">Canales de Atención</p>
-                    <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase text-nowrap">Contacto Clientes</h3>
+                    <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase text-nowrap">Contacto Clientes</h3>
                     <p className="text-sm text-muted-foreground font-medium leading-tight mt-1">
                         Información pública para que tus clientes soliciten cambios de horario.
                     </p>

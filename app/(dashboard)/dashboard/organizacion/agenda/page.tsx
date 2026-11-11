@@ -20,7 +20,7 @@ export default async function ConsolidatedAgendaPage() {
     if (!organization) redirect("/dashboard/organizacion")
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pt-10">
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <Link
                 href="/dashboard/organizacion"
                 className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"

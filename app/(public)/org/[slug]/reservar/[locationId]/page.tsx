@@ -124,7 +124,7 @@ export default async function LocationBookingPage({ params }: LocationBookingPag
                                     {(member.user.profile?.bio?.length || 0) > 60 ? '...' : ''}
                                 </p>
 
-                                <Button variant="outline" className="mt-auto w-full rounded-xl border-primary/20 text-primary font-black uppercase tracking-widest text-2xs group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                                <Button variant="outline" className="mt-auto w-full border-primary/20 text-primary font-black uppercase tracking-widest text-2xs group-hover:bg-primary group-hover:text-white transition-all duration-500">
                                     Ver Agenda
                                     <ArrowRight className="ml-2 h-3.5 w-3.5" />
                                 </Button>

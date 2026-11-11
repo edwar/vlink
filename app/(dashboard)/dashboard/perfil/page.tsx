@@ -8,7 +8,7 @@ export default async function PerfilPage() {
     const profile = await getEffectiveProfile();
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <PageHeader
                 title="Mi Perfil"
                 icon={UserCircle}

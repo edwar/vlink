@@ -142,7 +142,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogTrigger asChild>
                             <Button
-                                className="h-12 w-12 bg-red-500/5 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
+                                className="h-12 w-12 bg-red-500/5 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all group/btn shrink-0 border border-red-500/10"
                                 title="Cancelar cita"
                                 aria-label="Cancelar cita"
                             >
@@ -154,7 +154,7 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                                 <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-red-600 mb-4 mx-auto">
                                     <AlertTriangle className="h-8 w-8" />
                                 </div>
-                                <DialogTitle className="text-2xl font-display font-black tracking-tight text-center sm:text-left">
+                                <DialogTitle className="text-center sm:text-left">
                                     ¿Cancelar esta cita?
                                 </DialogTitle>
                                 <DialogDescription className="text-base text-center sm:text-left">
@@ -162,18 +162,18 @@ export function AppointmentCard({ appt, showDate = false, readOnly = false }: { 
                                 </DialogDescription>
                             </DialogHeader>
                             <DialogFooter className="flex w-full gap-3 sm:flex-row pt-4">
-                                <Button
+                                <Button size="lg"
                                     variant="outline"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex-1 rounded-xl border-border/50 font-bold h-12"
+                                    className="flex-1 border-border/50 font-bold"
                                     disabled={isPending}
                                 >
                                     Mantener cita
                                 </Button>
-                                <Button
+                                <Button size="lg"
                                     variant="destructive"
                                     onClick={handleCancel}
-                                    className="flex-1 rounded-xl font-bold h-12 shadow-[none]"
+                                    className="flex-1 font-bold shadow-[none]"
                                     disabled={isPending}
                                 >
                                     {isPending ? "Cancelando..." : "Sí, cancelar cita"}

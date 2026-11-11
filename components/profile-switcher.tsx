@@ -93,7 +93,7 @@ export function ProfileSwitcher({ onClick }: { onClick?: () => void }) {
                 Viendo Agenda De:
             </p>
             <Select value={selectedProfileId || "personal"} onValueChange={handleSwitch}>
-                <SelectTrigger className="w-full h-12 bg-background border-2 focus:ring-primary/20 transition-all rounded-sm pl-2">
+                <SelectTrigger size="lg" className="w-full bg-background border-2 focus:ring-primary/20 transition-all rounded-sm pl-2">
                     <SelectValue>
                         <div className="flex items-center gap-2 truncate">
                             <UserAvatar
