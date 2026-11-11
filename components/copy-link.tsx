@@ -25,7 +25,7 @@ export function CopyLink({ url }: CopyLinkProps) {
         <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors shrink-0"
+            className="h-9 w-9 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors shrink-0"
             onClick={handleCopy}
         >
             {copied ? (

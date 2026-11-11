@@ -43,7 +43,7 @@ export function RemoveMember({ organizationId, targetUserId, memberName }: Remov
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 rounded-lg text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors shrink-0"
+                    className="h-9 w-9 rounded-lg text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors shrink-0"
                     title={`Eliminar a ${memberName ?? "este miembro"}`}
                 >
                     <UserMinus className="h-3.5 w-3.5" />
