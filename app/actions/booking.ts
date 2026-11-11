@@ -35,73 +35,7 @@ export async function getProfileForBooking(username: string) {
 
     if (!profile) return null
 
-    // 1. Billing Enforcement: Lock if payment is missing or overdue
-    let isLocked = false;
     const membership = profile.user.memberships[0];
-
-    if (membership && membership.organization) {
-        const org = membership.organization;
-        const now = new Date();
-
-        const planConfig = org.subscriptionPlan ? await prisma.planConfig.findUnique({
-            where: { id: org.subscriptionPlan }
-        }) : null;
-
-        // Check for Billing Hard-Lock
-        const isDegraded = org.billingStatus === "DEGRADED";
-        const isOverdueGraceEnded = org.billingStatus === "OVERDUE" && org.gracePeriodEnd && org.gracePeriodEnd < now;
-
-        // Treat as expired trial if: ACTIVE + Trial Date Passed + No active Mercado Pago subscription
-        // and its either not a free plan or we want to enforce card for all.
-        // Assuming planConfig.price starts with '$0' for free plans.
-        const trialExpired = org.billingStatus === "ACTIVE" &&
-            org.gracePeriodEnd &&
-            org.gracePeriodEnd < now &&
-            !org.mpSubscriptionId &&
-            (planConfig?.price !== "$0");
-
-        if (isDegraded || isOverdueGraceEnded || trialExpired || !org.subscriptionPlan) {
-            console.log(`[Hard-Lock] Agenda bloqueada para ${username}. Status: ${org.billingStatus}, Plan: ${org.subscriptionPlan}`);
-            isLocked = true;
-        }
-
-        // 2. Soft-Lock Check (Seat limits) - only if not already hard-locked
-        if (!isLocked && planConfig) {
-            const maxSeats = planConfig.maxSeats ?? 0;
-            if (maxSeats > 0) {
-                const allOrgMembers = await prisma.member.findMany({
-                    where: { organizationId: org.id },
-                    orderBy: { createdAt: 'asc' }
-                });
-
-                // Priority: OWNER (0) > MANAGER (1) > PROFESSIONAL (2)
-                const rolePriority: Record<string, number> = {
-                    OWNER: 0,
-                    MANAGER: 1,
-                    PROFESSIONAL: 2
-                };
-
-                const sortedMembers = allOrgMembers.sort((a, b) => {
-                    const priorityA = rolePriority[a.role] ?? 10;
-                    const priorityB = rolePriority[b.role] ?? 10;
-                    if (priorityA !== priorityB) return priorityA - priorityB;
-                    return a.createdAt.getTime() - b.createdAt.getTime();
-                });
-
-                const myIndex = sortedMembers.findIndex(m => m.userId === profile.userId);
-                if (myIndex >= maxSeats) {
-                    console.log(`[Soft-Lock] Perfil ${username} bloqueado por límite de asientos del plan ${org.subscriptionPlan}`);
-                    isLocked = true;
-                }
-            }
-        }
-    } else {
-        // Individual user without organization - check if individual booking is allowed or needs a plan
-        // For now, let's assume they need an organization to be active in this specific workflow
-        // or just let it pass if that's the business rule.
-        // Based on user request "si no tiene un plan", let's assume if no org/plan, it's locked.
-        // isLocked = true; 
-    }
 
     return {
         id: profile.id,
@@ -111,7 +45,6 @@ export async function getProfileForBooking(username: string) {
         image: profile.user.image,
         advanceNoticeHours: profile.advanceNoticeHours,
         expertise: profile.expertise || [],
-        isLocked,
         organizationId: profile.organizationId || "",
         organizationSlug: membership?.organization?.slug || "",
         services: profile.services.map((s: any) => ({

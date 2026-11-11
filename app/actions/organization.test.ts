@@ -105,10 +105,9 @@ describe('organization actions', () => {
             expect(result.error).toBe("No tienes permisos para crear invitaciones en esta organización")
         })
 
-        it('checks plan limits and creates invitation', async () => {
+        it('creates invitation without seat limits', async () => {
             vi.mocked(prisma.member.findFirst).mockResolvedValue({ role: 'OWNER' } as any)
-            vi.mocked(prisma.organization.findUnique).mockResolvedValue({ _count: { members: 1, invitations: 0 } } as any)
-            vi.mocked(prisma.planConfig.findUnique).mockResolvedValue({ maxSeats: 5 } as any)
+            vi.mocked(prisma.organization.findUnique).mockResolvedValue({ id: 'org-id' } as any)
             vi.mocked(prisma.invitation.create).mockResolvedValue({ token: '123e4567-e89b-12d3-a456-426614174000' } as any)
 
             const result = await createInvitation('org-id')
@@ -117,16 +116,6 @@ describe('organization actions', () => {
             expect(prisma.invitation.create).toHaveBeenCalledWith(expect.objectContaining({
                 data: expect.objectContaining({ role: 'PROFESSIONAL' })
             }))
-        })
-
-        it('fails if max seats reached', async () => {
-            vi.mocked(prisma.member.findFirst).mockResolvedValue({ role: 'OWNER' } as any)
-            vi.mocked(prisma.organization.findUnique).mockResolvedValue({ _count: { members: 5, invitations: 0 } } as any)
-            vi.mocked(prisma.planConfig.findUnique).mockResolvedValue({ maxSeats: 5, name: 'TEAM' } as any)
-
-            const result = await createInvitation('org-id')
-            expect(result.success).toBe(false)
-            expect(result.error).toContain("El plan TEAM tiene un límite de 5 miembros")
         })
     })
 

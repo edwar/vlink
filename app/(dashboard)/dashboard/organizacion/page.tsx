@@ -5,7 +5,7 @@ import { getUserOrganizations } from "@/app/actions/organization"
 import { InviteMember } from "@/components/invite-member"
 import { CreateOrganization } from "@/components/create-organization"
 import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, AlertTriangle, MapPin, Store } from "lucide-react"
+import { Shield, Building2, UserCircle, Briefcase, Globe, IdCard, CalendarRange, MapPin, Store } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -61,11 +61,6 @@ export default async function OrganizacionPage(props: {
 
     const config = await prisma.systemConfig.findUnique({ where: { id: 'global' } });
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/org/${organization.slug}`
-
-    const planConfig = await prisma.planConfig.findUnique({
-        where: { id: organization.subscriptionPlan }
-    })
-    const maxSeats = planConfig?.maxSeats ?? 0;
 
     // Fetch members of the organization with pagination
     const totalMembers = await prisma.member.count({
@@ -129,18 +124,6 @@ export default async function OrganizacionPage(props: {
                         </p>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
-                        {isOwnerOrManager && (
-                            <a id="tour-org-plan" href="/dashboard/organizacion/planes" className="px-6 py-3 bg-primary/10 hover:bg-primary/20 transition-colors backdrop-blur border border-primary/20 rounded-2xl shadow-none inline-flex flex-col gap-1 items-start justify-center group">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-primary/80 group-hover:text-primary flex items-center gap-2">
-                                    <Globe className="h-3 w-3" /> Cambiar Plan
-                                </p>
-                                <p className="text-sm font-black text-primary">
-                                    {organization.subscriptionPlan === "BASIC" ? "Básico" :
-                                        organization.subscriptionPlan === "TEAM" ? "Equipos" : "Corporativo"}
-                                </p>
-                            </a>
-                        )}
-
                         <div className="px-6 py-3 bg-card/60 backdrop-blur border border-primary/10 rounded-2xl shadow-none inline-flex items-center gap-3">
                             <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                 <Shield className="h-5 w-5" />
@@ -235,13 +218,6 @@ export default async function OrganizacionPage(props: {
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed relative z-10">
                             Invita nuevos profesionales a tu organización copiando el enlace mágico para escalar tu negocio.
                         </p>
-                        <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-foreground/70">
-                                    Capstone ({organization.subscriptionPlan === "BASIC" ? "1 Base" : organization.subscriptionPlan === "TEAM" ? "Hasta 5" : "Ilimitado"})
-                                </span>
-                            </div>
-                        </div>
                         <div className="relative z-10 flex-1">
                             <InviteMember
                                 organizationId={organization.id}
@@ -351,17 +327,11 @@ export default async function OrganizacionPage(props: {
                 <div id="tour-team-members" className="relative grid grid-cols-1 gap-6">
                     <div id="tour-team-members-anchor" className="absolute inset-0 pointer-events-none rounded-[inherit]" />
                     {sortedMembers.map((member: typeof members[0], index: number) => {
-                        // For seat calculation, we would ideally need the absolute index across pages,
-                        // but let's stick to simple active display if you're in the list.
-                        // Ideally, we'd check if (skip + index) < maxSeats.
-                        const absoluteIndex = skip + index;
-                        const isPlanActive = maxSeats === 0 || absoluteIndex < maxSeats;
                         return (
                             <div
                                 key={member.id}
                                 className={cn(
-                                    "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative bg-card border border-border/50 rounded-lg hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6",
-                                    !isPlanActive && "opacity-70 grayscale-[0.3] border-red-500/20"
+                                    "bg-linear-to-br from-primary/5 via-transparent to-transparent group relative bg-card border border-border/50 rounded-lg hover:border-border/80 transition-all flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 sm:px-6 gap-6"
                                 )}
                                 style={{ animationDelay: `${index * 50}ms` }}
                             >
@@ -376,11 +346,6 @@ export default async function OrganizacionPage(props: {
                                         {member.role === "OWNER" && (
                                             <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-none border-2 border-background z-10">
                                                 <Shield className="h-2.5 w-2.5" />
-                                            </div>
-                                        )}
-                                        {!isPlanActive && (
-                                            <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-none border-2 border-background z-10" title="Suspendido por límite de plan">
-                                                <AlertTriangle className="h-2.5 w-2.5" />
                                             </div>
                                         )}
                                     </div>
@@ -430,18 +395,6 @@ export default async function OrganizacionPage(props: {
                                                         "bg-emerald-500/5 text-emerald-600 border-emerald-500/20"
                                             )}>
                                                 {ROLE_LABELS[member.role]}
-                                            </span>
-                                        )}
-
-                                        {!isPlanActive && (
-                                            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border bg-red-500/5 text-red-600 border-red-500/20">
-                                                Suspendido
-                                            </span>
-                                        )}
-
-                                        {isPlanActive && (
-                                            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border bg-emerald-500/5 text-emerald-600 border-emerald-500/20 hidden md:inline-flex">
-                                                Activo
                                             </span>
                                         )}
 

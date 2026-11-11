@@ -45,7 +45,6 @@ export default async function AdminDashboard() {
             </div>
 
             <AdminCharts
-                planStats={stats.planStats}
                 appointmentsByStatus={stats.appointmentsByStatus}
                 topServices={stats.topServices}
                 monthlyGrowth={stats.monthlyGrowth}

@@ -75,7 +75,7 @@ export async function updateOrganizationContact(organizationId: string, data: {
 /**
  * Creates a new organization and assigns the current user as OWNER
  */
-export async function createOrganization(name: string, plan: "BASIC" | "TEAM" | "CORPORATE" = "BASIC") {
+export async function createOrganization(name: string) {
     const session = await auth.api.getSession({
         headers: await headers()
     })
@@ -91,19 +91,10 @@ export async function createOrganization(name: string, plan: "BASIC" | "TEAM" | 
     if (existing) throw new Error(`Ya existe una organización con el nombre "${name}". Por favor elige otro nombre.`)
 
     const organization = await prisma.$transaction(async (tx) => {
-        // First month is free logic
-        const now = new Date()
-        const gracePeriodEnd = new Date(now)
-        gracePeriodEnd.setMonth(now.getMonth() + 1) // 30 days free
-
         const org = await tx.organization.create({
             data: {
                 name,
                 slug,
-                subscriptionPlan: plan,
-                billingStatus: "ACTIVE",
-                lastPaymentDate: now,
-                gracePeriodEnd: gracePeriodEnd,
                 members: {
                     create: {
                         userId: session.user.id,
@@ -174,34 +165,12 @@ export async function createInvitation(organizationId: string, role: "MANAGER" |
         return { success: false, error: "No tienes permisos para crear invitaciones en esta organización" }
     }
 
-    // Check SaaS limits
     const orgData = await prisma.organization.findUnique({
         where: { id: organizationId },
-        include: {
-            _count: {
-                select: {
-                    members: true,
-                    invitations: { where: { expiresAt: { gt: new Date() } } }
-                }
-            }
-        }
+        select: { id: true }
     })
 
     if (!orgData) return { success: false, error: "Organización no encontrada" }
-
-    const totalSeatsUsed = orgData._count.members + orgData._count.invitations;
-
-    // Fetch plan configuration to check limits
-    const planConfig = await prisma.planConfig.findUnique({
-        where: { id: orgData.subscriptionPlan }
-    })
-
-    if (planConfig && planConfig.maxSeats > 0 && totalSeatsUsed >= planConfig.maxSeats) {
-        return {
-            success: false,
-            error: `El plan ${planConfig.name} tiene un límite de ${planConfig.maxSeats} ${planConfig.maxSeats === 1 ? 'miembro' : 'miembros'}. Actualiza tu plan para invitar más colaboradores.`
-        }
-    }
 
     const invitation = await prisma.invitation.create({
         data: {
@@ -356,16 +325,6 @@ export async function getManagedProfiles(organizationId: string) {
         return []
     }
 
-    const org = await prisma.organization.findUnique({
-        where: { id: organizationId }
-    })
-
-    const planConfig = org ? await prisma.planConfig.findUnique({
-        where: { id: org.subscriptionPlan }
-    }) : null;
-
-    const maxSeats = planConfig?.maxSeats ?? 0;
-
     const allMembers = await prisma.member.findMany({
         where: {
             organizationId
@@ -380,7 +339,6 @@ export async function getManagedProfiles(organizationId: string) {
     })
 
 
-    // Sort all members to determine who is active under the current plan
     // Priority: OWNER > MANAGER > PROFESSIONAL, then by createdAt
     const sortedMembers = [...allMembers].sort((a, b) => {
         const roleOrder = { "OWNER": 0, "MANAGER": 1, "PROFESSIONAL": 2 };
@@ -393,12 +351,10 @@ export async function getManagedProfiles(organizationId: string) {
     return sortedMembers
         .filter(m => m.user.profile && m.userId !== session.user.id)
         .map(m => {
-            const memberIndex = sortedMembers.findIndex(sm => sm.id === m.id);
             return {
                 ...m.user.profile!,
                 user: m.user,
-                role: m.role,
-                isPlanActive: maxSeats === 0 || memberIndex < maxSeats
+                role: m.role
             };
         })
 }
@@ -410,10 +366,6 @@ export async function getOrganizationPublicProfiles(slug: string) {
     const organization = await prisma.organization.findUnique({
         where: { slug }
     })
-
-    const planConfig = organization ? await prisma.planConfig.findUnique({
-        where: { id: organization.subscriptionPlan }
-    }) : null;
 
     if (!organization) return null
 
@@ -452,21 +404,16 @@ export async function getOrganizationPublicProfiles(slug: string) {
     const members = (orgData as any).members
 
     // Keep only members who have a profile with showOnOrgPage = true
-    const maxSeats = planConfig?.maxSeats ?? 0;
-
-    // Filter by plan limits and visibility
     const visibleProfiles = members
         .filter((m: any) => m.user.profile !== null && m.user.profile.showOnOrgPage)
-        .map((m: any, index: number) => ({
+        .map((m: any) => ({
             username: m.user.profile!.username,
             displayName: m.user.profile!.displayName || m.user.name || m.user.profile!.username,
             bio: m.user.profile!.bio,
             image: m.user.image,
             expertise: (m.user.profile as any).expertise || [],
-            serviceCount: m.user.profile!.services.length,
-            isPlanActive: maxSeats === 0 || index < maxSeats
+            serviceCount: m.user.profile!.services.length
         }))
-        .filter((p: any) => p.isPlanActive) // Only return profiles active in the plan
         .sort((a: any, b: any) => a.displayName.localeCompare(b.displayName))
 
     return {

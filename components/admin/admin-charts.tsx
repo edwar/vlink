@@ -1,7 +1,7 @@
 "use client"
 
-import { Globe, CalendarCheck2, TrendingUp, Star } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell, AreaChart, Area, LineChart, Line } from "recharts"
+import { CalendarCheck2, TrendingUp, Star } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell, AreaChart, Area } from "recharts"
 
 import {
     Card,
@@ -18,33 +18,12 @@ import {
 } from "@/components/ui/chart"
 
 interface AdminChartsProps {
-    planStats: { plan: string; count: number }[]
     appointmentsByStatus: { status: string; count: number }[]
     topServices: { name: string; count: number }[]
     monthlyGrowth: { month: string; count: number }[]
 }
 
-export function AdminCharts({ planStats, appointmentsByStatus, topServices, monthlyGrowth }: AdminChartsProps) {
-    // 1. Distribución por Plan (Ahora LineChart)
-    const planColors: Record<string, string> = {
-        BASIC: "hsl(215 20% 65%)",       // Slate
-        TEAM: "hsl(217 91% 60%)",       // Blue
-        CORPORATE: "hsl(142 76% 45%)",  // Emerald
-    }
-
-    const planData = planStats.map((ps) => ({
-        name: ps.plan,
-        count: ps.count,
-        fill: planColors[ps.plan] || "hsl(215 20% 65%)",
-    }))
-
-    const planConfig = {
-        count: {
-            label: "Organizaciones",
-            color: "hsl(var(--primary))",
-        },
-    } satisfies ChartConfig
-
+export function AdminCharts({ appointmentsByStatus, topServices, monthlyGrowth }: AdminChartsProps) {
     // 2. Salud del Ecosistema (BarChart - Vertical)
     const apptConfig = {
         count: {
@@ -90,38 +69,8 @@ export function AdminCharts({ planStats, appointmentsByStatus, topServices, mont
     return (
         <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Distribución por Plan */}
-                <Card className="border border-border/40 shadow-none rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
-                    <CardHeader className="p-6 pb-2">
-                        <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2">
-                            <Globe className="h-5 w-5 text-primary" /> Distribución por Plan
-                        </CardTitle>
-                        <CardDescription>Organizaciones registradas por nivel de suscripción.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 pt-2 space-y-4">
-                        <ChartContainer
-                            config={planConfig}
-                            className="aspect-auto h-[300px] w-full"
-                        >
-                            <LineChart data={planData} margin={{ top: 20, right: 20, left: 20, bottom: 0 }}>
-                                <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.3} />
-                                <XAxis dataKey="name" tickLine={false} tickMargin={10} axisLine={false} />
-                                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                <Line
-                                    type="monotone"
-                                    dataKey="count"
-                                    stroke="var(--color-count)"
-                                    strokeWidth={4}
-                                    dot={{ r: 6, fill: "var(--color-count)" }}
-                                    activeDot={{ r: 8 }}
-                                />
-                            </LineChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-
                 {/* Salud del Ecosistema */}
-                <Card className="border border-border/40 shadow-none rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
+                <Card className="lg:col-span-2 border border-border/40 shadow-none rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
                     <CardHeader className="p-6 pb-2">
                         <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2">
                             <CalendarCheck2 className="h-5 w-5 text-primary" /> Salud del Ecosistema

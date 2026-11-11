@@ -58,15 +58,6 @@ export async function createLocation(organizationId: string, data: {
 
     if (!org) throw new Error("Organización no encontrada")
 
-    // Check plan limits
-    const planConfig = await prisma.planConfig.findUnique({
-        where: { id: org.subscriptionPlan }
-    })
-
-    if (planConfig && planConfig.maxLocations > 0 && org._count.locations >= planConfig.maxLocations) {
-        throw new Error(`Tu plan ${planConfig.name} permite máximo ${planConfig.maxLocations} sede(s). Actualiza tu plan para añadir más.`)
-    }
-
     const location = await prisma.$transaction(async (tx) => {
         const newLoc = await tx.location.create({
             data: {

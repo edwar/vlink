@@ -10,7 +10,6 @@ import { signOut, useSession } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import { Logo } from "./logo"
 import { useProfileStore } from "@/lib/store/profile-store"
-import { PlanBadge } from "./plan-badge"
 import { motion } from "framer-motion"
 
 const navigation = [
@@ -52,8 +51,6 @@ export function DashboardSidebar() {
             </div>
 
             <ProfileSwitcher />
-
-            <PlanBadge />
 
             <nav id="tour-nav" className="flex flex-1 flex-col mt-2">
                 <ul role="list" className="flex flex-1 flex-col gap-y-3">

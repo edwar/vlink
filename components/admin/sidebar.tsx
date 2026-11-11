@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, Building2, Users, CreditCard, Settings, LogOut, ExternalLink } from "lucide-react"
+import { LayoutDashboard, Building2, Users, Settings, LogOut, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
@@ -17,7 +17,6 @@ export function Sidebar() {
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
         { href: "/admin/organizations", label: "Organizaciones", icon: Building2 },
         { href: "/admin/users", label: "Usuarios", icon: Users },
-        { href: "/admin/plans", label: "Planes SaaS", icon: CreditCard },
         { href: "/admin/settings", label: "Configuración", icon: Settings },
     ]
 
