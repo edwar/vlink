@@ -46,9 +46,9 @@ export function LeaveOrganization({ organizationId, organizationName }: LeaveOrg
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button
+                <Button size="sm"
                     variant="ghost"
-                    className="h-9 px-4 text-red-500 hover:text-red-600 hover:bg-red-500/10 rounded-xl transition-all font-bold text-[10px] uppercase tracking-widest gap-2 flex items-center"
+                    className="px-4 text-red-500 hover:text-red-600 hover:bg-red-500/10 transition-all font-bold text-2xs uppercase tracking-widest gap-2 flex items-center"
                 >
                     <LogOut className="h-3.5 w-3.5" />
                     Abandonar Organización
@@ -56,10 +56,10 @@ export function LeaveOrganization({ organizationId, organizationName }: LeaveOrg
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-8">
                 <DialogHeader className="space-y-3">
-                    <div className="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 mb-2">
+                    <div className="h-12 w-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 mb-2">
                         <AlertTriangle className="h-6 w-6" />
                     </div>
-                    <DialogTitle className="text-2xl font-display font-black tracking-tight uppercase text-foreground">
+                    <DialogTitle>
                         ¿Abandonar Organización?
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium leading-relaxed">
@@ -72,7 +72,7 @@ export function LeaveOrganization({ organizationId, organizationName }: LeaveOrg
                     <Button
                         variant="ghost"
                         onClick={() => setIsOpen(false)}
-                        className="rounded-2xl font-black text-[10px] uppercase tracking-widest"
+                        className="font-black text-2xs uppercase tracking-widest"
                         disabled={isLoading}
                     >
                         Cancelar
@@ -80,7 +80,7 @@ export function LeaveOrganization({ organizationId, organizationName }: LeaveOrg
                     <Button
                         variant="destructive"
                         onClick={handleLeave}
-                        className="rounded-2xl font-black text-[10px] uppercase tracking-widest bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20 px-8"
+                        className="font-black text-2xs uppercase tracking-widest bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20 px-8"
                         disabled={isLoading}
                     >
                         {isLoading ? (

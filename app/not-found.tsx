@@ -46,7 +46,7 @@ export default function NotFound() {
                 <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
                     <Link
                         href="/"
-                        className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold text-base shadow-2xl shadow-primary/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                        className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold text-base shadow-2xl shadow-primary/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
                     >
                         <Home className="h-5 w-5" />
                         Ir al Inicio
@@ -54,7 +54,7 @@ export default function NotFound() {
 
                     <button
                         onClick={() => router.back()}
-                        className="w-full sm:w-auto px-8 py-4 bg-card border border-primary/10 rounded-2xl font-bold text-base transition-all hover:bg-accent flex items-center justify-center gap-3"
+                        className="w-full sm:w-auto px-8 py-4 bg-card border border-primary/10 rounded-xl font-bold text-base transition-all hover:bg-accent flex items-center justify-center gap-3"
                     >
                         <ArrowLeft className="h-5 w-5" />
                         Regresar

@@ -5,6 +5,7 @@ import { Loader2, Plus, Pencil, Trash2, Check, X, Clock, Save, Briefcase, Sparkl
 import { getConfiguration, updateConfiguration, createService, updateService, deleteService } from "@/app/actions/services"
 import { cn, formatPrice, parsePrice } from "@/lib/utils"
 import { Input } from "./ui/input"
+import { StatusBadge } from "./ui/status-badge"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 import {
@@ -253,16 +254,13 @@ export function ConfigurationSettings() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Column 1: Services (Left) */}
                 <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-10 relative overflow-hidden">
+                    <section id="tour-services-list" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 space-y-10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50 pointer-events-none" />
                         <div className="relative z-10 space-y-10">
                             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
                                 <div className="space-y-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-1 bg-primary rounded-full" />
-                                        <h3 className="text-3xl font-black font-display tracking-tight text-primary uppercase">Mis Servicios</h3>
-                                    </div>
-                                    <p className="text-muted-foreground font-medium text-lg max-w-xl">
+                                    <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Mis Servicios</h3>
+                                    <p className="text-sm text-muted-foreground font-medium max-w-xl">
                                         Define tu portafolio profesional. Configura precios y duraciones personalizadas para cada sesión.
                                     </p>
                                 </div>
@@ -270,7 +268,7 @@ export function ConfigurationSettings() {
                                     <Button
                                         onClick={() => setShowNewForm(true)}
                                         id="tour-new-service"
-                                        className="shrink-0 px-8 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
+                                        className="shrink-0 px-8 font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
                                     >
                                         <Plus className="h-5 w-5 mr-2" />
                                         Nuevo Servicio
@@ -284,7 +282,7 @@ export function ConfigurationSettings() {
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
 
                                     <div className="flex items-center gap-4 border-b border-border/40 pb-6">
-                                        <div className="p-3 bg-primary/10 rounded-2xl">
+                                        <div className="p-3 bg-primary/10 rounded-xl">
                                             <Plus className="h-5 w-5 text-primary" />
                                         </div>
                                         <div>
@@ -316,13 +314,13 @@ export function ConfigurationSettings() {
                                                 value={newDuration.toString()}
                                                 onValueChange={(val) => setNewDuration(parseInt(val))}
                                             >
-                                                <SelectTrigger className="h-14 w-full font-bold text-lg px-6">
+                                                <SelectTrigger size="lg" className="w-full font-bold text-lg px-6">
                                                     <div className="flex items-center gap-3">
                                                         <Clock className="h-5 w-5 text-muted-foreground" />
                                                         <SelectValue placeholder="Duración" />
                                                     </div>
                                                 </SelectTrigger>
-                                                <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
+                                                <SelectContent position="popper" className="rounded-xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
                                                     <SelectGroup>
                                                         {DURATION_OPTIONS.map((opt) => (
                                                             <SelectItem
@@ -340,17 +338,17 @@ export function ConfigurationSettings() {
                                     </div>
 
                                     <div className="flex flex-col-reverse sm:flex-row gap-4 justify-end pt-6 border-t border-border/40 relative z-10">
-                                        <Button
+                                        <Button size="lg"
                                             variant="ghost"
                                             onClick={() => { setShowNewForm(false); setNewName(""); setNewPrice("0"); setNewDuration(30) }}
-                                            className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                            className="font-black px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive transition-colors"
                                         >
                                             Descartar
                                         </Button>
-                                        <Button
+                                        <Button size="lg"
                                             onClick={handleCreateService}
                                             disabled={creatingService || !newName.trim()}
-                                            className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 hover:scale-105 transition-all active:scale-95 bg-primary text-primary-foreground"
+                                            className="font-black px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 hover:scale-105 transition-all active:scale-95 bg-primary text-primary-foreground"
                                         >
                                             {creatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Check className="h-5 w-5 mr-2" />}
                                             Publicar Servicio
@@ -374,7 +372,7 @@ export function ConfigurationSettings() {
                                     <Button
                                         variant="outline"
                                         onClick={() => setShowNewForm(true)}
-                                        className="rounded-xl font-black border-2 hover:bg-primary/5"
+                                        className="font-black border-2 hover:bg-primary/5"
                                     >
                                         Inaugurar Catálogo
                                     </Button>
@@ -390,7 +388,7 @@ export function ConfigurationSettings() {
                                                 {editingId === service.id ? (
                                                     <>
                                                         <div className="flex items-center gap-4 border-b border-border/40 pb-6">
-                                                            <div className="p-3 bg-primary/10 rounded-2xl">
+                                                            <div className="p-3 bg-primary/10 rounded-xl">
                                                                 <Pencil className="h-5 w-5 text-primary" />
                                                             </div>
                                                             <div>
@@ -426,13 +424,13 @@ export function ConfigurationSettings() {
                                                                     value={editDuration.toString()}
                                                                     onValueChange={(val) => setEditDuration(parseInt(val))}
                                                                 >
-                                                                    <SelectTrigger className="h-14 w-full font-bold text-lg px-6">
+                                                                    <SelectTrigger size="lg" className="w-full font-bold text-lg px-6">
                                                                         <div className="flex items-center gap-3">
                                                                             <Clock className="h-5 w-5 text-muted-foreground" />
                                                                             <SelectValue placeholder="Duración" />
                                                                         </div>
                                                                     </SelectTrigger>
-                                                                    <SelectContent position="popper" className="rounded-2xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
+                                                                    <SelectContent position="popper" className="rounded-xl border-border/40 shadow-xl p-2 bg-popover/95 backdrop-blur-xl">
                                                                         {DURATION_OPTIONS.map(opt => (
                                                                             <SelectItem
                                                                                 key={opt.value}
@@ -460,13 +458,13 @@ export function ConfigurationSettings() {
                                                         </div>
 
                                                         <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 pt-6 border-t border-border/40">
-                                                            <Button variant="ghost" onClick={() => setEditingId(null)} className="rounded-2xl font-black h-12 px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive w-full sm:w-auto">
+                                                            <Button size="lg" variant="ghost" onClick={() => setEditingId(null)} className="font-black px-8 uppercase tracking-widest text-xs hover:bg-destructive/10 hover:text-destructive w-full sm:w-auto">
                                                                 Cancelar
                                                             </Button>
-                                                            <Button
+                                                            <Button size="lg"
                                                                 onClick={() => handleUpdateService(service.id)}
                                                                 disabled={updatingService || !editName.trim()}
-                                                                className="rounded-2xl font-black h-12 px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 w-full sm:w-auto"
+                                                                className="font-black px-10 uppercase tracking-widest text-xs shadow-md shadow-primary/10 w-full sm:w-auto"
                                                             >
                                                                 {updatingService ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                                                                 Confirmar Cambios
@@ -479,7 +477,7 @@ export function ConfigurationSettings() {
                                                             {/* Service Image or Status Indicator */}
                                                             <div className={cn(
                                                                 "h-12 w-12 sm:h-14 sm:w-14 shrink-0",
-                                                                service.images.length > 0 ? "rounded-xl overflow-hidden border border-border/40" : "rounded-2xl flex items-center justify-center border-2",
+                                                                service.images.length > 0 ? "rounded-xl overflow-hidden border border-border/40" : "rounded-xl flex items-center justify-center border-2",
                                                                 service.isActive && service.images.length === 0
                                                                     ? "bg-primary/10 border-primary/20 shadow-xl shadow-primary/5 group-hover:scale-105 group-hover:rotate-3"
                                                                     : !service.isActive ? "bg-muted border-muted-foreground/10 opacity-50" : ""
@@ -502,16 +500,11 @@ export function ConfigurationSettings() {
                                                                     <h4 className="font-black text-base sm:text-lg truncate tracking-tight text-foreground/90 leading-tight">
                                                                         {service.name}
                                                                     </h4>
-                                                                    <span className={cn(
-                                                                        "shrink-0 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                                                                        service.isActive
-                                                                            ? "bg-green-500/10 text-green-600 border-green-500/20"
-                                                                            : "bg-muted text-muted-foreground border-muted-foreground/10"
-                                                                    )}>
-                                                                        {service.isActive ? "Vigente" : "Latente"}
-                                                                    </span>
+                                                                    <StatusBadge tone={service.isActive ? "success" : "neutral"} dot>
+                                                                        {service.isActive ? "Activo" : "Pausado"}
+                                                                    </StatusBadge>
                                                                 </div>
-                                                                <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 text-[9px] font-black uppercase tracking-widest">
+                                                                <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 text-2xs font-black uppercase tracking-widest">
                                                                     <div className="flex items-center gap-1.5 text-primary bg-primary/5 px-2.5 py-1 rounded-lg border border-primary/10">
                                                                         <Clock className="h-3 w-3" />
                                                                         <span>
@@ -546,7 +539,7 @@ export function ConfigurationSettings() {
                                                             <Button
                                                                 variant="outline"
                                                                 onClick={() => startEditing(service)}
-                                                                className="h-10 w-10 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-primary/5 hover:border-primary/20 hover:bg-primary/5"
+                                                                className="h-10 w-10 p-0 transition-all hover:scale-105 active:scale-90 border-2 border-primary/5 hover:border-primary/20 hover:bg-primary/5"
                                                                 title="Ajustar"
                                                             >
                                                                 <Pencil className="h-4 w-4" />
@@ -555,7 +548,7 @@ export function ConfigurationSettings() {
                                                                 variant="outline"
                                                                 onClick={() => setServiceToDelete(service)}
                                                                 disabled={deletingId === service.id}
-                                                                className="h-10 w-10 p-0 rounded-xl transition-all hover:scale-105 active:scale-90 border-2 border-destructive/5 hover:border-destructive/20 hover:bg-destructive/5 text-destructive hover:text-destructive"
+                                                                className="h-10 w-10 p-0 transition-all hover:scale-105 active:scale-90 border-2 border-destructive/5 hover:border-destructive/20 hover:bg-destructive/5 text-destructive hover:text-destructive"
                                                                 title="Eliminar"
                                                             >
                                                                 {deletingId === service.id
@@ -579,17 +572,17 @@ export function ConfigurationSettings() {
 
                 {/* Column 2: Commercial Name (Right) */}
                 <div className="lg:col-span-12 xl:col-span-5 space-y-10">
-                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-2xl p-8 sm:p-10 space-y-12 relative overflow-hidden">
+                    <section id="tour-branding-section" className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 rounded-xl p-8 space-y-12 relative overflow-hidden">
                         <div className="relative z-10 space-y-12">
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Marca y Logística</h3>
+                                    <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Marca y Logística</h3>
                                     <p className="text-sm text-muted-foreground font-medium">Personaliza tu identidad y reglas de negocio.</p>
                                 </div>
 
                                 <div className="space-y-8">
                                     <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
+                                        <Label className="label-caps text-muted-foreground/80 ml-1">Tu Nombre de Profesional</Label>
                                         <Input
                                             type="text"
                                             value={displayName}
@@ -599,7 +592,7 @@ export function ConfigurationSettings() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Áreas de Experticia</Label>
+                                        <Label className="label-caps text-muted-foreground/80 ml-1">Áreas de Experticia</Label>
                                         <PillInput
                                             value={expertise}
                                             onChange={setExpertise}
@@ -612,7 +605,7 @@ export function ConfigurationSettings() {
                                         onClick={handleSaveConfig}
                                         disabled={savingConfig}
                                         id="tour-save-config"
-                                        className="w-full rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
+                                        className="w-full font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/10 transition-all hover:scale-105 active:scale-95 group/save"
                                     >
                                         {savingConfig ? (
                                             <Loader2 className="h-6 w-6 animate-spin mr-3" />
@@ -631,29 +624,29 @@ export function ConfigurationSettings() {
             <Dialog open={!!serviceToDelete} onOpenChange={(open) => !open && setServiceToDelete(null)}>
                 <DialogContent className="p-10 max-w-md shadow-lg">
                     <DialogHeader className="space-y-4">
-                        <div className="h-16 w-16 bg-destructive/10 rounded-2xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
+                        <div className="h-16 w-16 bg-destructive/10 rounded-xl flex items-center justify-center text-destructive mb-2 mx-auto sm:mx-0">
                             <Trash2 className="h-8 w-8" />
                         </div>
-                        <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Eliminar Servicio</DialogTitle>
+                        <DialogTitle>Eliminar Servicio</DialogTitle>
                         <DialogDescription className="text-lg font-medium leading-relaxed pr-6">
                             Estás a punto de desmantelar <span className="font-black text-foreground underline decoration-destructive/30 decoration-4">{serviceToDelete?.name}</span>. Esta operación es irreversible y afectará tu disponibilidad futura.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="flex flex-col sm:flex-row w-full gap-4 pt-8">
-                        <Button
+                        <Button size="lg"
                             variant="ghost"
                             onClick={() => setServiceToDelete(null)}
-                            className="flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
+                            className="flex-1 font-black uppercase tracking-widest text-xs border-2 border-transparent hover:bg-muted/50 transition-all"
                         >
                             Conservar
                         </Button>
-                        <Button
+                        <Button size="lg"
                             onClick={() => {
                                 if (serviceToDelete) handleDeleteService(serviceToDelete.id)
                             }}
                             disabled={deletingId === serviceToDelete?.id}
                             variant="destructive"
-                            className="flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
+                            className="flex-1 font-black uppercase tracking-widest text-xs shadow-2xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
                         >
                             {deletingId === serviceToDelete?.id ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <Trash2 className="h-5 w-5 mr-2" />}
                             Confirmar Baja

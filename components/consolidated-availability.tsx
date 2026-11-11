@@ -37,12 +37,12 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
     }
 
     return (
-        <div className="w-full bg-card border-2 border-primary/5 rounded-[2.5rem] p-6 md:p-10 shadow-none space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="w-full bg-card border-2 border-primary/5 rounded-3xl p-6 md:p-10 shadow-none space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center space-y-2">
-                <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl mb-2 text-primary">
+                <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-xl mb-2 text-primary">
                     <Search className="h-6 w-6" />
                 </div>
-                <h2 className="text-2xl font-display font-black tracking-tight">Buscar Disponibilidad</h2>
+                <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Buscar Disponibilidad</h2>
                 <p className="text-muted-foreground text-sm font-medium">Revisa qué profesionales tienen horarios libres en un día específico.</p>
             </div>
 
@@ -58,19 +58,19 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                             <button
                                 key={date.toISOString()}
                                 onClick={() => handleDateSelect(date)}
-                                className={`snap-start shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl border-2 font-bold transition-all active:scale-95
+                                className={`snap-start shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-xl border-2 font-bold transition-all active:scale-95
                                     ${isSelected
                                         ? "bg-primary text-primary-foreground border-primary shadow-none scale-105"
                                         : "bg-background border-primary/10 hover:border-primary/30 shadow-none"
                                     }`}
                             >
-                                <span className="text-[10px] uppercase tracking-widest opacity-80">
+                                <span className="text-2xs uppercase tracking-widest opacity-80">
                                     {format(date, "EEE", { locale: es })}
                                 </span>
                                 <span className="text-2xl font-black leading-tight">
                                     {format(date, "d")}
                                 </span>
-                                <span className="text-[10px] uppercase tracking-widest opacity-80">
+                                <span className="text-2xs uppercase tracking-widest opacity-80">
                                     {format(date, "MMM", { locale: es })}
                                 </span>
                             </button>
@@ -89,7 +89,7 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                     {loading ? (
                         <div className="grid gap-4 sm:grid-cols-2">
                             {[1, 2].map(i => (
-                                <div key={i} className="p-4 border-2 border-primary/5 rounded-2xl flex items-center gap-4 animate-pulse">
+                                <div key={i} className="p-4 border-2 border-primary/5 rounded-xl flex items-center gap-4 animate-pulse">
                                     <div className="h-12 w-12 bg-muted rounded-full shrink-0" />
                                     <div className="space-y-2 w-full">
                                         <div className="h-4 bg-muted rounded w-1/2" />
@@ -110,11 +110,11 @@ export function ConsolidatedAvailability({ orgSlug }: Props) {
                                 <div key={i} className="group relative flex flex-col p-5 bg-background border-2 border-primary/5 hover:border-primary/20 rounded-3xl transition-all shadow-none">
                                     <div className="flex items-center gap-3 mb-4">
                                         {data.profile.image ? (
-                                            <div className="relative h-12 w-12 rounded-2xl overflow-hidden shadow-none">
+                                            <div className="relative h-12 w-12 rounded-xl overflow-hidden shadow-none">
                                                 <Image src={data.profile.image} alt={data.profile.displayName} fill className="object-cover" />
                                             </div>
                                         ) : (
-                                            <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-xl shadow-none">
+                                            <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black text-xl shadow-none">
                                                 {data.profile.displayName.charAt(0)}
                                             </div>
                                         )}

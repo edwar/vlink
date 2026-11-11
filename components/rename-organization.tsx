@@ -66,7 +66,7 @@ export function RenameOrganization({ organizationId, currentName }: RenameOrgani
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={handleKeyDown}
                     disabled={saving}
-                    className="text-5xl font-display font-black tracking-tighter text-primary uppercase bg-transparent border-b-2 border-primary/40 focus:border-primary outline-none w-full max-w-sm transition-colors"
+                    className="text-4xl lg:text-5xl font-display font-black tracking-tight text-primary bg-transparent border-b-2 border-primary/40 focus:border-primary outline-none w-full max-w-sm transition-colors"
                     placeholder="Nombre de la organización"
                 />
                 <div className="flex items-center gap-2 shrink-0">
@@ -94,7 +94,7 @@ export function RenameOrganization({ organizationId, currentName }: RenameOrgani
 
     return (
         <div className="flex items-center gap-3 group/rename">
-            <h1 className="text-5xl font-display font-black tracking-tighter text-primary uppercase">
+            <h1 className="text-4xl lg:text-5xl font-display font-black tracking-tight text-primary">
                 {value}
             </h1>
             <button

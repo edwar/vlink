@@ -30,7 +30,7 @@ export default async function AdminDashboard() {
                             <div className={`absolute top-0 right-0 w-32 h-32 ${card.bg} rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700`} />
                             <CardContent>
                                 <div className="flex items-center justify-between mb-4">
-                                    <div className={`p-3 rounded-2xl ${card.bg} ${card.color}`}>
+                                    <div className={`p-3 rounded-xl ${card.bg} ${card.color}`}>
                                         <Icon className="h-6 w-6" />
                                     </div>
                                     <span className="text-2xl font-black font-display tracking-tight group-hover:scale-110 transition-transform">

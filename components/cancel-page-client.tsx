@@ -52,7 +52,7 @@ export function CancelPageClient({ appointment, token }: CancelPageClientProps) 
                 <p className="text-muted-foreground">Tu cita ha sido cancelada exitosamente. El profesional ha sido notificado.</p>
                 <Link
                     href={`/${appointment.professionalUsername}`}
-                    className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary text-primary-foreground rounded-2xl font-bold text-sm hover:opacity-90 transition-all"
+                    className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-all"
                 >
                     Agendar nueva cita
                 </Link>
@@ -71,7 +71,7 @@ export function CancelPageClient({ appointment, token }: CancelPageClientProps) 
                 <p className="text-muted-foreground">{errorMsg}</p>
                 <Link
                     href={`/${appointment.professionalUsername}`}
-                    className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-card border-2 border-primary/10 text-foreground rounded-2xl font-bold text-sm hover:border-primary/30 transition-all"
+                    className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-card border-2 border-primary/10 text-foreground rounded-xl font-bold text-sm hover:border-primary/30 transition-all"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Volver al perfil
@@ -114,7 +114,7 @@ export function CancelPageClient({ appointment, token }: CancelPageClientProps) 
 
             {/* Already cancelled */}
             {isAlreadyCancelled && (
-                <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4 text-sm">
+                <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm">
                     <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                     <p className="text-amber-800 dark:text-amber-300 font-medium">Esta cita ya fue cancelada anteriormente.</p>
                 </div>
@@ -122,7 +122,7 @@ export function CancelPageClient({ appointment, token }: CancelPageClientProps) 
 
             {/* Past cutoff warning */}
             {!isAlreadyCancelled && isPastCutoff && (
-                <div className="flex items-start gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4 text-sm">
+                <div className="flex items-start gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-sm">
                     <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                     <p className="text-red-800 dark:text-red-300 font-medium">
                         Ya no puedes cancelar en línea (menos de 2 horas para la cita). Contacta al profesional directamente.
@@ -136,7 +136,7 @@ export function CancelPageClient({ appointment, token }: CancelPageClientProps) 
                     {state === "idle" && (
                         <button
                             onClick={() => setState("confirming")}
-                            className="w-full h-13 py-3.5 bg-red-500/5 text-red-600 font-bold text-sm rounded-2xl border-2 border-red-500/20 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-[0.98]"
+                            className="w-full h-13 py-3.5 bg-red-500/5 text-red-600 font-bold text-sm rounded-xl border-2 border-red-500/20 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-[0.98]"
                         >
                             Cancelar mi cita
                         </button>
@@ -150,13 +150,13 @@ export function CancelPageClient({ appointment, token }: CancelPageClientProps) 
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setState("idle")}
-                                    className="flex-1 h-12 bg-card border-2 border-primary/10 font-bold text-sm rounded-2xl hover:border-primary/30 transition-all"
+                                    className="flex-1 h-12 bg-card border-2 border-primary/10 font-bold text-sm rounded-xl hover:border-primary/30 transition-all"
                                 >
                                     Mantener cita
                                 </button>
                                 <button
                                     onClick={handleCancel}
-                                    className="flex-1 h-12 bg-red-500 text-white font-bold text-sm rounded-2xl hover:bg-red-600 transition-all active:scale-[0.98] shadow-lg shadow-red-500/20"
+                                    className="flex-1 h-12 bg-red-500 text-white font-bold text-sm rounded-xl hover:bg-red-600 transition-all active:scale-[0.98] shadow-lg shadow-red-500/20"
                                 >
                                     Sí, cancelar
                                 </button>

@@ -70,7 +70,7 @@ export function AdminCharts({ appointmentsByStatus, topServices, monthlyGrowth }
         <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Salud del Ecosistema */}
-                <Card className="lg:col-span-2 border border-border/40 shadow-none rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
+                <Card className="lg:col-span-2 border border-border/40 shadow-none rounded-xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
                     <CardHeader className="p-6 pb-2">
                         <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2">
                             <CalendarCheck2 className="h-5 w-5 text-primary" /> Salud del Ecosistema
@@ -99,7 +99,7 @@ export function AdminCharts({ appointmentsByStatus, topServices, monthlyGrowth }
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Top Servicios */}
-                <Card className="border border-border/40 shadow-none rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
+                <Card className="border border-border/40 shadow-none rounded-xl bg-linear-to-br from-primary/5 via-transparent to-transparent">
                     <CardHeader className="p-6 pb-2">
                         <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2 text-blue-500">
                             <Star className="h-5 w-5" /> Top Servicios Globales
@@ -124,7 +124,7 @@ export function AdminCharts({ appointmentsByStatus, topServices, monthlyGrowth }
                 </Card>
 
                 {/* Crecimiento Mensual */}
-                <Card className="border border-border/40 shadow-none rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent overflow-hidden">
+                <Card className="border border-border/40 shadow-none rounded-xl bg-linear-to-br from-primary/5 via-transparent to-transparent overflow-hidden">
                     <CardHeader className="p-6 pb-2">
                         <CardTitle className="text-xl font-black font-display tracking-tight flex items-center gap-2">
                             <TrendingUp className="h-5 w-5 text-primary" /> Crecimiento Histórico

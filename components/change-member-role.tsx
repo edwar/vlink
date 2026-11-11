@@ -44,7 +44,7 @@ export function ChangeMemberRole({ organizationId, targetUserId, currentRole, me
     // OWNERs are shown as a static badge (cannot be changed here)
     if (currentRole === "OWNER") {
         return (
-            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border bg-amber-500/5 text-amber-600 border-amber-500/20">
+            <span className="px-4 py-1.5 rounded-full label-caps border bg-amber-500/5 text-amber-600 border-amber-500/20">
                 Propietario
             </span>
         )
@@ -85,17 +85,17 @@ export function ChangeMemberRole({ organizationId, targetUserId, currentRole, me
                 <SelectTrigger
                     size="sm"
                     className={cn(
-                        "h-auto px-4 py-1.5 text-[10px] font-black uppercase tracking-widest border rounded-full shadow-[none] w-auto gap-2 min-w-[110px]",
+                        "h-auto px-4 py-1.5 label-caps border rounded-full shadow-[none] w-auto gap-2 min-w-[110px]",
                         config.className
                     )}
                 >
                     <SelectValue />
                 </SelectTrigger>
-                <SelectContent position="popper" align="end" className="rounded-2xl border-border/50 shadow-xl overflow-hidden">
-                    <SelectItem value="MANAGER" className="text-[11px] font-black uppercase tracking-widest text-blue-600 focus:bg-blue-500/5 focus:text-blue-600 rounded-lg m-1">
+                <SelectContent position="popper" align="end" className="rounded-xl border-border/50 shadow-xl overflow-hidden">
+                    <SelectItem value="MANAGER" className="text-xs font-black uppercase tracking-widest text-blue-600 focus:bg-blue-500/5 focus:text-blue-600 rounded-lg m-1">
                         Gestor
                     </SelectItem>
-                    <SelectItem value="PROFESSIONAL" className="text-[11px] font-black uppercase tracking-widest text-emerald-600 focus:bg-emerald-500/5 focus:text-emerald-600 rounded-lg m-1">
+                    <SelectItem value="PROFESSIONAL" className="text-xs font-black uppercase tracking-widest text-emerald-600 focus:bg-emerald-500/5 focus:text-emerald-600 rounded-lg m-1">
                         Profesional
                     </SelectItem>
                 </SelectContent>

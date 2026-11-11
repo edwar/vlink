@@ -11,7 +11,7 @@ export default async function DashboardLayout({
     const config = await getPublicSystemConfig();
 
     return (
-        <div className="flex flex-col lg:flex-row h-screen bg-background overflow-hidden">
+        <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
             <aside className="w-64 hidden lg:flex flex-col h-full sticky top-0 overflow-y-auto shrink-0 border-r border-border/40">
                 <DashboardSidebar />
             </aside>

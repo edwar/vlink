@@ -22,7 +22,7 @@ export async function MaintenanceGuard({ children }: { children: React.ReactNode
                         </p>
                     </div>
 
-                    <div className="p-4 bg-muted/40 rounded-2xl border-2 border-dashed border-border flex items-center gap-4 text-left">
+                    <div className="p-4 bg-muted/40 rounded-xl border-2 border-dashed border-border flex items-center gap-4 text-left">
                         <Hammer className="h-5 w-5 text-primary shrink-0" />
                         <p className="text-xs font-bold text-muted-foreground leading-relaxed">
                             Los agendamientos públicos se encuentran pausados temporalmente. Volveremos muy pronto.

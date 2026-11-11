@@ -52,7 +52,7 @@ export function RemoveMember({ organizationId, targetUserId, memberName }: Remov
             <PopoverContent
                 align="end"
                 side="top"
-                className="w-72 p-4 rounded-2xl border-2 border-red-500/15 bg-background/95 backdrop-blur-3xl shadow-xl"
+                className="w-72 p-4 rounded-xl border-2 border-red-500/15 bg-background/95 backdrop-blur-3xl shadow-xl"
             >
                 <div className="space-y-3">
                     <div className="flex items-start gap-3">
@@ -75,7 +75,7 @@ export function RemoveMember({ organizationId, targetUserId, memberName }: Remov
                             size="sm"
                             onClick={() => setIsOpen(false)}
                             disabled={isLoading}
-                            className="flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest h-8"
+                            className="flex-1 label-caps h-8"
                         >
                             Cancelar
                         </Button>
@@ -83,7 +83,7 @@ export function RemoveMember({ organizationId, targetUserId, memberName }: Remov
                             size="sm"
                             onClick={handleRemove}
                             disabled={isLoading}
-                            className="flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest h-8 bg-red-500 hover:bg-red-600 text-white shadow-sm shadow-red-500/20"
+                            className="flex-1 label-caps h-8 bg-red-500 hover:bg-red-600 text-white shadow-sm shadow-red-500/20"
                         >
                             {isLoading ? (
                                 <Loader2 className="h-3.5 w-3.5 animate-spin" />

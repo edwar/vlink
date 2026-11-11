@@ -33,7 +33,7 @@ export function MarkdownManual({ content }: { content: string }) {
                         onClick={handleDownloadPdf}
                         variant="default"
                         size="sm"
-                        className="rounded-full px-5 font-black uppercase text-[10px] tracking-widest shadow-xl bg-primary text-white"
+                        className="rounded-full px-5 font-black uppercase text-2xs tracking-widest shadow-xl bg-primary text-white"
                     >
                         <Download className="h-4 w-4 mr-2" />
                         Descargar PDF
@@ -47,7 +47,7 @@ export function MarkdownManual({ content }: { content: string }) {
                 prose-img:rounded-4xl prose-img:border prose-img:border-border/40 prose-img:shadow-2xl prose-img:my-10
                 prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:text-lg
                 prose-strong:text-foreground prose-strong:font-black
-                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:rounded-r-2xl prose-blockquote:p-6 prose-blockquote:not-italic
+                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:rounded-r-xl prose-blockquote:p-6 prose-blockquote:not-italic
                 prose-ul:text-muted-foreground prose-ul:space-y-2
                 prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                 print:prose-p:text-sm print:prose-headings:mt-4 print:prose-img:my-4 print:prose-img:max-h-[300px] print:m-0 print:p-0

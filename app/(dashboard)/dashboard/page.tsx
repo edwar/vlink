@@ -9,7 +9,7 @@ import { subDays, eachDayOfInterval, format as formatDateFns } from "date-fns"
 import { getEffectiveProfile } from "@/lib/permissions"
 import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
-import { Title } from "@/components/title"
+import { PageHeader } from "@/components/page-header";
 import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
 import { DashboardTour } from "@/components/tours/dashboard-tour"
 import { DashboardRealtimeUpdater } from "@/components/dashboard-realtime-updater"
@@ -116,22 +116,12 @@ export default async function DashboardPage(props: {
     const hoursOccupied = Math.round((totalMinutes / 60) * 10) / 10
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            {/* Header section with profile overview */}
-            <header className="relative py-6 sm:py-8 rounded-3xl bg-surface/50 overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5 sm:opacity-10">
-                    <CalendarIcon className="h-24 w-24 text-primary rotate-12" />
-                </div>
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8">
-                    <div className="space-y-2">
-                        <Title title="Panel de Control" />
-                        <p className="text-muted-foreground font-medium text-lg max-w-xl">
-                            Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.
-                        </p>
-                    </div>
-                </div>
-            </header>
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <PageHeader
+                title="Panel de Control"
+                icon={CalendarIcon}
+                description={<>Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.</>}
+            />
 
             <DashboardTabsUI
                 stats={{
@@ -163,7 +153,7 @@ export default async function DashboardPage(props: {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{totalAppointmentsToday}</p>
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
+                                    <p className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Citas agendadas para hoy</p>
                                 </div>
                             </div>
 
@@ -174,7 +164,7 @@ export default async function DashboardPage(props: {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{allAppointments.length}</p>
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
+                                    <p className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Reservas totales activas</p>
                                 </div>
                             </div>
 
@@ -185,7 +175,7 @@ export default async function DashboardPage(props: {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-3xl sm:text-4xl font-black font-display tracking-tight leading-none text-foreground">{hoursOccupied}h</p>
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
+                                    <p className="text-2xs font-black text-muted-foreground uppercase tracking-widest">Horas de servicio ocupadas hoy</p>
                                 </div>
                             </div>
                         </div>
@@ -200,8 +190,7 @@ export default async function DashboardPage(props: {
                                     <section className="space-y-8 relative">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                                             <div id="tour-agenda-today" className="space-y-1">
-                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                                    <div className="h-8 w-1.5 bg-primary rounded-full" />
+                                                <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase flex items-center gap-3">
                                                     Agenda
                                                 </h2>
                                                 <p className="text-muted-foreground font-medium text-sm">Estas son tus citas confirmadas para la jornada actual.</p>
@@ -235,8 +224,7 @@ export default async function DashboardPage(props: {
                                     <section className="space-y-8">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                                             <div className="space-y-1">
-                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3">
-                                                    <div className="h-8 w-1.5 bg-blue-500 rounded-full" />
+                                                <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase flex items-center gap-3">
                                                     Reservas
                                                 </h2>
                                                 <p className="text-muted-foreground font-medium text-sm">Vista a futuro de los compromisos ya confirmados en tu calendario.</p>
@@ -276,8 +264,7 @@ export default async function DashboardPage(props: {
                                     <section className="space-y-8">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                                             <div className="space-y-1">
-                                                <h2 className="text-3xl font-display font-black tracking-tight flex items-center gap-3 text-muted-foreground">
-                                                    <div className="h-8 w-1.5 bg-muted-foreground/30 rounded-full" />
+                                                <h2 className="text-xl font-black font-display tracking-tight text-muted-foreground uppercase flex items-center gap-3">
                                                     Historial
                                                 </h2>
                                                 <p className="text-muted-foreground/70 font-medium text-sm">Registro de citas que ya concluyeron o fueron canceladas.</p>
@@ -320,8 +307,7 @@ export default async function DashboardPage(props: {
                 children_analytics={
                     <div className="py-8">
                         <div className="space-y-4 mb-10 border-b border-dashed border-border/50 pb-8">
-                            <h2 className="text-3xl sm:text-4xl font-display font-black tracking-tight flex items-center gap-3">
-                                <div className="h-8 w-1.5 bg-primary rounded-full" />
+                            <h2 className="text-xl font-black font-display tracking-tight text-foreground uppercase flex items-center gap-3">
                                 Rendimiento Comercial
                             </h2>
                             <p className="text-muted-foreground font-medium text-sm sm:text-base max-w-2xl">Mide el impacto y crecimiento de tu servicios digitales con datos precisos.</p>

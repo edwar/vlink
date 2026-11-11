@@ -17,10 +17,10 @@ export default async function AdminSettings() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Modo Mantenimiento */}
-                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-2xl">
+                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-xl">
                     <CardHeader className="p-6">
                         <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
+                            <div className="p-3 rounded-xl bg-amber-500/10 text-amber-500">
                                 <ShieldAlert className="h-6 w-6" />
                             </div>
                             <div>
@@ -30,7 +30,7 @@ export default async function AdminSettings() {
                         </div>
                     </CardHeader>
                     <CardContent className="p-6 pt-0 space-y-6">
-                        <div className="p-4 bg-muted/40 rounded-2xl flex items-center justify-between">
+                        <div className="p-4 bg-muted/40 rounded-xl flex items-center justify-between">
                             <div className="space-y-1">
                                 <p className="text-sm font-bold">Estado Actual</p>
                                 <p className={`text-xs font-black uppercase tracking-widest ${config.maintenanceMode ? 'text-red-500' : 'text-green-500'}`}>
@@ -43,7 +43,7 @@ export default async function AdminSettings() {
                             }}>
                                 <Button
                                     variant={config.maintenanceMode ? "default" : "destructive"}
-                                    className="rounded-xl font-black uppercase tracking-widest text-[10px] px-6"
+                                    className="font-black uppercase tracking-widest text-2xs px-6"
                                 >
                                     {config.maintenanceMode ? 'Desactivar' : 'Activar'}
                                 </Button>
@@ -56,10 +56,10 @@ export default async function AdminSettings() {
                 </Card>
 
                 {/* Comunicaciones Globales (Banners) */}
-                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-2xl">
+                <Card className="bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40 shadow-none bg-card rounded-xl">
                     <CardHeader className="p-6">
                         <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500">
+                            <div className="p-3 rounded-xl bg-blue-500/10 text-blue-500">
                                 <Megaphone className="h-6 w-6" />
                             </div>
                             <div>
@@ -81,7 +81,7 @@ export default async function AdminSettings() {
                             })
                         }} className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Título del Anuncio</label>
+                                <label className="label-caps text-muted-foreground">Título del Anuncio</label>
                                 <input
                                     name="title"
                                     defaultValue={config.announcementTitle || ''}
@@ -90,7 +90,7 @@ export default async function AdminSettings() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Cuerpo del Mensaje</label>
+                                <label className="label-caps text-muted-foreground">Cuerpo del Mensaje</label>
                                 <textarea
                                     name="body"
                                     defaultValue={config.announcementBody || ''}
@@ -100,12 +100,12 @@ export default async function AdminSettings() {
                             </div>
                             <div className="flex items-center gap-4">
                                 <div className="space-y-2 flex-1">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tipo</label>
+                                    <label className="label-caps text-muted-foreground">Tipo</label>
                                     <Select name="type" defaultValue={config.announcementType}>
-                                        <SelectTrigger className="w-full h-12 text-sm font-black uppercase tracking-widest">
+                                        <SelectTrigger size="lg" className="w-full text-sm font-black uppercase tracking-widest">
                                             <SelectValue placeholder="Tipo" />
                                         </SelectTrigger>
-                                        <SelectContent position="popper" className="rounded-2xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">
+                                        <SelectContent position="popper" className="rounded-xl border-2 border-primary/10 bg-card/95 backdrop-blur-xl">
                                             <SelectItem value="INFO" className="rounded-xl focus:bg-primary/10 focus:text-primary">Información</SelectItem>
                                             <SelectItem value="SUCCESS" className="rounded-xl focus:bg-primary/10 focus:text-primary">Novedad</SelectItem>
                                             <SelectItem value="WARNING" className="rounded-xl focus:bg-primary/10 focus:text-primary">Advertencia</SelectItem>
@@ -113,7 +113,7 @@ export default async function AdminSettings() {
                                     </Select>
                                 </div>
                                 <div className="pt-4">
-                                    <Button className="font-black uppercase tracking-widest text-[10px] px-8 flex items-center gap-2">
+                                    <Button className="font-black uppercase tracking-widest text-2xs px-8 flex items-center gap-2">
                                         <Save className="h-4 w-4" /> Guardar
                                     </Button>
                                 </div>

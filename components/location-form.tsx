@@ -84,7 +84,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Nombre de la Sede</FormLabel>
+                            <FormLabel className="label-caps text-foreground/70">Nombre de la Sede</FormLabel>
                             <FormControl>
 <Input placeholder="Ej: Sede Norte, Consultorio Central..." {...field} />
                                     </FormControl>
@@ -98,7 +98,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                                 name="city"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Ciudad</FormLabel>
+                                        <FormLabel className="label-caps text-foreground/70">Ciudad</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Bogotá" {...field} />
                                 </FormControl>
@@ -111,7 +111,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                         name="phone"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Teléfono</FormLabel>
+                                <FormLabel className="label-caps text-foreground/70">Teléfono</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Opcional (Ej. 300 000 0000)"
@@ -136,7 +136,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                     name="address"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-[10px] font-black uppercase tracking-widest text-foreground/70">Dirección</FormLabel>
+                            <FormLabel className="label-caps text-foreground/70">Dirección</FormLabel>
                             <FormControl>
                                 <Input placeholder="Calle 123 # 45 - 67" {...field} />
                             </FormControl>
@@ -144,7 +144,7 @@ export function LocationForm({ organizationId, initialData, onSuccess }: Locatio
                         </FormItem>
                     )}
                 />
-                <Button type="submit" disabled={loading} className="w-full h-12 rounded-xl font-black uppercase tracking-widest mt-4">
+                <Button size="lg" type="submit" disabled={loading} className="w-full font-black uppercase tracking-widest mt-4">
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {initialData ? "Actualizar Sede" : loading ? "Creando Sede..." : "Crear Sede"}
                 </Button>

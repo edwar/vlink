@@ -320,7 +320,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                     <div className="flex flex-col gap-3 w-full max-w-[280px]">
                         <Button
                             asChild
-                            size="lg"
+                            size="xl"
                             variant="vlink"
                             className="w-full"
                         >
@@ -332,7 +332,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         <Button
                             asChild
                             variant="outline"
-                            size="lg"
+                            size="xl"
                             className="w-full"
                         >
                             <Link href="/login">
@@ -393,13 +393,13 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         onMouseEnter={() => setShowExpertise(true)}
                                         onMouseLeave={() => setShowExpertise(false)}
                                         onClick={() => setShowExpertise(!showExpertise)}
-                                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-none group"
+                                        className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-full label-caps transition-all shadow-none group"
                                     >
                                         <Sparkles className="h-3 w-3 group-hover:animate-pulse" />
                                         <span>Experticia</span>
                                     </button>
                                     {showExpertise && (
-                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl shadow-none z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 p-4 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-xl shadow-none z-50 min-w-[220px] animate-in zoom-in-90 fade-in slide-in-from-bottom-2 duration-300">
                                             <div className="flex flex-wrap gap-2 justify-center">
                                                 {profileData.expertise.map((skill) => (
                                                     <span key={skill} className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/10 rounded-lg text-[9px] font-black uppercase tracking-tight">
@@ -437,7 +437,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         onClick={() => handleSelectLocation(loc)}
                                         className="w-full p-6 rounded-4xl border-2 border-muted-foreground/20 text-left transition-all hover:border-primary/40 hover:bg-primary/5 flex items-start gap-4 group/loc"
                                     >
-                                        <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover/loc:scale-110 transition-transform">
+                                        <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover/loc:scale-110 transition-transform">
                                             <Navigation className="h-6 w-6 text-primary" />
                                         </div>
                                         <div className="flex-1">
@@ -492,7 +492,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                             <div
                                                 key={service.id}
                                                 className={cn(
-                                                    "relative rounded-2xl border-2 transition-all bg-card overflow-hidden",
+                                                    "relative rounded-xl border-2 transition-all bg-card overflow-hidden",
                                                     selectedService?.id === service.id
                                                         ? "border-primary shadow-md shadow-primary/10"
                                                         : "border-muted-foreground/20 hover:border-primary/30"
@@ -502,7 +502,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                                     onClick={() => handleSelectService(service)}
                                                     className="w-full text-left flex items-stretch"
                                                 >
-                                                    <div className="relative shrink-0 w-24 sm:w-28 aspect-square bg-muted/20 select-none overflow-hidden rounded-l-2xl">
+                                                    <div className="relative shrink-0 w-24 sm:w-28 aspect-square bg-muted/20 select-none overflow-hidden rounded-l-xl">
                                                         {imgCount > 0 ? (
                                                             <div
                                                                 className="absolute inset-0 cursor-pointer"
@@ -560,7 +560,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                                                     : `${service.durationMinutes} min`}
                                                             </span>
                                                             <span className={cn(
-                                                                "px-2 py-0.5 rounded-full text-[10px]",
+                                                                "px-2 py-0.5 rounded-full text-2xs",
                                                                 selectedService?.id === service.id
                                                                     ? "bg-primary-foreground text-primary"
                                                                     : "bg-primary/10 text-primary"
@@ -595,7 +595,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                 <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-bold truncate">{selectedLocation.name}</p>
-                                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{selectedLocation.city}</p>
+                                    <p className="text-2xs text-muted-foreground font-medium uppercase tracking-wider">{selectedLocation.city}</p>
                                 </div>
                             </div>
                         )}
@@ -660,13 +660,13 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         aria-pressed={isSameDay(day, selectedDate)}
                                         aria-label={`Seleccionar ${format(day, "EEEE d 'de' MMMM", { locale: es })}`}
                                         className={cn(
-                                            "flex flex-col items-center min-w-[64px] p-4 rounded-2xl border border-primary/10 transition-all focus-visible:ring-2 focus-visible:ring-primary",
+                                            "flex flex-col items-center min-w-[64px] p-4 rounded-xl border border-primary/10 transition-all focus-visible:ring-2 focus-visible:ring-primary",
                                             isSameDay(day, selectedDate)
                                                 ? "bg-primary text-primary-foreground border-primary shadow-none scale-105"
                                                 : "bg-card hover:border-accent"
                                         )}
                                     >
-                                        <span className="text-[10px] uppercase font-bold opacity-70" aria-hidden="true">
+                                        <span className="text-2xs uppercase font-bold opacity-70" aria-hidden="true">
                                             {format(day, "eee", { locale: es })}
                                         </span>
                                         <span className="text-lg font-bold" aria-hidden="true">
@@ -686,7 +686,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                             </div>
 
                             {loadingSlots ? (
-                                <div className="flex flex-col items-center justify-center p-12 bg-card rounded-2xl border-2 border-dashed gap-3">
+                                <div className="flex flex-col items-center justify-center p-12 bg-card rounded-xl border-2 border-dashed gap-3">
                                     <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                                     <p className="text-xs text-muted-foreground">Buscando horarios...</p>
                                 </div>
@@ -747,7 +747,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         disabled={!selectedTime}
                         onClick={() => setStep(2)}
                         variant="vlink"
-                        size="lg"
+                        size="xl"
                         className="w-full"
                     >
                         Continuar
@@ -893,7 +893,7 @@ function ClientVerification({ onBack, onSuccess, bookingInfo, username, serviceI
 
                     <Button
                         variant="vlink"
-                        size="lg"
+                        size="xl"
                         onClick={handleBooking}
                         disabled={isSubmitting || name.length < 3 || email.length < 5 || phone.replace(/\D/g, '').length < 10}
                         className="w-full text-xl hover:shadow-none hover:-translate-y-1"
@@ -1004,14 +1004,14 @@ function SuccessView({ bookingInfo, displayName, serviceName, price, locationInf
                     >
                         {serviceName && (
                             <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full relative">
-                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Servicio</p>
+                                <p className="text-2xs font-black uppercase text-muted-foreground tracking-widest pl-1">Servicio</p>
                                 <p className="font-bold text-lg leading-tight md:truncate pr-2">{serviceName}</p>
                             </motion.div>
                         )}
 
                         {locationInfo && (
                             <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full border-t border-dashed border-border/60 pt-5 relative">
-                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Ubicación</p>
+                                <p className="text-2xs font-black uppercase text-muted-foreground tracking-widest pl-1">Ubicación</p>
                                 <p className="font-bold text-[15px] leading-tight pr-2">{locationInfo.name}</p>
                                 <p className="text-xs text-muted-foreground">{locationInfo.address}, {locationInfo.city}</p>
                             </motion.div>
@@ -1019,7 +1019,7 @@ function SuccessView({ bookingInfo, displayName, serviceName, price, locationInf
 
                         {price !== undefined && price !== null && (
                             <motion.div variants={itemMotion} className="flex flex-col gap-1 w-full border-t border-dashed border-border/60 pt-5 relative">
-                                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest pl-1">Inversión / Pago</p>
+                                <p className="text-2xs font-black uppercase text-muted-foreground tracking-widest pl-1">Inversión / Pago</p>
                                 <p className="font-black text-3xl tracking-tight text-primary mt-1">$ {price.toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
                             </motion.div>
                         )}
@@ -1036,13 +1036,13 @@ function SuccessView({ bookingInfo, displayName, serviceName, price, locationInf
                                     <div className="h-6 w-6 rounded-md bg-primary/10 flex items-center justify-center">
                                         <CalendarIcon className="h-3 w-3 text-primary" />
                                     </div>
-                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Fecha</p>
+                                    <p className="text-2xs font-black uppercase text-muted-foreground tracking-widest">Fecha</p>
                                 </div>
                                 <p className="font-bold text-[15px] capitalize leading-tight pl-1">{format(bookingInfo.date, "EEEE, d 'de' MMMM", { locale: es })}</p>
                             </div>
                             <div className="space-y-1 shrink-0 text-right">
                                 <div className="flex items-center justify-end gap-2">
-                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Hora</p>
+                                    <p className="text-2xs font-black uppercase text-muted-foreground tracking-widest">Hora</p>
                                     <div className="h-6 w-6 rounded-md bg-primary/10 flex items-center justify-center">
                                         <Clock className="h-3 w-3 text-primary" />
                                     </div>
@@ -1068,9 +1068,9 @@ function SuccessView({ bookingInfo, displayName, serviceName, price, locationInf
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                         variant="outline"
-                        size="lg"
+                        size="xl"
                         onClick={() => window.location.reload()}
-                        className="w-full font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all border-2 rounded-2xl h-14"
+                        className="w-full font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all border-2 h-14"
                     >
                         Agendar otra cita
                     </Button>

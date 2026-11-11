@@ -92,7 +92,7 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <Button
-                    className="h-12 w-12 bg-blue-500/5 text-blue-500 rounded-2xl flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all shrink-0 border border-blue-500/10"
+                    className="h-12 w-12 bg-blue-500/5 text-blue-500 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all shrink-0 border border-blue-500/10"
                     title="Reprogramar cita"
                     aria-label="Reprogramar cita"
                 >
@@ -105,7 +105,7 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                     <div className="h-16 w-16 bg-primary-foreground rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                         <RotateCcw className="h-8 w-8" />
                     </div>
-                    <DialogTitle className="text-2xl font-display font-black tracking-tight text-center">
+                    <DialogTitle className="text-center">
                         Reprogramar cita
                     </DialogTitle>
                     <p className="text-sm text-muted-foreground text-center">
@@ -126,19 +126,19 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                                     <button
                                         key={date.toISOString()}
                                         onClick={() => handleDateSelect(date)}
-                                        className={`snap-start shrink-0 flex flex-col items-center justify-center w-14 h-16 rounded-2xl border-2 font-bold text-sm transition-all active:scale-95
+                                        className={`snap-start shrink-0 flex flex-col items-center justify-center w-14 h-16 rounded-xl border-2 font-bold text-sm transition-all active:scale-95
                                             ${isSelected
                                                 ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
                                                 : "bg-card border-primary/10 hover:border-primary/30"
                                             }`}
                                     >
-                                        <span className="text-[9px] uppercase tracking-widest opacity-70">
+                                        <span className="text-2xs uppercase tracking-widest opacity-70">
                                             {format(date, "EEE", { locale: es })}
                                         </span>
                                         <span className="text-xl font-black leading-tight">
                                             {format(date, "d")}
                                         </span>
-                                        <span className="text-[9px] uppercase tracking-widest opacity-70">
+                                        <span className="text-2xs uppercase tracking-widest opacity-70">
                                             {format(date, "MMM", { locale: es })}
                                         </span>
                                     </button>
@@ -160,7 +160,7 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                                     ))}
                                 </div>
                             ) : slots.length === 0 ? (
-                                <p className="text-sm text-muted-foreground text-center py-4 bg-muted/50 rounded-2xl">
+                                <p className="text-sm text-muted-foreground text-center py-4 bg-muted/50 rounded-xl">
                                     Sin disponibilidad para este día
                                 </p>
                             ) : (
@@ -184,10 +184,10 @@ export function RescheduleDialog({ appt }: RescheduleDialogProps) {
                     )}
 
                     {/* Confirm button */}
-                    <Button
+                    <Button size="lg"
                         onClick={handleConfirm}
                         disabled={!selectedDate || !selectedSlot || saving}
-                        className="w-full h-12 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20"
+                        className="w-full font-bold text-sm shadow-lg shadow-primary/20"
                     >
                         {saving ? "Reprogramando..." : "Confirmar reprogramación"}
                     </Button>

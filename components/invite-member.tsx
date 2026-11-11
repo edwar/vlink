@@ -64,7 +64,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                     <UserPlus className="h-12 w-12" />
                 </div>
                 <div className="flex w-full flex-col items-centertext-center">
-                    <h3 className="text-xl font-black font-display tracking-tight text-foreground/90 uppercase">Invitar a un Miembro</h3>
+                    <h3 className="text-xl font-black font-display tracking-tight text-foreground uppercase">Invitar a un Miembro</h3>
                     <p className="text-sm text-muted-foreground font-medium leading-tight">Genera un enlace para que alguien se una a tu equipo.</p>
                 </div>
             </div>
@@ -72,31 +72,31 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
             <div className="flex-1 flex flex-col gap-6 relative z-10 w-full mt-4">
                 <div className="flex-1 flex flex-col justify-center gap-4">
                     <div className="space-y-2 w-full">
-                        <Label htmlFor="role" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 ml-1">Rol del invitado</Label>
+                        <Label htmlFor="role" className="label-caps text-muted-foreground/80 ml-1">Rol del invitado</Label>
                         <Select value={role} onValueChange={(v: any) => setRole(v)} disabled={disabled}>
-                            <SelectTrigger id="role" className="h-14 rounded-2xl border bg-background/40 hover:bg-background/80 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
+                            <SelectTrigger size="lg" id="role" className="border bg-background/40 hover:bg-background/80 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all text-sm font-bold px-5">
                                 <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
-                            <SelectContent position="popper" className="rounded-2xl border shadow-xl overflow-hidden">
+                            <SelectContent position="popper" className="rounded-xl border shadow-xl overflow-hidden">
                                 <SelectItem value="PROFESSIONAL" className="rounded-lg px-4 focus:bg-primary/5 focus:text-primary">
                                     <div className="flex flex-col items-baseline gap-0.5">
                                         <span className="font-bold">Profesional</span>
-                                        <span className="text-[10px] text-muted-foreground font-medium normal-case tracking-normal">Tiene su propia agenda</span>
+                                        <span className="text-2xs text-muted-foreground font-medium normal-case tracking-normal">Tiene su propia agenda</span>
                                     </div>
                                 </SelectItem>
                                 <SelectItem value="MANAGER" className="rounded-lg px-4 focus:bg-primary/5 focus:text-primary">
                                     <div className="flex flex-col items-baseline gap-0.5">
                                         <span className="font-bold">Gestor</span>
-                                        <span className="text-[10px] text-muted-foreground font-medium normal-case tracking-normal">Administra agendas de otros</span>
+                                        <span className="text-2xs text-muted-foreground font-medium normal-case tracking-normal">Administra agendas de otros</span>
                                     </div>
                                 </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-2xl border">
+                    <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl border">
                         <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                        <p className="text-[11px] text-muted-foreground font-medium leading-relaxed">
+                        <p className="text-xs text-muted-foreground font-medium leading-relaxed">
                             {disabled
                                 ? "Solo el propietario puede generar nuevos enlaces de invitación."
                                 : role === "PROFESSIONAL"
@@ -108,7 +108,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
 
                 {invitationUrl && (
                     <div className="space-y-4 animate-in zoom-in duration-500">
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-primary/70 ml-1">Enlace de invitación</Label>
+                        <Label className="label-caps text-primary/70 ml-1">Enlace de invitación</Label>
                         <div className="flex">
                             <Input
                                 readOnly
@@ -118,19 +118,19 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                             <Button
                                 size="icon"
                                 variant="outline"
-                                className="h-14 w-14 shrink-0 border border-border/50 rounded-r-2xl rounded-l-none bg-background/40 hover:bg-primary/10 hover:border-primary/20 hover:text-primary transition-all"
+                                className="h-14 w-14 shrink-0 border border-border/50 rounded-r-xl rounded-l-none bg-background/40 hover:bg-primary/10 hover:border-primary/20 hover:text-primary transition-all"
                                 onClick={copyToClipboard}
                             >
                                 {copied ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
                             </Button>
                         </div>
-                        <p className="text-[10px] text-center text-muted-foreground/60 font-medium italic">Este enlace es de un solo uso y expira en 7 días.</p>
+                        <p className="text-2xs text-center text-muted-foreground/60 font-medium italic">Este enlace es de un solo uso y expira en 7 días.</p>
                     </div>
                 )}
 
                 <Button
                     size="default"
-                    className="w-fit ml-auto rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
+                    className="w-fit ml-auto font-black text-xs uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] group/btn overflow-hidden relative"
                     onClick={handleCreateInvitation}
                     disabled={isPending || disabled}
                 >

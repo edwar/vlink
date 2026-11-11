@@ -101,7 +101,7 @@ export function LocationMembersConfig({
                 <Button
                     onClick={handleSave}
                     disabled={loading}
-                    className="w-full h-11 rounded-xl font-black uppercase tracking-widest"
+                    className="w-full font-black uppercase tracking-widest"
                 >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Check className="h-4 w-4 mr-2" />}
                     Guardar Configuración

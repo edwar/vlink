@@ -68,10 +68,10 @@ export function CreateOrganization() {
                 )}
             </CardContent>
             <CardFooter className="pt-4 pb-8">
-                <Button
+                <Button size="xl"
                     type="button"
                     onClick={handleSubmit}
-                    className="w-full h-14 text-lg font-black rounded-xl transition-all"
+                    className="w-full text-lg font-black transition-all"
                     disabled={!name.trim() || isPending}
                 >
                     {isPending ? (

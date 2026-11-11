@@ -29,6 +29,7 @@ import { LocationTeamList } from "@/components/location-team-list"
 import { revalidatePath } from "next/cache"
 import { deleteLocation, getMemberServicesByLocation } from "@/app/actions/locations"
 import { getUserOrganizations } from "@/app/actions/organization"
+import { PageHeader } from "@/components/page-header"
 import { sileo } from "sileo"
 
 export default async function SedesPage() {
@@ -81,19 +82,17 @@ export default async function SedesPage() {
     const canManageAll = currentUserRole === "OWNER" || currentUserRole === "MANAGER";
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-700 py-10">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div className="space-y-1">
-                    <h1 className="text-4xl font-display font-black tracking-tight text-foreground uppercase">Sedes y Sucursales</h1>
-                    <p className="text-muted-foreground font-medium">Gestiona los puntos físicos donde prestas tus servicios.</p>
-                </div>
-
-                {canManageAll && (
+        <div className="space-y-10 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <PageHeader
+                icon={Building2}
+                title="Sedes y Sucursales"
+                description="Gestiona los puntos físicos donde prestas tus servicios."
+                actions={canManageAll && (
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button
+                            <Button size="lg"
                                 variant="vlink"
-                                className="rounded-2xl h-12 px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
+                                className="px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
                             >
                                 <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
                                 Agregar Nueva Sede
@@ -101,7 +100,7 @@ export default async function SedesPage() {
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[500px]">
                             <DialogHeader className="p-8 pb-0">
-                                <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Nueva Sede</DialogTitle>
+                                <DialogTitle>Nueva Sede</DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium pt-2">
                                     Ingresa los detalles de tu nueva ubicación física.
                                 </DialogDescription>
@@ -112,7 +111,7 @@ export default async function SedesPage() {
                         </DialogContent>
                     </Dialog>
                 )}
-            </div>
+            />
 
             <div id="tour-org-sedes" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {organization.locations.length === 0 ? (
@@ -132,20 +131,20 @@ export default async function SedesPage() {
                         <Card key={loc.id} className="group overflow-hidden rounded-lg bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/40">
                             <CardHeader className="p-6 pb-2">
                                 <div className="flex items-start justify-between">
-                                    <div className="h-14 w-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform duration-500">
+                                    <div className="h-14 w-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform duration-500">
                                         <Building2 className="h-7 w-7" />
                                     </div>
                                     <div className="flex items-center gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
                                         {canManageAll && (
                                             <Dialog>
                                                 <DialogTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted/50">
+                                                    <Button variant="ghost" size="icon" className="h-9 w-9 hover:bg-muted/50">
                                                         <Settings2 className="h-4 w-4 text-muted-foreground" />
                                                     </Button>
                                                 </DialogTrigger>
                                                 <DialogContent className="sm:max-w-[500px]">
                                                     <DialogHeader className="p-8 pb-0">
-                                                        <DialogTitle className="text-3xl font-black font-display tracking-tight uppercase">Editar Sede</DialogTitle>
+                                                        <DialogTitle>Editar Sede</DialogTitle>
                                                     </DialogHeader>
                                                     <div className="p-8">
                                                         <LocationForm
@@ -174,7 +173,7 @@ export default async function SedesPage() {
                             </CardHeader>
                             <CardContent className="p-6 pt-4 space-y-6">
                                 <div className="space-y-3">
-                                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-muted/20 border border-border/20">
+                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/20 border border-border/20">
                                         <div className="h-8 w-8 rounded-lg bg-background flex items-center justify-center text-muted-foreground">
                                             <Phone className="h-4 w-4" />
                                         </div>
@@ -182,7 +181,7 @@ export default async function SedesPage() {
                                             {loc.phone || "No especificado"}
                                         </span>
                                     </div>
-                                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-muted/20 border border-border/20">
+                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/20 border border-border/20">
                                         <div className="h-8 w-8 rounded-lg bg-background flex items-center justify-center text-muted-foreground">
                                             <MapPin className="h-4 w-4" />
                                         </div>
@@ -193,7 +192,7 @@ export default async function SedesPage() {
                                 </div>
 
                                 <div className="pt-2 border-t border-border/40">
-                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Configuración de Equipo</h4>
+                                    <h4 className="label-caps text-muted-foreground mb-4">Configuración de Equipo</h4>
 
                                     <LocationTeamList
                                         members={(organization as any).members.filter((m: any) => canManageAll || m.userId === session.user.id)}

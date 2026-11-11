@@ -43,7 +43,7 @@ export function SupportOrganizationButton({ organizationId, organizationName, is
             size="sm"
             onClick={handleSupport}
             disabled={isLoading}
-            className="rounded-xl h-10 px-4 text-xs font-black uppercase tracking-widest shadow-sm gap-2"
+            className="h-10 px-4 text-xs font-black uppercase tracking-widest shadow-sm gap-2"
         >
             {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

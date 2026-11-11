@@ -81,7 +81,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="space-y-3">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/50 rounded-full border border-primary/5 text-[10px] font-bold uppercase tracking-widest text-primary">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/50 rounded-full border border-primary/5 text-2xs font-bold uppercase tracking-widest text-primary">
                                 <Sparkles className="h-3 w-3" />
                                 Acceso Premium
                             </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
 
                         <div className="flex items-center gap-4 py-2">
                             <div className="h-px flex-1 bg-primary/10" />
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-black text-muted-foreground/50">Seguridad Garantizada</span>
+                            <span className="text-2xs uppercase tracking-[0.2em] font-black text-muted-foreground/50">Seguridad Garantizada</span>
                             <div className="h-px flex-1 bg-primary/10" />
                         </div>
 
