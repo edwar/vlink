@@ -58,15 +58,6 @@ export async function createLocation(organizationId: string, data: {
 
     if (!org) throw new Error("Organización no encontrada")
 
-    // Check plan limits
-    const planConfig = await prisma.planConfig.findUnique({
-        where: { id: org.subscriptionPlan }
-    })
-
-    if (planConfig && planConfig.maxLocations > 0 && org._count.locations >= planConfig.maxLocations) {
-        throw new Error(`Tu plan ${planConfig.name} permite máximo ${planConfig.maxLocations} sede(s). Actualiza tu plan para añadir más.`)
-    }
-
     const location = await prisma.$transaction(async (tx) => {
         const newLoc = await tx.location.create({
             data: {
@@ -132,9 +123,16 @@ export async function updateLocation(locationId: string, data: {
 
     if (!membership) throw new Error("No tienes permisos para modificar sedes")
 
+    // Whitelist explícita: nunca pasar el objeto del cliente directo a Prisma
     await prisma.location.update({
         where: { id: locationId },
-        data
+        data: {
+            ...(typeof data.name === "string" && { name: data.name }),
+            ...(typeof data.address === "string" && { address: data.address }),
+            ...(typeof data.city === "string" && { city: data.city }),
+            ...(typeof data.phone === "string" && { phone: data.phone }),
+            ...(typeof data.isActive === "boolean" && { isActive: data.isActive }),
+        }
     })
 
     revalidatePath("/dashboard/organizacion/sedes")
@@ -238,6 +236,23 @@ export async function setMemberServicesForLocation(memberId: string, locationId:
         if (!callerMembership) throw new Error("No tienes permisos para modificar servicios de otros miembros")
     }
 
+    // La sede debe pertenecer a la misma organización del miembro
+    const location = await prisma.location.findFirst({
+        where: { id: locationId, organizationId: member.organizationId }
+    })
+    if (!location) throw new Error("Sede no encontrada")
+
+    // Los servicios deben ser del propio perfil del miembro
+    const uniqueServiceIds = [...new Set(serviceIds)]
+    if (uniqueServiceIds.length > 0) {
+        const ownedServices = await prisma.service.count({
+            where: { id: { in: uniqueServiceIds }, profile: { userId: member.userId } }
+        })
+        if (ownedServices !== uniqueServiceIds.length) {
+            throw new Error("Uno o más servicios no pertenecen a este miembro")
+        }
+    }
+
     await prisma.$transaction(async (tx) => {
         // Delete current mappings
         await tx.memberLocationService.deleteMany({
@@ -245,9 +260,9 @@ export async function setMemberServicesForLocation(memberId: string, locationId:
         })
 
         // Create new mappings
-        if (serviceIds.length > 0) {
+        if (uniqueServiceIds.length > 0) {
             await tx.memberLocationService.createMany({
-                data: serviceIds.map(serviceId => ({
+                data: uniqueServiceIds.map(serviceId => ({
                     memberId,
                     locationId,
                     serviceId,

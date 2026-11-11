@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { pusherClient } from "@/lib/pusher-client"
+import { profileChannel } from "@/lib/realtime-channels"
 
 /**
  * Escucha eventos de Pusher para refrescar el dashboard 
@@ -13,7 +14,7 @@ export function DashboardRealtimeUpdater({ profileId }: { profileId: string }) {
 
     useEffect(() => {
         // Suscribirse al canal específico del perfil/usuario
-        const channel = pusherClient.subscribe(`profile-${profileId}`)
+        const channel = pusherClient.subscribe(profileChannel(profileId))
         
         // Escuchar el evento de actualización
         channel.bind("appointments-updated", () => {
@@ -23,7 +24,7 @@ export function DashboardRealtimeUpdater({ profileId }: { profileId: string }) {
         })
 
         return () => {
-            pusherClient.unsubscribe(`profile-${profileId}`)
+            pusherClient.unsubscribe(profileChannel(profileId))
         }
     }, [profileId, router])
 

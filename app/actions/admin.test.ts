@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { getGlobalStats, getAllOrganizations, getAllUsers, updateUserRole, getSystemConfig, updateSystemConfig, getPlanConfigs, updatePlanConfig, supportOrganization } from './admin'
+import { getGlobalStats, getAllOrganizations, getAllUsers, updateUserRole, getSystemConfig, updateSystemConfig, supportOrganization } from './admin'
 import prisma from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 
@@ -11,7 +11,6 @@ vi.mock('@/lib/prisma', () => ({
         member: { count: vi.fn(), create: vi.fn(), update: vi.fn(), findUnique: vi.fn() },
         service: { findMany: vi.fn() },
         systemConfig: { findUnique: vi.fn(), create: vi.fn(), upsert: vi.fn() },
-        planConfig: { findMany: vi.fn(), create: vi.fn(), update: vi.fn() }
     }
 }))
 

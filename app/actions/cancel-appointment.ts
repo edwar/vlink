@@ -7,13 +7,17 @@ import { sendAppointmentEmail } from "@/lib/resend"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { pusherServer } from "@/lib/pusher"
+import { profileChannel } from "@/lib/realtime-channels"
+import { getEffectiveProfile } from "@/lib/permissions"
 
 export async function cancelAppointmentAction(id: string) {
     if (!id) return { success: false, error: "No ID provided" }
 
     try {
-        const appointment = await prisma.appointment.findUnique({
-            where: { id },
+        const profile = await getEffectiveProfile()
+
+        const appointment = await prisma.appointment.findFirst({
+            where: { id, profileId: profile.id },
             include: {
                 profile: { include: { user: true } },
                 service: true,
@@ -45,7 +49,7 @@ export async function cancelAppointmentAction(id: string) {
         }
 
         // Trigger Realtime Dashboard Update
-        await pusherServer.trigger(`profile-${appointment.profileId}`, "appointments-updated", {
+        await pusherServer.trigger(profileChannel(appointment.profileId), "appointments-updated", {
             appointmentId: id,
             status: "CANCELLED"
         }).catch(console.error)

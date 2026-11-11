@@ -7,6 +7,8 @@ import { sendAppointmentEmail } from "@/lib/resend"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { pusherServer } from "@/lib/pusher"
+import { profileChannel } from "@/lib/realtime-channels"
+import { getEffectiveProfile } from "@/lib/permissions"
 
 export async function rescheduleAppointmentAction(
     id: string,
@@ -17,9 +19,15 @@ export async function rescheduleAppointmentAction(
         return { success: false, error: "Datos incompletos" }
     }
 
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(newDate) || !/^\d{2}:\d{2}$/.test(newTime)) {
+        return { success: false, error: "Fecha u hora inválida" }
+    }
+
     try {
-        const appointment = await prisma.appointment.findUnique({
-            where: { id },
+        const profile = await getEffectiveProfile()
+
+        const appointment = await prisma.appointment.findFirst({
+            where: { id, profileId: profile.id },
             include: {
                 profile: { include: { user: true } },
                 service: true,
@@ -81,7 +89,7 @@ export async function rescheduleAppointmentAction(
         }
 
         // Trigger Realtime Dashboard Update
-        await pusherServer.trigger(`profile-${appointment.profileId}`, "appointments-updated", {
+        await pusherServer.trigger(profileChannel(appointment.profileId), "appointments-updated", {
             appointmentId: id,
             status: "RESCHEDULED"
         }).catch(console.error)

@@ -38,7 +38,11 @@ export async function GET() {
         // Escape CSV fields to prevent issues with commas or quotes
         const escapeCSV = (field: string | null | undefined) => {
             if (!field) return '""'
-            const stringField = String(field)
+            let stringField = String(field)
+            // Evitar inyección de fórmulas al abrir el CSV en Excel/Sheets
+            if (/^[=+\-@\t\r]/.test(stringField)) {
+                stringField = `'${stringField}`
+            }
             if (stringField.includes('"') || stringField.includes(',') || stringField.includes('\n')) {
                 return `"${stringField.replace(/"/g, '""')}"`
             }

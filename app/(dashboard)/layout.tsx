@@ -2,7 +2,6 @@ import { DashboardSidebar } from "@/components/dashboard-sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { getPublicSystemConfig } from "@/app/actions/admin";
 import { AlertTriangle, CheckCircle2, Info } from "lucide-react";
-import { PaymentStatusWrapper } from "@/components/payment-status-wrapper";
 
 export default async function DashboardLayout({
     children,
@@ -36,7 +35,6 @@ export default async function DashboardLayout({
                         </div>
                     </div>
                 )}
-                <PaymentStatusWrapper />
                 <main className="flex-1 overflow-y-auto px-4 py-8 pt-2 md:pt-20 lg:pt-0 md:px-8">
                     <div className="max-w-7xl mx-auto w-full">
                         {children}

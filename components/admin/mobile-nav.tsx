@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, X, LogOut, LayoutDashboard, Building2, Users, CreditCard, Settings, ExternalLink } from "lucide-react"
+import { Menu, X, LogOut, LayoutDashboard, Building2, Users, Settings, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "../theme-toggle"
@@ -13,7 +13,6 @@ const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/organizations", label: "Organizaciones", icon: Building2 },
     { href: "/admin/users", label: "Usuarios", icon: Users },
-    { href: "/admin/plans", label: "Planes SaaS", icon: CreditCard },
     { href: "/admin/settings", label: "Configuración", icon: Settings },
 ]
 

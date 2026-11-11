@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma"
 import { startOfDay, endOfDay, format, isAfter } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, TrendingUp, Users, Download, CreditCard } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, CheckCircle2, CalendarOff, Users, Download } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { AgendaTabsUI } from "@/components/agenda-tabs-ui"
@@ -27,13 +27,6 @@ export default async function DashboardPage(props: {
     const skipPast = (pastPage - 1) * limit
     const profile = await getEffectiveProfile()
     const today = new Date()
-
-    const isOldAccount = profile.organization?.createdAt
-        ? (new Date().getTime() - new Date(profile.organization.createdAt).getTime()) > 30 * 24 * 60 * 60 * 1000
-        : false;
-
-    const showBillingNotice = profile.organization?.subscriptionPlan === "BASIC";
-    const billingUrgent = showBillingNotice && isOldAccount && !profile.organization?.mpSubscriptionId;
 
     // Get all appointments for this profile (including cancelled for conversion rate)
     const allAppointmentsWithCancelled = await prisma.appointment.findMany({
@@ -139,49 +132,6 @@ export default async function DashboardPage(props: {
                     </div>
                 </div>
             </header>
-
-            {showBillingNotice && (
-                <div className={cn(
-                    "p-3 px-4 sm:p-5 rounded-4xl border flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 animate-in fade-in duration-500",
-                    billingUrgent
-                        ? "bg-red-500/10 border-red-500/20 shadow-none"
-                        : "bg-amber-500/10 border-amber-500/20 shadow-none"
-                )}>
-                    <div className="flex items-center gap-3 text-center sm:text-left">
-                        <div className={cn(
-                            "hidden sm:flex h-10 w-10 rounded-full items-center justify-center shrink-0",
-                            billingUrgent ? "bg-red-500/20 text-red-600" : "bg-amber-500/20 text-amber-600"
-                        )}>
-                            {billingUrgent ? <CreditCard className="h-5 w-5" /> : <TrendingUp className="h-5 w-5" />}
-                        </div>
-                        <div>
-                            <p className={cn(
-                                "text-xs md:text-sm font-black uppercase tracking-tight",
-                                billingUrgent ? "text-red-700" : "text-amber-700"
-                            )}>
-                                {billingUrgent ? "Acción Requerida" : "Plan BASIC Activo"}
-                            </p>
-                            <p className={cn(
-                                "hidden sm:block text-xs font-medium",
-                                billingUrgent ? "text-red-600/80" : "text-amber-600/80"
-                            )}>
-                                {billingUrgent
-                                    ? "Periodo de gracia terminado. Agrega un pago."
-                                    : "Mejora tu plan para desbloquear funciones avanzadas."}
-                            </p>
-                        </div>
-                    </div>
-                    <a
-                        href="/dashboard/organizacion/planes"
-                        className={cn(
-                            "shrink-0 px-4 py-1.5 md:px-6 md:py-2 text-white font-black uppercase text-[9px] md:text-[10px] tracking-widest rounded-lg md:rounded-xl shadow-none transition-all hover:scale-105 active:scale-95",
-                            billingUrgent ? "bg-red-500" : "bg-amber-500"
-                        )}
-                    >
-                        {billingUrgent ? "Configurar" : "Mejorar"}
-                    </a>
-                </div>
-            )}
 
             <DashboardTabsUI
                 stats={{

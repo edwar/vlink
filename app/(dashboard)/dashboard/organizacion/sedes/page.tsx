@@ -13,8 +13,7 @@ import {
     Phone,
     Users,
     ArrowRight,
-    MapPinned,
-    AlertCircle
+    MapPinned
 } from "lucide-react"
 import {
     Dialog,
@@ -80,15 +79,6 @@ export default async function SedesPage() {
     const currentUserRole = currentUserMember?.role || "PROFESSIONAL";
     const canManageAll = currentUserRole === "OWNER" || currentUserRole === "MANAGER";
 
-    // Get plan config to check limits
-    const planConfig = await prisma.planConfig.findUnique({
-        where: { id: organization.subscriptionPlan as any }
-    })
-
-    const maxLocations = (planConfig as any)?.maxLocations ?? 1 // Default to 1 if not found
-    const currentLocationsCount = organization.locations.length
-    const canAddLocation = maxLocations === 0 || currentLocationsCount < maxLocations
-
     return (
         <div className="space-y-8 animate-in fade-in duration-700 py-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -101,7 +91,6 @@ export default async function SedesPage() {
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button
-                                disabled={!canAddLocation}
                                 variant="vlink"
                                 className="rounded-2xl h-12 px-6 font-black uppercase tracking-widest text-xs flex items-center gap-2 group shadow-xl shadow-primary/20"
                             >
@@ -123,20 +112,6 @@ export default async function SedesPage() {
                     </Dialog>
                 )}
             </div>
-
-            {/* Plan Limit Alert */}
-            {!canAddLocation && maxLocations !== 0 && (
-                <div className="bg-amber-500/10 border border-amber-500/20 rounded-3xl p-4 flex items-start gap-4 animate-in slide-in-from-top duration-500">
-                    <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-                    <div className="space-y-1">
-                        <p className="text-sm font-black text-amber-900 uppercase tracking-tight">Límite de Sedes Alcanzado</p>
-                        <p className="text-sm text-amber-800/80 font-medium">
-                            Tu plan actual ({organization.subscriptionPlan}) permite un máximo de {maxLocations} sedes.
-                            Considera mejorar tu plan para agregar más ubicaciones.
-                        </p>
-                    </div>
-                </div>
-            )}
 
             <div id="tour-org-sedes" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {organization.locations.length === 0 ? (

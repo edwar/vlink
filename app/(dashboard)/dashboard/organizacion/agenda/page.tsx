@@ -19,9 +19,6 @@ export default async function ConsolidatedAgendaPage() {
 
     if (!organization) redirect("/dashboard/organizacion")
 
-    // Solo accesible por DUEÑOS o MANAGER en planes TEAM/CORPORATE
-    // Pero permitimos verlo si es dueño para invitar a subir de plan si fuera necesario
-
     return (
         <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pt-10">
             <Link
@@ -44,29 +41,10 @@ export default async function ConsolidatedAgendaPage() {
                 </div>
             </header>
 
-            {organization.subscriptionPlan === "BASIC" ? (
-                <div className="p-12 bg-amber-500/5 border-2 border-dashed border-amber-500/20 rounded-lg flex flex-col items-center text-center gap-6">
-                    <div className="h-20 w-20 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-600">
-                        <CalendarRange className="h-10 w-10" />
-                    </div>
-                    <div className="space-y-2">
-                        <h3 className="text-2xl font-black font-display tracking-tight">Función de Plan Equipos</h3>
-                        <p className="text-muted-foreground max-w-md mx-auto font-medium">
-                            La vista consolidada de agenda está disponible para organizaciones con múltiples profesionales. Sube de plan para ver la disponibilidad de todo tu equipo en una sola pantalla.
-                        </p>
-                    </div>
-                    <Link href="/dashboard/organizacion/planes">
-                        <button className="px-8 h-12 bg-amber-500 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-none hover:scale-105 active:scale-95 transition-all">
-                            Ver Planes
-                        </button>
-                    </Link>
-                </div>
-            ) : (
-                <ConsolidatedAgenda
-                    orgSlug={organization.slug}
-                    locations={organization.locations}
-                />
-            )}
+            <ConsolidatedAgenda
+                orgSlug={organization.slug}
+                locations={organization.locations}
+            />
         </div>
     )
 }

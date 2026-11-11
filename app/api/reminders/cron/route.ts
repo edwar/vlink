@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { sendAppointmentEmail } from '@/lib/resend'
+import { purgeExpiredRateLimits } from '@/lib/rate-limit'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -9,8 +10,13 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
     // Verify CRON_SECRET to prevent unauthorized calls
+    const cronSecret = process.env.CRON_SECRET
+    if (!cronSecret) {
+        console.error('[reminders/cron] CRON_SECRET no está configurado')
+        return Response.json({ error: 'Server misconfigured' }, { status: 500 })
+    }
     const authHeader = request.headers.get('authorization')
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (authHeader !== `Bearer ${cronSecret}`) {
         return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -73,6 +79,11 @@ export async function GET(request: NextRequest) {
             results.errors++
         }
     }
+
+    // Limpieza de contadores de rate limit vencidos
+    await purgeExpiredRateLimits().catch((error) => {
+        console.error('[reminders/cron] Error limpiando rate_limit:', error)
+    })
 
     console.log('[reminders/cron] Run complete:', results)
     return Response.json({ ok: true, ...results })

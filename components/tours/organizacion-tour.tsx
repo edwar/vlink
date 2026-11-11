@@ -50,13 +50,7 @@ export function OrganizacionTour({ isOwnerOrManager = true }: { isOwnerOrManager
             title: "Página Pública",
             intro: "Visualiza cómo tus clientes ven el perfil de tu organización y agendan citas directamente con tus profesionales.",
             position: "auto"
-        },
-        ...(isOwnerOrManager ? [{
-            element: "#tour-org-plan",
-            title: "Tu Plan",
-            intro: "Gestiona los límites de tu equipo y mejora tus características escalando de plan.",
-            position: "auto"
-        }] : [])
+        }
     ]
 
     return (

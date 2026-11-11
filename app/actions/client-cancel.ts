@@ -6,6 +6,8 @@ import { deleteGoogleCalendarEvent } from "@/lib/google-calendar"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { pusherServer } from "@/lib/pusher"
+import { enforceRateLimits, getClientIp, RateLimitError } from "@/lib/rate-limit"
+import { profileChannel } from "@/lib/realtime-channels"
 
 /**
  * Public server action — no authentication required.
@@ -13,6 +15,16 @@ import { pusherServer } from "@/lib/pusher"
  */
 export async function clientCancelAppointment(token: string) {
     if (!token) return { success: false, error: "Token inválido" }
+
+    try {
+        const ip = await getClientIp()
+        await enforceRateLimits([
+            { name: "client-cancel:ip:10m", id: ip, max: 10, windowSeconds: 10 * 60 },
+        ])
+    } catch (error) {
+        if (error instanceof RateLimitError) return { success: false, error: error.message }
+        throw error
+    }
 
     const appointment = await prisma.appointment.findUnique({
         where: { cancelToken: token },
@@ -66,7 +78,7 @@ export async function clientCancelAppointment(token: string) {
     }
 
     // Trigger Realtime Dashboard Update for the professional
-    await pusherServer.trigger(`profile-${appointment.profileId}`, "appointments-updated", {
+    await pusherServer.trigger(profileChannel(appointment.profileId), "appointments-updated", {
         appointmentId: appointment.id,
         status: "CANCELLED"
     }).catch(console.error)

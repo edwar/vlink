@@ -27,14 +27,6 @@ export async function getGlobalStats() {
         prisma.member.count({ where: { user: { role: "USER" } } })
     ])
 
-    const planStats = await prisma.organization.groupBy({
-        by: ['subscriptionPlan'],
-        where: orgWhereClause,
-        _count: {
-            _all: true
-        }
-    })
-
     const appointmentsByStatus = await prisma.appointment.groupBy({
         by: ['status'],
         _count: {
@@ -105,10 +97,6 @@ export async function getGlobalStats() {
         userCount,
         apptCount,
         memberCount,
-        planStats: planStats.map(p => ({
-            plan: p.subscriptionPlan,
-            count: p._count._all
-        })),
         appointmentsByStatus: appointmentsByStatus.map(s => ({
             status: s.status,
             count: s._count._all
@@ -234,65 +222,15 @@ export async function updateSystemConfig(data: {
     return { success: true }
 }
 
-export async function getPlanConfigs() {
-    await ensureAdmin()
-
-    const plans = await prisma.planConfig.findMany({
-        orderBy: { id: 'asc' }
-    })
-
-    // If no plans exist yet, seed them with defaults
-    if (plans.length === 0) {
-        const defaults = [
-            { id: 'BASIC' as const, name: 'BASIC', price: '0', limit: '1 Miembro', maxSeats: 1, maxLocations: 1, features: ['Agendas individuales', 'Sync Google', 'Confirmaciones Email'], active: true },
-            { id: 'TEAM' as const, name: 'TEAM', price: '49000', limit: '5 Miembros', maxSeats: 5, maxLocations: 3, features: ['Agenda de Equipo', 'Página de Org', 'Gestión Multimanager', 'Sedes (hasta 3)'], active: true },
-            { id: 'CORPORATE' as const, name: 'CORPORATE', price: '99000', limit: 'Ilimitado', maxSeats: 0, maxLocations: 0, features: ['Sedes Ilimitadas', 'Subdominios (Pronto)', 'API Access', 'Prioridad 24/7'], active: true },
-        ]
-
-        for (const plan of defaults) {
-            await prisma.planConfig.create({ data: plan })
-        }
-        return await prisma.planConfig.findMany({ orderBy: { id: 'asc' } })
-    }
-
-    return plans
-}
-
-export async function updatePlanConfig(id: string, data: {
-    price?: string,
-    limit?: string,
-    maxSeats?: number,
-    maxLocations?: number,
-    features?: string[],
-    active?: boolean
-}) {
-    await ensureAdmin()
-
-    await prisma.planConfig.update({
-        where: { id: id as 'BASIC' | 'TEAM' | 'CORPORATE' },
-        data
-    })
-
-    revalidatePath("/admin/plans")
-    revalidatePath("/dashboard/organizacion/planes")
-    return { success: true }
-}
-
 export async function getPublicSystemConfig() {
     return await prisma.systemConfig.findUnique({
         where: { id: 'global' }
     })
 }
 
-export async function getPublicPlanConfigs() {
-    return await prisma.planConfig.findMany({
-        orderBy: { id: 'asc' }
-    })
-}
-
 /**
  * Permite a un administrador unirse temporalmente a una organización como OWNER
- * para dar soporte, modificar planes o resolver problemas.
+ * para dar soporte o resolver problemas.
  */
 export async function supportOrganization(organizationId: string) {
     const session = await ensureAdmin()

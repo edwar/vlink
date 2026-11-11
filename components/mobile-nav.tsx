@@ -10,7 +10,6 @@ import { signOut, useSession } from "@/lib/auth-client"
 import { ProfileSwitcher } from "./profile-switcher"
 import { Users } from "lucide-react"
 import { Logo } from "./logo"
-import { PlanBadge } from "./plan-badge"
 import { motion } from "framer-motion"
 
 const navigation = [
@@ -91,9 +90,6 @@ export function MobileNav() {
                 </div>
                 <div className="px-1 border-b">
                     <ProfileSwitcher onClick={() => setIsOpen(false)} />
-                </div>
-                <div className="px-1 py-3 border-b">
-                    <PlanBadge onClick={() => setIsOpen(false)} />
                 </div>
 
                 <nav className="flex flex-1 flex-col px-6 py-4 overflow-y-auto">

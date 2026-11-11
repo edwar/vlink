@@ -7,7 +7,21 @@ import { es } from "date-fns/locale"
 import { randomUUID } from "crypto"
 import { getBogotaDay, getBogotaISO } from "@/lib/utils"
 import { pusherServer } from "@/lib/pusher"
+import { profileChannel } from "@/lib/realtime-channels"
 import { isHolidayColombia } from "@/lib/holidays"
+import { z } from "zod"
+import { enforceRateLimits, getClientIp } from "@/lib/rate-limit"
+
+const createAppointmentSchema = z.object({
+    username: z.string().min(1).max(64),
+    date: z.coerce.date(),
+    time: z.string().regex(/^\d{1,2}:\d{2}$/),
+    clientName: z.string().trim().min(1).max(100),
+    clientPhone: z.string().trim().min(5).max(30).regex(/^[0-9+()\s-]+$/),
+    clientEmail: z.string().trim().email().max(254),
+    serviceId: z.string().max(64).nullish(),
+    locationId: z.string().max(64).nullish(),
+})
 
 export async function getProfileForBooking(username: string) {
     const profile = await prisma.profile.findUnique({
@@ -35,73 +49,7 @@ export async function getProfileForBooking(username: string) {
 
     if (!profile) return null
 
-    // 1. Billing Enforcement: Lock if payment is missing or overdue
-    let isLocked = false;
     const membership = profile.user.memberships[0];
-
-    if (membership && membership.organization) {
-        const org = membership.organization;
-        const now = new Date();
-
-        const planConfig = org.subscriptionPlan ? await prisma.planConfig.findUnique({
-            where: { id: org.subscriptionPlan }
-        }) : null;
-
-        // Check for Billing Hard-Lock
-        const isDegraded = org.billingStatus === "DEGRADED";
-        const isOverdueGraceEnded = org.billingStatus === "OVERDUE" && org.gracePeriodEnd && org.gracePeriodEnd < now;
-
-        // Treat as expired trial if: ACTIVE + Trial Date Passed + No active Mercado Pago subscription
-        // and its either not a free plan or we want to enforce card for all.
-        // Assuming planConfig.price starts with '$0' for free plans.
-        const trialExpired = org.billingStatus === "ACTIVE" &&
-            org.gracePeriodEnd &&
-            org.gracePeriodEnd < now &&
-            !org.mpSubscriptionId &&
-            (planConfig?.price !== "$0");
-
-        if (isDegraded || isOverdueGraceEnded || trialExpired || !org.subscriptionPlan) {
-            console.log(`[Hard-Lock] Agenda bloqueada para ${username}. Status: ${org.billingStatus}, Plan: ${org.subscriptionPlan}`);
-            isLocked = true;
-        }
-
-        // 2. Soft-Lock Check (Seat limits) - only if not already hard-locked
-        if (!isLocked && planConfig) {
-            const maxSeats = planConfig.maxSeats ?? 0;
-            if (maxSeats > 0) {
-                const allOrgMembers = await prisma.member.findMany({
-                    where: { organizationId: org.id },
-                    orderBy: { createdAt: 'asc' }
-                });
-
-                // Priority: OWNER (0) > MANAGER (1) > PROFESSIONAL (2)
-                const rolePriority: Record<string, number> = {
-                    OWNER: 0,
-                    MANAGER: 1,
-                    PROFESSIONAL: 2
-                };
-
-                const sortedMembers = allOrgMembers.sort((a, b) => {
-                    const priorityA = rolePriority[a.role] ?? 10;
-                    const priorityB = rolePriority[b.role] ?? 10;
-                    if (priorityA !== priorityB) return priorityA - priorityB;
-                    return a.createdAt.getTime() - b.createdAt.getTime();
-                });
-
-                const myIndex = sortedMembers.findIndex(m => m.userId === profile.userId);
-                if (myIndex >= maxSeats) {
-                    console.log(`[Soft-Lock] Perfil ${username} bloqueado por límite de asientos del plan ${org.subscriptionPlan}`);
-                    isLocked = true;
-                }
-            }
-        }
-    } else {
-        // Individual user without organization - check if individual booking is allowed or needs a plan
-        // For now, let's assume they need an organization to be active in this specific workflow
-        // or just let it pass if that's the business rule.
-        // Based on user request "si no tiene un plan", let's assume if no org/plan, it's locked.
-        // isLocked = true; 
-    }
 
     return {
         id: profile.id,
@@ -111,7 +59,6 @@ export async function getProfileForBooking(username: string) {
         image: profile.user.image,
         advanceNoticeHours: profile.advanceNoticeHours,
         expertise: profile.expertise || [],
-        isLocked,
         organizationId: profile.organizationId || "",
         organizationSlug: membership?.organization?.slug || "",
         services: profile.services.map((s: any) => ({
@@ -325,6 +272,19 @@ export async function createAppointment(data: {
     serviceId?: string,
     locationId?: string
 }) {
+    const parsed = createAppointmentSchema.safeParse(data)
+    if (!parsed.success) throw new Error("Datos de la reserva inválidos")
+    data = { ...parsed.data, serviceId: parsed.data.serviceId || undefined, locationId: parsed.data.locationId || undefined }
+
+    // Rate limit: la reserva es pública y dispara correos, así que se limita
+    // por IP (ráfagas y volumen diario) y por email destino (evitar spam a terceros)
+    const ip = await getClientIp()
+    await enforceRateLimits([
+        { name: "booking:ip:10m", id: ip, max: 5, windowSeconds: 10 * 60 },
+        { name: "booking:ip:1d", id: ip, max: 20, windowSeconds: 24 * 60 * 60 },
+        { name: "booking:email:1h", id: data.clientEmail, max: 3, windowSeconds: 60 * 60 },
+    ])
+
     const profile = await prisma.profile.findUnique({
         where: { username: data.username },
         include: {
@@ -355,6 +315,17 @@ export async function createAppointment(data: {
     // 2. If not, try to infer from availability for that day/time
     let finalLocationId = data.locationId;
 
+    if (finalLocationId) {
+        const validLocation = await prisma.location.findFirst({
+            where: {
+                id: finalLocationId,
+                isActive: true,
+                organization: { members: { some: { userId: profile.userId } } }
+            }
+        })
+        if (!validLocation) throw new Error("Sede no válida para este profesional")
+    }
+
     if (!finalLocationId) {
         const dayOfWeek = getBogotaDay(data.date);
         const availability = profile.availabilities.find((a: any) =>
@@ -366,8 +337,9 @@ export async function createAppointment(data: {
     }
 
     if (data.serviceId) {
-        const service = await prisma.service.findUnique({ where: { id: data.serviceId } })
-        if (service) {
+        const service = await prisma.service.findFirst({ where: { id: data.serviceId, profileId: profile.id, isActive: true } })
+        if (!service) throw new Error("Servicio no válido para este profesional")
+        {
             durationMinutes = service.durationMinutes
             serviceName = service.name
             servicePrice = service.price
@@ -451,7 +423,7 @@ export async function createAppointment(data: {
     await createGoogleCalendarEvent(appointment.id).catch(console.error)
 
     // Trigger Realtime Dashboard Update
-    await pusherServer.trigger(`profile-${profile.id}`, "appointments-updated", {
+    await pusherServer.trigger(profileChannel(profile.id), "appointments-updated", {
         appointmentId: appointment.id
     }).catch(console.error)
 

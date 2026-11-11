@@ -29,6 +29,7 @@ import { getOrganizationSettings } from "@/app/actions/organization"
 import { isHolidayColombia } from "@/lib/holidays"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { pusherClient } from "@/lib/pusher-client"
+import { profileChannel } from "@/lib/realtime-channels"
 import { useRouter } from "next/navigation"
 import {
     Dialog,
@@ -348,14 +349,14 @@ export function CalendarView({ profileId, organizationId }: { profileId: string,
         }
         fetchData()
 
-        const channel = pusherClient.subscribe(`profile-${profileId}`)
+        const channel = pusherClient.subscribe(profileChannel(profileId))
         channel.bind("appointments-updated", () => {
             fetchData()
             router.refresh()
         })
 
         return () => {
-            pusherClient.unsubscribe(`profile-${profileId}`)
+            pusherClient.unsubscribe(profileChannel(profileId))
         }
         // Listen for real-time updates
         // We'll trust the profile the user is currently seeing

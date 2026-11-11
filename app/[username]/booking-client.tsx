@@ -7,7 +7,7 @@ import Image from "next/image"
 import { motion, Variants } from "framer-motion"
 import { format, addDays, startOfTomorrow, isSameDay, isValid } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, ImageOffIcon, UserX, CalendarOff, Sparkles, AlertCircle, CalendarX2 } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, Check, MessageSquare, Loader2, Briefcase, ImageOffIcon, UserX, CalendarOff, Sparkles, CalendarX2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getProfileForBooking, getAvailableSlots, createAppointment, getLocationsByOrgId } from "@/app/actions/booking"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -66,7 +66,6 @@ interface ProfileData {
     advanceNoticeHours: number
     expertise: string[]
     services: ServiceOption[]
-    isLocked: boolean
     organizationId: string
     locationServices: { locationId: string, serviceId: string }[]
 }
@@ -166,7 +165,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
     // Fetch slots when date or service changes
     useEffect(() => {
-        if (step < 1 || !selectedService || profileData?.isLocked) return
+        if (step < 1 || !selectedService) return
         const fetchSlots = async () => {
             setLoadingSlots(true)
             try {
@@ -184,7 +183,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
             }
         }
         fetchSlots()
-    }, [selectedDate, username, selectedService, step, profileData?.isLocked, selectedLocation?.id])
+    }, [selectedDate, username, selectedService, step, selectedLocation?.id])
 
     // Calculate the first selectable day based on advanceNoticeHours
     const firstEligibleDate = profileData
@@ -197,7 +196,7 @@ export function BookingClient({ params }: { params: { username: string } }) {
     const days = [...Array(14)].map((_, i) => addDays(baseDate, i))
 
     useEffect(() => {
-        if (profileData && !profileData.isLocked) {
+        if (profileData) {
             if (queryDate) {
                 const [year, month, day] = queryDate.split('-').map(Number)
                 const parsed = new Date(year, month - 1, day)
@@ -256,7 +255,6 @@ export function BookingClient({ params }: { params: { username: string } }) {
     }
 
     const handleSelectService = (service: ServiceOption) => {
-        if (profileData?.isLocked) return
         setSelectedService(service)
         setSelectedTime(null)
         setStep(1)
@@ -359,24 +357,12 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
     return (
         <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground relative">
-            {profileData.isLocked && (
-                <div className="sticky top-0 z-100 w-full bg-amber-500 text-white py-3 px-6 shadow-none animate-in slide-in-from-top duration-500">
-                    <div className="max-w-md mx-auto flex items-center gap-3">
-                        <AlertCircle className="h-5 w-5 shrink-0" />
-                        <p className="text-xs font-bold leading-tight">
-                            Este servicio no está disponible por ahora. Comunícate con el administrador para habilitar la agenda nuevamente.
-                        </p>
-                    </div>
-                </div>
-            )}
-
             <div className="absolute top-4 right-4 z-50">
                 <ThemeToggle />
             </div>
 
             <main id="main-content" className={cn(
-                "max-w-xl mx-auto px-6 py-12 md:py-20 space-y-10 transition-all duration-700 outline-none",
-                profileData.isLocked && "opacity-40 pointer-events-none grayscale-[0.5]"
+                "max-w-xl mx-auto px-6 py-12 md:py-20 space-y-10 transition-all duration-700 outline-none"
             )} tabIndex={-1}>
 
                 <header className="text-center space-y-4">
@@ -514,7 +500,6 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                             >
                                                 <button
                                                     onClick={() => handleSelectService(service)}
-                                                    disabled={profileData.isLocked}
                                                     className="w-full text-left flex items-stretch"
                                                 >
                                                     <div className="relative shrink-0 w-24 sm:w-28 aspect-square bg-muted/20 select-none overflow-hidden rounded-l-2xl">
@@ -598,7 +583,6 @@ export function BookingClient({ params }: { params: { username: string } }) {
                         {selectedService && profileData.services.length > 1 && (
                             <button
                                 onClick={() => { setStep(0); setSelectedTime(null) }}
-                                disabled={profileData.isLocked}
                                 className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
@@ -673,7 +657,6 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                     <button
                                         key={day.toString()}
                                         onClick={() => setSelectedDate(day)}
-                                        disabled={profileData.isLocked}
                                         aria-pressed={isSameDay(day, selectedDate)}
                                         aria-label={`Seleccionar ${format(day, "EEEE d 'de' MMMM", { locale: es })}`}
                                         className={cn(
@@ -713,7 +696,6 @@ export function BookingClient({ params }: { params: { username: string } }) {
                                         <button
                                             key={time}
                                             onClick={() => setSelectedTime(time)}
-                                            disabled={profileData.isLocked}
                                             className={cn(
                                                 "py-3 rounded-xl font-semibold text-sm border border-primary/10 transition-all",
                                                 selectedTime === time
@@ -758,11 +740,11 @@ export function BookingClient({ params }: { params: { username: string } }) {
 
             <div className={cn(
                 "fixed bottom-0 left-0 right-0 p-6 bg-linear-to-t from-background via-background/95 to-transparent pt-12 z-50 pointer-events-none transition-all duration-300",
-                step === 1 && !profileData.isLocked ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
+                step === 1 ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
             )}>
                 <div className="max-w-md mx-auto pointer-events-auto">
                     <Button
-                        disabled={!selectedTime || profileData.isLocked}
+                        disabled={!selectedTime}
                         onClick={() => setStep(2)}
                         variant="vlink"
                         size="lg"
