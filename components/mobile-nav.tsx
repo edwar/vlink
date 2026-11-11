@@ -11,6 +11,7 @@ import { ProfileSwitcher } from "./profile-switcher"
 import { Users } from "lucide-react"
 import { Logo } from "./logo"
 import { motion } from "framer-motion"
+import { SupportVLinkLink } from "@/components/support-vlink-link"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -131,6 +132,7 @@ export function MobileNav() {
                             </ul>
                         </li>
                         <li className="mt-auto space-y-1">
+                            <SupportVLinkLink className="rounded-md p-3" />
                             {mounted && isAdmin && (
                                 <Link
                                     href="/admin"

@@ -117,3 +117,26 @@ export async function enableCalendarSync() {
     revalidatePath("/dashboard/perfil")
     return { success: true }
 }
+
+/**
+ * Marca como visto el aviso de donación de un hito de citas para el usuario
+ * actual (su propio perfil, no el que esté viendo con "ver como").
+ */
+export async function dismissDonationMilestone(milestone: number) {
+    const { auth } = await import("@/lib/auth")
+    const { headers } = await import("next/headers")
+    const { DONATION_MILESTONES } = await import("@/lib/branding")
+
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session?.user?.id) throw new Error("Unauthorized")
+    if (!(DONATION_MILESTONES as readonly number[]).includes(milestone)) throw new Error("Hito inválido")
+
+    // Solo avanza: nunca vuelve a mostrar un hito anterior
+    await prisma.profile.updateMany({
+        where: { userId: session.user.id, donationMilestoneSeen: { lt: milestone } },
+        data: { donationMilestoneSeen: milestone },
+    })
+
+    revalidatePath("/dashboard")
+    return { success: true }
+}

@@ -1,3 +1,5 @@
+import { PoweredBy } from "@/components/powered-by"
+import { shouldShowBrandingForProfile } from "@/lib/branding"
 import { getProfileForBooking } from "@/app/actions/booking"
 import { MaintenanceGuard } from "@/components/maintenance-guard"
 import { BookingClient } from "./booking-client"
@@ -42,6 +44,7 @@ export async function generateMetadata({
 export default async function BookingPage({ params }: { params: Promise<{ username: string }> }) {
     const resolvedParams = await params
     const profile = await getProfileForBooking(resolvedParams.username)
+    const showBranding = profile ? await shouldShowBrandingForProfile(resolvedParams.username) : false
 
     const jsonLd = profile ? {
         "@context": "https://schema.org",
@@ -80,6 +83,7 @@ export default async function BookingPage({ params }: { params: Promise<{ userna
                 />
             )}
             <BookingClient params={resolvedParams} />
+            {showBranding && <PoweredBy />}
         </MaintenanceGuard>
     )
 }

@@ -7,6 +7,7 @@ import Link from "next/link"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { SupportOrganizationButton } from "@/components/support-organization-button"
+import { BrandingControl } from "@/components/admin/branding-control"
 import { AdminEmptyState } from "@/components/admin/admin-empty-state"
 
 import { PaginationControls } from "@/components/pagination-controls"
@@ -66,6 +67,10 @@ export default async function AdminOrganizations(props: {
                                                 </div>
 
                                                 <div className="flex items-center gap-3">
+                                                    <BrandingControl
+                                                        target={{ type: "organization", id: org.id }}
+                                                        removedUntil={org.brandingRemovedUntil}
+                                                    />
                                                     <SupportOrganizationButton
                                                         organizationId={org.id}
                                                         organizationName={org.name}

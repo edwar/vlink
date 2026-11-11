@@ -10,6 +10,11 @@ import { getEffectiveProfile } from "@/lib/permissions"
 import { AppointmentCard } from "@/components/appointment-card"
 import { EmptyState } from "@/components/empty-state"
 import { PageHeader } from "@/components/page-header";
+import { DonationMilestoneBanner } from "@/components/donation-milestone-banner"
+import { DONATION_URL } from "@/components/support-vlink-link"
+import { reachedMilestone } from "@/lib/branding"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 import { DashboardTabsUI } from "@/components/dashboard-tabs-ui"
 import { DashboardTour } from "@/components/tours/dashboard-tour"
 import { DashboardRealtimeUpdater } from "@/components/dashboard-realtime-updater"
@@ -26,6 +31,21 @@ export default async function DashboardPage(props: {
     const skipUpcoming = (page - 1) * limit
     const skipPast = (pastPage - 1) * limit
     const profile = await getEffectiveProfile()
+
+    // Aviso de donación: se calcula siempre sobre el perfil propio del usuario,
+    // no sobre el que esté viendo con "ver como".
+    let donationMilestone = 0
+    if (DONATION_URL) {
+        const session = await auth.api.getSession({ headers: await headers() })
+        const ownProfile = session?.user?.id
+            ? await prisma.profile.findUnique({ where: { userId: session.user.id }, select: { id: true, donationMilestoneSeen: true } })
+            : null
+        if (ownProfile) {
+            const ownCount = await prisma.appointment.count({ where: { profileId: ownProfile.id, status: { not: "CANCELLED" } } })
+            const reached = reachedMilestone(ownCount)
+            if (reached > ownProfile.donationMilestoneSeen) donationMilestone = reached
+        }
+    }
     const today = new Date()
 
     // Get all appointments for this profile (including cancelled for conversion rate)
@@ -122,6 +142,10 @@ export default async function DashboardPage(props: {
                 icon={CalendarIcon}
                 description={<>Hola <span className="text-foreground font-bold">{profile.displayName || profile.user.name}</span>, gestiona tus servicios y actividad. Los datos se actualizan automáticamente.</>}
             />
+
+            {donationMilestone > 0 && DONATION_URL && (
+                <DonationMilestoneBanner milestone={donationMilestone} donationUrl={DONATION_URL} />
+            )}
 
             <DashboardTabsUI
                 stats={{
