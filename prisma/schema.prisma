@@ -293,6 +293,16 @@ model TourProgress {
   @@map("tour_progress")
 }
 
+/// Contadores de ventana fija para rate limiting (ver lib/rate-limit.ts)
+model RateLimit {
+  key         String   @id
+  count       Int      @default(0)
+  windowStart DateTime @default(now())
+
+  @@index([windowStart])
+  @@map("rate_limit")
+}
+
 enum UserRole {
   USER
   ADMIN

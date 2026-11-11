@@ -124,7 +124,7 @@ export function InviteMember({ organizationId, disabled }: InviteMemberProps) {
                                 {copied ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
                             </Button>
                         </div>
-                        <p className="text-[10px] text-center text-muted-foreground/60 font-medium italic">Este enlace expira en 7 días.</p>
+                        <p className="text-[10px] text-center text-muted-foreground/60 font-medium italic">Este enlace es de un solo uso y expira en 7 días.</p>
                     </div>
                 )}
 

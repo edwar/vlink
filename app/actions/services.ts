@@ -190,10 +190,18 @@ export async function reorderServiceImages(serviceId: string, imageIds: string[]
         throw new Error("Servicio no encontrado")
     }
 
+    // Solo se pueden reordenar imágenes que pertenezcan a este servicio
+    const ownedCount = await prisma.serviceImage.count({
+        where: { id: { in: imageIds }, serviceId }
+    })
+    if (ownedCount !== new Set(imageIds).size || ownedCount !== imageIds.length) {
+        throw new Error("Imagen no encontrada")
+    }
+
     await prisma.$transaction(
         imageIds.map((id, index) =>
             prisma.serviceImage.update({
-                where: { id },
+                where: { id, serviceId },
                 data: { order: index }
             })
         )

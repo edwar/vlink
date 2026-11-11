@@ -6,13 +6,22 @@ import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { randomUUID } from "crypto"
 
+async function requireOrgRole(userId: string, organizationId: string, roles: ("OWNER" | "MANAGER" | "PROFESSIONAL")[]) {
+    const membership = await prisma.member.findFirst({
+        where: { organizationId, userId, role: { in: roles } }
+    })
+    if (!membership) throw new Error("No tienes permisos en esta organización")
+    return membership
+}
+
 export async function updateOrganizationHolidayWork(organizationId: string, enabled: boolean) {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session) throw new Error("No hay sesión activa")
+    await requireOrgRole(session.user.id, organizationId, ["OWNER", "MANAGER"])
 
     const result = await prisma.organization.update({
         where: { id: organizationId },
-        data: { workOnHolidays: enabled }
+        data: { workOnHolidays: !!enabled }
     })
 
     revalidatePath("/dashboard")
@@ -22,6 +31,7 @@ export async function updateOrganizationHolidayWork(organizationId: string, enab
 export async function getOrganizationSettings(organizationId: string) {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session) throw new Error("No hay sesión activa")
+    await requireOrgRole(session.user.id, organizationId, ["OWNER", "MANAGER", "PROFESSIONAL"])
 
     const org = await prisma.organization.findUnique({
         where: { id: organizationId },
@@ -241,8 +251,17 @@ export async function acceptInvitation(token: string) {
         )
     }
 
-    // Atomic transaction: Join organization and link profile
+    // Atomic transaction: consume invitation, join organization and link profile
     await prisma.$transaction(async (tx) => {
+        // 0. Consumir la invitación (un solo uso). El DELETE bloquea la fila, así que
+        //    si dos personas aceptan a la vez solo una obtiene count === 1.
+        const consumed = await tx.invitation.deleteMany({
+            where: { id: invitation.id, expiresAt: { gt: new Date() } }
+        })
+        if (consumed.count !== 1) {
+            throw new Error("Esta invitación ya fue utilizada o expiró")
+        }
+
         // 1. Create membership
         await tx.member.upsert({
             where: {
